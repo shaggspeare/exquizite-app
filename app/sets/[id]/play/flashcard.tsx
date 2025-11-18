@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Pressable, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -22,6 +22,8 @@ export default function FlashcardScreen() {
   const set = getSetById(id!);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showHint, setShowHint] = useState(false);
+  const [hint, setHint] = useState<string>('');
+  const [loadingHint, setLoadingHint] = useState(false);
   const rotation = useSharedValue(0);
 
   if (!set || set.words.length === 0) {
@@ -42,11 +44,35 @@ export default function FlashcardScreen() {
     setShowHint(false);
   };
 
+  const loadHint = async () => {
+    if (hint) {
+      setShowHint(!showHint);
+      return;
+    }
+
+    setLoadingHint(true);
+    try {
+      const generatedHint = await generateHint(
+        currentWord.word,
+        currentWord.translation
+      );
+      setHint(generatedHint);
+      setShowHint(true);
+    } catch (error) {
+      console.error('Error loading hint:', error);
+      setHint('Think about the meaning and practice!');
+      setShowHint(true);
+    } finally {
+      setLoadingHint(false);
+    }
+  };
+
   const goToNext = () => {
     if (currentIndex < set.words.length - 1) {
       rotation.value = 0;
       setCurrentIndex(currentIndex + 1);
       setShowHint(false);
+      setHint('');
     }
   };
 
@@ -55,6 +81,7 @@ export default function FlashcardScreen() {
       rotation.value = 0;
       setCurrentIndex(currentIndex - 1);
       setShowHint(false);
+      setHint('');
     }
   };
 
@@ -112,23 +139,28 @@ export default function FlashcardScreen() {
 
           <Animated.View style={[styles.card, styles.cardBack, backAnimatedStyle]}>
             <Text style={styles.cardText}>{currentWord.translation}</Text>
-            {showHint && (
-              <Text style={styles.hint}>
-                {generateHint(currentWord.word, currentWord.translation)}
-              </Text>
+            {showHint && hint && (
+              <Text style={styles.hint}>{hint}</Text>
             )}
           </Animated.View>
         </Pressable>
 
         <View style={styles.controls}>
           <TouchableOpacity
-            onPress={() => setShowHint(!showHint)}
+            onPress={loadHint}
             style={styles.hintButton}
+            disabled={loadingHint}
           >
-            <Ionicons name="sparkles" size={20} color={Colors.ai} />
-            <Text style={styles.hintButtonText}>
-              {showHint ? 'Hide' : 'Show'} Hint
-            </Text>
+            {loadingHint ? (
+              <ActivityIndicator size="small" color={Colors.ai} />
+            ) : (
+              <>
+                <Ionicons name="sparkles" size={20} color={Colors.ai} />
+                <Text style={styles.hintButtonText}>
+                  {showHint ? 'Hide' : 'Show'} Hint
+                </Text>
+              </>
+            )}
           </TouchableOpacity>
         </View>
 

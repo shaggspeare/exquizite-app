@@ -33,15 +33,24 @@ export default function QuizScreen() {
     }
   }, [set]);
 
-  const generateQuestions = () => {
+  const generateQuestions = async () => {
     if (!set) return;
 
     const allTranslations = set.words.map(w => w.translation);
-    const quizQuestions: QuizQuestion[] = shuffleArray(set.words).map(word => ({
-      word: word.word,
-      correctAnswer: word.translation,
-      options: generateQuizOptions(word.translation, allTranslations),
-    }));
+    const shuffledWords = shuffleArray(set.words);
+
+    // Generate questions with async options
+    const quizQuestions: QuizQuestion[] = await Promise.all(
+      shuffledWords.map(async (word) => ({
+        word: word.word,
+        correctAnswer: word.translation,
+        options: await generateQuizOptions(
+          word.word,
+          word.translation,
+          allTranslations
+        ),
+      }))
+    );
 
     setQuestions(quizQuestions);
   };

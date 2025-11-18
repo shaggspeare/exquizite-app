@@ -1,7 +1,8 @@
-// Mock AI helper functions for word suggestions and hints
+// AI helper functions using OpenAI API with fallback to mock data
 import { WordPair } from './types';
+import * as OpenAIService from './openai-service';
 
-// Mock word suggestions by theme
+// Mock word suggestions by theme (fallback)
 const mockSuggestions: Record<string, WordPair[]> = {
   animals: [
     { id: '1', word: 'cat', translation: 'кіт' },
@@ -26,38 +27,103 @@ const mockSuggestions: Record<string, WordPair[]> = {
   ],
 };
 
-export function generateWordSuggestions(theme: string): WordPair[] {
-  // Simulate AI processing delay
-  const normalizedTheme = theme.toLowerCase();
-  return mockSuggestions[normalizedTheme] || [];
+/**
+ * Generate word suggestions based on theme
+ * Uses OpenAI API, falls back to mock data on error
+ */
+export async function generateWordSuggestions(
+  theme: string,
+  targetLanguage: string = 'Ukrainian'
+): Promise<WordPair[]> {
+  try {
+    // Try to use OpenAI API
+    const suggestions = await OpenAIService.generateWordSuggestions(
+      theme,
+      targetLanguage,
+      5
+    );
+
+    if (suggestions.length > 0) {
+      return suggestions;
+    }
+
+    // Fallback to mock data
+    const normalizedTheme = theme.toLowerCase();
+    return mockSuggestions[normalizedTheme] || [];
+  } catch (error) {
+    console.error('Error generating word suggestions:', error);
+    // Fallback to mock data
+    const normalizedTheme = theme.toLowerCase();
+    return mockSuggestions[normalizedTheme] || [];
+  }
 }
 
-export function generateHint(word: string, translation: string): string {
-  // Mock hint generation
-  const hints = [
-    `Think about the first letter: "${word[0].toUpperCase()}"`,
-    `The word has ${word.length} letters`,
-    `It translates to: ${translation.slice(0, 2)}...`,
-    `Remember: ${word.toUpperCase()} → ${translation}`,
-  ];
-
-  return hints[Math.floor(Math.random() * hints.length)];
+/**
+ * Generate a hint for learning a word
+ * Uses OpenAI API, falls back to simple hint on error
+ */
+export async function generateHint(
+  word: string,
+  translation: string
+): Promise<string> {
+  try {
+    // Try to use OpenAI API
+    const hint = await OpenAIService.generateHint(word, translation);
+    return hint;
+  } catch (error) {
+    console.error('Error generating hint:', error);
+    // Fallback to simple hint
+    const fallbackHints = [
+      `Think about the first letter: "${word[0].toUpperCase()}"`,
+      `The word has ${word.length} letters`,
+      `It translates to: ${translation.slice(0, 2)}...`,
+      `Remember: ${word.toUpperCase()} → ${translation}`,
+    ];
+    return fallbackHints[Math.floor(Math.random() * fallbackHints.length)];
+  }
 }
 
-export function generateQuizOptions(
+/**
+ * Generate quiz options (3 wrong + 1 correct)
+ * Uses OpenAI API for better distractors when possible
+ */
+export async function generateQuizOptions(
+  word: string,
   correctAnswer: string,
   allTranslations: string[]
-): string[] {
-  // Filter out the correct answer from all translations
-  const wrongOptions = allTranslations.filter(t => t !== correctAnswer);
+): Promise<string[]> {
+  try {
+    // Filter out the correct answer from all translations
+    const wrongOptions = allTranslations.filter(t => t !== correctAnswer);
 
-  // Shuffle and take 3 random wrong answers
-  const shuffled = wrongOptions.sort(() => Math.random() - 0.5);
-  const selected = shuffled.slice(0, 3);
+    let distractors: string[];
 
-  // Combine with correct answer and shuffle again
-  const allOptions = [...selected, correctAnswer];
-  return allOptions.sort(() => Math.random() - 0.5);
+    if (wrongOptions.length >= 3) {
+      // Use existing translations from the set
+      const shuffled = wrongOptions.sort(() => Math.random() - 0.5);
+      distractors = shuffled.slice(0, 3);
+    } else {
+      // Try to generate with OpenAI
+      distractors = await OpenAIService.generateQuizDistractors(
+        word,
+        correctAnswer,
+        allTranslations,
+        3
+      );
+    }
+
+    // Combine with correct answer and shuffle
+    const allOptions = [...distractors, correctAnswer];
+    return allOptions.sort(() => Math.random() - 0.5);
+  } catch (error) {
+    console.error('Error generating quiz options:', error);
+    // Fallback: use available translations
+    const wrongOptions = allTranslations.filter(t => t !== correctAnswer);
+    const shuffled = wrongOptions.sort(() => Math.random() - 0.5);
+    const selected = shuffled.slice(0, 3);
+    const allOptions = [...selected, correctAnswer];
+    return allOptions.sort(() => Math.random() - 0.5);
+  }
 }
 
 export function shuffleArray<T>(array: T[]): T[] {

@@ -4,7 +4,9 @@
       "Bash(npx expo install expo-auth-session expo-secure-store expo-av expo-crypto)",
       "Bash(mkdir:*)",
       "Bash(npm start)",
-      "Bash(npx expo start:*)"
+      "Bash(npx expo start:*)",
+      "Bash(npm install:*)",
+      "Bash(npm audit fix:*)"
     ],
     "deny": [],
     "ask": []

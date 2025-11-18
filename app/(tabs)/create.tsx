@@ -12,6 +12,7 @@ import { useRouter } from 'expo-router';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { WordPairInput } from '@/components/set/WordPairInput';
+import { AISuggestionModal } from '@/components/ai/AISuggestionModal';
 import { useSets } from '@/contexts/SetsContext';
 import { WordPair } from '@/lib/types';
 import { Colors, Spacing, Typography, MAX_WORDS_PER_SET } from '@/lib/constants';
@@ -24,6 +25,7 @@ export default function CreateSetScreen() {
   const [wordPairs, setWordPairs] = useState<WordPair[]>([
     { id: '1', word: '', translation: '' },
   ]);
+  const [showAIModal, setShowAIModal] = useState(false);
 
   const addWordPair = () => {
     if (wordPairs.length >= MAX_WORDS_PER_SET) {
@@ -56,7 +58,21 @@ export default function CreateSetScreen() {
     setWordPairs(pairs => pairs.filter(pair => pair.id !== id));
   };
 
-  const handleSave = () => {
+  const handleAIWordsSelected = (aiWords: WordPair[]) => {
+    const availableSlots = MAX_WORDS_PER_SET - wordPairs.length;
+    const wordsToAdd = aiWords.slice(0, availableSlots);
+
+    if (wordsToAdd.length < aiWords.length) {
+      Alert.alert(
+        'Limit Reached',
+        `Only ${wordsToAdd.length} words were added to stay within the ${MAX_WORDS_PER_SET} word limit.`
+      );
+    }
+
+    setWordPairs([...wordPairs, ...wordsToAdd]);
+  };
+
+  const handleSave = async () => {
     if (!setName.trim()) {
       Alert.alert('Error', 'Please enter a set name');
       return;
@@ -71,13 +87,22 @@ export default function CreateSetScreen() {
       return;
     }
 
-    const newSet = createSet(setName, validPairs);
-    Alert.alert('Success', 'Set created successfully!', [
-      {
-        text: 'OK',
-        onPress: () => router.push(`/sets/${newSet.id}`),
-      },
-    ]);
+    try {
+      const newSet = await createSet(setName, validPairs);
+      if (newSet) {
+        Alert.alert('Success', 'Set created successfully!', [
+          {
+            text: 'OK',
+            onPress: () => router.push(`/sets/${newSet.id}`),
+          },
+        ]);
+      } else {
+        Alert.alert('Error', 'Failed to create set. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error saving set:', error);
+      Alert.alert('Error', 'Failed to create set. Please try again.');
+    }
   };
 
   return (
@@ -154,8 +179,38 @@ export default function CreateSetScreen() {
               Add Word
             </Text>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.aiButton}
+            onPress={() => setShowAIModal(true)}
+            disabled={wordPairs.length >= MAX_WORDS_PER_SET}
+          >
+            <Ionicons
+              name="sparkles"
+              size={24}
+              color={
+                wordPairs.length >= MAX_WORDS_PER_SET
+                  ? Colors.textSecondary
+                  : Colors.ai
+              }
+            />
+            <Text
+              style={[
+                styles.aiButtonText,
+                wordPairs.length >= MAX_WORDS_PER_SET && styles.addButtonDisabled,
+              ]}
+            >
+              AI Suggestions
+            </Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
+
+      <AISuggestionModal
+        visible={showAIModal}
+        onClose={() => setShowAIModal(false)}
+        onSelectWords={handleAIWordsSelected}
+      />
     </SafeAreaView>
   );
 }
@@ -224,5 +279,22 @@ const styles = StyleSheet.create({
   },
   addButtonDisabled: {
     color: Colors.textSecondary,
+  },
+  aiButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: Spacing.sm,
+    paddingVertical: Spacing.md,
+    marginTop: Spacing.sm,
+    backgroundColor: `${Colors.ai}10`,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: Colors.ai,
+  },
+  aiButtonText: {
+    ...Typography.body,
+    color: Colors.ai,
+    fontWeight: '500',
   },
 });

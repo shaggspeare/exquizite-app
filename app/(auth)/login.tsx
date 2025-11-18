@@ -1,76 +1,179 @@
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
 import { useAuth } from '@/contexts/AuthContext';
 import { Colors, Spacing, Typography } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function LoginScreen() {
-  const { signInWithGoogle, signInAsGuest } = useAuth();
+  const { signInWithEmail, signUpWithEmail, signInAsGuest } = useAuth();
+  const [isSignUp, setIsSignUp] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleGoogleSignIn = async () => {
+  // Form state
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const handleEmailAuth = async () => {
+    if (!email.trim() || !password.trim()) {
+      Alert.alert('Error', 'Please fill in all fields');
+      return;
+    }
+
+    if (isSignUp) {
+      if (!name.trim()) {
+        Alert.alert('Error', 'Please enter your name');
+        return;
+      }
+      if (password !== confirmPassword) {
+        Alert.alert('Error', 'Passwords do not match');
+        return;
+      }
+      if (password.length < 6) {
+        Alert.alert('Error', 'Password must be at least 6 characters');
+        return;
+      }
+    }
+
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      await signInWithGoogle();
-    } catch (error) {
-      Alert.alert('Error', 'Failed to sign in with Google');
+      if (isSignUp) {
+        await signUpWithEmail(email.trim(), password, name.trim());
+        Alert.alert('Success', 'Account created! You can now sign in.');
+        // Switch to sign in mode
+        setIsSignUp(false);
+        setPassword('');
+        setConfirmPassword('');
+      } else {
+        await signInWithEmail(email.trim(), password);
+      }
+    } catch (error: any) {
+      Alert.alert('Error', error.message || 'Authentication failed');
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleGuestSignIn = async () => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       await signInAsGuest('Guest User');
-    } catch (error) {
-      Alert.alert('Error', 'Failed to continue as guest');
+    } catch (error: any) {
+      Alert.alert('Error', error.message || 'Failed to continue as guest');
     } finally {
       setIsLoading(false);
     }
   };
 
+  const toggleMode = () => {
+    setIsSignUp(!isSignUp);
+    setPassword('');
+    setConfirmPassword('');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <View style={styles.header}>
-          <Text style={styles.logo}>Exquizite</Text>
-          <Text style={styles.subtitle}>
-            Learn vocabulary with AI-powered games
-          </Text>
-        </View>
-
-        <View style={styles.actions}>
-          <Button
-            title="Sign in with Google"
-            onPress={handleGoogleSignIn}
-            disabled={isLoading}
-            style={styles.googleButton}
-          />
-
-          <View style={styles.divider}>
-            <View style={styles.dividerLine} />
-            <Text style={styles.dividerText}>or</Text>
-            <View style={styles.dividerLine} />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.keyboardView}
+      >
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View style={styles.header}>
+            <Text style={styles.logo}>Exquizite</Text>
+            <Text style={styles.subtitle}>
+              Learn vocabulary with AI-powered games
+            </Text>
           </View>
 
-          <Button
-            title="Continue as Guest"
-            onPress={handleGuestSignIn}
-            variant="outline"
-            disabled={isLoading}
-          />
-        </View>
+          <View style={styles.formContainer}>
+            <Text style={styles.formTitle}>
+              {isSignUp ? 'Create Account' : 'Welcome Back'}
+            </Text>
 
-        <View style={styles.footer}>
-          <Ionicons name="sparkles" size={20} color={Colors.ai} />
-          <Text style={styles.footerText}>
-            AI-enhanced learning experience
-          </Text>
-        </View>
-      </View>
+            {isSignUp && (
+              <Input
+                label="Name"
+                value={name}
+                onChangeText={setName}
+                placeholder="Your name"
+                autoCapitalize="words"
+              />
+            )}
+
+            <Input
+              label="Email"
+              value={email}
+              onChangeText={setEmail}
+              placeholder="your@email.com"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
+            />
+
+            <Input
+              label="Password"
+              value={password}
+              onChangeText={setPassword}
+              placeholder={isSignUp ? 'Min 6 characters' : 'Enter password'}
+              secureTextEntry
+              autoCapitalize="none"
+            />
+
+            {isSignUp && (
+              <Input
+                label="Confirm Password"
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                placeholder="Re-enter password"
+                secureTextEntry
+                autoCapitalize="none"
+              />
+            )}
+
+            <Button
+              title={isSignUp ? 'Sign Up' : 'Sign In'}
+              onPress={handleEmailAuth}
+              disabled={isLoading}
+              style={styles.primaryButton}
+            />
+
+            <Button
+              title={isSignUp ? 'Already have an account? Sign In' : 'Don\'t have an account? Sign Up'}
+              onPress={toggleMode}
+              variant="text"
+              disabled={isLoading}
+            />
+
+            <View style={styles.divider}>
+              <View style={styles.dividerLine} />
+              <Text style={styles.dividerText}>or</Text>
+              <View style={styles.dividerLine} />
+            </View>
+
+            <Button
+              title="Continue as Guest"
+              onPress={handleGuestSignIn}
+              variant="outline"
+              disabled={isLoading}
+            />
+          </View>
+
+          <View style={styles.footer}>
+            <Ionicons name="sparkles" size={20} color={Colors.ai} />
+            <Text style={styles.footerText}>
+              AI-enhanced learning experience
+            </Text>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -80,14 +183,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
   },
-  content: {
+  keyboardView: {
     flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
     justifyContent: 'center',
     paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.xl,
   },
   header: {
     alignItems: 'center',
-    marginBottom: Spacing.xxl * 2,
+    marginBottom: Spacing.xxl,
   },
   logo: {
     ...Typography.h1,
@@ -100,18 +207,23 @@ const styles = StyleSheet.create({
     color: Colors.textSecondary,
     textAlign: 'center',
   },
-  actions: {
-    gap: Spacing.md,
+  formContainer: {
+    marginBottom: Spacing.xl,
   },
-  googleButton: {
-    backgroundColor: Colors.card,
-    borderWidth: 1,
-    borderColor: Colors.border,
+  formTitle: {
+    ...Typography.h2,
+    color: Colors.text,
+    marginBottom: Spacing.lg,
+    textAlign: 'center',
+  },
+  primaryButton: {
+    marginTop: Spacing.md,
+    marginBottom: Spacing.sm,
   },
   divider: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: Spacing.md,
+    marginVertical: Spacing.lg,
   },
   dividerLine: {
     flex: 1,
@@ -127,7 +239,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: Spacing.xxl * 2,
+    marginTop: Spacing.xl,
     gap: Spacing.sm,
   },
   footerText: {
