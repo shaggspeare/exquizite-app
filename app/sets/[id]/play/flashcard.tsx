@@ -41,6 +41,24 @@ export default function FlashcardScreen() {
     }
   }, [set]);
 
+  // All hooks must be called before any conditional returns
+  const frontAnimatedStyle = useAnimatedStyle(() => {
+    const rotateY = interpolate(rotation.value, [0, 180], [0, 180]);
+    return {
+      transform: [{ rotateY: `${rotateY}deg` }],
+      backfaceVisibility: 'hidden',
+    };
+  });
+
+  const backAnimatedStyle = useAnimatedStyle(() => {
+    const rotateY = interpolate(rotation.value, [0, 180], [180, 360]);
+    return {
+      transform: [{ rotateY: `${rotateY}deg` }],
+      backfaceVisibility: 'hidden',
+    };
+  });
+
+  // Conditional returns after all hooks
   if (!set || set.words.length === 0) {
     return (
       <SafeAreaView style={styles.container}>
@@ -80,22 +98,6 @@ export default function FlashcardScreen() {
     updateLastPracticed(id!);
     router.back();
   };
-
-  const frontAnimatedStyle = useAnimatedStyle(() => {
-    const rotateY = interpolate(rotation.value, [0, 180], [0, 180]);
-    return {
-      transform: [{ rotateY: `${rotateY}deg` }],
-      backfaceVisibility: 'hidden',
-    };
-  });
-
-  const backAnimatedStyle = useAnimatedStyle(() => {
-    const rotateY = interpolate(rotation.value, [0, 180], [180, 360]);
-    return {
-      transform: [{ rotateY: `${rotateY}deg` }],
-      backfaceVisibility: 'hidden',
-    };
-  });
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
