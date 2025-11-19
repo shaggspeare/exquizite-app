@@ -4,6 +4,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState, useEffect } from 'react';
@@ -184,66 +185,78 @@ export default function MatchScreen() {
         <View style={styles.columns}>
           <View style={styles.column}>
             <Text style={styles.columnTitle}>Words</Text>
-            {words.map(item => (
-              <TouchableOpacity
-                key={item.id}
-                onPress={() => handleWordPress(item)}
-                disabled={item.matched}
-                style={[
-                  styles.matchCard,
-                  selectedWord === item.id && styles.matchCardSelected,
-                  item.matched && styles.matchCardMatched,
-                ]}
-              >
-                <Text
+            <ScrollView
+              style={styles.scrollView}
+              contentContainerStyle={styles.scrollContent}
+              showsVerticalScrollIndicator={false}
+            >
+              {words.map(item => (
+                <TouchableOpacity
+                  key={item.id}
+                  onPress={() => handleWordPress(item)}
+                  disabled={item.matched}
                   style={[
-                    styles.matchCardText,
-                    item.matched && styles.matchCardTextMatched,
+                    styles.matchCard,
+                    selectedWord === item.id && styles.matchCardSelected,
+                    item.matched && styles.matchCardMatched,
                   ]}
                 >
-                  {item.text}
-                </Text>
-                {item.matched && (
-                  <Ionicons
-                    name="checkmark-circle"
-                    size={20}
-                    color={Colors.success}
-                  />
-                )}
-              </TouchableOpacity>
-            ))}
+                  <Text
+                    style={[
+                      styles.matchCardText,
+                      item.matched && styles.matchCardTextMatched,
+                    ]}
+                  >
+                    {item.text}
+                  </Text>
+                  {item.matched && (
+                    <Ionicons
+                      name="checkmark-circle"
+                      size={20}
+                      color={Colors.success}
+                    />
+                  )}
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
           </View>
 
           <View style={styles.column}>
             <Text style={styles.columnTitle}>Translations</Text>
-            {translations.map(item => (
-              <TouchableOpacity
-                key={item.id}
-                onPress={() => handleTranslationPress(item)}
-                disabled={item.matched}
-                style={[
-                  styles.matchCard,
-                  selectedTranslation === item.id && styles.matchCardSelected,
-                  item.matched && styles.matchCardMatched,
-                ]}
-              >
-                <Text
+            <ScrollView
+              style={styles.scrollView}
+              contentContainerStyle={styles.scrollContent}
+              showsVerticalScrollIndicator={false}
+            >
+              {translations.map(item => (
+                <TouchableOpacity
+                  key={item.id}
+                  onPress={() => handleTranslationPress(item)}
+                  disabled={item.matched}
                   style={[
-                    styles.matchCardText,
-                    item.matched && styles.matchCardTextMatched,
+                    styles.matchCard,
+                    selectedTranslation === item.id && styles.matchCardSelected,
+                    item.matched && styles.matchCardMatched,
                   ]}
                 >
-                  {item.text}
-                </Text>
-                {item.matched && (
-                  <Ionicons
-                    name="checkmark-circle"
-                    size={20}
-                    color={Colors.success}
-                  />
-                )}
-              </TouchableOpacity>
-            ))}
+                  <Text
+                    style={[
+                      styles.matchCardText,
+                      item.matched && styles.matchCardTextMatched,
+                    ]}
+                  >
+                    {item.text}
+                  </Text>
+                  {item.matched && (
+                    <Ionicons
+                      name="checkmark-circle"
+                      size={20}
+                      color={Colors.success}
+                    />
+                  )}
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
           </View>
         </View>
       </View>
@@ -294,6 +307,12 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginBottom: Spacing.sm,
     textAlign: 'center',
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: Spacing.lg,
   },
   matchCard: {
     backgroundColor: Colors.card,
