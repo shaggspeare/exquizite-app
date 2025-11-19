@@ -1,7 +1,8 @@
 import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import { Card } from '@/components/ui/Card';
+import { useTheme } from '@/contexts/ThemeContext';
 import { WordSet } from '@/lib/types';
-import { Colors, Spacing, Typography } from '@/lib/constants';
+import { Spacing, Typography } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 
 interface SetCardProps {
@@ -10,6 +11,7 @@ interface SetCardProps {
 }
 
 export function SetCard({ set, onPress }: SetCardProps) {
+  const { colors } = useTheme();
   const formatDate = (dateString?: string) => {
     if (!dateString) return 'Never';
     const date = new Date(dateString);
@@ -26,31 +28,34 @@ export function SetCard({ set, onPress }: SetCardProps) {
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
       <Card style={styles.card}>
-        <Text style={styles.title}>{set.name}</Text>
+        <Text style={[styles.title, { color: colors.text }]}>{set.name}</Text>
 
         <View style={styles.meta}>
           <View style={styles.metaItem}>
-            <Ionicons name="book" size={16} color={Colors.textSecondary} />
-            <Text style={styles.metaText}>
+            <Ionicons name="book" size={16} color={colors.textSecondary} />
+            <Text style={[styles.metaText, { color: colors.textSecondary }]}>
               {set.words.length} {set.words.length === 1 ? 'word' : 'words'}
             </Text>
           </View>
 
           {set.lastPracticed && (
             <View style={styles.metaItem}>
-              <Ionicons name="time" size={16} color={Colors.textSecondary} />
-              <Text style={styles.metaText}>
+              <Ionicons name="time" size={16} color={colors.textSecondary} />
+              <Text style={[styles.metaText, { color: colors.textSecondary }]}>
                 {formatDate(set.lastPracticed)}
               </Text>
             </View>
           )}
         </View>
 
-        <View style={styles.progressBar}>
+        <View style={[styles.progressBar, { backgroundColor: colors.border }]}>
           <View
             style={[
               styles.progressFill,
-              { width: `${Math.min((set.words.length / 20) * 100, 100)}%` },
+              {
+                width: `${Math.min((set.words.length / 20) * 100, 100)}%`,
+                backgroundColor: colors.primary,
+              },
             ]}
           />
         </View>
@@ -66,7 +71,6 @@ const styles = StyleSheet.create({
   title: {
     ...Typography.h2,
     fontSize: 20,
-    color: Colors.text,
     marginBottom: Spacing.sm,
   },
   meta: {
@@ -81,16 +85,13 @@ const styles = StyleSheet.create({
   },
   metaText: {
     ...Typography.caption,
-    color: Colors.textSecondary,
   },
   progressBar: {
     height: 4,
-    backgroundColor: Colors.border,
     borderRadius: 2,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    backgroundColor: Colors.primary,
   },
 });

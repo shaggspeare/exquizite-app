@@ -4,11 +4,13 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { useAuth } from '@/contexts/AuthContext';
-import { Colors, Spacing, Typography } from '@/lib/constants';
+import { useTheme } from '@/contexts/ThemeContext';
+import { Spacing, Typography } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function LoginScreen() {
   const { signInWithEmail, signUpWithEmail, signInAsGuest } = useAuth();
+  const { colors } = useTheme();
   const [isSignUp, setIsSignUp] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -76,7 +78,7 @@ export default function LoginScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardView}
@@ -87,14 +89,14 @@ export default function LoginScreen() {
           keyboardShouldPersistTaps="handled"
         >
           <View style={styles.header}>
-            <Text style={styles.logo}>Exquizite</Text>
-            <Text style={styles.subtitle}>
+            <Text style={[styles.logo, { color: colors.primary }]}>Exquizite</Text>
+            <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
               Learn vocabulary with AI-powered games
             </Text>
           </View>
 
           <View style={styles.formContainer}>
-            <Text style={styles.formTitle}>
+            <Text style={[styles.formTitle, { color: colors.text }]}>
               {isSignUp ? 'Create Account' : 'Welcome Back'}
             </Text>
 
@@ -153,9 +155,9 @@ export default function LoginScreen() {
             />
 
             <View style={styles.divider}>
-              <View style={styles.dividerLine} />
-              <Text style={styles.dividerText}>or</Text>
-              <View style={styles.dividerLine} />
+              <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
+              <Text style={[styles.dividerText, { color: colors.textSecondary }]}>or</Text>
+              <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
             </View>
 
             <Button
@@ -167,8 +169,8 @@ export default function LoginScreen() {
           </View>
 
           <View style={styles.footer}>
-            <Ionicons name="sparkles" size={20} color={Colors.ai} />
-            <Text style={styles.footerText}>
+            <Ionicons name="sparkles" size={20} color={colors.ai} />
+            <Text style={[styles.footerText, { color: colors.textSecondary }]}>
               AI-enhanced learning experience
             </Text>
           </View>
@@ -181,7 +183,6 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
   },
   keyboardView: {
     flex: 1,
@@ -199,12 +200,10 @@ const styles = StyleSheet.create({
   logo: {
     ...Typography.h1,
     fontSize: 48,
-    color: Colors.primary,
     marginBottom: Spacing.md,
   },
   subtitle: {
     ...Typography.body,
-    color: Colors.textSecondary,
     textAlign: 'center',
   },
   formContainer: {
@@ -212,7 +211,6 @@ const styles = StyleSheet.create({
   },
   formTitle: {
     ...Typography.h2,
-    color: Colors.text,
     marginBottom: Spacing.lg,
     textAlign: 'center',
   },
@@ -228,11 +226,9 @@ const styles = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: Colors.border,
   },
   dividerText: {
     ...Typography.caption,
-    color: Colors.textSecondary,
     marginHorizontal: Spacing.md,
   },
   footer: {
@@ -244,6 +240,5 @@ const styles = StyleSheet.create({
   },
   footerText: {
     ...Typography.caption,
-    color: Colors.textSecondary,
   },
 });

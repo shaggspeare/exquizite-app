@@ -1,6 +1,7 @@
 import { View, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 import { WordPair } from '@/lib/types';
-import { Colors, Spacing, Typography, BorderRadius } from '@/lib/constants';
+import { Spacing, Typography, BorderRadius } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 
 interface WordPairInputProps {
@@ -18,20 +19,38 @@ export function WordPairInput({
   onDelete,
   canDelete,
 }: WordPairInputProps) {
+  const { colors } = useTheme();
+
   return (
     <View style={styles.container}>
       <View style={styles.inputs}>
         <TextInput
-          style={[styles.input, styles.wordInput]}
+          style={[
+            styles.input,
+            styles.wordInput,
+            {
+              borderColor: colors.border,
+              color: colors.text,
+              backgroundColor: colors.card,
+            },
+          ]}
           placeholder="Word"
-          placeholderTextColor={Colors.textSecondary}
+          placeholderTextColor={colors.textSecondary}
           value={pair.word}
           onChangeText={onChangeWord}
         />
         <TextInput
-          style={[styles.input, styles.translationInput]}
+          style={[
+            styles.input,
+            styles.translationInput,
+            {
+              borderColor: colors.border,
+              color: colors.text,
+              backgroundColor: colors.card,
+            },
+          ]}
           placeholder="Translation"
-          placeholderTextColor={Colors.textSecondary}
+          placeholderTextColor={colors.textSecondary}
           value={pair.translation}
           onChangeText={onChangeTranslation}
         />
@@ -42,7 +61,7 @@ export function WordPairInput({
           style={styles.deleteButton}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Ionicons name="close-circle" size={24} color={Colors.error} />
+          <Ionicons name="close-circle" size={24} color={colors.error} />
         </TouchableOpacity>
       )}
     </View>
@@ -63,13 +82,10 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: Colors.border,
     borderRadius: BorderRadius.input,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
     ...Typography.body,
-    color: Colors.text,
-    backgroundColor: Colors.card,
     minHeight: 44,
   },
   wordInput: {

@@ -1,6 +1,8 @@
 // Design system constants for Exquizite app
+// To use theme-aware colors, import useTheme from @/contexts/ThemeContext
+// and use colors from the hook instead of importing Colors directly
 
-export const Colors = {
+export const LightColors = {
   background: '#FAFAFA',
   card: '#FFFFFF',
   primary: '#5B67E5',
@@ -12,6 +14,22 @@ export const Colors = {
   ai: '#8B5CF6',
   border: '#E5E5E5',
 };
+
+export const DarkColors = {
+  background: '#121212',
+  card: '#1E1E1E',
+  primary: '#6B7AFF',
+  primaryDark: '#5B6AEF',
+  text: '#FFFFFF',
+  textSecondary: '#A0A0A0',
+  success: '#10B981',
+  error: '#EF4444',
+  ai: '#A78BFA',
+  border: '#2C2C2C',
+};
+
+// Default export for backwards compatibility
+export const Colors = LightColors;
 
 export const Spacing = {
   xs: 4,

@@ -4,7 +4,8 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
-import { Colors, Spacing, BorderRadius, Typography } from '@/lib/constants';
+import { Spacing, BorderRadius, Typography } from '@/lib/constants';
+import { useTheme } from '@/contexts/ThemeContext';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -26,6 +27,7 @@ export function Button({
   textStyle,
 }: ButtonProps) {
   const scale = useSharedValue(1);
+  const { colors } = useTheme();
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
@@ -39,6 +41,32 @@ export function Button({
     scale.value = withSpring(1);
   };
 
+  const getBackgroundColor = () => {
+    if (disabled) {
+      if (variant === 'primary') return colors.border;
+      if (variant === 'secondary') return colors.card;
+      return 'transparent';
+    }
+    if (variant === 'primary') return colors.primary;
+    if (variant === 'secondary') return colors.card;
+    return 'transparent';
+  };
+
+  const getBorderColor = () => {
+    if (disabled && variant === 'outline') return colors.border;
+    if (variant === 'secondary') return colors.border;
+    if (variant === 'outline') return colors.primary;
+    return undefined;
+  };
+
+  const getTextColor = () => {
+    if (disabled) return colors.textSecondary;
+    if (variant === 'primary') return '#FFFFFF';
+    if (variant === 'secondary') return colors.text;
+    if (variant === 'outline' || variant === 'text') return colors.primary;
+    return colors.text;
+  };
+
   return (
     <AnimatedPressable
       onPressIn={handlePressIn}
@@ -47,7 +75,11 @@ export function Button({
       disabled={disabled}
       style={[
         styles.button,
-        styles[variant],
+        {
+          backgroundColor: getBackgroundColor(),
+          borderColor: getBorderColor(),
+          borderWidth: variant === 'secondary' || variant === 'outline' ? 1 : 0,
+        },
         disabled && styles.disabled,
         animatedStyle,
         style,
@@ -56,8 +88,7 @@ export function Button({
       <Text
         style={[
           styles.buttonText,
-          styles[`${variant}Text`],
-          disabled && styles.disabledText,
+          { color: getTextColor() },
           textStyle,
         ]}
       >
@@ -76,42 +107,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     minHeight: 44,
   },
-  primary: {
-    backgroundColor: Colors.primary,
-  },
-  secondary: {
-    backgroundColor: Colors.card,
-    borderWidth: 1,
-    borderColor: Colors.border,
-  },
-  outline: {
-    backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderColor: Colors.primary,
-  },
-  text: {
-    backgroundColor: 'transparent',
-  },
   disabled: {
-    opacity: 0.5,
+    opacity: 0.8,
   },
   buttonText: {
     ...Typography.body,
     fontWeight: '500',
-  },
-  primaryText: {
-    color: '#FFFFFF',
-  },
-  secondaryText: {
-    color: Colors.text,
-  },
-  outlineText: {
-    color: Colors.primary,
-  },
-  textText: {
-    color: Colors.primary,
-  },
-  disabledText: {
-    color: Colors.textSecondary,
   },
 });

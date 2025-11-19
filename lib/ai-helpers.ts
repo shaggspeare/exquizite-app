@@ -1,60 +1,36 @@
-// AI helper functions using OpenAI API with fallback to mock data
+// AI helper functions using OpenAI API
 import { WordPair } from './types';
 import * as OpenAIService from './openai-service';
 
-// Mock word suggestions by theme (fallback)
-const mockSuggestions: Record<string, WordPair[]> = {
-  animals: [
-    { id: '1', word: 'cat', translation: 'кіт' },
-    { id: '2', word: 'dog', translation: 'собака' },
-    { id: '3', word: 'bird', translation: 'птах' },
-    { id: '4', word: 'fish', translation: 'риба' },
-    { id: '5', word: 'horse', translation: 'кінь' },
-  ],
-  colors: [
-    { id: '1', word: 'red', translation: 'червоний' },
-    { id: '2', word: 'blue', translation: 'синій' },
-    { id: '3', word: 'green', translation: 'зелений' },
-    { id: '4', word: 'yellow', translation: 'жовтий' },
-    { id: '5', word: 'white', translation: 'білий' },
-  ],
-  food: [
-    { id: '1', word: 'bread', translation: 'хліб' },
-    { id: '2', word: 'milk', translation: 'молоко' },
-    { id: '3', word: 'apple', translation: 'яблуко' },
-    { id: '4', word: 'water', translation: 'вода' },
-    { id: '5', word: 'cheese', translation: 'сир' },
-  ],
-};
-
 /**
- * Generate word suggestions based on theme
- * Uses OpenAI API, falls back to mock data on error
+ * Generate word suggestions based on theme using OpenAI API
  */
 export async function generateWordSuggestions(
   theme: string,
-  targetLanguage: string = 'Ukrainian'
+  targetLanguage: string = 'Ukrainian',
+  nativeLanguage: string = 'English'
 ): Promise<WordPair[]> {
   try {
-    // Try to use OpenAI API
+    console.log('[AI Helper] Requesting word suggestions:', { theme, targetLanguage, nativeLanguage });
+
     const suggestions = await OpenAIService.generateWordSuggestions(
       theme,
       targetLanguage,
+      nativeLanguage,
       5
     );
 
-    if (suggestions.length > 0) {
-      return suggestions;
+    if (suggestions.length === 0) {
+      console.warn('[AI Helper] No suggestions returned from OpenAI');
+      throw new Error('No suggestions generated');
     }
 
-    // Fallback to mock data
-    const normalizedTheme = theme.toLowerCase();
-    return mockSuggestions[normalizedTheme] || [];
+    console.log('[AI Helper] Successfully received', suggestions.length, 'suggestions');
+    return suggestions;
   } catch (error) {
-    console.error('Error generating word suggestions:', error);
-    // Fallback to mock data
-    const normalizedTheme = theme.toLowerCase();
-    return mockSuggestions[normalizedTheme] || [];
+    console.error('[AI Helper] Error generating word suggestions:', error);
+    // Return empty array - no mock fallback
+    return [];
   }
 }
 
@@ -104,12 +80,12 @@ export async function generateQuizOptions(
       distractors = shuffled.slice(0, 3);
     } else {
       // Try to generate with OpenAI
-      distractors = await OpenAIService.generateQuizDistractors(
+      distractors = await OpenAIService.generateQuizDistractors({
         word,
         correctAnswer,
         allTranslations,
-        3
-      );
+        count: 3,
+      });
     }
 
     // Combine with correct answer and shuffle

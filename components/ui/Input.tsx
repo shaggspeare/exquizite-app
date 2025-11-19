@@ -1,5 +1,6 @@
 import { TextInput, StyleSheet, View, Text, TextInputProps } from 'react-native';
-import { Colors, Spacing, BorderRadius, Typography } from '@/lib/constants';
+import { Spacing, BorderRadius, Typography } from '@/lib/constants';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface InputProps extends TextInputProps {
   label?: string;
@@ -7,15 +8,25 @@ interface InputProps extends TextInputProps {
 }
 
 export function Input({ label, error, style, ...props }: InputProps) {
+  const { colors } = useTheme();
+
   return (
     <View style={styles.container}>
-      {label && <Text style={styles.label}>{label}</Text>}
+      {label && <Text style={[styles.label, { color: colors.text }]}>{label}</Text>}
       <TextInput
-        style={[styles.input, error && styles.inputError, style]}
-        placeholderTextColor={Colors.textSecondary}
+        style={[
+          styles.input,
+          {
+            borderColor: error ? colors.error : colors.border,
+            color: colors.text,
+            backgroundColor: colors.card,
+          },
+          style
+        ]}
+        placeholderTextColor={colors.textSecondary}
         {...props}
       />
-      {error && <Text style={styles.error}>{error}</Text>}
+      {error && <Text style={[styles.error, { color: colors.error }]}>{error}</Text>}
     </View>
   );
 }
@@ -26,26 +37,18 @@ const styles = StyleSheet.create({
   },
   label: {
     ...Typography.caption,
-    color: Colors.text,
     marginBottom: Spacing.xs,
   },
   input: {
     borderWidth: 1,
-    borderColor: Colors.border,
     borderRadius: BorderRadius.input,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
     ...Typography.body,
-    color: Colors.text,
-    backgroundColor: Colors.card,
     minHeight: 44,
-  },
-  inputError: {
-    borderColor: Colors.error,
   },
   error: {
     ...Typography.small,
-    color: Colors.error,
     marginTop: Spacing.xs,
   },
 });

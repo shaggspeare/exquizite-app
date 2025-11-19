@@ -6,8 +6,8 @@ import { WordSet, WordPair } from '@/lib/types';
 interface SetsContextType {
   sets: WordSet[];
   isLoading: boolean;
-  createSet: (name: string, words: WordPair[]) => Promise<WordSet | null>;
-  updateSet: (id: string, name: string, words: WordPair[]) => Promise<void>;
+  createSet: (name: string, words: WordPair[], targetLanguage: string, nativeLanguage: string) => Promise<WordSet | null>;
+  updateSet: (id: string, name: string, words: WordPair[], targetLanguage: string, nativeLanguage: string) => Promise<void>;
   deleteSet: (id: string) => Promise<void>;
   getSetById: (id: string) => WordSet | undefined;
   updateLastPracticed: (id: string) => Promise<void>;
@@ -57,6 +57,8 @@ export function SetsProvider({ children }: { children: ReactNode }) {
             word: pair.word,
             translation: pair.translation,
           })),
+        targetLanguage: set.target_language || 'uk',
+        nativeLanguage: set.native_language || 'en',
         createdAt: set.created_at,
         updatedAt: set.updated_at,
         lastPracticed: set.last_practiced || undefined,
@@ -70,21 +72,39 @@ export function SetsProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const createSet = async (name: string, words: WordPair[]): Promise<WordSet | null> => {
-    if (!user) return null;
+  const createSet = async (name: string, words: WordPair[], targetLanguage: string, nativeLanguage: string): Promise<WordSet | null> => {
+    if (!user) {
+      console.error('No user found when creating set');
+      return null;
+    }
 
     try {
+      console.log('Creating set:', { name, wordCount: words.length, userId: user.id, targetLanguage, nativeLanguage });
+
       // Create the word set
       const { data: setData, error: setError } = await supabase
         .from('word_sets')
         .insert({
           user_id: user.id,
           name,
+          target_language: targetLanguage,
+          native_language: nativeLanguage,
         })
         .select()
         .single();
 
-      if (setError) throw setError;
+      if (setError) {
+        console.error('Error creating word set:', JSON.stringify(setError, null, 2));
+        console.error('Error details:', {
+          message: setError.message,
+          code: setError.code,
+          details: setError.details,
+          hint: setError.hint,
+        });
+        throw new Error(`Failed to create word set: ${setError.message || 'Unknown error'}`);
+      }
+
+      console.log('Set created successfully:', setData);
 
       // Create word pairs
       const wordPairsToInsert = words.map((word, index) => ({
@@ -94,12 +114,25 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         position: index,
       }));
 
+      console.log('Inserting word pairs:', wordPairsToInsert.length);
+
       const { data: pairsData, error: pairsError } = await supabase
         .from('word_pairs')
         .insert(wordPairsToInsert)
         .select();
 
-      if (pairsError) throw pairsError;
+      if (pairsError) {
+        console.error('Error creating word pairs:', JSON.stringify(pairsError, null, 2));
+        console.error('Error details:', {
+          message: pairsError.message,
+          code: pairsError.code,
+          details: pairsError.details,
+          hint: pairsError.hint,
+        });
+        throw new Error(`Failed to create word pairs: ${pairsError.message || 'Unknown error'}`);
+      }
+
+      console.log('Word pairs created successfully:', pairsData?.length);
 
       // Create the new set object
       const newSet: WordSet = {
@@ -110,6 +143,8 @@ export function SetsProvider({ children }: { children: ReactNode }) {
           word: pair.word,
           translation: pair.translation,
         })),
+        targetLanguage: setData.target_language,
+        nativeLanguage: setData.native_language,
         createdAt: setData.created_at,
         updatedAt: setData.updated_at,
         lastPracticed: undefined,
@@ -118,20 +153,38 @@ export function SetsProvider({ children }: { children: ReactNode }) {
       // Update local state
       setSets(prev => [newSet, ...prev]);
       return newSet;
-    } catch (error) {
-      console.error('Error creating set:', error);
+    } catch (error: any) {
+      console.error('Error creating set - Full error:', error);
+      console.error('Error creating set - Stringified:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+      console.error('Error creating set - Details:', {
+        message: error?.message || 'No message',
+        name: error?.name || 'No name',
+        code: error?.code || 'No code',
+        details: error?.details || 'No details',
+        hint: error?.hint || 'No hint',
+        stack: error?.stack || 'No stack',
+      });
+
+      // Show alert to user with error message
+      const errorMessage = error?.message || error?.toString() || 'Unknown error occurred';
+      console.error('Final error message:', errorMessage);
+
       return null;
     }
   };
 
-  const updateSet = async (id: string, name: string, words: WordPair[]) => {
+  const updateSet = async (id: string, name: string, words: WordPair[], targetLanguage: string, nativeLanguage: string) => {
     if (!user) return;
 
     try {
       // Update the word set
       const { error: setError } = await supabase
         .from('word_sets')
-        .update({ name })
+        .update({
+          name,
+          target_language: targetLanguage,
+          native_language: nativeLanguage,
+        })
         .eq('id', id);
 
       if (setError) throw setError;

@@ -6,14 +6,17 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   FlatList,
+  Keyboard,
 } from 'react-native';
 import { useState } from 'react';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
+import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage, getLanguageName } from '@/contexts/LanguageContext';
 import { WordPair } from '@/lib/types';
 import { generateWordSuggestions } from '@/lib/ai-helpers';
-import { Colors, Spacing, Typography } from '@/lib/constants';
+import { Spacing, Typography } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 
 interface AISuggestionModalProps {
@@ -27,6 +30,8 @@ export function AISuggestionModal({
   onClose,
   onSelectWords,
 }: AISuggestionModalProps) {
+  const { colors } = useTheme();
+  const { preferences } = useLanguage();
   const [theme, setTheme] = useState('');
   const [suggestions, setSuggestions] = useState<WordPair[]>([]);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -37,9 +42,20 @@ export function AISuggestionModal({
       return;
     }
 
+    // Dismiss keyboard
+    Keyboard.dismiss();
+
     setLoading(true);
+    setSuggestions([]); // Clear previous suggestions
     try {
-      const words = await generateWordSuggestions(theme, 'Ukrainian');
+      const targetLangName = getLanguageName(preferences.targetLanguage);
+      const nativeLangName = getLanguageName(preferences.nativeLanguage);
+
+      const words = await generateWordSuggestions(
+        theme,
+        targetLangName,
+        nativeLangName
+      );
       setSuggestions(words);
       setSelectedIds(new Set(words.map(w => w.id)));
     } catch (error) {
@@ -73,6 +89,17 @@ export function AISuggestionModal({
     onClose();
   };
 
+  const renderSkeletonCard = () => (
+    <Card style={styles.suggestionCard}>
+      <View style={styles.suggestionContent}>
+        <View style={styles.wordInfo}>
+          <View style={[styles.skeleton, styles.skeletonWord, { backgroundColor: colors.border }]} />
+          <View style={[styles.skeleton, styles.skeletonTranslation, { backgroundColor: colors.border }]} />
+        </View>
+      </View>
+    </Card>
+  );
+
   return (
     <Modal
       visible={visible}
@@ -80,11 +107,11 @@ export function AISuggestionModal({
       presentationStyle="pageSheet"
       onRequestClose={handleClose}
     >
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>AI Word Suggestions</Text>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <View style={[styles.header, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
+          <Text style={[styles.headerTitle, { color: colors.text }]}>AI Word Suggestions</Text>
           <TouchableOpacity onPress={handleClose}>
-            <Ionicons name="close" size={28} color={Colors.text} />
+            <Ionicons name="close" size={28} color={colors.text} />
           </TouchableOpacity>
         </View>
 
@@ -95,26 +122,32 @@ export function AISuggestionModal({
               value={theme}
               onChangeText={setTheme}
               style={styles.input}
+              editable={!loading}
             />
             <Button
-              title="Generate"
+              title={loading ? "Generating..." : "Generate"}
               onPress={handleGenerate}
               disabled={loading || !theme.trim()}
             />
           </View>
 
           {loading && (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" color={Colors.ai} />
-              <Text style={styles.loadingText}>
-                Generating suggestions with AI...
-              </Text>
+            <View style={styles.loadingSection}>
+              <View style={styles.loadingHeader}>
+                <ActivityIndicator size="small" color={colors.primary} />
+                <Text style={[styles.loadingHeaderText, { color: colors.textSecondary }]}>
+                  Generating suggestions with AI...
+                </Text>
+              </View>
+              {[1, 2, 3, 4, 5].map((key) => (
+                <View key={key}>{renderSkeletonCard()}</View>
+              ))}
             </View>
           )}
 
           {!loading && suggestions.length > 0 && (
             <>
-              <Text style={styles.sectionTitle}>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>
                 Select words to add ({selectedIds.size} selected)
               </Text>
               <FlatList
@@ -128,13 +161,17 @@ export function AISuggestionModal({
                     <Card
                       style={[
                         styles.suggestionCard,
-                        selectedIds.has(item.id) && styles.selectedCard,
+                        selectedIds.has(item.id) ? {
+                          borderWidth: 2,
+                          borderColor: colors.success,
+                          backgroundColor: `${colors.success}10`,
+                        } : undefined,
                       ]}
                     >
                       <View style={styles.suggestionContent}>
                         <View style={styles.wordInfo}>
-                          <Text style={styles.word}>{item.word}</Text>
-                          <Text style={styles.translation}>
+                          <Text style={[styles.word, { color: colors.text }]}>{item.word}</Text>
+                          <Text style={[styles.translation, { color: colors.textSecondary }]}>
                             {item.translation}
                           </Text>
                         </View>
@@ -142,7 +179,7 @@ export function AISuggestionModal({
                           <Ionicons
                             name="checkmark-circle"
                             size={24}
-                            color={Colors.success}
+                            color={colors.success}
                           />
                         )}
                       </View>
@@ -152,7 +189,7 @@ export function AISuggestionModal({
                 showsVerticalScrollIndicator={false}
               />
 
-              <View style={styles.footer}>
+              <View style={[styles.footer, { borderTopColor: colors.border }]}>
                 <Button
                   title={`Add ${selectedIds.size} ${
                     selectedIds.size === 1 ? 'word' : 'words'
@@ -166,8 +203,8 @@ export function AISuggestionModal({
 
           {!loading && suggestions.length === 0 && theme && (
             <View style={styles.emptyState}>
-              <Ionicons name="sparkles" size={64} color={Colors.textSecondary} />
-              <Text style={styles.emptyText}>
+              <Ionicons name="sparkles" size={64} color={colors.textSecondary} />
+              <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
                 No suggestions yet. Click Generate to get AI-powered word
                 suggestions!
               </Text>
@@ -182,7 +219,6 @@ export function AISuggestionModal({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
   },
   header: {
     flexDirection: 'row',
@@ -190,14 +226,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.md,
-    backgroundColor: Colors.card,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
   },
   headerTitle: {
     ...Typography.h2,
     fontSize: 20,
-    color: Colors.text,
   },
   content: {
     flex: 1,
@@ -210,29 +243,39 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: Spacing.md,
   },
-  loadingContainer: {
+  loadingSection: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: Spacing.md,
   },
-  loadingText: {
+  loadingHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+    marginBottom: Spacing.lg,
+    paddingVertical: Spacing.sm,
+  },
+  loadingHeaderText: {
     ...Typography.body,
-    color: Colors.textSecondary,
+    fontSize: 16,
+  },
+  skeleton: {
+    borderRadius: 6,
+  },
+  skeletonWord: {
+    height: 20,
+    width: '60%',
+    marginBottom: Spacing.xs,
+  },
+  skeletonTranslation: {
+    height: 16,
+    width: '40%',
   },
   sectionTitle: {
     ...Typography.h2,
     fontSize: 18,
-    color: Colors.text,
     marginBottom: Spacing.md,
   },
   suggestionCard: {
     marginBottom: Spacing.sm,
-  },
-  selectedCard: {
-    borderWidth: 2,
-    borderColor: Colors.success,
-    backgroundColor: `${Colors.success}10`,
   },
   suggestionContent: {
     flexDirection: 'row',
@@ -244,13 +287,11 @@ const styles = StyleSheet.create({
   },
   word: {
     ...Typography.body,
-    color: Colors.text,
     fontWeight: '600',
     marginBottom: Spacing.xs,
   },
   translation: {
     ...Typography.caption,
-    color: Colors.textSecondary,
   },
   emptyState: {
     flex: 1,
@@ -260,14 +301,12 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     ...Typography.body,
-    color: Colors.textSecondary,
     textAlign: 'center',
     marginTop: Spacing.lg,
   },
   footer: {
     paddingTop: Spacing.md,
     borderTopWidth: 1,
-    borderTopColor: Colors.border,
     marginTop: Spacing.md,
   },
 });

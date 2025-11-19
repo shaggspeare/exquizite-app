@@ -9,14 +9,18 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSets } from '@/contexts/SetsContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { Colors, Spacing, Typography } from '@/lib/constants';
+import { Spacing, Typography } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
 export default function ProfileScreen() {
   const { user, signOut } = useAuth();
   const { sets, deleteSet } = useSets();
+  const { colors } = useTheme();
+  const router = useRouter();
 
   const totalWords = sets.reduce((sum, set) => sum + set.words.length, 0);
 
@@ -49,9 +53,15 @@ export default function ProfileScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Profile</Text>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
+      <View style={[styles.header, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
+        <Text style={[styles.headerTitle, { color: colors.text }]}>Profile</Text>
+        <TouchableOpacity
+          onPress={() => router.push('/(tabs)/settings')}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
+          <Ionicons name="settings-outline" size={24} color={colors.text} />
+        </TouchableOpacity>
       </View>
 
       <ScrollView
@@ -60,49 +70,49 @@ export default function ProfileScreen() {
         showsVerticalScrollIndicator={false}
       >
         <Card style={styles.profileCard}>
-          <View style={styles.avatar}>
-            <Ionicons name="person" size={48} color={Colors.primary} />
+          <View style={[styles.avatar, { backgroundColor: `${colors.primary}20` }]}>
+            <Ionicons name="person" size={48} color={colors.primary} />
           </View>
-          <Text style={styles.userName}>{user?.name || 'Guest'}</Text>
-          {user?.email && <Text style={styles.userEmail}>{user.email}</Text>}
+          <Text style={[styles.userName, { color: colors.text }]}>{user?.name || 'Guest'}</Text>
+          {user?.email && <Text style={[styles.userEmail, { color: colors.textSecondary }]}>{user.email}</Text>}
           <View style={styles.accountType}>
             <Ionicons
               name={user?.isGuest ? 'person-outline' : 'logo-google'}
               size={16}
-              color={Colors.textSecondary}
+              color={colors.textSecondary}
             />
-            <Text style={styles.accountTypeText}>
+            <Text style={[styles.accountTypeText, { color: colors.textSecondary }]}>
               {user?.isGuest ? 'Guest Account' : 'Google Account'}
             </Text>
           </View>
         </Card>
 
         <Card style={styles.statsCard}>
-          <Text style={styles.sectionTitle}>Statistics</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Statistics</Text>
           <View style={styles.stats}>
             <View style={styles.stat}>
-              <Ionicons name="library" size={32} color={Colors.primary} />
-              <Text style={styles.statValue}>{sets.length}</Text>
-              <Text style={styles.statLabel}>Sets Created</Text>
+              <Ionicons name="library" size={32} color={colors.primary} />
+              <Text style={[styles.statValue, { color: colors.text }]}>{sets.length}</Text>
+              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Sets Created</Text>
             </View>
             <View style={styles.stat}>
-              <Ionicons name="book" size={32} color={Colors.primary} />
-              <Text style={styles.statValue}>{totalWords}</Text>
-              <Text style={styles.statLabel}>Total Words</Text>
+              <Ionicons name="book" size={32} color={colors.primary} />
+              <Text style={[styles.statValue, { color: colors.text }]}>{totalWords}</Text>
+              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Total Words</Text>
             </View>
           </View>
         </Card>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Your Sets</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Your Sets</Text>
           {sets.length === 0 ? (
-            <Text style={styles.emptyText}>No sets created yet</Text>
+            <Text style={[styles.emptyText, { color: colors.textSecondary }]}>No sets created yet</Text>
           ) : (
             sets.map(set => (
               <Card key={set.id} style={styles.setCard}>
                 <View style={styles.setInfo}>
-                  <Text style={styles.setName}>{set.name}</Text>
-                  <Text style={styles.setMeta}>
+                  <Text style={[styles.setName, { color: colors.text }]}>{set.name}</Text>
+                  <Text style={[styles.setMeta, { color: colors.textSecondary }]}>
                     {set.words.length} {set.words.length === 1 ? 'word' : 'words'}
                   </Text>
                 </View>
@@ -110,7 +120,7 @@ export default function ProfileScreen() {
                   onPress={() => handleDeleteSet(set.id, set.name)}
                   hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 >
-                  <Ionicons name="trash-outline" size={24} color={Colors.error} />
+                  <Ionicons name="trash-outline" size={24} color={colors.error} />
                 </TouchableOpacity>
               </Card>
             ))
@@ -132,19 +142,18 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
   },
   header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.lg,
-    backgroundColor: Colors.card,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
   },
   headerTitle: {
     ...Typography.h1,
     fontSize: 28,
-    color: Colors.text,
   },
   content: {
     flex: 1,
@@ -162,19 +171,16 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: `${Colors.primary}20`,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: Spacing.md,
   },
   userName: {
     ...Typography.h2,
-    color: Colors.text,
     marginBottom: Spacing.xs,
   },
   userEmail: {
     ...Typography.body,
-    color: Colors.textSecondary,
     marginBottom: Spacing.sm,
   },
   accountType: {
@@ -185,7 +191,6 @@ const styles = StyleSheet.create({
   },
   accountTypeText: {
     ...Typography.caption,
-    color: Colors.textSecondary,
   },
   statsCard: {
     marginBottom: Spacing.lg,
@@ -193,7 +198,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     ...Typography.h2,
     fontSize: 18,
-    color: Colors.text,
     marginBottom: Spacing.md,
   },
   stats: {
@@ -208,12 +212,10 @@ const styles = StyleSheet.create({
   statValue: {
     ...Typography.h1,
     fontSize: 24,
-    color: Colors.text,
     marginTop: Spacing.sm,
   },
   statLabel: {
     ...Typography.caption,
-    color: Colors.textSecondary,
     textAlign: 'center',
   },
   section: {
@@ -230,17 +232,14 @@ const styles = StyleSheet.create({
   },
   setName: {
     ...Typography.body,
-    color: Colors.text,
     fontWeight: '600',
     marginBottom: Spacing.xs,
   },
   setMeta: {
     ...Typography.caption,
-    color: Colors.textSecondary,
   },
   emptyText: {
     ...Typography.body,
-    color: Colors.textSecondary,
     textAlign: 'center',
     paddingVertical: Spacing.xl,
   },

@@ -40,7 +40,12 @@ export default function SetDetailScreen() {
         <Text style={styles.headerTitle} numberOfLines={1}>
           {set.name}
         </Text>
-        <View style={styles.headerPlaceholder} />
+        <TouchableOpacity
+          onPress={() => router.push(`/(tabs)/create?editId=${id}`)}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
+          <Ionicons name="create-outline" size={24} color={Colors.primary} />
+        </TouchableOpacity>
       </View>
 
       <ScrollView

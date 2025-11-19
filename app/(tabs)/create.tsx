@@ -7,25 +7,45 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useState } from 'react';
-import { useRouter } from 'expo-router';
+import { useState, useEffect } from 'react';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { WordPairInput } from '@/components/set/WordPairInput';
 import { AISuggestionModal } from '@/components/ai/AISuggestionModal';
 import { useSets } from '@/contexts/SetsContext';
+import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { WordPair } from '@/lib/types';
-import { Colors, Spacing, Typography, MAX_WORDS_PER_SET } from '@/lib/constants';
+import { Spacing, Typography, MAX_WORDS_PER_SET } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function CreateSetScreen() {
   const router = useRouter();
-  const { createSet } = useSets();
+  const params = useLocalSearchParams();
+  const { createSet, updateSet, getSetById } = useSets();
+  const { colors } = useTheme();
+  const { preferences } = useLanguage();
+
+  const editingSetId = params.editId as string | undefined;
+  const isEditing = !!editingSetId;
+
   const [setName, setSetName] = useState('');
   const [wordPairs, setWordPairs] = useState<WordPair[]>([
     { id: '1', word: '', translation: '' },
   ]);
   const [showAIModal, setShowAIModal] = useState(false);
+
+  // Load set data if editing
+  useEffect(() => {
+    if (isEditing && editingSetId) {
+      const setToEdit = getSetById(editingSetId);
+      if (setToEdit) {
+        setSetName(setToEdit.name);
+        setWordPairs(setToEdit.words.length > 0 ? setToEdit.words : [{ id: '1', word: '', translation: '' }]);
+      }
+    }
+  }, [editingSetId, isEditing]);
 
   const addWordPair = () => {
     if (wordPairs.length >= MAX_WORDS_PER_SET) {
@@ -69,7 +89,18 @@ export default function CreateSetScreen() {
       );
     }
 
-    setWordPairs([...wordPairs, ...wordsToAdd]);
+    // Regenerate IDs to ensure uniqueness
+    const wordsWithNewIds = wordsToAdd.map((word, index) => ({
+      ...word,
+      id: `${Date.now()}-${index}`,
+    }));
+
+    setWordPairs([...wordPairs, ...wordsWithNewIds]);
+  };
+
+  const clearForm = () => {
+    setSetName('');
+    setWordPairs([{ id: '1', word: '', translation: '' }]);
   };
 
   const handleSave = async () => {
@@ -88,38 +119,63 @@ export default function CreateSetScreen() {
     }
 
     try {
-      const newSet = await createSet(setName, validPairs);
-      if (newSet) {
-        Alert.alert('Success', 'Set created successfully!', [
+      if (isEditing && editingSetId) {
+        // Update existing set
+        await updateSet(
+          editingSetId,
+          setName,
+          validPairs,
+          preferences.targetLanguage,
+          preferences.nativeLanguage
+        );
+        Alert.alert('Success', 'Set updated successfully!', [
           {
             text: 'OK',
-            onPress: () => router.push(`/sets/${newSet.id}`),
+            onPress: () => router.back(),
           },
         ]);
       } else {
-        Alert.alert('Error', 'Failed to create set. Please try again.');
+        // Create new set
+        const newSet = await createSet(
+          setName,
+          validPairs,
+          preferences.targetLanguage,
+          preferences.nativeLanguage
+        );
+        if (newSet) {
+          clearForm(); // Clear the form after successful creation
+          Alert.alert('Success', 'Set created successfully!', [
+            {
+              text: 'OK',
+              onPress: () => router.push(`/sets/${newSet.id}`),
+            },
+          ]);
+        } else {
+          Alert.alert('Error', 'Failed to create set. Please try again.');
+        }
       }
     } catch (error) {
       console.error('Error saving set:', error);
-      Alert.alert('Error', 'Failed to create set. Please try again.');
+      Alert.alert('Error', `Failed to ${isEditing ? 'update' : 'create'} set. Please try again.`);
     }
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
+      <View style={[styles.header, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
         <TouchableOpacity
           onPress={() => router.back()}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Ionicons name="close" size={28} color={Colors.text} />
+          <Ionicons name="close" size={28} color={colors.text} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Create Set</Text>
+        <Text style={[styles.headerTitle, { color: colors.text }]}>
+          {isEditing ? 'Edit Set' : 'Create Set'}
+        </Text>
         <Button
           title="Save"
           onPress={handleSave}
           variant="text"
-          textStyle={styles.saveButton}
         />
       </View>
 
@@ -137,8 +193,8 @@ export default function CreateSetScreen() {
 
         <View style={styles.wordsSection}>
           <View style={styles.wordsSectionHeader}>
-            <Text style={styles.sectionTitle}>Words</Text>
-            <Text style={styles.wordCount}>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>Words</Text>
+            <Text style={[styles.wordCount, { color: colors.textSecondary }]}>
               {wordPairs.length}/{MAX_WORDS_PER_SET}
             </Text>
           </View>
@@ -166,14 +222,14 @@ export default function CreateSetScreen() {
               size={24}
               color={
                 wordPairs.length >= MAX_WORDS_PER_SET
-                  ? Colors.textSecondary
-                  : Colors.primary
+                  ? colors.textSecondary
+                  : colors.primary
               }
             />
             <Text
               style={[
                 styles.addButtonText,
-                wordPairs.length >= MAX_WORDS_PER_SET && styles.addButtonDisabled,
+                { color: wordPairs.length >= MAX_WORDS_PER_SET ? colors.textSecondary : colors.primary },
               ]}
             >
               Add Word
@@ -181,7 +237,10 @@ export default function CreateSetScreen() {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={styles.aiButton}
+            style={[styles.aiButton, {
+              backgroundColor: `${colors.ai}10`,
+              borderColor: colors.ai
+            }]}
             onPress={() => setShowAIModal(true)}
             disabled={wordPairs.length >= MAX_WORDS_PER_SET}
           >
@@ -190,14 +249,14 @@ export default function CreateSetScreen() {
               size={24}
               color={
                 wordPairs.length >= MAX_WORDS_PER_SET
-                  ? Colors.textSecondary
-                  : Colors.ai
+                  ? colors.textSecondary
+                  : colors.ai
               }
             />
             <Text
               style={[
                 styles.aiButtonText,
-                wordPairs.length >= MAX_WORDS_PER_SET && styles.addButtonDisabled,
+                { color: wordPairs.length >= MAX_WORDS_PER_SET ? colors.textSecondary : colors.ai },
               ]}
             >
               AI Suggestions
@@ -218,7 +277,6 @@ export default function CreateSetScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
   },
   header: {
     flexDirection: 'row',
@@ -226,18 +284,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.md,
-    backgroundColor: Colors.card,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
   },
   headerTitle: {
     ...Typography.h2,
     fontSize: 20,
-    color: Colors.text,
-  },
-  saveButton: {
-    color: Colors.primary,
-    fontWeight: '600',
   },
   content: {
     flex: 1,
@@ -258,11 +309,9 @@ const styles = StyleSheet.create({
   sectionTitle: {
     ...Typography.h2,
     fontSize: 18,
-    color: Colors.text,
   },
   wordCount: {
     ...Typography.caption,
-    color: Colors.textSecondary,
   },
   addButton: {
     flexDirection: 'row',
@@ -274,11 +323,7 @@ const styles = StyleSheet.create({
   },
   addButtonText: {
     ...Typography.body,
-    color: Colors.primary,
     fontWeight: '500',
-  },
-  addButtonDisabled: {
-    color: Colors.textSecondary,
   },
   aiButton: {
     flexDirection: 'row',
@@ -287,14 +332,11 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
     paddingVertical: Spacing.md,
     marginTop: Spacing.sm,
-    backgroundColor: `${Colors.ai}10`,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: Colors.ai,
   },
   aiButtonText: {
     ...Typography.body,
-    color: Colors.ai,
     fontWeight: '500',
   },
 });

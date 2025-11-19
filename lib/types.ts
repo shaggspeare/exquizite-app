@@ -10,6 +10,8 @@ export interface WordSet {
   id: string;
   name: string;
   words: WordPair[];
+  targetLanguage: string;
+  nativeLanguage: string;
   createdAt: string;
   updatedAt: string;
   lastPracticed?: string;
