@@ -8,16 +8,17 @@ import * as OpenAIService from './openai-service';
 export async function generateWordSuggestions(
   theme: string,
   targetLanguage: string = 'Ukrainian',
-  nativeLanguage: string = 'English'
+  nativeLanguage: string = 'English',
+  count: number = 5
 ): Promise<WordPair[]> {
   try {
-    console.log('[AI Helper] Requesting word suggestions:', { theme, targetLanguage, nativeLanguage });
+    console.log('[AI Helper] Requesting word suggestions:', { theme, targetLanguage, nativeLanguage, count });
 
     const suggestions = await OpenAIService.generateWordSuggestions(
       theme,
       targetLanguage,
       nativeLanguage,
-      5
+      count
     );
 
     if (suggestions.length === 0) {

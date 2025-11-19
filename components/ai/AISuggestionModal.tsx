@@ -19,7 +19,7 @@ import { useLanguage, getLanguageName } from '@/contexts/LanguageContext';
 import { WordPair } from '@/lib/types';
 import { generateWordSuggestions } from '@/lib/ai-helpers';
 import * as OpenAIService from '@/lib/openai-service';
-import { Spacing, Typography } from '@/lib/constants';
+import { Spacing, Typography, MAX_WORDS_PER_SET } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 
 interface AISuggestionModalProps {
@@ -38,6 +38,7 @@ export function AISuggestionModal({
   const { colors } = useTheme();
   const { preferences } = useLanguage();
   const [theme, setTheme] = useState('');
+  const [count, setCount] = useState('5');
   const [suggestions, setSuggestions] = useState<WordPair[]>([]);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(false);
@@ -47,6 +48,10 @@ export function AISuggestionModal({
     pair => pair.word.trim() && pair.translation.trim()
   );
   const hasExistingPairs = validExistingPairs.length > 0;
+
+  // Calculate max count based on available slots (only count valid filled pairs)
+  const maxCount = MAX_WORDS_PER_SET - validExistingPairs.length;
+  const countNum = Math.min(Math.max(1, parseInt(count) || 5), maxCount);
 
   // Auto-generate when modal opens if there are existing pairs
   useEffect(() => {
@@ -72,7 +77,8 @@ export function AISuggestionModal({
       const words = await generateWordSuggestions(
         theme,
         targetLangName,
-        nativeLangName
+        nativeLangName,
+        countNum
       );
       setSuggestions(words);
       setSelectedIds(new Set(words.map(w => w.id)));
@@ -93,7 +99,8 @@ export function AISuggestionModal({
       const words = await OpenAIService.generateWordSuggestionsFromContext(
         validExistingPairs,
         targetLangName,
-        nativeLangName
+        nativeLangName,
+        countNum
       );
       setSuggestions(words);
       setSelectedIds(new Set(words.map(w => w.id)));
@@ -122,6 +129,7 @@ export function AISuggestionModal({
 
   const handleClose = () => {
     setTheme('');
+    setCount('5');
     setSuggestions([]);
     setSelectedIds(new Set());
     setLoading(false);
@@ -161,13 +169,29 @@ export function AISuggestionModal({
         <View style={styles.content}>
           {!hasExistingPairs && (
             <View style={styles.inputSection}>
-              <Input
-                placeholder="Enter a theme (e.g., animals, colors, food)"
-                value={theme}
-                onChangeText={setTheme}
-                style={styles.input}
-                editable={!loading}
-              />
+              <View style={styles.inputRow}>
+                <View style={styles.themeInputWrapper}>
+                  <Input
+                    placeholder="Theme (e.g., animals, food)"
+                    value={theme}
+                    onChangeText={setTheme}
+                    editable={!loading}
+                  />
+                </View>
+                <View style={styles.countInputWrapper}>
+                  <Input
+                    placeholder="#"
+                    value={count}
+                    onChangeText={setCount}
+                    keyboardType="number-pad"
+                    editable={!loading}
+                    maxLength={2}
+                  />
+                </View>
+              </View>
+              <Text style={[styles.helperText, { color: colors.textSecondary }]}>
+                Generate up to {maxCount} words (5 by default)
+              </Text>
               <Button
                 title={loading ? "Generating..." : "Generate"}
                 onPress={handleGenerate}
@@ -193,8 +217,8 @@ export function AISuggestionModal({
                   Generating suggestions with AI...
                 </Text>
               </View>
-              {[1, 2, 3, 4, 5].map((key) => (
-                <View key={key}>{renderSkeletonCard()}</View>
+              {Array.from({ length: countNum }).map((_, index) => (
+                <View key={index}>{renderSkeletonCard()}</View>
               ))}
             </View>
           )}
@@ -294,7 +318,23 @@ const styles = StyleSheet.create({
   inputSection: {
     marginBottom: Spacing.lg,
   },
-  input: {
+  inputRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: Spacing.xs,
+  },
+  themeInputWrapper: {
+    flex: 1,
+    minWidth: 0,
+    marginRight: Spacing.sm,
+  },
+  countInputWrapper: {
+    width: 50,
+    flexShrink: 0,
+  },
+  helperText: {
+    ...Typography.caption,
+    fontSize: 12,
     marginBottom: Spacing.md,
   },
   loadingSection: {

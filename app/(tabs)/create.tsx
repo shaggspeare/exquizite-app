@@ -38,6 +38,7 @@ export default function CreateSetScreen() {
     { id: '1', word: '', translation: '' },
   ]);
   const [showAIModal, setShowAIModal] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   // Clear form or load data when screen comes into focus
   useFocusEffect(
@@ -114,6 +115,8 @@ export default function CreateSetScreen() {
   };
 
   const handleSave = async () => {
+    if (saving) return; // Prevent multiple clicks
+
     if (!setName.trim()) {
       Alert.alert('Error', 'Please enter a set name');
       return;
@@ -128,6 +131,7 @@ export default function CreateSetScreen() {
       return;
     }
 
+    setSaving(true);
     try {
       if (isEditing && editingSetId) {
         // Update existing set
@@ -164,9 +168,23 @@ export default function CreateSetScreen() {
           Alert.alert('Error', 'Failed to create set. Please try again.');
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving set:', error);
-      Alert.alert('Error', `Failed to ${isEditing ? 'update' : 'create'} set. Please try again.`);
+
+      // Extract more detailed error message
+      let errorMessage = `Failed to ${isEditing ? 'update' : 'create'} set.`;
+
+      if (error?.message) {
+        if (error.message.includes('Network request failed')) {
+          errorMessage = 'Network error. Please check your connection and try again.';
+        } else {
+          errorMessage = error.message;
+        }
+      }
+
+      Alert.alert('Error', errorMessage);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -183,9 +201,11 @@ export default function CreateSetScreen() {
           {isEditing ? 'Edit Set' : 'Create Set'}
         </Text>
         <Button
-          title="Save"
+          title={saving ? "Saving..." : "Save"}
           onPress={handleSave}
-          variant="text"
+          variant="primary"
+          disabled={saving}
+          style={styles.saveButton}
         />
       </View>
 
@@ -307,6 +327,11 @@ const styles = StyleSheet.create({
   headerTitle: {
     ...Typography.h2,
     fontSize: 20,
+  },
+  saveButton: {
+    minHeight: 36,
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.lg,
   },
   keyboardAvoid: {
     flex: 1,

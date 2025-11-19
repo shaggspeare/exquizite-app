@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { supabase } from '@/lib/supabase';
+import { supabase, retryOperation } from '@/lib/supabase';
 import { useAuth } from './AuthContext';
 import { WordSet, WordPair } from '@/lib/types';
 
@@ -81,32 +81,36 @@ export function SetsProvider({ children }: { children: ReactNode }) {
     try {
       console.log('Creating set:', { name, wordCount: words.length, userId: user.id, targetLanguage, nativeLanguage });
 
-      // Create the word set
-      const { data: setData, error: setError } = await supabase
-        .from('word_sets')
-        .insert({
-          user_id: user.id,
-          name,
-          target_language: targetLanguage,
-          native_language: nativeLanguage,
-        })
-        .select()
-        .single();
+      // Create the word set with retry logic
+      const setData = await retryOperation(async () => {
+        const { data, error: setError } = await supabase
+          .from('word_sets')
+          .insert({
+            user_id: user.id,
+            name,
+            target_language: targetLanguage,
+            native_language: nativeLanguage,
+          })
+          .select()
+          .single();
 
-      if (setError) {
-        console.error('Error creating word set:', JSON.stringify(setError, null, 2));
-        console.error('Error details:', {
-          message: setError.message,
-          code: setError.code,
-          details: setError.details,
-          hint: setError.hint,
-        });
-        throw new Error(`Failed to create word set: ${setError.message || 'Unknown error'}`);
-      }
+        if (setError) {
+          console.error('Error creating word set:', JSON.stringify(setError, null, 2));
+          console.error('Error details:', {
+            message: setError.message,
+            code: setError.code,
+            details: setError.details,
+            hint: setError.hint,
+          });
+          throw new Error(`Failed to create word set: ${setError.message || 'Unknown error'}`);
+        }
+
+        return data;
+      });
 
       console.log('Set created successfully:', setData);
 
-      // Create word pairs
+      // Create word pairs with retry logic
       const wordPairsToInsert = words.map((word, index) => ({
         set_id: setData.id,
         word: word.word,
@@ -116,21 +120,25 @@ export function SetsProvider({ children }: { children: ReactNode }) {
 
       console.log('Inserting word pairs:', wordPairsToInsert.length);
 
-      const { data: pairsData, error: pairsError } = await supabase
-        .from('word_pairs')
-        .insert(wordPairsToInsert)
-        .select();
+      const pairsData = await retryOperation(async () => {
+        const { data, error: pairsError } = await supabase
+          .from('word_pairs')
+          .insert(wordPairsToInsert)
+          .select();
 
-      if (pairsError) {
-        console.error('Error creating word pairs:', JSON.stringify(pairsError, null, 2));
-        console.error('Error details:', {
-          message: pairsError.message,
-          code: pairsError.code,
-          details: pairsError.details,
-          hint: pairsError.hint,
-        });
-        throw new Error(`Failed to create word pairs: ${pairsError.message || 'Unknown error'}`);
-      }
+        if (pairsError) {
+          console.error('Error creating word pairs:', JSON.stringify(pairsError, null, 2));
+          console.error('Error details:', {
+            message: pairsError.message,
+            code: pairsError.code,
+            details: pairsError.details,
+            hint: pairsError.hint,
+          });
+          throw new Error(`Failed to create word pairs: ${pairsError.message || 'Unknown error'}`);
+        }
+
+        return data;
+      });
 
       console.log('Word pairs created successfully:', pairsData?.length);
 
@@ -174,30 +182,44 @@ export function SetsProvider({ children }: { children: ReactNode }) {
   };
 
   const updateSet = async (id: string, name: string, words: WordPair[], targetLanguage: string, nativeLanguage: string) => {
-    if (!user) return;
+    if (!user) {
+      throw new Error('No user found when updating set');
+    }
 
     try {
-      // Update the word set
-      const { error: setError } = await supabase
-        .from('word_sets')
-        .update({
-          name,
-          target_language: targetLanguage,
-          native_language: nativeLanguage,
-        })
-        .eq('id', id);
+      console.log('Updating set:', { id, name, wordCount: words.length, targetLanguage, nativeLanguage });
 
-      if (setError) throw setError;
+      // Update the word set with retry logic
+      await retryOperation(async () => {
+        const { error: setError } = await supabase
+          .from('word_sets')
+          .update({
+            name,
+            target_language: targetLanguage,
+            native_language: nativeLanguage,
+          })
+          .eq('id', id);
 
-      // Delete existing word pairs
-      const { error: deleteError } = await supabase
-        .from('word_pairs')
-        .delete()
-        .eq('set_id', id);
+        if (setError) {
+          console.error('Error updating word set:', setError);
+          throw new Error(`Failed to update word set: ${setError.message}`);
+        }
+      });
 
-      if (deleteError) throw deleteError;
+      // Delete existing word pairs with retry logic
+      await retryOperation(async () => {
+        const { error: deleteError } = await supabase
+          .from('word_pairs')
+          .delete()
+          .eq('set_id', id);
 
-      // Insert new word pairs
+        if (deleteError) {
+          console.error('Error deleting word pairs:', deleteError);
+          throw new Error(`Failed to delete word pairs: ${deleteError.message}`);
+        }
+      });
+
+      // Insert new word pairs with retry logic
       const wordPairsToInsert = words.map((word, index) => ({
         set_id: id,
         word: word.word,
@@ -205,16 +227,25 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         position: index,
       }));
 
-      const { error: insertError } = await supabase
-        .from('word_pairs')
-        .insert(wordPairsToInsert);
+      await retryOperation(async () => {
+        const { error: insertError } = await supabase
+          .from('word_pairs')
+          .insert(wordPairsToInsert);
 
-      if (insertError) throw insertError;
+        if (insertError) {
+          console.error('Error inserting word pairs:', insertError);
+          throw new Error(`Failed to insert word pairs: ${insertError.message}`);
+        }
+      });
+
+      console.log('Set updated successfully');
 
       // Reload sets to get updated data
       await loadSets();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating set:', error);
+      // Re-throw the error so the calling code can handle it
+      throw error;
     }
   };
 

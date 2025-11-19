@@ -27,8 +27,51 @@ export const supabase = createClient(
       persistSession: true,
       detectSessionInUrl: false,
     },
+    global: {
+      headers: {
+        'x-client-info': 'exquizite-app',
+      },
+    },
+    db: {
+      schema: 'public',
+    },
+    realtime: {
+      timeout: 20000, // 20 seconds timeout for realtime connections
+    },
   }
 );
+
+// Helper function to retry operations on network failure
+export async function retryOperation<T>(
+  operation: () => Promise<T>,
+  maxRetries: number = 2,
+  delayMs: number = 1000
+): Promise<T> {
+  let lastError: any;
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await operation();
+    } catch (error: any) {
+      lastError = error;
+      const isNetworkError = error?.message?.includes('Network request failed') ||
+                            error?.message?.includes('Failed to fetch') ||
+                            error?.code === 'NETWORK_ERROR';
+
+      // Only retry on network errors
+      if (isNetworkError && attempt < maxRetries) {
+        console.log(`Network error on attempt ${attempt + 1}, retrying in ${delayMs}ms...`);
+        await new Promise(resolve => setTimeout(resolve, delayMs));
+        continue;
+      }
+
+      // If it's not a network error or we've exhausted retries, throw
+      throw error;
+    }
+  }
+
+  throw lastError;
+}
 
 // Database types
 export type Database = {
