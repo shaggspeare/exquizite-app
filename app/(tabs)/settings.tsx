@@ -9,8 +9,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage, AVAILABLE_LANGUAGES } from '@/contexts/LanguageContext';
+import { useSets } from '@/contexts/SetsContext';
 import { Card } from '@/components/ui/Card';
 import { LanguageDropdown } from '@/components/ui/LanguageDropdown';
+import { SetCard } from '@/components/set/SetCard';
 import { Spacing, Typography } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -20,6 +22,7 @@ export default function SettingsScreen() {
   const router = useRouter();
   const { colors, theme, setTheme } = useTheme();
   const { preferences, setLanguages } = useLanguage();
+  const { sets } = useSets();
 
   const themeOptions: { value: ThemeOption; label: string; icon: keyof typeof Ionicons.glyphMap }[] = [
     { value: 'light', label: 'Light', icon: 'sunny' },
@@ -139,6 +142,28 @@ export default function SettingsScreen() {
             </Text>
           </View>
         </Card>
+
+        <View style={styles.setsSection}>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>My Sets</Text>
+          <Text style={[styles.sectionDescription, { color: colors.textSecondary }]}>
+            Manage your word sets. Click to expand and view words.
+          </Text>
+        </View>
+
+        {sets.length > 0 ? (
+          sets.map((set) => (
+            <SetCard key={set.id} set={set} />
+          ))
+        ) : (
+          <Card style={styles.section}>
+            <View style={styles.emptyState}>
+              <Ionicons name="book-outline" size={48} color={colors.textSecondary} />
+              <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
+                No sets created yet
+              </Text>
+            </View>
+          </Card>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -210,5 +235,17 @@ const styles = StyleSheet.create({
   },
   languageDropdowns: {
     gap: Spacing.lg,
+  },
+  setsSection: {
+    marginBottom: Spacing.md,
+  },
+  emptyState: {
+    alignItems: 'center',
+    paddingVertical: Spacing.xl,
+    gap: Spacing.sm,
+  },
+  emptyText: {
+    ...Typography.body,
+    textAlign: 'center',
   },
 });

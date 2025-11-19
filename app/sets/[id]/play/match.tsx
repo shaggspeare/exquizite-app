@@ -9,9 +9,18 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState, useEffect } from 'react';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useSets } from '@/contexts/SetsContext';
-import { shuffleArray } from '@/lib/ai-helpers';
 import { Colors, Spacing, Typography } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
+
+// Utility function to shuffle array
+function shuffleArray<T>(array: T[]): T[] {
+  const newArray = [...array];
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+  }
+  return newArray;
+}
 
 interface MatchItem {
   id: string;

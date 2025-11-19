@@ -1,6 +1,6 @@
-import { View, Text, StyleSheet, TouchableOpacity, Pressable, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import Animated, {
   useSharedValue,
@@ -10,9 +10,19 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSets } from '@/contexts/SetsContext';
 import { Button } from '@/components/ui/Button';
-import { generateHint } from '@/lib/ai-helpers';
+import { WordPair } from '@/lib/types';
 import { Colors, Spacing, Typography } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
+
+// Utility function to shuffle array
+function shuffleArray<T>(array: T[]): T[] {
+  const newArray = [...array];
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+  }
+  return newArray;
+}
 
 export default function FlashcardScreen() {
   const router = useRouter();
@@ -20,11 +30,16 @@ export default function FlashcardScreen() {
   const { getSetById, updateLastPracticed } = useSets();
 
   const set = getSetById(id!);
+  const [shuffledWords, setShuffledWords] = useState<WordPair[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [showHint, setShowHint] = useState(false);
-  const [hint, setHint] = useState<string>('');
-  const [loadingHint, setLoadingHint] = useState(false);
   const rotation = useSharedValue(0);
+
+  // Shuffle words on mount
+  useEffect(() => {
+    if (set) {
+      setShuffledWords(shuffleArray(set.words));
+    }
+  }, [set]);
 
   if (!set || set.words.length === 0) {
     return (
@@ -34,45 +49,23 @@ export default function FlashcardScreen() {
     );
   }
 
-  const currentWord = set.words[currentIndex];
+  if (shuffledWords.length === 0) {
+    return null; // Wait for shuffle to complete
+  }
+
+  const currentWord = shuffledWords[currentIndex];
 
   const flipCard = () => {
     rotation.value = withSpring(rotation.value === 0 ? 180 : 0, {
       damping: 15,
       stiffness: 100,
     });
-    setShowHint(false);
-  };
-
-  const loadHint = async () => {
-    if (hint) {
-      setShowHint(!showHint);
-      return;
-    }
-
-    setLoadingHint(true);
-    try {
-      const generatedHint = await generateHint(
-        currentWord.word,
-        currentWord.translation
-      );
-      setHint(generatedHint);
-      setShowHint(true);
-    } catch (error) {
-      console.error('Error loading hint:', error);
-      setHint('Think about the meaning and practice!');
-      setShowHint(true);
-    } finally {
-      setLoadingHint(false);
-    }
   };
 
   const goToNext = () => {
-    if (currentIndex < set.words.length - 1) {
+    if (currentIndex < shuffledWords.length - 1) {
       rotation.value = 0;
       setCurrentIndex(currentIndex + 1);
-      setShowHint(false);
-      setHint('');
     }
   };
 
@@ -80,8 +73,6 @@ export default function FlashcardScreen() {
     if (currentIndex > 0) {
       rotation.value = 0;
       setCurrentIndex(currentIndex - 1);
-      setShowHint(false);
-      setHint('');
     }
   };
 
@@ -116,7 +107,7 @@ export default function FlashcardScreen() {
           <Ionicons name="close" size={28} color={Colors.text} />
         </TouchableOpacity>
         <Text style={styles.progress}>
-          {currentIndex + 1} of {set.words.length}
+          {currentIndex + 1} of {shuffledWords.length}
         </Text>
         <View style={styles.headerPlaceholder} />
       </View>
@@ -125,7 +116,7 @@ export default function FlashcardScreen() {
         <View
           style={[
             styles.progressFill,
-            { width: `${((currentIndex + 1) / set.words.length) * 100}%` },
+            { width: `${((currentIndex + 1) / shuffledWords.length) * 100}%` },
           ]}
         />
       </View>
@@ -139,30 +130,8 @@ export default function FlashcardScreen() {
 
           <Animated.View style={[styles.card, styles.cardBack, backAnimatedStyle]}>
             <Text style={styles.cardText}>{currentWord.translation}</Text>
-            {showHint && hint && (
-              <Text style={styles.hint}>{hint}</Text>
-            )}
           </Animated.View>
         </Pressable>
-
-        <View style={styles.controls}>
-          <TouchableOpacity
-            onPress={loadHint}
-            style={styles.hintButton}
-            disabled={loadingHint}
-          >
-            {loadingHint ? (
-              <ActivityIndicator size="small" color={Colors.ai} />
-            ) : (
-              <>
-                <Ionicons name="sparkles" size={20} color={Colors.ai} />
-                <Text style={styles.hintButtonText}>
-                  {showHint ? 'Hide' : 'Show'} Hint
-                </Text>
-              </>
-            )}
-          </TouchableOpacity>
-        </View>
 
         <View style={styles.navigation}>
           <Button
@@ -172,7 +141,7 @@ export default function FlashcardScreen() {
             disabled={currentIndex === 0}
             style={styles.navButton}
           />
-          {currentIndex === set.words.length - 1 ? (
+          {currentIndex === shuffledWords.length - 1 ? (
             <Button
               title="Complete"
               onPress={handleComplete}
@@ -256,29 +225,6 @@ const styles = StyleSheet.create({
     ...Typography.caption,
     color: Colors.textSecondary,
     marginTop: Spacing.lg,
-  },
-  hint: {
-    ...Typography.body,
-    color: '#FFFFFF',
-    textAlign: 'center',
-    marginTop: Spacing.lg,
-    opacity: 0.9,
-  },
-  controls: {
-    alignItems: 'center',
-    marginBottom: Spacing.xl,
-  },
-  hintButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.sm,
-    paddingVertical: Spacing.sm,
-    paddingHorizontal: Spacing.md,
-  },
-  hintButtonText: {
-    ...Typography.body,
-    color: Colors.ai,
-    fontWeight: '500',
   },
   navigation: {
     flexDirection: 'row',

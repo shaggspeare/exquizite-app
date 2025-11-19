@@ -60,10 +60,7 @@ export default function HomeScreen() {
           data={sets}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
-            <SetCard
-              set={item}
-              onPress={() => router.push(`/sets/${item.id}`)}
-            />
+            <SetCard set={item} />
           )}
           ListEmptyComponent={renderEmptyState}
           contentContainerStyle={sets.length === 0 && styles.emptyContainer}

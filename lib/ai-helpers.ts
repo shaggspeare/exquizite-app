@@ -35,78 +35,32 @@ export async function generateWordSuggestions(
 }
 
 /**
- * Generate a hint for learning a word
- * Uses OpenAI API, falls back to simple hint on error
+ * Generate a sentence with a gap for fill-in-the-blank exercise
  */
-export async function generateHint(
+export async function generateSentenceWithGap(
   word: string,
-  translation: string
-): Promise<string> {
+  translation: string,
+  targetLanguage: string = 'Ukrainian',
+  nativeLanguage: string = 'English'
+): Promise<{ sentence: string; correctAnswer: string }> {
   try {
-    // Try to use OpenAI API
-    const hint = await OpenAIService.generateHint(word, translation);
-    return hint;
+    console.log('[AI Helper] Requesting sentence with gap:', { word, translation });
+
+    const result = await OpenAIService.generateSentenceWithGap(
+      word,
+      translation,
+      targetLanguage,
+      nativeLanguage
+    );
+
+    console.log('[AI Helper] Successfully generated sentence with gap');
+    return result;
   } catch (error) {
-    console.error('Error generating hint:', error);
-    // Fallback to simple hint
-    const fallbackHints = [
-      `Think about the first letter: "${word[0].toUpperCase()}"`,
-      `The word has ${word.length} letters`,
-      `It translates to: ${translation.slice(0, 2)}...`,
-      `Remember: ${word.toUpperCase()} → ${translation}`,
-    ];
-    return fallbackHints[Math.floor(Math.random() * fallbackHints.length)];
+    console.error('[AI Helper] Error generating sentence with gap:', error);
+    // Fallback to simple sentence
+    return {
+      sentence: `___ means ${translation}`,
+      correctAnswer: word,
+    };
   }
-}
-
-/**
- * Generate quiz options (3 wrong + 1 correct)
- * Uses OpenAI API for better distractors when possible
- */
-export async function generateQuizOptions(
-  word: string,
-  correctAnswer: string,
-  allTranslations: string[]
-): Promise<string[]> {
-  try {
-    // Filter out the correct answer from all translations
-    const wrongOptions = allTranslations.filter(t => t !== correctAnswer);
-
-    let distractors: string[];
-
-    if (wrongOptions.length >= 3) {
-      // Use existing translations from the set
-      const shuffled = wrongOptions.sort(() => Math.random() - 0.5);
-      distractors = shuffled.slice(0, 3);
-    } else {
-      // Try to generate with OpenAI
-      distractors = await OpenAIService.generateQuizDistractors({
-        word,
-        correctAnswer,
-        allTranslations,
-        count: 3,
-      });
-    }
-
-    // Combine with correct answer and shuffle
-    const allOptions = [...distractors, correctAnswer];
-    return allOptions.sort(() => Math.random() - 0.5);
-  } catch (error) {
-    console.error('Error generating quiz options:', error);
-    // Fallback: use available translations
-    const wrongOptions = allTranslations.filter(t => t !== correctAnswer);
-    const shuffled = wrongOptions.sort(() => Math.random() - 0.5);
-    const selected = shuffled.slice(0, 3);
-    const allOptions = [...selected, correctAnswer];
-    return allOptions.sort(() => Math.random() - 0.5);
-  }
-}
-
-export function shuffleArray<T>(array: T[]): T[] {
-  const newArray = [...array];
-  for (let i = newArray.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-  }
-  return newArray;
 }

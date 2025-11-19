@@ -7,8 +7,10 @@ import {
   ActivityIndicator,
   FlatList,
   Keyboard,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -16,6 +18,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage, getLanguageName } from '@/contexts/LanguageContext';
 import { WordPair } from '@/lib/types';
 import { generateWordSuggestions } from '@/lib/ai-helpers';
+import * as OpenAIService from '@/lib/openai-service';
 import { Spacing, Typography } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -23,12 +26,14 @@ interface AISuggestionModalProps {
   visible: boolean;
   onClose: () => void;
   onSelectWords: (words: WordPair[]) => void;
+  existingPairs?: WordPair[];
 }
 
 export function AISuggestionModal({
   visible,
   onClose,
   onSelectWords,
+  existingPairs = [],
 }: AISuggestionModalProps) {
   const { colors } = useTheme();
   const { preferences } = useLanguage();
@@ -36,6 +41,19 @@ export function AISuggestionModal({
   const [suggestions, setSuggestions] = useState<WordPair[]>([]);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(false);
+
+  // Filter existing pairs to only include valid ones (both word and translation filled)
+  const validExistingPairs = existingPairs.filter(
+    pair => pair.word.trim() && pair.translation.trim()
+  );
+  const hasExistingPairs = validExistingPairs.length > 0;
+
+  // Auto-generate when modal opens if there are existing pairs
+  useEffect(() => {
+    if (visible && hasExistingPairs) {
+      handleGenerateFromContext();
+    }
+  }, [visible, hasExistingPairs]);
 
   const handleGenerate = async () => {
     if (!theme.trim()) {
@@ -60,6 +78,27 @@ export function AISuggestionModal({
       setSelectedIds(new Set(words.map(w => w.id)));
     } catch (error) {
       console.error('Error generating suggestions:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGenerateFromContext = async () => {
+    setLoading(true);
+    setSuggestions([]); // Clear previous suggestions
+    try {
+      const targetLangName = getLanguageName(preferences.targetLanguage);
+      const nativeLangName = getLanguageName(preferences.nativeLanguage);
+
+      const words = await OpenAIService.generateWordSuggestionsFromContext(
+        validExistingPairs,
+        targetLangName,
+        nativeLangName
+      );
+      setSuggestions(words);
+      setSelectedIds(new Set(words.map(w => w.id)));
+    } catch (error) {
+      console.error('Error generating suggestions from context:', error);
     } finally {
       setLoading(false);
     }
@@ -100,14 +139,18 @@ export function AISuggestionModal({
     </Card>
   );
 
-  return (
+
+    return (
     <Modal
       visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
       onRequestClose={handleClose}
     >
-      <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <KeyboardAvoidingView
+        style={[styles.container, { backgroundColor: colors.background }]}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
         <View style={[styles.header, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
           <Text style={[styles.headerTitle, { color: colors.text }]}>AI Word Suggestions</Text>
           <TouchableOpacity onPress={handleClose}>
@@ -116,20 +159,31 @@ export function AISuggestionModal({
         </View>
 
         <View style={styles.content}>
-          <View style={styles.inputSection}>
-            <Input
-              placeholder="Enter a theme (e.g., animals, colors, food)"
-              value={theme}
-              onChangeText={setTheme}
-              style={styles.input}
-              editable={!loading}
-            />
-            <Button
-              title={loading ? "Generating..." : "Generate"}
-              onPress={handleGenerate}
-              disabled={loading || !theme.trim()}
-            />
-          </View>
+          {!hasExistingPairs && (
+            <View style={styles.inputSection}>
+              <Input
+                placeholder="Enter a theme (e.g., animals, colors, food)"
+                value={theme}
+                onChangeText={setTheme}
+                style={styles.input}
+                editable={!loading}
+              />
+              <Button
+                title={loading ? "Generating..." : "Generate"}
+                onPress={handleGenerate}
+                disabled={loading || !theme.trim()}
+              />
+            </View>
+          )}
+
+          {hasExistingPairs && (
+            <View style={styles.contextInfo}>
+              <Ionicons name="information-circle" size={20} color={colors.primary} />
+              <Text style={[styles.contextText, { color: colors.textSecondary }]}>
+                Generating suggestions based on your {validExistingPairs.length} existing {validExistingPairs.length === 1 ? 'word' : 'words'}...
+              </Text>
+            </View>
+          )}
 
           {loading && (
             <View style={styles.loadingSection}>
@@ -161,11 +215,11 @@ export function AISuggestionModal({
                     <Card
                       style={[
                         styles.suggestionCard,
-                        selectedIds.has(item.id) ? {
+                        selectedIds.has(item.id) && {
                           borderWidth: 2,
                           borderColor: colors.success,
                           backgroundColor: `${colors.success}10`,
-                        } : undefined,
+                        },
                       ]}
                     >
                       <View style={styles.suggestionContent}>
@@ -211,7 +265,7 @@ export function AISuggestionModal({
             </View>
           )}
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }
@@ -308,5 +362,18 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.md,
     borderTopWidth: 1,
     marginTop: Spacing.md,
+  },
+  contextInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+    padding: Spacing.md,
+    marginBottom: Spacing.lg,
+    borderRadius: 8,
+    backgroundColor: `rgba(0, 122, 255, 0.1)`,
+  },
+  contextText: {
+    ...Typography.body,
+    flex: 1,
   },
 });

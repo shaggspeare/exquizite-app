@@ -10,10 +10,36 @@ import { useState, useEffect } from 'react';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useSets } from '@/contexts/SetsContext';
 import { Button } from '@/components/ui/Button';
-import { generateQuizOptions, shuffleArray } from '@/lib/ai-helpers';
 import { QuizQuestion } from '@/lib/types';
 import { Colors, Spacing, Typography } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
+
+// Utility function to shuffle array
+function shuffleArray<T>(array: T[]): T[] {
+  const newArray = [...array];
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+  }
+  return newArray;
+}
+
+// Generate quiz options from available translations
+function generateQuizOptions(
+  correctAnswer: string,
+  allTranslations: string[]
+): string[] {
+  // Filter out the correct answer
+  const wrongOptions = allTranslations.filter(t => t !== correctAnswer);
+
+  // Shuffle and take first 3
+  const shuffled = shuffleArray(wrongOptions);
+  const selected = shuffled.slice(0, 3);
+
+  // Combine with correct answer and shuffle
+  const allOptions = [...selected, correctAnswer];
+  return shuffleArray(allOptions);
+}
 
 export default function QuizScreen() {
   const router = useRouter();
@@ -33,24 +59,18 @@ export default function QuizScreen() {
     }
   }, [set]);
 
-  const generateQuestions = async () => {
+  const generateQuestions = () => {
     if (!set) return;
 
     const allTranslations = set.words.map(w => w.translation);
     const shuffledWords = shuffleArray(set.words);
 
-    // Generate questions with async options
-    const quizQuestions: QuizQuestion[] = await Promise.all(
-      shuffledWords.map(async (word) => ({
-        word: word.word,
-        correctAnswer: word.translation,
-        options: await generateQuizOptions(
-          word.word,
-          word.translation,
-          allTranslations
-        ),
-      }))
-    );
+    // Generate questions
+    const quizQuestions: QuizQuestion[] = shuffledWords.map((word) => ({
+      word: word.word,
+      correctAnswer: word.translation,
+      options: generateQuizOptions(word.translation, allTranslations),
+    }));
 
     setQuestions(quizQuestions);
   };

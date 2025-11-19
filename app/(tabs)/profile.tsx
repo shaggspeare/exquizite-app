@@ -77,12 +77,12 @@ export default function ProfileScreen() {
           {user?.email && <Text style={[styles.userEmail, { color: colors.textSecondary }]}>{user.email}</Text>}
           <View style={styles.accountType}>
             <Ionicons
-              name={user?.isGuest ? 'person-outline' : 'logo-google'}
+              name={'person-outline'}
               size={16}
               color={colors.textSecondary}
             />
             <Text style={[styles.accountTypeText, { color: colors.textSecondary }]}>
-              {user?.isGuest ? 'Guest Account' : 'Google Account'}
+              {user?.isGuest ? 'Guest Account' : 'App Account'}
             </Text>
           </View>
         </Card>

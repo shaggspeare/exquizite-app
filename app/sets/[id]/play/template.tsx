@@ -1,8 +1,9 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Card } from '@/components/ui/Card';
-import { Colors, Spacing, Typography } from '@/lib/constants';
+import { Spacing, Typography } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 
 interface GameTemplate {
@@ -21,7 +22,7 @@ const templates: GameTemplate[] = [
     description: 'Flip to reveal translations',
     icon: 'layers',
     route: 'flashcard',
-    aiEnabled: true,
+    aiEnabled: false,
   },
   {
     id: 'match',
@@ -36,28 +37,37 @@ const templates: GameTemplate[] = [
     description: 'Multiple choice questions',
     icon: 'help-circle',
     route: 'quiz',
-    aiEnabled: true,
+    aiEnabled: false,
+  },
+  {
+    id: 'fill-blank',
+    title: 'Fill in the Blank',
+    description: 'Complete sentences with the right word',
+    icon: 'create',
+    route: 'fill-blank',
+    aiEnabled: false,
   },
 ];
 
 export default function TemplateSelectionScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { colors } = useTheme();
 
   const handleSelectTemplate = (template: GameTemplate) => {
     router.push(`/sets/${id}/play/${template.route}`);
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
+      <View style={[styles.header, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
         <TouchableOpacity
           onPress={() => router.back()}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Ionicons name="arrow-back" size={28} color={Colors.text} />
+          <Ionicons name="arrow-back" size={28} color={colors.text} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Choose Activity</Text>
+        <Text style={[styles.headerTitle, { color: colors.text }]}>Choose Activity</Text>
         <View style={styles.headerPlaceholder} />
       </View>
 
@@ -69,29 +79,29 @@ export default function TemplateSelectionScreen() {
             activeOpacity={0.7}
           >
             <Card style={styles.templateCard}>
-              <View style={styles.iconContainer}>
+              <View style={[styles.iconContainer, { backgroundColor: `${colors.primary}10` }]}>
                 <Ionicons
                   name={template.icon}
                   size={48}
-                  color={Colors.primary}
+                  color={colors.primary}
                 />
               </View>
               <View style={styles.templateInfo}>
-                <Text style={styles.templateTitle}>{template.title}</Text>
-                <Text style={styles.templateDescription}>
+                <Text style={[styles.templateTitle, { color: colors.text }]}>{template.title}</Text>
+                <Text style={[styles.templateDescription, { color: colors.textSecondary }]}>
                   {template.description}
                 </Text>
                 {template.aiEnabled && (
                   <View style={styles.aiBadge}>
-                    <Ionicons name="sparkles" size={14} color={Colors.ai} />
-                    <Text style={styles.aiBadgeText}>AI hints available</Text>
+                    <Ionicons name="sparkles" size={14} color={colors.ai} />
+                    <Text style={[styles.aiBadgeText, { color: colors.ai }]}>AI hints available</Text>
                   </View>
                 )}
               </View>
               <Ionicons
                 name="chevron-forward"
                 size={24}
-                color={Colors.textSecondary}
+                color={colors.textSecondary}
               />
             </Card>
           </TouchableOpacity>
@@ -104,7 +114,6 @@ export default function TemplateSelectionScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
   },
   header: {
     flexDirection: 'row',
@@ -112,14 +121,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.md,
-    backgroundColor: Colors.card,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
   },
   headerTitle: {
     ...Typography.h2,
     fontSize: 20,
-    color: Colors.text,
   },
   headerPlaceholder: {
     width: 28,
@@ -139,7 +145,6 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: `${Colors.primary}10`,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: Spacing.md,
@@ -150,12 +155,10 @@ const styles = StyleSheet.create({
   templateTitle: {
     ...Typography.h2,
     fontSize: 20,
-    color: Colors.text,
     marginBottom: Spacing.xs,
   },
   templateDescription: {
     ...Typography.body,
-    color: Colors.textSecondary,
     marginBottom: Spacing.xs,
   },
   aiBadge: {
@@ -166,6 +169,5 @@ const styles = StyleSheet.create({
   },
   aiBadgeText: {
     ...Typography.caption,
-    color: Colors.ai,
   },
 });

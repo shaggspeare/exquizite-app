@@ -8,43 +8,45 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useSets } from '@/contexts/SetsContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { Colors, Spacing, Typography } from '@/lib/constants';
+import { Spacing, Typography } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function SetDetailScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { getSetById } = useSets();
+  const { colors } = useTheme();
 
   const set = getSetById(id!);
 
   if (!set) {
     return (
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.errorText}>Set not found</Text>
+      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+        <Text style={[styles.errorText, { color: colors.error }]}>Set not found</Text>
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
+      <View style={[styles.header, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
         <TouchableOpacity
           onPress={() => router.back()}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Ionicons name="arrow-back" size={28} color={Colors.text} />
+          <Ionicons name="arrow-back" size={28} color={colors.text} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle} numberOfLines={1}>
+        <Text style={[styles.headerTitle, { color: colors.text }]} numberOfLines={1}>
           {set.name}
         </Text>
         <TouchableOpacity
           onPress={() => router.push(`/(tabs)/create?editId=${id}`)}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Ionicons name="create-outline" size={24} color={Colors.primary} />
+          <Ionicons name="create-outline" size={24} color={colors.primary} />
         </TouchableOpacity>
       </View>
 
@@ -55,28 +57,28 @@ export default function SetDetailScreen() {
         <Card style={styles.statsCard}>
           <View style={styles.statRow}>
             <View style={styles.stat}>
-              <Ionicons name="book" size={32} color={Colors.primary} />
-              <Text style={styles.statValue}>{set.words.length}</Text>
-              <Text style={styles.statLabel}>Words</Text>
+              <Ionicons name="book" size={32} color={colors.primary} />
+              <Text style={[styles.statValue, { color: colors.text }]}>{set.words.length}</Text>
+              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Words</Text>
             </View>
           </View>
         </Card>
 
-        <Text style={styles.sectionTitle}>Words in this set</Text>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>Words in this set</Text>
         {set.words.map((pair, index) => (
           <Card key={pair.id} style={styles.wordCard}>
             <View style={styles.wordCardContent}>
-              <Text style={styles.wordNumber}>{index + 1}</Text>
+              <Text style={[styles.wordNumber, { color: colors.textSecondary }]}>{index + 1}</Text>
               <View style={styles.wordPair}>
-                <Text style={styles.word}>{pair.word}</Text>
-                <Text style={styles.translation}>{pair.translation}</Text>
+                <Text style={[styles.word, { color: colors.text }]}>{pair.word}</Text>
+                <Text style={[styles.translation, { color: colors.textSecondary }]}>{pair.translation}</Text>
               </View>
             </View>
           </Card>
         ))}
       </ScrollView>
 
-      <View style={styles.footer}>
+      <View style={[styles.footer, { backgroundColor: colors.card, borderTopColor: colors.border }]}>
         <Button
           title="Start Practice"
           onPress={() => router.push(`/sets/${id}/play/template`)}
@@ -89,7 +91,6 @@ export default function SetDetailScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
   },
   header: {
     flexDirection: 'row',
@@ -97,14 +98,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.md,
-    backgroundColor: Colors.card,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
   },
   headerTitle: {
     ...Typography.h2,
     fontSize: 20,
-    color: Colors.text,
     flex: 1,
     textAlign: 'center',
     marginHorizontal: Spacing.md,
@@ -132,17 +130,14 @@ const styles = StyleSheet.create({
   statValue: {
     ...Typography.h1,
     fontSize: 24,
-    color: Colors.text,
     marginTop: Spacing.sm,
   },
   statLabel: {
     ...Typography.caption,
-    color: Colors.textSecondary,
   },
   sectionTitle: {
     ...Typography.h2,
     fontSize: 18,
-    color: Colors.text,
     marginBottom: Spacing.md,
   },
   wordCard: {
@@ -155,7 +150,6 @@ const styles = StyleSheet.create({
   },
   wordNumber: {
     ...Typography.body,
-    color: Colors.textSecondary,
     fontWeight: '600',
     width: 24,
   },
@@ -164,23 +158,18 @@ const styles = StyleSheet.create({
   },
   word: {
     ...Typography.body,
-    color: Colors.text,
     fontWeight: '600',
     marginBottom: Spacing.xs,
   },
   translation: {
     ...Typography.caption,
-    color: Colors.textSecondary,
   },
   footer: {
     padding: Spacing.lg,
-    backgroundColor: Colors.card,
     borderTopWidth: 1,
-    borderTopColor: Colors.border,
   },
   errorText: {
     ...Typography.body,
-    color: Colors.error,
     textAlign: 'center',
     marginTop: Spacing.xl,
   },

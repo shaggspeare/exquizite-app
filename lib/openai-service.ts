@@ -100,6 +100,86 @@ Only return valid JSON, no additional text.`;
 }
 
 /**
+ * Generate additional word suggestions based on existing word pairs
+ */
+export async function generateWordSuggestionsFromContext(
+  existingPairs: WordPair[],
+  targetLanguage: string = 'Ukrainian',
+  nativeLanguage: string = 'English',
+  count: number = 5
+): Promise<WordPair[]> {
+  try {
+    console.log('[OpenAI] Generating word suggestions from context:', { existingPairs: existingPairs.length, targetLanguage, nativeLanguage, count });
+    const client = getOpenAIClient();
+
+    // Create a context string from existing pairs
+    const contextWords = existingPairs
+      .map(pair => `${pair.word} (${pair.translation})`)
+      .join(', ');
+
+    const prompt = `Based on these existing ${targetLanguage}-${nativeLanguage} word pairs: ${contextWords}
+
+Generate ${count} additional ${targetLanguage} words that fit the same theme or topic, with their ${nativeLanguage} translations.
+The new words should be related to or complement the existing words.
+
+Format the response as a JSON object with a "words" property containing an array of word objects.
+Each word object should have "word" (in ${targetLanguage}) and "translation" (in ${nativeLanguage}) fields.
+Example format: {"words": [{"word": "кіт", "translation": "cat"}, {"word": "собака", "translation": "dog"}]}
+Only return valid JSON, no additional text.`;
+
+    const completion = await client.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [
+        {
+          role: 'system',
+          content:
+            'You are a helpful language learning assistant that generates vocabulary words with accurate translations based on context. Always respond with valid JSON only.',
+        },
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
+      max_completion_tokens: 500,
+      temperature: 0.7,
+      response_format: { type: 'json_object' },
+    });
+
+    const responseText = completion.choices[0].message.content?.trim() || '{}';
+    console.log('[OpenAI] Response received:', responseText.substring(0, 200));
+
+    // Parse the JSON response
+    const responseData = JSON.parse(responseText);
+
+    // Handle both direct array and object with array property
+    const words = Array.isArray(responseData) ? responseData : (responseData.words || []);
+
+    if (!Array.isArray(words) || words.length === 0) {
+      console.error('[OpenAI] Invalid response format:', responseData);
+      throw new Error('Invalid response format from OpenAI');
+    }
+
+    // Add IDs to each word pair
+    const result = words.map((word: any, index: number) => ({
+      id: `${Date.now()}_${index}`,
+      word: word.word || '',
+      translation: word.translation || '',
+    }));
+
+    console.log('[OpenAI] Successfully generated', result.length, 'words from context');
+    return result;
+  } catch (error: any) {
+    console.error('[OpenAI] Error generating word suggestions from context:', {
+      message: error?.message,
+      status: error?.status,
+      type: error?.type,
+    });
+    // Return empty array on error to trigger fallback
+    return [];
+  }
+}
+
+/**
  * Generate a helpful hint for learning a word using ChatGPT
  */
 export async function generateHint(
@@ -223,5 +303,70 @@ Only return valid JSON, no additional text.`;
     // Fallback to existing translations or empty strings
     const fallback = allTranslations.filter(t => t !== correctAnswer);
     return fallback.slice(0, count);
+  }
+}
+
+/**
+ * Generate a sentence with a gap where the word should be filled in
+ */
+export async function generateSentenceWithGap(
+  word: string,
+  translation: string,
+  targetLanguage: string = 'Ukrainian',
+  nativeLanguage: string = 'English'
+): Promise<{ sentence: string; correctAnswer: string }> {
+  try {
+    console.log('[OpenAI] Generating sentence with gap:', { word, translation, targetLanguage });
+    const client = getOpenAIClient();
+
+    const prompt = `Generate a simple, natural sentence in ${targetLanguage} that uses the word "${word}" (which means "${translation}" in ${nativeLanguage}).
+Replace the word "${word}" with "___" to create a fill-in-the-blank exercise.
+The sentence should be appropriate for language learners and provide context clues.
+Format as a JSON object with "sentence" (the sentence with ___) and "correctAnswer" (the word "${word}") fields.
+Example format: {"sentence": "Я люблю ___ на сніданок", "correctAnswer": "яблука"}
+Only return valid JSON, no additional text.`;
+
+    const completion = await client.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [
+        {
+          role: 'system',
+          content:
+            'You are a language learning assistant that creates educational fill-in-the-blank exercises. Always respond with valid JSON only.',
+        },
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
+      max_completion_tokens: 200,
+      temperature: 0.7,
+      response_format: { type: 'json_object' },
+    });
+
+    const responseText = completion.choices[0].message.content?.trim() || '{}';
+    console.log('[OpenAI] Sentence response received');
+
+    const responseData = JSON.parse(responseText);
+
+    if (!responseData.sentence || !responseData.correctAnswer) {
+      throw new Error('Invalid response format');
+    }
+
+    console.log('[OpenAI] Successfully generated sentence with gap');
+    return {
+      sentence: responseData.sentence,
+      correctAnswer: responseData.correctAnswer,
+    };
+  } catch (error: any) {
+    console.error('[OpenAI] Error generating sentence with gap:', {
+      message: error?.message,
+      status: error?.status,
+    });
+    // Fallback sentence
+    return {
+      sentence: `___ means ${translation}`,
+      correctAnswer: word,
+    };
   }
 }

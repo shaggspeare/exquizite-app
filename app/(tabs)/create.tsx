@@ -5,10 +5,13 @@ import {
   ScrollView,
   Alert,
   TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useState, useEffect } from 'react';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useState } from 'react';
+import { useRouter, useLocalSearchParams, useFocusEffect } from 'expo-router';
+import { useCallback } from 'react';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { WordPairInput } from '@/components/set/WordPairInput';
@@ -36,16 +39,23 @@ export default function CreateSetScreen() {
   ]);
   const [showAIModal, setShowAIModal] = useState(false);
 
-  // Load set data if editing
-  useEffect(() => {
-    if (isEditing && editingSetId) {
-      const setToEdit = getSetById(editingSetId);
-      if (setToEdit) {
-        setSetName(setToEdit.name);
-        setWordPairs(setToEdit.words.length > 0 ? setToEdit.words : [{ id: '1', word: '', translation: '' }]);
+  // Clear form or load data when screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      if (isEditing && editingSetId) {
+        const setToEdit = getSetById(editingSetId);
+        if (setToEdit) {
+          setSetName(setToEdit.name);
+          setWordPairs(setToEdit.words.length > 0 ? setToEdit.words : [{ id: '1', word: '', translation: '' }]);
+        }
+      } else {
+        // Clear form when creating new set
+        setSetName('');
+        setWordPairs([{ id: '1', word: '', translation: '' }]);
+        setShowAIModal(false);
       }
-    }
-  }, [editingSetId, isEditing]);
+    }, [editingSetId, isEditing])
+  );
 
   const addWordPair = () => {
     if (wordPairs.length >= MAX_WORDS_PER_SET) {
@@ -179,96 +189,104 @@ export default function CreateSetScreen() {
         />
       </View>
 
-      <ScrollView
-        style={styles.content}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
+      <KeyboardAvoidingView
+        style={styles.keyboardAvoid}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
       >
-        <Input
-          label="Set Name"
-          value={setName}
-          onChangeText={setSetName}
-          placeholder="e.g., Spanish Vocabulary"
-        />
+        <ScrollView
+          style={styles.content}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          <Input
+            label="Set Name"
+            value={setName}
+            onChangeText={setSetName}
+            placeholder="e.g., Spanish Vocabulary"
+          />
 
-        <View style={styles.wordsSection}>
-          <View style={styles.wordsSectionHeader}>
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>Words</Text>
-            <Text style={[styles.wordCount, { color: colors.textSecondary }]}>
-              {wordPairs.length}/{MAX_WORDS_PER_SET}
-            </Text>
+          <View style={styles.wordsSection}>
+            <View style={styles.wordsSectionHeader}>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>Words</Text>
+              <Text style={[styles.wordCount, { color: colors.textSecondary }]}>
+                {wordPairs.length}/{MAX_WORDS_PER_SET}
+              </Text>
+            </View>
+
+            {wordPairs.map(pair => (
+              <WordPairInput
+                key={pair.id}
+                pair={pair}
+                onChangeWord={text => updateWordPair(pair.id, 'word', text)}
+                onChangeTranslation={text =>
+                  updateWordPair(pair.id, 'translation', text)
+                }
+                onDelete={() => deleteWordPair(pair.id)}
+                canDelete={wordPairs.length > 1}
+              />
+            ))}
+
+            <TouchableOpacity
+              style={styles.addButton}
+              onPress={addWordPair}
+              disabled={wordPairs.length >= MAX_WORDS_PER_SET}
+            >
+              <Ionicons
+                name="add-circle-outline"
+                size={24}
+                color={
+                  wordPairs.length >= MAX_WORDS_PER_SET
+                    ? colors.textSecondary
+                    : colors.primary
+                }
+              />
+              <Text
+                style={[
+                  styles.addButtonText,
+                  { color: wordPairs.length >= MAX_WORDS_PER_SET ? colors.textSecondary : colors.primary },
+                ]}
+              >
+                Add Word
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.aiButton, {
+                backgroundColor: `${colors.ai}10`,
+                borderColor: colors.ai
+              }]}
+              onPress={() => setShowAIModal(true)}
+              disabled={wordPairs.length >= MAX_WORDS_PER_SET}
+            >
+              <Ionicons
+                name="sparkles"
+                size={24}
+                color={
+                  wordPairs.length >= MAX_WORDS_PER_SET
+                    ? colors.textSecondary
+                    : colors.ai
+                }
+              />
+              <Text
+                style={[
+                  styles.aiButtonText,
+                  { color: wordPairs.length >= MAX_WORDS_PER_SET ? colors.textSecondary : colors.ai },
+                ]}
+              >
+                AI Suggestions
+              </Text>
+            </TouchableOpacity>
           </View>
-
-          {wordPairs.map(pair => (
-            <WordPairInput
-              key={pair.id}
-              pair={pair}
-              onChangeWord={text => updateWordPair(pair.id, 'word', text)}
-              onChangeTranslation={text =>
-                updateWordPair(pair.id, 'translation', text)
-              }
-              onDelete={() => deleteWordPair(pair.id)}
-              canDelete={wordPairs.length > 1}
-            />
-          ))}
-
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={addWordPair}
-            disabled={wordPairs.length >= MAX_WORDS_PER_SET}
-          >
-            <Ionicons
-              name="add-circle-outline"
-              size={24}
-              color={
-                wordPairs.length >= MAX_WORDS_PER_SET
-                  ? colors.textSecondary
-                  : colors.primary
-              }
-            />
-            <Text
-              style={[
-                styles.addButtonText,
-                { color: wordPairs.length >= MAX_WORDS_PER_SET ? colors.textSecondary : colors.primary },
-              ]}
-            >
-              Add Word
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.aiButton, {
-              backgroundColor: `${colors.ai}10`,
-              borderColor: colors.ai
-            }]}
-            onPress={() => setShowAIModal(true)}
-            disabled={wordPairs.length >= MAX_WORDS_PER_SET}
-          >
-            <Ionicons
-              name="sparkles"
-              size={24}
-              color={
-                wordPairs.length >= MAX_WORDS_PER_SET
-                  ? colors.textSecondary
-                  : colors.ai
-              }
-            />
-            <Text
-              style={[
-                styles.aiButtonText,
-                { color: wordPairs.length >= MAX_WORDS_PER_SET ? colors.textSecondary : colors.ai },
-              ]}
-            >
-              AI Suggestions
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
 
       <AISuggestionModal
         visible={showAIModal}
         onClose={() => setShowAIModal(false)}
         onSelectWords={handleAIWordsSelected}
+        existingPairs={wordPairs}
       />
     </SafeAreaView>
   );
@@ -289,6 +307,9 @@ const styles = StyleSheet.create({
   headerTitle: {
     ...Typography.h2,
     fontSize: 20,
+  },
+  keyboardAvoid: {
+    flex: 1,
   },
   content: {
     flex: 1,
