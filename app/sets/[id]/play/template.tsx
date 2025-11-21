@@ -1,10 +1,11 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
-import { Card } from '@/components/ui/Card';
-import { Spacing, Typography } from '@/lib/constants';
+import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 
 interface GameTemplate {
   id: string;
@@ -13,6 +14,7 @@ interface GameTemplate {
   icon: keyof typeof Ionicons.glyphMap;
   route: string;
   aiEnabled?: boolean;
+  gradientColors: string[];
 }
 
 const templates: GameTemplate[] = [
@@ -23,6 +25,7 @@ const templates: GameTemplate[] = [
     icon: 'layers',
     route: 'flashcard',
     aiEnabled: false,
+    gradientColors: ['#4A90E2', '#5B9EFF'],
   },
   {
     id: 'match',
@@ -30,6 +33,7 @@ const templates: GameTemplate[] = [
     description: 'Drag and connect pairs',
     icon: 'git-compare',
     route: 'match',
+    gradientColors: ['#B537F2', '#E066FF'],
   },
   {
     id: 'quiz',
@@ -38,6 +42,7 @@ const templates: GameTemplate[] = [
     icon: 'help-circle',
     route: 'quiz',
     aiEnabled: false,
+    gradientColors: ['#00D4FF', '#00E5A0'],
   },
   {
     id: 'fill-blank',
@@ -46,8 +51,71 @@ const templates: GameTemplate[] = [
     icon: 'create',
     route: 'fill-blank',
     aiEnabled: false,
+    gradientColors: ['#FF6B35', '#FFBB00'],
   },
 ];
+
+interface GameCardProps {
+  template: GameTemplate;
+  onPress: () => void;
+}
+
+function GameCard({ template, onPress }: GameCardProps) {
+  const scale = useSharedValue(1);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scale.value }],
+    };
+  });
+
+  const handlePressIn = () => {
+    scale.value = withSpring(0.98, { damping: 15, stiffness: 150 });
+  };
+
+  const handlePressOut = () => {
+    scale.value = withSpring(1, { damping: 15, stiffness: 150 });
+  };
+
+  return (
+    <Animated.View style={[styles.gameCardWrapper, animatedStyle]}>
+      <TouchableOpacity
+        onPress={onPress}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        activeOpacity={1}
+      >
+        <LinearGradient
+          colors={template.gradientColors}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.gameCard}
+        >
+          <View style={styles.gameCardContent}>
+            <View style={styles.iconCircle}>
+              <Ionicons
+                name={template.icon}
+                size={48}
+                color="#FFFFFF"
+              />
+            </View>
+            <Text style={styles.gameTitle}>{template.title}</Text>
+            <Text style={styles.gameDescription}>{template.description}</Text>
+            {template.aiEnabled && (
+              <View style={styles.aiBadge}>
+                <Ionicons name="sparkles" size={14} color="#FFFFFF" />
+                <Text style={styles.aiBadgeText}>AI hints available</Text>
+              </View>
+            )}
+          </View>
+          <View style={styles.playButton}>
+            <Ionicons name="play" size={24} color="#FFFFFF" />
+          </View>
+        </LinearGradient>
+      </TouchableOpacity>
+    </Animated.View>
+  );
+}
 
 export default function TemplateSelectionScreen() {
   const router = useRouter();
@@ -60,7 +128,7 @@ export default function TemplateSelectionScreen() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
-      <View style={[styles.header, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
+      <View style={[styles.header, { borderBottomColor: colors.border }]}>
         <TouchableOpacity
           onPress={() => router.back()}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
@@ -71,42 +139,19 @@ export default function TemplateSelectionScreen() {
         <View style={styles.headerPlaceholder} />
       </View>
 
-      <View style={styles.content}>
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         {templates.map(template => (
-          <TouchableOpacity
+          <GameCard
             key={template.id}
+            template={template}
             onPress={() => handleSelectTemplate(template)}
-            activeOpacity={0.7}
-          >
-            <Card style={styles.templateCard}>
-              <View style={[styles.iconContainer, { backgroundColor: `${colors.primary}10` }]}>
-                <Ionicons
-                  name={template.icon}
-                  size={48}
-                  color={colors.primary}
-                />
-              </View>
-              <View style={styles.templateInfo}>
-                <Text style={[styles.templateTitle, { color: colors.text }]}>{template.title}</Text>
-                <Text style={[styles.templateDescription, { color: colors.textSecondary }]}>
-                  {template.description}
-                </Text>
-                {template.aiEnabled && (
-                  <View style={styles.aiBadge}>
-                    <Ionicons name="sparkles" size={14} color={colors.ai} />
-                    <Text style={[styles.aiBadgeText, { color: colors.ai }]}>AI hints available</Text>
-                  </View>
-                )}
-              </View>
-              <Ionicons
-                name="chevron-forward"
-                size={24}
-                color={colors.textSecondary}
-              />
-            </Card>
-          </TouchableOpacity>
+          />
         ))}
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -120,54 +165,84 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
+    paddingVertical: Spacing.lg,
     borderBottomWidth: 1,
   },
   headerTitle: {
     ...Typography.h2,
-    fontSize: 20,
+    fontSize: 24,
+    fontWeight: '700',
   },
   headerPlaceholder: {
     width: 28,
   },
   content: {
     flex: 1,
+  },
+  scrollContent: {
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.lg,
   },
-  templateCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: Spacing.md,
-    paddingVertical: Spacing.lg,
+  gameCardWrapper: {
+    marginBottom: Spacing.lg,
   },
-  iconContainer: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+  gameCard: {
+    borderRadius: BorderRadius.cardLarge,
+    padding: Spacing.xl,
+    minHeight: 160,
+    ...Shadow.cardDeep,
+    position: 'relative',
+  },
+  gameCardContent: {
+    flex: 1,
+    paddingRight: 72,
+  },
+  iconCircle: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    backgroundColor: 'rgba(255,255,255,0.3)',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: Spacing.md,
+    marginBottom: Spacing.md,
   },
-  templateInfo: {
-    flex: 1,
-  },
-  templateTitle: {
-    ...Typography.h2,
-    fontSize: 20,
+  gameTitle: {
+    ...Typography.h1,
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#FFFFFF',
     marginBottom: Spacing.xs,
   },
-  templateDescription: {
-    ...Typography.body,
-    marginBottom: Spacing.xs,
+  gameDescription: {
+    ...Typography.bodyLarge,
+    color: 'rgba(255,255,255,0.9)',
+    marginBottom: Spacing.sm,
   },
   aiBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.xs,
-    marginTop: Spacing.xs,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.round,
+    alignSelf: 'flex-start',
   },
   aiBadgeText: {
     ...Typography.caption,
+    fontSize: 12,
+    color: '#FFFFFF',
+    fontWeight: '600',
+  },
+  playButton: {
+    position: 'absolute',
+    top: Spacing.lg,
+    right: Spacing.lg,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: 'rgba(255,255,255,0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

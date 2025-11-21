@@ -4,15 +4,19 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState, useEffect } from 'react';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useSets } from '@/contexts/SetsContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Button } from '@/components/ui/Button';
 import { QuizQuestion } from '@/lib/types';
-import { Colors, Spacing, Typography } from '@/lib/constants';
+import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 
 // Utility function to shuffle array
 function shuffleArray<T>(array: T[]): T[] {
@@ -45,6 +49,7 @@ export default function QuizScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { getSetById, updateLastPracticed } = useSets();
+  const { colors } = useTheme();
 
   const set = getSetById(id!);
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
@@ -138,86 +143,76 @@ export default function QuizScreen() {
   const currentQuestion = questions[currentIndex];
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => router.back()}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Ionicons name="close" size={28} color={Colors.text} />
+          <Ionicons name="close" size={28} color={colors.text} />
         </TouchableOpacity>
-        <Text style={styles.progress}>
+        <Text style={[styles.progress, { color: colors.text }]}>
           Question {currentIndex + 1} of {questions.length}
         </Text>
-        <View style={styles.scoreContainer}>
-          <Ionicons name="trophy" size={20} color={Colors.primary} />
-          <Text style={styles.scoreText}>{score}</Text>
+        <View style={[styles.scoreContainer, { backgroundColor: `${colors.success}20` }]}>
+          <Ionicons name="trophy" size={20} color={colors.success} />
+          <Text style={[styles.scoreText, { color: colors.success }]}>{score}</Text>
         </View>
       </View>
 
-      <View style={styles.progressBarContainer}>
-        {questions.map((_, index) => (
-          <View
-            key={index}
-            style={[
-              styles.progressDot,
-              index === currentIndex && styles.progressDotActive,
-              index < currentIndex && styles.progressDotComplete,
-            ]}
-          />
-        ))}
+      <View style={[styles.progressBarContainer, { backgroundColor: colors.border }]}>
+        <LinearGradient
+          colors={['#00D4FF', '#00E5A0']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={[
+            styles.progressFill,
+            { width: `${((currentIndex + 1) / questions.length) * 100}%` },
+          ]}
+        />
       </View>
 
-      <View style={styles.content}>
-        <View style={styles.questionCard}>
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <LinearGradient
+          colors={['#00D4FF', '#00E5A0']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.questionCard}
+        >
+          <Ionicons name="help-circle" size={48} color="#FFFFFF" style={{ marginBottom: Spacing.md }} />
           <Text style={styles.questionLabel}>Translate:</Text>
           <Text style={styles.questionText}>{currentQuestion.word}</Text>
-        </View>
+        </LinearGradient>
 
         <View style={styles.options}>
-          {currentQuestion.options.map((option, index) => {
+          {currentQuestion.options.map((option, optionIndex) => {
             const isCorrect = option === currentQuestion.correctAnswer;
             const isSelected = selectedAnswer === option;
             const showCorrect = isAnswered && isCorrect;
             const showWrong = isAnswered && isSelected && !isCorrect;
 
             return (
-              <TouchableOpacity
-                key={index}
+              <OptionCard
+                key={optionIndex}
+                option={option}
+                index={optionIndex}
+                isSelected={isSelected}
+                showCorrect={showCorrect}
+                showWrong={showWrong}
+                isAnswered={isAnswered}
                 onPress={() => handleSelectAnswer(option)}
-                disabled={isAnswered}
-                style={[
-                  styles.option,
-                  isSelected && styles.optionSelected,
-                  showCorrect && styles.optionCorrect,
-                  showWrong && styles.optionWrong,
-                ]}
-              >
-                <Text
-                  style={[
-                    styles.optionText,
-                    (showCorrect || showWrong) && styles.optionTextAnswered,
-                  ]}
-                >
-                  {option}
-                </Text>
-                {showCorrect && (
-                  <Ionicons
-                    name="checkmark-circle"
-                    size={24}
-                    color={Colors.success}
-                  />
-                )}
-                {showWrong && (
-                  <Ionicons name="close-circle" size={24} color={Colors.error} />
-                )}
-              </TouchableOpacity>
+                colors={colors}
+              />
             );
           })}
         </View>
-      </View>
+      </ScrollView>
 
-      <View style={styles.footer}>
+      <View style={[styles.footer, { backgroundColor: colors.card, borderTopColor: colors.border }]}>
         {isAnswered ? (
           <Button
             title={
@@ -237,118 +232,180 @@ export default function QuizScreen() {
   );
 }
 
+interface OptionCardProps {
+  option: string;
+  index: number;
+  isSelected: boolean;
+  showCorrect: boolean;
+  showWrong: boolean;
+  isAnswered: boolean;
+  onPress: () => void;
+  colors: any;
+}
+
+function OptionCard({ option, index, isSelected, showCorrect, showWrong, isAnswered, onPress, colors }: OptionCardProps) {
+  const scale = useSharedValue(1);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scale.value }],
+    };
+  });
+
+  const handlePressIn = () => {
+    if (!isAnswered) {
+      scale.value = withSpring(0.98, { damping: 15, stiffness: 150 });
+    }
+  };
+
+  const handlePressOut = () => {
+    scale.value = withSpring(1, { damping: 15, stiffness: 150 });
+  };
+
+  const getBorderColor = () => {
+    if (showCorrect) return colors.success;
+    if (showWrong) return colors.error;
+    if (isSelected) return colors.primary;
+    return colors.border;
+  };
+
+  const getBackgroundColor = () => {
+    if (showCorrect) return `${colors.success}20`;
+    if (showWrong) return `${colors.error}20`;
+    if (isSelected) return `${colors.primary}10`;
+    return colors.card;
+  };
+
+  return (
+    <Animated.View style={animatedStyle}>
+      <TouchableOpacity
+        onPress={onPress}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        disabled={isAnswered}
+        style={[
+          styles.option,
+          {
+            borderColor: getBorderColor(),
+            backgroundColor: getBackgroundColor(),
+          },
+        ]}
+        activeOpacity={1}
+      >
+        <View style={[styles.optionNumber, { backgroundColor: colors.border }]}>
+          <Text style={[styles.optionNumberText, { color: colors.text }]}>{String.fromCharCode(65 + index)}</Text>
+        </View>
+        <Text style={[styles.optionText, { color: colors.text }]}>
+          {option}
+        </Text>
+        {showCorrect && (
+          <Ionicons name="checkmark-circle" size={28} color={colors.success} />
+        )}
+        {showWrong && (
+          <Ionicons name="close-circle" size={28} color={colors.error} />
+        )}
+      </TouchableOpacity>
+    </Animated.View>
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
+    paddingVertical: Spacing.lg,
   },
   progress: {
-    ...Typography.caption,
-    color: Colors.textSecondary,
-    fontWeight: '500',
+    ...Typography.body,
+    fontWeight: '700',
+    fontSize: 16,
   },
   scoreContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.xs,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.round,
   },
   scoreText: {
     ...Typography.body,
-    color: Colors.primary,
-    fontWeight: '600',
+    fontWeight: '700',
   },
   progressBarContainer: {
-    flexDirection: 'row',
-    gap: Spacing.xs,
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.sm,
+    height: 6,
   },
-  progressDot: {
-    flex: 1,
-    height: 4,
-    backgroundColor: Colors.border,
-    borderRadius: 2,
-  },
-  progressDotActive: {
-    backgroundColor: Colors.primary,
-  },
-  progressDotComplete: {
-    backgroundColor: Colors.success,
+  progressFill: {
+    height: '100%',
   },
   content: {
     flex: 1,
+  },
+  scrollContent: {
     paddingHorizontal: Spacing.lg,
     paddingTop: Spacing.xl,
+    paddingBottom: Spacing.xl,
   },
   questionCard: {
-    backgroundColor: Colors.card,
-    borderRadius: 16,
+    borderRadius: BorderRadius.cardLarge,
     padding: Spacing.xl,
     marginBottom: Spacing.xl,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 2,
+    ...Shadow.cardDeep,
   },
   questionLabel: {
     ...Typography.caption,
-    color: Colors.textSecondary,
+    fontSize: 14,
+    color: 'rgba(255,255,255,0.9)',
     marginBottom: Spacing.sm,
+    fontWeight: '600',
   },
   questionText: {
     ...Typography.h1,
-    fontSize: 28,
-    color: Colors.text,
+    fontSize: 32,
+    fontWeight: '700',
+    color: '#FFFFFF',
     textAlign: 'center',
   },
   options: {
     gap: Spacing.md,
   },
   option: {
-    backgroundColor: Colors.card,
-    borderRadius: 12,
-    padding: Spacing.md,
+    borderRadius: BorderRadius.button,
+    padding: Spacing.lg,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    gap: Spacing.md,
     borderWidth: 2,
-    borderColor: Colors.border,
-    minHeight: 56,
+    minHeight: 72,
+    ...Shadow.card,
   },
-  optionSelected: {
-    borderColor: Colors.primary,
-    backgroundColor: `${Colors.primary}10`,
+  optionNumber: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  optionCorrect: {
-    borderColor: Colors.success,
-    backgroundColor: `${Colors.success}10`,
-  },
-  optionWrong: {
-    borderColor: Colors.error,
-    backgroundColor: `${Colors.error}10`,
+  optionNumberText: {
+    ...Typography.body,
+    fontWeight: '700',
+    fontSize: 16,
   },
   optionText: {
     ...Typography.body,
-    color: Colors.text,
+    fontSize: 17,
     flex: 1,
-  },
-  optionTextAnswered: {
     fontWeight: '500',
   },
   footer: {
     padding: Spacing.lg,
-    backgroundColor: Colors.card,
     borderTopWidth: 1,
-    borderTopColor: Colors.border,
   },
   loading: {
     flex: 1,
@@ -357,7 +414,6 @@ const styles = StyleSheet.create({
   },
   errorText: {
     ...Typography.body,
-    color: Colors.error,
     textAlign: 'center',
     marginTop: Spacing.xl,
   },

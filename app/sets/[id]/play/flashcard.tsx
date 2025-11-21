@@ -9,10 +9,12 @@ import Animated, {
   interpolate,
 } from 'react-native-reanimated';
 import { useSets } from '@/contexts/SetsContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Button } from '@/components/ui/Button';
 import { WordPair } from '@/lib/types';
-import { Colors, Spacing, Typography } from '@/lib/constants';
+import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 // Utility function to shuffle array
 function shuffleArray<T>(array: T[]): T[] {
@@ -28,6 +30,7 @@ export default function FlashcardScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { getSetById, updateLastPracticed } = useSets();
+  const { colors } = useTheme();
 
   const set = getSetById(id!);
   const [shuffledWords, setShuffledWords] = useState<WordPair[]>([]);
@@ -100,22 +103,25 @@ export default function FlashcardScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => router.back()}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Ionicons name="close" size={28} color={Colors.text} />
+          <Ionicons name="close" size={28} color={colors.text} />
         </TouchableOpacity>
-        <Text style={styles.progress}>
+        <Text style={[styles.progress, { color: colors.text }]}>
           {currentIndex + 1} of {shuffledWords.length}
         </Text>
         <View style={styles.headerPlaceholder} />
       </View>
 
-      <View style={styles.progressBar}>
-        <View
+      <View style={[styles.progressBar, { backgroundColor: colors.border }]}>
+        <LinearGradient
+          colors={['#5B9EFF', '#E066FF']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
           style={[
             styles.progressFill,
             { width: `${((currentIndex + 1) / shuffledWords.length) * 100}%` },
@@ -125,13 +131,25 @@ export default function FlashcardScreen() {
 
       <View style={styles.content}>
         <Pressable onPress={flipCard} style={styles.cardContainer}>
-          <Animated.View style={[styles.card, frontAnimatedStyle]}>
-            <Text style={styles.cardText}>{currentWord.word}</Text>
-            <Text style={styles.cardHint}>Tap to flip</Text>
+          <Animated.View style={[styles.card, { backgroundColor: colors.card }, frontAnimatedStyle]}>
+            <Ionicons name="language" size={48} color={colors.primary} style={{ marginBottom: Spacing.lg }} />
+            <Text style={[styles.cardText, { color: colors.text }]}>{currentWord.word}</Text>
+            <View style={[styles.tapHint, { backgroundColor: `${colors.primary}20` }]}>
+              <Ionicons name="hand-left-outline" size={16} color={colors.primary} />
+              <Text style={[styles.cardHint, { color: colors.primary }]}>Tap to flip</Text>
+            </View>
           </Animated.View>
 
           <Animated.View style={[styles.card, styles.cardBack, backAnimatedStyle]}>
-            <Text style={styles.cardText}>{currentWord.translation}</Text>
+            <LinearGradient
+              colors={['#5B9EFF', '#E066FF']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.cardBackGradient}
+            >
+              <Ionicons name="checkmark-circle" size={48} color="#FFFFFF" style={{ marginBottom: Spacing.lg }} />
+              <Text style={[styles.cardText, styles.cardTextBack]}>{currentWord.translation}</Text>
+            </LinearGradient>
           </Animated.View>
         </Pressable>
 
@@ -165,30 +183,27 @@ export default function FlashcardScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
+    paddingVertical: Spacing.lg,
   },
   progress: {
     ...Typography.body,
-    color: Colors.textSecondary,
-    fontWeight: '500',
+    fontWeight: '700',
+    fontSize: 18,
   },
   headerPlaceholder: {
     width: 28,
   },
   progressBar: {
-    height: 4,
-    backgroundColor: Colors.border,
+    height: 6,
   },
   progressFill: {
     height: '100%',
-    backgroundColor: Colors.primary,
   },
   content: {
     flex: 1,
@@ -196,37 +211,52 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cardContainer: {
-    height: 400,
+    height: 450,
     marginVertical: Spacing.xl,
   },
   card: {
     position: 'absolute',
     width: '100%',
     height: '100%',
-    backgroundColor: Colors.card,
-    borderRadius: 16,
+    borderRadius: BorderRadius.cardLarge,
     padding: Spacing.xl,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 4,
+    ...Shadow.cardDeep,
   },
   cardBack: {
-    backgroundColor: Colors.primary,
+    padding: 0,
+    overflow: 'hidden',
+  },
+  cardBackGradient: {
+    width: '100%',
+    height: '100%',
+    padding: Spacing.xl,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: BorderRadius.cardLarge,
   },
   cardText: {
-    ...Typography.h1,
-    fontSize: 36,
-    color: Colors.text,
+    ...Typography.display,
+    fontSize: 48,
+    fontWeight: '700',
     textAlign: 'center',
+  },
+  cardTextBack: {
+    color: '#FFFFFF',
+  },
+  tapHint: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.xs,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.round,
+    marginTop: Spacing.xl,
   },
   cardHint: {
     ...Typography.caption,
-    color: Colors.textSecondary,
-    marginTop: Spacing.lg,
+    fontWeight: '600',
   },
   navigation: {
     flexDirection: 'row',
@@ -237,7 +267,6 @@ const styles = StyleSheet.create({
   },
   errorText: {
     ...Typography.body,
-    color: Colors.error,
     textAlign: 'center',
     marginTop: Spacing.xl,
   },

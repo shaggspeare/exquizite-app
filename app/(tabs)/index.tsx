@@ -1,18 +1,26 @@
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSets } from '@/contexts/SetsContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { SetCard } from '@/components/set/SetCard';
-import { Spacing, Typography } from '@/lib/constants';
+import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Card } from '@/components/ui/Card';
 
 export default function HomeScreen() {
   const { user } = useAuth();
   const { sets } = useSets();
   const { colors } = useTheme();
   const router = useRouter();
+
+  const totalWords = sets.reduce((sum, set) => sum + set.words.length, 0);
+  const recentSets = sets.slice(0, 3);
+
+  // Calculate streak (mock for now)
+  const streak = sets.filter(s => s.lastPracticed).length;
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
@@ -21,52 +29,119 @@ export default function HomeScreen() {
       <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
         Create your first word set to get started!
       </Text>
+      <TouchableOpacity
+        style={[styles.emptyButton, { backgroundColor: colors.primary }]}
+        onPress={() => router.push('/(tabs)/create')}
+        activeOpacity={0.7}
+      >
+        <Ionicons name="add" size={20} color="#FFFFFF" />
+        <Text style={styles.emptyButtonText}>Create Set</Text>
+      </TouchableOpacity>
     </View>
   );
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
-      <View style={[styles.header, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
-        <View>
-          <Text style={[styles.greeting, { color: colors.text }]}>
-            Hello, {user?.name || 'there'}!
-          </Text>
-          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Ready to learn?</Text>
-        </View>
-        <TouchableOpacity
-          style={[styles.createButton, { backgroundColor: colors.primary }]}
-          onPress={() => router.push('/(tabs)/create')}
-          activeOpacity={0.7}
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Welcome Widget */}
+        <LinearGradient
+          colors={['#5B9EFF', '#E066FF']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.welcomeWidget}
         >
-          <Ionicons name="add" size={24} color="#FFFFFF" />
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.content}>
-        <View style={styles.titleRow}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>My Sets</Text>
-          <TouchableOpacity
-            style={styles.textButton}
-            onPress={() => router.push('/(tabs)/create')}
-            activeOpacity={0.6}
-          >
-            <Ionicons name="add-circle-outline" size={20} color={colors.primary} />
-            <Text style={[styles.textButtonLabel, { color: colors.primary }]}>
-              New Set
+          <View style={styles.welcomeContent}>
+            <Text style={styles.welcomeTitle}>
+              Hello, {user?.name || 'there'}!
             </Text>
+            <Text style={styles.welcomeSubtitle}>Ready to learn today?</Text>
+          </View>
+          <TouchableOpacity
+            style={styles.createFab}
+            onPress={() => router.push('/(tabs)/create')}
+            activeOpacity={0.8}
+          >
+            <Ionicons name="add" size={28} color="#5B9EFF" />
           </TouchableOpacity>
-        </View>
-        <FlatList
-          data={sets}
-          keyExtractor={item => item.id}
-          renderItem={({ item }) => (
-            <SetCard set={item} />
-          )}
-          ListEmptyComponent={renderEmptyState}
-          contentContainerStyle={sets.length === 0 && styles.emptyContainer}
-          showsVerticalScrollIndicator={false}
-        />
-      </View>
+        </LinearGradient>
+
+        {sets.length > 0 ? (
+          <>
+            {/* Stats Grid */}
+            <View style={styles.statsGrid}>
+              <Card style={styles.statCard}>
+                <View style={[styles.statIconContainer, { backgroundColor: `${colors.primary}20` }]}>
+                  <Ionicons name="library" size={32} color={colors.primary} />
+                </View>
+                <Text style={[styles.statValue, { color: colors.text }]}>{sets.length}</Text>
+                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Sets</Text>
+              </Card>
+
+              <Card style={styles.statCard}>
+                <View style={[styles.statIconContainer, { backgroundColor: `${colors.success}20` }]}>
+                  <Ionicons name="book" size={32} color={colors.success} />
+                </View>
+                <Text style={[styles.statValue, { color: colors.text }]}>{totalWords}</Text>
+                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Words</Text>
+              </Card>
+
+              <Card style={styles.statCard}>
+                <View style={[styles.statIconContainer, { backgroundColor: `${colors.ai}20` }]}>
+                  <Ionicons name="flame" size={32} color={colors.ai} />
+                </View>
+                <Text style={[styles.statValue, { color: colors.text }]}>{streak}</Text>
+                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Streak</Text>
+              </Card>
+            </View>
+
+            {/* Quick Practice Widget */}
+            {recentSets.length > 0 && (
+              <TouchableOpacity
+                onPress={() => router.push(`/sets/${recentSets[0].id}`)}
+                activeOpacity={0.8}
+              >
+                <LinearGradient
+                  colors={['#00D4FF', '#00E5A0']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.quickPracticeWidget}
+                >
+                  <View>
+                    <Text style={styles.quickPracticeTitle}>Quick Practice</Text>
+                    <Text style={styles.quickPracticeSubtitle}>{recentSets[0].name}</Text>
+                  </View>
+                  <View style={styles.playIconContainer}>
+                    <Ionicons name="play" size={28} color="#FFFFFF" />
+                  </View>
+                </LinearGradient>
+              </TouchableOpacity>
+            )}
+
+            {/* My Sets Section */}
+            <View style={styles.setsSection}>
+              <View style={styles.sectionHeader}>
+                <Text style={[styles.sectionTitle, { color: colors.text }]}>My Sets</Text>
+                <TouchableOpacity
+                  onPress={() => router.push('/(tabs)/create')}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                >
+                  <Ionicons name="add-circle" size={28} color={colors.primary} />
+                </TouchableOpacity>
+              </View>
+
+              {sets.map(set => (
+                <SetCard key={set.id} set={set} />
+              ))}
+            </View>
+          </>
+        ) : (
+          renderEmptyState()
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -75,53 +150,118 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.lg,
-    borderBottomWidth: 1,
-  },
-  greeting: {
-    ...Typography.h1,
-    fontSize: 28,
-  },
-  subtitle: {
-    ...Typography.body,
-    marginTop: Spacing.xs,
-  },
-  content: {
+  scrollView: {
     flex: 1,
+  },
+  scrollContent: {
     paddingHorizontal: Spacing.lg,
     paddingTop: Spacing.lg,
+    paddingBottom: Spacing.xxl,
   },
-  titleRow: {
+  welcomeWidget: {
+    borderRadius: BorderRadius.cardLarge,
+    padding: Spacing.xl,
+    marginBottom: Spacing.lg,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: Spacing.md,
+    minHeight: 120,
+    ...Shadow.cardDeep,
+  },
+  welcomeContent: {
+    flex: 1,
+  },
+  welcomeTitle: {
+    ...Typography.h1,
+    fontSize: 32,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    marginBottom: Spacing.xs,
+  },
+  welcomeSubtitle: {
+    ...Typography.bodyLarge,
+    color: 'rgba(255,255,255,0.9)',
+  },
+  createFab: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    ...Shadow.button,
+  },
+  statsGrid: {
+    flexDirection: 'row',
+    gap: Spacing.md,
+    marginBottom: Spacing.lg,
+  },
+  statCard: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: Spacing.lg,
+  },
+  statIconContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: Spacing.sm,
+  },
+  statValue: {
+    ...Typography.h1,
+    fontSize: 28,
+    fontWeight: '700',
+    marginBottom: Spacing.xs,
+  },
+  statLabel: {
+    ...Typography.caption,
+    fontSize: 12,
+  },
+  quickPracticeWidget: {
+    borderRadius: BorderRadius.cardLarge,
+    padding: Spacing.lg,
+    marginBottom: Spacing.lg,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    minHeight: 80,
+    ...Shadow.card,
+  },
+  quickPracticeTitle: {
+    ...Typography.caption,
+    fontSize: 14,
+    color: 'rgba(255,255,255,0.9)',
+    marginBottom: Spacing.xs,
+  },
+  quickPracticeSubtitle: {
+    ...Typography.h2,
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#FFFFFF',
+  },
+  playIconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: 'rgba(255,255,255,0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  setsSection: {
+    marginTop: Spacing.md,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: Spacing.lg,
   },
   sectionTitle: {
     ...Typography.h2,
-    fontSize: 20,
-  },
-  textButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.xs,
-    paddingVertical: Spacing.xs,
-    paddingHorizontal: Spacing.sm,
-  },
-  textButtonLabel: {
-    ...Typography.body,
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    fontSize: 24,
+    fontWeight: '700',
   },
   emptyState: {
     alignItems: 'center',
@@ -135,17 +275,20 @@ const styles = StyleSheet.create({
   emptyText: {
     ...Typography.body,
     textAlign: 'center',
+    marginBottom: Spacing.lg,
   },
-  createButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    justifyContent: 'center',
+  emptyButton: {
+    flexDirection: 'row',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 3,
+    gap: Spacing.sm,
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.xl,
+    borderRadius: BorderRadius.button,
+    ...Shadow.button,
+  },
+  emptyButtonText: {
+    ...Typography.body,
+    color: '#FFFFFF',
+    fontWeight: '600',
   },
 });

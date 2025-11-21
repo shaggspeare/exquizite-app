@@ -65,3 +65,31 @@ export async function generateSentenceWithGap(
     };
   }
 }
+
+/**
+ * Generate multiple sentences with gaps in a single request
+ */
+export async function generateMultipleSentencesWithGaps(
+  words: Array<{ word: string; translation: string }>,
+  targetLanguage: string = 'Ukrainian',
+  nativeLanguage: string = 'English'
+): Promise<Array<{ sentence: string; correctAnswer: string }>> {
+  try {
+    console.log('[AI Helper] Requesting multiple sentences with gaps:', { count: words.length });
+
+    const results = await OpenAIService.generateMultipleSentencesWithGaps(
+      words,
+      targetLanguage,
+    );
+
+    console.log('[AI Helper] Successfully generated', results.length, 'sentences with gaps');
+    return results;
+  } catch (error) {
+    console.error('[AI Helper] Error generating multiple sentences with gaps:', error);
+    // Fallback to simple sentences
+    return words.map(w => ({
+      sentence: `___ means ${w.translation}`,
+      correctAnswer: w.word,
+    }));
+  }
+}

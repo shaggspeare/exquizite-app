@@ -370,3 +370,70 @@ Only return valid JSON, no additional text.`;
     };
   }
 }
+
+/**
+ * Generate multiple sentences with gaps in a single API call
+ */
+export async function generateMultipleSentencesWithGaps(
+  words: Array<{ word: string; translation: string }>,
+  targetLanguage: string = 'Ukrainian',
+): Promise<Array<{ sentence: string; correctAnswer: string }>> {
+  try {
+    console.log('[OpenAI] Generating multiple sentences with gaps:', { count: words.length, targetLanguage });
+    const client = getOpenAIClient();
+
+    const wordsList = words.map((w, i) => `${i + 1}. "${w.word}" (means "${w.translation}")`).join('\n');
+
+    const prompt = `Generate simple, natural sentences in ${targetLanguage} for the following words. Each sentence should use the word and then have it replaced with "___" to create fill-in-the-blank exercises.
+The sentences should be appropriate for language learners and provide context clues.
+
+Words:
+${wordsList}
+
+Format the response as a JSON object with a "sentences" property containing an array of objects.
+Each object should have "sentence" (the sentence with ___) and "correctAnswer" (the original word) fields.
+Example format: {"sentences": [{"sentence": "Я люблю ___ на сніданок", "correctAnswer": "яблука"}, {"sentence": "Мій ___ дуже великий", "correctAnswer": "дім"}]}
+Only return valid JSON, no additional text.`;
+
+    const completion = await client.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [
+        {
+          role: 'system',
+          content:
+            'You are a language learning assistant that creates educational fill-in-the-blank exercises. Always respond with valid JSON only.',
+        },
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
+      max_completion_tokens: 1500,
+      temperature: 0.7,
+      response_format: { type: 'json_object' },
+    });
+
+    const responseText = completion.choices[0].message.content?.trim() || '{}';
+    console.log('[OpenAI] Multiple sentences response received');
+
+    const responseData = JSON.parse(responseText);
+    const sentences = responseData.sentences || [];
+
+    if (!Array.isArray(sentences) || sentences.length === 0) {
+      throw new Error('Invalid response format');
+    }
+
+    console.log('[OpenAI] Successfully generated', sentences.length, 'sentences with gaps');
+    return sentences;
+  } catch (error: any) {
+    console.error('[OpenAI] Error generating multiple sentences with gaps:', {
+      message: error?.message,
+      status: error?.status,
+    });
+    // Fallback: return simple sentences for each word
+    return words.map(w => ({
+      sentence: `___ means ${w.translation}`,
+      correctAnswer: w.word,
+    }));
+  }
+}

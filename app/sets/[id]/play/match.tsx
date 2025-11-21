@@ -10,8 +10,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState, useEffect } from 'react';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useSets } from '@/contexts/SetsContext';
-import { Colors, Spacing, Typography } from '@/lib/constants';
+import { useTheme } from '@/contexts/ThemeContext';
+import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 
 // Utility function to shuffle array
 function shuffleArray<T>(array: T[]): T[] {
@@ -34,6 +37,7 @@ export default function MatchScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { getSetById, updateLastPracticed } = useSets();
+  const { colors } = useTheme();
 
   const set = getSetById(id!);
   const [words, setWords] = useState<MatchItem[]>([]);
@@ -162,21 +166,23 @@ export default function MatchScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => router.back()}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Ionicons name="close" size={28} color={Colors.text} />
+          <Ionicons name="close" size={28} color={colors.text} />
         </TouchableOpacity>
         <View style={styles.stats}>
-          <Text style={styles.statText}>
-            <Ionicons name="timer" size={16} /> {formatTime(timer)}
-          </Text>
-          <Text style={styles.statText}>
-            <Ionicons name="checkmark-circle" size={16} /> {score}/{set.words.length}
-          </Text>
+          <View style={[styles.statBadge, { backgroundColor: `${colors.ai}20` }]}>
+            <Ionicons name="timer" size={18} color={colors.ai} />
+            <Text style={[styles.statText, { color: colors.ai }]}>{formatTime(timer)}</Text>
+          </View>
+          <View style={[styles.statBadge, { backgroundColor: `${colors.success}20` }]}>
+            <Ionicons name="checkmark-circle" size={18} color={colors.success} />
+            <Text style={[styles.statText, { color: colors.success }]}>{score}/{set.words.length}</Text>
+          </View>
         </View>
         <View style={styles.headerPlaceholder} />
       </View>
@@ -184,77 +190,57 @@ export default function MatchScreen() {
       <View style={styles.content}>
         <View style={styles.columns}>
           <View style={styles.column}>
-            <Text style={styles.columnTitle}>Words</Text>
+            <LinearGradient
+              colors={['#B537F2', '#E066FF']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.columnHeader}
+            >
+              <Ionicons name="language" size={20} color="#FFFFFF" />
+              <Text style={styles.columnTitle}>Words</Text>
+            </LinearGradient>
             <ScrollView
               style={styles.scrollView}
               contentContainerStyle={styles.scrollContent}
               showsVerticalScrollIndicator={false}
             >
               {words.map(item => (
-                <TouchableOpacity
+                <MatchCard
                   key={item.id}
+                  item={item}
+                  isSelected={selectedWord === item.id}
                   onPress={() => handleWordPress(item)}
-                  disabled={item.matched}
-                  style={[
-                    styles.matchCard,
-                    selectedWord === item.id && styles.matchCardSelected,
-                    item.matched && styles.matchCardMatched,
-                  ]}
-                >
-                  <Text
-                    style={[
-                      styles.matchCardText,
-                      item.matched && styles.matchCardTextMatched,
-                    ]}
-                  >
-                    {item.text}
-                  </Text>
-                  {item.matched && (
-                    <Ionicons
-                      name="checkmark-circle"
-                      size={20}
-                      color={Colors.success}
-                    />
-                  )}
-                </TouchableOpacity>
+                  colors={colors}
+                  accentColor="#B537F2"
+                />
               ))}
             </ScrollView>
           </View>
 
           <View style={styles.column}>
-            <Text style={styles.columnTitle}>Translations</Text>
+            <LinearGradient
+              colors={['#00D4FF', '#00E5A0']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.columnHeader}
+            >
+              <Ionicons name="text" size={20} color="#FFFFFF" />
+              <Text style={styles.columnTitle}>Translations</Text>
+            </LinearGradient>
             <ScrollView
               style={styles.scrollView}
               contentContainerStyle={styles.scrollContent}
               showsVerticalScrollIndicator={false}
             >
               {translations.map(item => (
-                <TouchableOpacity
+                <MatchCard
                   key={item.id}
+                  item={item}
+                  isSelected={selectedTranslation === item.id}
                   onPress={() => handleTranslationPress(item)}
-                  disabled={item.matched}
-                  style={[
-                    styles.matchCard,
-                    selectedTranslation === item.id && styles.matchCardSelected,
-                    item.matched && styles.matchCardMatched,
-                  ]}
-                >
-                  <Text
-                    style={[
-                      styles.matchCardText,
-                      item.matched && styles.matchCardTextMatched,
-                    ]}
-                  >
-                    {item.text}
-                  </Text>
-                  {item.matched && (
-                    <Ionicons
-                      name="checkmark-circle"
-                      size={20}
-                      color={Colors.success}
-                    />
-                  )}
-                </TouchableOpacity>
+                  colors={colors}
+                  accentColor="#00D4FF"
+                />
               ))}
             </ScrollView>
           </View>
@@ -264,49 +250,132 @@ export default function MatchScreen() {
   );
 }
 
+interface MatchCardProps {
+  item: MatchItem;
+  isSelected: boolean;
+  onPress: () => void;
+  colors: any;
+  accentColor: string;
+}
+
+function MatchCard({ item, isSelected, onPress, colors, accentColor }: MatchCardProps) {
+  const scale = useSharedValue(1);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scale.value }],
+    };
+  });
+
+  const handlePressIn = () => {
+    if (!item.matched) {
+      scale.value = withSpring(0.95, { damping: 15, stiffness: 150 });
+    }
+  };
+
+  const handlePressOut = () => {
+    scale.value = withSpring(1, { damping: 15, stiffness: 150 });
+  };
+
+  const getBorderColor = () => {
+    if (item.matched) return colors.success;
+    if (isSelected) return accentColor;
+    return colors.border;
+  };
+
+  const getBackgroundColor = () => {
+    if (item.matched) return `${colors.success}15`;
+    if (isSelected) return `${accentColor}15`;
+    return colors.card;
+  };
+
+  return (
+    <Animated.View style={animatedStyle}>
+      <TouchableOpacity
+        onPress={onPress}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        disabled={item.matched}
+        style={[
+          styles.matchCard,
+          {
+            borderColor: getBorderColor(),
+            backgroundColor: getBackgroundColor(),
+            opacity: item.matched ? 0.5 : 1,
+          },
+        ]}
+        activeOpacity={1}
+      >
+        <Text style={[styles.matchCardText, { color: colors.text }]}>
+          {item.text}
+        </Text>
+        {item.matched && (
+          <Ionicons name="checkmark-circle" size={24} color={colors.success} />
+        )}
+      </TouchableOpacity>
+    </Animated.View>
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
+    paddingVertical: Spacing.lg,
   },
   stats: {
     flexDirection: 'row',
-    gap: Spacing.md,
+    gap: Spacing.sm,
+  },
+  statBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.xs,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.round,
   },
   statText: {
     ...Typography.caption,
-    color: Colors.textSecondary,
-    fontWeight: '500',
+    fontWeight: '700',
+    fontSize: 14,
   },
   headerPlaceholder: {
     width: 28,
   },
   content: {
     flex: 1,
-    paddingHorizontal: Spacing.lg,
-    paddingTop: Spacing.lg,
+    paddingHorizontal: Spacing.md,
+    paddingTop: Spacing.md,
   },
   columns: {
     flexDirection: 'row',
-    gap: Spacing.md,
+    gap: Spacing.sm,
     flex: 1,
   },
   column: {
     flex: 1,
   },
+  columnHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: Spacing.xs,
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.button,
+    marginBottom: Spacing.md,
+    ...Shadow.card,
+  },
   columnTitle: {
-    ...Typography.caption,
-    color: Colors.textSecondary,
-    fontWeight: '600',
-    marginBottom: Spacing.sm,
-    textAlign: 'center',
+    ...Typography.body,
+    color: '#FFFFFF',
+    fontWeight: '700',
+    fontSize: 16,
   },
   scrollView: {
     flex: 1,
@@ -315,41 +384,24 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.lg,
   },
   matchCard: {
-    backgroundColor: Colors.card,
-    borderRadius: 12,
+    borderRadius: BorderRadius.button,
     padding: Spacing.md,
     marginBottom: Spacing.sm,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderWidth: 2,
-    borderColor: 'transparent',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  matchCardSelected: {
-    borderColor: Colors.primary,
-    backgroundColor: `${Colors.primary}10`,
-  },
-  matchCardMatched: {
-    borderColor: Colors.success,
-    backgroundColor: `${Colors.success}10`,
-    opacity: 0.6,
+    borderWidth: 3,
+    minHeight: 64,
+    ...Shadow.card,
   },
   matchCardText: {
     ...Typography.body,
-    color: Colors.text,
+    fontSize: 16,
     flex: 1,
-  },
-  matchCardTextMatched: {
-    color: Colors.textSecondary,
+    fontWeight: '500',
   },
   errorText: {
     ...Typography.body,
-    color: Colors.error,
     textAlign: 'center',
     marginTop: Spacing.xl,
   },

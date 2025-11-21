@@ -9,19 +9,19 @@ import {
   Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter, useLocalSearchParams, useFocusEffect } from 'expo-router';
 import { useCallback } from 'react';
 import { Input } from '@/components/ui/Input';
-import { Button } from '@/components/ui/Button';
 import { WordPairInput } from '@/components/set/WordPairInput';
 import { AISuggestionModal } from '@/components/ai/AISuggestionModal';
 import { useSets } from '@/contexts/SetsContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { WordPair } from '@/lib/types';
-import { Spacing, Typography, MAX_WORDS_PER_SET } from '@/lib/constants';
+import { Spacing, Typography, MAX_WORDS_PER_SET, BorderRadius } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function CreateSetScreen() {
   const router = useRouter();
@@ -32,6 +32,7 @@ export default function CreateSetScreen() {
 
   const editingSetId = params.editId as string | undefined;
   const isEditing = !!editingSetId;
+  const previousEditId = useRef<string | undefined>(undefined);
 
   const [setName, setSetName] = useState('');
   const [wordPairs, setWordPairs] = useState<WordPair[]>([
@@ -40,21 +41,25 @@ export default function CreateSetScreen() {
   const [showAIModal, setShowAIModal] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  // Clear form or load data when screen comes into focus
+  // Load data when editing, preserve state when creating
   useFocusEffect(
     useCallback(() => {
       if (isEditing && editingSetId) {
+        // Always load fresh data when editing
         const setToEdit = getSetById(editingSetId);
         if (setToEdit) {
           setSetName(setToEdit.name);
           setWordPairs(setToEdit.words.length > 0 ? setToEdit.words : [{ id: '1', word: '', translation: '' }]);
         }
-      } else {
-        // Clear form when creating new set
+        previousEditId.current = editingSetId;
+      } else if (previousEditId.current) {
+        // Just switched from editing to creating - clear the form
         setSetName('');
         setWordPairs([{ id: '1', word: '', translation: '' }]);
         setShowAIModal(false);
+        previousEditId.current = undefined;
       }
+      // When creating new set (not editing), preserve the current state
     }, [editingSetId, isEditing])
   );
 
@@ -145,7 +150,7 @@ export default function CreateSetScreen() {
         Alert.alert('Success', 'Set updated successfully!', [
           {
             text: 'OK',
-            onPress: () => router.back(),
+            onPress: () => router.push(`/sets/${editingSetId}`),
           },
         ]);
       } else {
@@ -190,24 +195,32 @@ export default function CreateSetScreen() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
-      <View style={[styles.header, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
+      <LinearGradient
+        colors={['#5B9EFF', '#E066FF']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={styles.header}
+      >
         <TouchableOpacity
           onPress={() => router.back()}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Ionicons name="close" size={28} color={colors.text} />
+          <Ionicons name="close" size={28} color="#FFFFFF" />
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, { color: colors.text }]}>
+        <Text style={styles.headerTitle}>
           {isEditing ? 'Edit Set' : 'Create Set'}
         </Text>
-        <Button
-          title={saving ? "Saving..." : "Save"}
+        <TouchableOpacity
           onPress={handleSave}
-          variant="primary"
           disabled={saving}
-          style={styles.saveButton}
-        />
-      </View>
+          style={[styles.saveButton, saving && styles.saveButtonDisabled]}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
+          <Text style={styles.saveButtonText}>
+            {saving ? "Saving..." : "Save"}
+          </Text>
+        </TouchableOpacity>
+      </LinearGradient>
 
       <KeyboardAvoidingView
         style={styles.keyboardAvoid}
@@ -321,17 +334,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
-    borderBottomWidth: 1,
+    paddingVertical: Spacing.lg,
   },
   headerTitle: {
     ...Typography.h2,
-    fontSize: 20,
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#FFFFFF',
   },
   saveButton: {
-    minHeight: 36,
     paddingVertical: Spacing.sm,
-    paddingHorizontal: Spacing.lg,
+    paddingHorizontal: Spacing.md,
+    backgroundColor: 'rgba(255,255,255,0.3)',
+    borderRadius: BorderRadius.button,
+  },
+  saveButtonDisabled: {
+    opacity: 0.5,
+  },
+  saveButtonText: {
+    ...Typography.body,
+    fontWeight: '700',
+    color: '#FFFFFF',
   },
   keyboardAvoid: {
     flex: 1,
@@ -354,10 +377,13 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     ...Typography.h2,
-    fontSize: 18,
+    fontSize: 20,
+    fontWeight: '700',
   },
   wordCount: {
     ...Typography.caption,
+    fontSize: 14,
+    fontWeight: '600',
   },
   addButton: {
     flexDirection: 'row',
@@ -369,7 +395,7 @@ const styles = StyleSheet.create({
   },
   addButtonText: {
     ...Typography.body,
-    fontWeight: '500',
+    fontWeight: '600',
   },
   aiButton: {
     flexDirection: 'row',
@@ -378,11 +404,11 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
     paddingVertical: Spacing.md,
     marginTop: Spacing.sm,
-    borderRadius: 8,
-    borderWidth: 1,
+    borderRadius: BorderRadius.button,
+    borderWidth: 2,
   },
   aiButtonText: {
     ...Typography.body,
-    fontWeight: '500',
+    fontWeight: '600',
   },
 });
