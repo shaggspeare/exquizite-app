@@ -15,20 +15,36 @@ function RootLayoutNav() {
   const router = useRouter();
 
   useEffect(() => {
-    if (authLoading || langLoading) return;
+    console.log('🔍 Routing check:', {
+      authLoading,
+      langLoading,
+      hasUser: !!user,
+      isConfigured: preferences.isConfigured,
+      segments,
+    });
+
+    if (authLoading || langLoading) {
+      console.log('⏳ Still loading, skipping navigation');
+      return;
+    }
 
     const inAuthGroup = segments[0] === '(auth)';
     const onLanguageSetup = segments[1] === 'language-setup';
 
     if (!user && !inAuthGroup) {
       // Redirect to login if not authenticated
+      console.log('➡️  Redirecting to login (no user)');
       router.replace('/(auth)/login');
     } else if (user && !preferences.isConfigured && !onLanguageSetup) {
       // Redirect to language setup if authenticated but languages not configured
+      console.log('➡️  Redirecting to language setup (user but no languages configured)');
       router.replace('/(auth)/language-setup');
     } else if (user && preferences.isConfigured && inAuthGroup && !onLanguageSetup) {
       // Redirect to main app if authenticated and languages configured
+      console.log('➡️  Redirecting to main app (user and languages configured)');
       router.replace('/(tabs)');
+    } else {
+      console.log('✅ No redirect needed, staying on current route');
     }
   }, [user, authLoading, langLoading, preferences.isConfigured, segments]);
 
@@ -47,13 +63,13 @@ function RootLayoutNav() {
 export default function RootLayout() {
   return (
     <ThemeProvider>
-      <LanguageProvider>
-        <AuthProvider>
+      <AuthProvider>
+        <LanguageProvider>
           <SetsProvider>
             <RootLayoutNav />
           </SetsProvider>
-        </AuthProvider>
-      </LanguageProvider>
+        </LanguageProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

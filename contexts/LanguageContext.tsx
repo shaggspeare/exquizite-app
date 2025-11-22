@@ -7,6 +7,7 @@ import {
 } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import * as Localization from 'expo-localization';
+import { useAuth } from './AuthContext';
 
 export interface LanguagePreferences {
   targetLanguage: string; // Language user wants to learn
@@ -65,6 +66,7 @@ const getDeviceLanguage = (): string => {
 };
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
+  const { user, isLoading: authLoading } = useAuth();
   const [preferences, setPreferences] = useState<LanguagePreferences>({
     targetLanguage: '',
     nativeLanguage: '',
@@ -73,23 +75,43 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    loadLanguagePreferences();
-  }, []);
+    if (!authLoading) {
+      loadLanguagePreferences();
+    }
+  }, [user?.id, authLoading]);
 
   const loadLanguagePreferences = async () => {
     try {
-      const stored = await SecureStore.getItemAsync(LANGUAGE_STORAGE_KEY);
+      // If no user, set defaults and return
+      if (!user) {
+        console.log('📚 No user, using default preferences');
+        const deviceLang = getDeviceLanguage();
+        setPreferences({
+          targetLanguage: '',
+          nativeLanguage: deviceLang,
+          isConfigured: false,
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      // Load preferences for this specific user
+      const userStorageKey = `${LANGUAGE_STORAGE_KEY}_${user.id}`;
+      const stored = await SecureStore.getItemAsync(userStorageKey);
+
       if (stored) {
         const parsed = JSON.parse(stored);
+        console.log('📚 Language preferences loaded for user', user.name, ':', parsed);
         setPreferences(parsed);
       } else {
         // Set default native language to device language
         const deviceLang = getDeviceLanguage();
-        setPreferences(prev => ({
-          ...prev,
+        console.log('📚 No stored preferences for user', user.name, '. Device language:', deviceLang);
+        setPreferences({
+          targetLanguage: '',
           nativeLanguage: deviceLang,
           isConfigured: false,
-        }));
+        });
       }
     } catch (error) {
       console.error('Error loading language preferences:', error);
@@ -107,17 +129,23 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   const setLanguages = async (targetLanguage: string, nativeLanguage: string) => {
     try {
+      if (!user) {
+        throw new Error('No user logged in');
+      }
+
       const newPreferences: LanguagePreferences = {
         targetLanguage,
         nativeLanguage,
         isConfigured: true,
       };
 
+      const userStorageKey = `${LANGUAGE_STORAGE_KEY}_${user.id}`;
       await SecureStore.setItemAsync(
-        LANGUAGE_STORAGE_KEY,
+        userStorageKey,
         JSON.stringify(newPreferences)
       );
 
+      console.log('📚 Language preferences saved for user', user.name, ':', newPreferences);
       setPreferences(newPreferences);
     } catch (error) {
       console.error('Error saving language preferences:', error);

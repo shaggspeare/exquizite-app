@@ -52,7 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const loadUserProfile = async (userId: string) => {
+  const loadUserProfile = async (userId: string, retries = 5) => {
     try {
       const { data: profile, error } = await supabase
         .from('profiles')
@@ -60,9 +60,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .eq('id', userId)
         .single();
 
-      if (error) throw error;
+      if (error) {
+        // If profile doesn't exist yet and we have retries left, wait and retry
+        if (error.code === 'PGRST116' && retries > 0) {
+          console.log(`Profile not found, retrying... (${retries} attempts left)`);
+          await new Promise(resolve => setTimeout(resolve, 500));
+          return loadUserProfile(userId, retries - 1);
+        }
+        throw error;
+      }
 
       if (profile) {
+        console.log('✅ Profile loaded successfully:', profile.name);
         setUser({
           id: profile.id,
           name: profile.name,

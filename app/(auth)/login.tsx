@@ -45,11 +45,9 @@ export default function LoginScreen() {
     try {
       if (isSignUp) {
         await signUpWithEmail(email.trim(), password, name.trim());
-        Alert.alert('Success', 'Account created! You can now sign in.');
-        // Switch to sign in mode
-        setIsSignUp(false);
-        setPassword('');
-        setConfirmPassword('');
+        // If signup succeeds without error, user is signed in
+        // The router will automatically redirect to language setup
+        // Clear form but don't switch modes or show alert
       } else {
         await signInWithEmail(email.trim(), password);
       }
