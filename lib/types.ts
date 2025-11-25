@@ -15,6 +15,9 @@ export interface WordSet {
   createdAt: string;
   updatedAt: string;
   lastPracticed?: string;
+  isCopy?: boolean;
+  isShareable?: boolean;
+  originalAuthorId?: string;
 }
 
 export interface User {
@@ -47,4 +50,61 @@ export interface MatchPair {
   word: string;
   translation: string;
   isMatched: boolean;
+}
+
+// Sharing Feature Types
+
+export interface SharedSet {
+  id: string;
+  setId: string;
+  shareCode: string;
+  isPublic: boolean;
+  createdBy: string;
+  viewCount: number;
+  copyCount: number;
+  createdAt: string;
+  expiresAt?: string;
+  isActive: boolean;
+}
+
+export interface ShareMetadata {
+  shareId: string;
+  shareCode: string;
+  shareUrl: string;
+  isNew: boolean;
+  viewCount: number;
+  copyCount: number;
+  createdAt: string;
+  expiresAt?: string;
+}
+
+export interface ShareOptions {
+  isPublic?: boolean;
+  expiresInDays?: number;
+}
+
+export interface SharedSetDetails {
+  setId: string;
+  name: string;
+  targetLanguage: string;
+  nativeLanguage: string;
+  wordCount: number;
+  words: WordPair[];
+  shareInfo: {
+    shareCode: string;
+    viewCount: number;
+    copyCount: number;
+    createdAt: string;
+    expiresAt?: string;
+  };
+  author: {
+    name: string;
+  };
+}
+
+export interface CopySetResponse {
+  setId: string;
+  name: string;
+  wordCount: number;
+  success: boolean;
 }

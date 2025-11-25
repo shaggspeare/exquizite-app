@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { supabase, retryOperation } from '@/lib/supabase';
 import { useAuth } from './AuthContext';
-import { WordSet, WordPair } from '@/lib/types';
+import { WordSet, WordPair, ShareMetadata, ShareOptions, SharedSetDetails, CopySetResponse } from '@/lib/types';
 
 interface SetsContextType {
   sets: WordSet[];
@@ -12,6 +12,11 @@ interface SetsContextType {
   getSetById: (id: string) => WordSet | undefined;
   updateLastPracticed: (id: string) => Promise<void>;
   refreshSets: () => Promise<void>;
+  // Sharing methods
+  shareSet: (setId: string, options?: ShareOptions) => Promise<ShareMetadata | null>;
+  getSharedSet: (shareCode: string) => Promise<SharedSetDetails | null>;
+  copySharedSet: (shareCode: string, customName?: string) => Promise<WordSet | null>;
+  deleteShare: (setId: string) => Promise<void>;
 }
 
 const SetsContext = createContext<SetsContextType | undefined>(undefined);
@@ -62,6 +67,9 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         createdAt: set.created_at,
         updatedAt: set.updated_at,
         lastPracticed: set.last_practiced || undefined,
+        isCopy: set.is_copy || false,
+        isShareable: set.is_shareable !== false,
+        originalAuthorId: set.original_author_id || undefined,
       }));
 
       setSets(transformedSets);
@@ -300,6 +308,122 @@ export function SetsProvider({ children }: { children: ReactNode }) {
     await loadSets();
   };
 
+  // Sharing methods
+  const shareSet = async (setId: string, options?: ShareOptions): Promise<ShareMetadata | null> => {
+    if (!user) {
+      console.error('User must be authenticated to share sets');
+      return null;
+    }
+
+    try {
+      console.log('Sharing set:', { setId, options });
+
+      const { data, error } = await supabase.functions.invoke('generate-share-link', {
+        body: {
+          setId,
+          isPublic: options?.isPublic ?? true,
+          expiresInDays: options?.expiresInDays,
+        },
+      });
+
+      if (error) {
+        console.error('Error generating share link:', error);
+        throw error;
+      }
+
+      console.log('Share link generated successfully:', data);
+      return data as ShareMetadata;
+    } catch (error: any) {
+      console.error('Error sharing set:', error);
+      return null;
+    }
+  };
+
+  const getSharedSet = async (shareCode: string): Promise<SharedSetDetails | null> => {
+    try {
+      console.log('Fetching shared set:', shareCode);
+
+      const { data, error } = await supabase.functions.invoke('get-shared-set', {
+        body: { shareCode },
+      });
+
+      if (error) {
+        console.error('Error fetching shared set:', error);
+        throw error;
+      }
+
+      console.log('Shared set fetched successfully:', data);
+      return data as SharedSetDetails;
+    } catch (error: any) {
+      console.error('Error getting shared set:', error);
+      return null;
+    }
+  };
+
+  const copySharedSet = async (shareCode: string, customName?: string): Promise<WordSet | null> => {
+    if (!user) {
+      console.error('User must be authenticated to copy sets');
+      return null;
+    }
+
+    try {
+      console.log('Copying shared set:', { shareCode, customName });
+
+      const { data, error } = await supabase.functions.invoke('copy-shared-set', {
+        body: {
+          shareCode,
+          customName,
+        },
+      });
+
+      if (error) {
+        console.error('Error copying shared set:', error);
+        throw error;
+      }
+
+      console.log('Shared set copied successfully:', data);
+
+      const response = data as CopySetResponse;
+
+      // Reload sets to include the newly copied set
+      await loadSets();
+
+      // Return the newly created set
+      return getSetById(response.setId) || null;
+    } catch (error: any) {
+      console.error('Error copying shared set:', error);
+      return null;
+    }
+  };
+
+  const deleteShare = async (setId: string): Promise<void> => {
+    if (!user) {
+      console.error('User must be authenticated to delete shares');
+      return;
+    }
+
+    try {
+      console.log('Deleting share for set:', setId);
+
+      // Deactivate the share by updating is_active to false
+      const { error } = await supabase
+        .from('shared_sets')
+        .update({ is_active: false })
+        .eq('set_id', setId)
+        .eq('created_by', user.id);
+
+      if (error) {
+        console.error('Error deleting share:', error);
+        throw error;
+      }
+
+      console.log('Share deleted successfully');
+    } catch (error: any) {
+      console.error('Error deleting share:', error);
+      throw error;
+    }
+  };
+
   return (
     <SetsContext.Provider
       value={{
@@ -311,6 +435,10 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         getSetById,
         updateLastPracticed,
         refreshSets,
+        shareSet,
+        getSharedSet,
+        copySharedSet,
+        deleteShare,
       }}
     >
       {children}

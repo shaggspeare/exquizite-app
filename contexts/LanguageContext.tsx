@@ -8,6 +8,7 @@ import {
 import * as SecureStore from 'expo-secure-store';
 import * as Localization from 'expo-localization';
 import { useAuth } from './AuthContext';
+import { supabase } from '@/lib/supabase';
 
 export interface LanguagePreferences {
   targetLanguage: string; // Language user wants to learn
@@ -104,14 +105,46 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         console.log('📚 Language preferences loaded for user', user.name, ':', parsed);
         setPreferences(parsed);
       } else {
-        // Set default native language to device language
+        // Check if user has any word sets (existing user)
+        const { data: sets, error } = await supabase
+          .from('word_sets')
+          .select('id, target_language, native_language')
+          .eq('user_id', user.id)
+          .limit(1);
+
+        const hasExistingSets = !error && sets && sets.length > 0;
         const deviceLang = getDeviceLanguage();
-        console.log('📚 No stored preferences for user', user.name, '. Device language:', deviceLang);
-        setPreferences({
-          targetLanguage: '',
-          nativeLanguage: deviceLang,
-          isConfigured: false,
-        });
+
+        if (hasExistingSets) {
+          // Existing user with sets - auto-configure with their set's languages or defaults
+          const firstSet = sets[0];
+          const targetLang = firstSet.target_language || 'uk';
+          const nativeLang = firstSet.native_language || deviceLang;
+
+          console.log('📚 Existing user detected. Auto-configuring languages:', { targetLang, nativeLang });
+
+          const autoConfiguredPrefs = {
+            targetLanguage: targetLang,
+            nativeLanguage: nativeLang,
+            isConfigured: true, // Mark as configured to skip language setup
+          };
+
+          // Save the auto-configured preferences
+          await SecureStore.setItemAsync(
+            userStorageKey,
+            JSON.stringify(autoConfiguredPrefs)
+          );
+
+          setPreferences(autoConfiguredPrefs);
+        } else {
+          // New user - prompt for language selection
+          console.log('📚 New user detected. Device language:', deviceLang);
+          setPreferences({
+            targetLanguage: '',
+            nativeLanguage: deviceLang,
+            isConfigured: false,
+          });
+        }
       }
     } catch (error) {
       console.error('Error loading language preferences:', error);

@@ -114,6 +114,9 @@ export type Database = {
           created_at: string;
           updated_at: string;
           last_practiced: string | null;
+          is_shareable: boolean;
+          original_author_id: string | null;
+          is_copy: boolean;
         };
         Insert: {
           id?: string;
@@ -122,6 +125,9 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
           last_practiced?: string | null;
+          is_shareable?: boolean;
+          original_author_id?: string | null;
+          is_copy?: boolean;
         };
         Update: {
           id?: string;
@@ -130,6 +136,9 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
           last_practiced?: string | null;
+          is_shareable?: boolean;
+          original_author_id?: string | null;
+          is_copy?: boolean;
         };
       };
       word_pairs: {
@@ -155,6 +164,70 @@ export type Database = {
           word?: string;
           translation?: string;
           position?: number;
+          created_at?: string;
+        };
+      };
+      shared_sets: {
+        Row: {
+          id: string;
+          set_id: string;
+          share_code: string;
+          is_public: boolean;
+          created_by: string;
+          view_count: number;
+          copy_count: number;
+          created_at: string;
+          expires_at: string | null;
+          is_active: boolean;
+        };
+        Insert: {
+          id?: string;
+          set_id: string;
+          share_code: string;
+          is_public?: boolean;
+          created_by: string;
+          view_count?: number;
+          copy_count?: number;
+          created_at?: string;
+          expires_at?: string | null;
+          is_active?: boolean;
+        };
+        Update: {
+          id?: string;
+          set_id?: string;
+          share_code?: string;
+          is_public?: boolean;
+          created_by?: string;
+          view_count?: number;
+          copy_count?: number;
+          created_at?: string;
+          expires_at?: string | null;
+          is_active?: boolean;
+        };
+      };
+      set_copies: {
+        Row: {
+          id: string;
+          original_set_id: string | null;
+          copied_set_id: string;
+          copied_by: string | null;
+          shared_via_code: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          original_set_id?: string | null;
+          copied_set_id: string;
+          copied_by?: string | null;
+          shared_via_code?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          original_set_id?: string | null;
+          copied_set_id?: string;
+          copied_by?: string | null;
+          shared_via_code?: string | null;
           created_at?: string;
         };
       };

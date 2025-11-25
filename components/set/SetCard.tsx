@@ -8,6 +8,7 @@ import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import { ShareModal } from './ShareModal';
 
 interface SetCardProps {
   set: WordSet;
@@ -19,6 +20,7 @@ export function SetCard({ set, onPress }: SetCardProps) {
   const { deleteSet } = useSets();
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
   const scale = useSharedValue(1);
 
   // Generate a consistent gradient based on set ID
@@ -92,6 +94,10 @@ export function SetCard({ set, onPress }: SetCardProps) {
     );
   };
 
+  const handleSharePress = () => {
+    setShowShareModal(true);
+  };
+
   const wordPairsList = set.words
     .map(word => word.word)
     .join(', ');
@@ -116,12 +122,6 @@ export function SetCard({ set, onPress }: SetCardProps) {
             <View style={styles.header}>
               <View style={styles.titleRow}>
                 <Text style={styles.title}>{set.name}</Text>
-                <View style={[styles.wordBadge, { backgroundColor: 'rgba(255,255,255,0.3)' }]}>
-                  <Ionicons name="book" size={14} color="#FFFFFF" />
-                  <Text style={styles.wordBadgeText}>
-                    {set.words.length}
-                  </Text>
-                </View>
               </View>
             </View>
 
@@ -150,6 +150,26 @@ export function SetCard({ set, onPress }: SetCardProps) {
               </View>
             )}
           </View>
+
+          {/* Word count badge at top right */}
+          <View style={[styles.wordBadge, { backgroundColor: 'rgba(255,255,255,0.3)' }]}>
+            <Ionicons name="book" size={14} color="#FFFFFF" />
+            <Text style={styles.wordBadgeText}>
+              {set.words.length}
+            </Text>
+          </View>
+
+          {/* Always visible practice button */}
+          <TouchableOpacity
+            style={styles.practiceButton}
+            onPress={(e) => {
+              e.stopPropagation();
+              handlePlayPress();
+            }}
+            activeOpacity={0.8}
+          >
+            <Ionicons name="play-circle" size={28} color="#FFFFFF" />
+          </TouchableOpacity>
         </LinearGradient>
 
         {isExpanded && (
@@ -162,12 +182,12 @@ export function SetCard({ set, onPress }: SetCardProps) {
 
             <View style={styles.actions}>
               <TouchableOpacity
-                style={[styles.actionButton, { backgroundColor: colors.primary }]}
-                onPress={handlePlayPress}
+                style={[styles.actionButton, { backgroundColor: colors.success }]}
+                onPress={handleSharePress}
                 activeOpacity={0.7}
               >
-                <Ionicons name="play" size={20} color="#FFFFFF" />
-                <Text style={styles.actionButtonText}>Practice</Text>
+                <Ionicons name="share-social" size={20} color="#FFFFFF" />
+                <Text style={styles.actionButtonText}>Share</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -182,6 +202,12 @@ export function SetCard({ set, onPress }: SetCardProps) {
           </View>
         )}
       </TouchableOpacity>
+
+      <ShareModal
+        visible={showShareModal}
+        set={set}
+        onClose={() => setShowShareModal(false)}
+      />
     </Animated.View>
   );
 }
@@ -198,6 +224,7 @@ const styles = StyleSheet.create({
   },
   cardContent: {
     position: 'relative',
+    paddingRight: 60,
   },
   header: {
     marginBottom: Spacing.md,
@@ -216,6 +243,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   wordBadge: {
+    position: 'absolute',
+    top: Spacing.lg,
+    right: Spacing.lg,
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.xs,
@@ -297,5 +327,17 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontWeight: '600',
     fontSize: 16,
+  },
+  practiceButton: {
+    position: 'absolute',
+    bottom: Spacing.lg,
+    right: Spacing.lg,
+    width: 48,
+    height: 48,
+    borderRadius: BorderRadius.round,
+    backgroundColor: 'rgba(255,255,255,0.25)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...Shadow.button,
   },
 });

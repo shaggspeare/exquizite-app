@@ -13,15 +13,35 @@
       "bundleIdentifier": "com.shaggspeare.exquiziteapp",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
-      }
+      },
+      "associatedDomains": ["applinks:exquizite.app"]
     },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#5B9EFF",
         "foregroundImage": "./assets/images/react-logo.png"
       },
+      "package": "com.shaggspeare.exquiziteapp",
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "exquizite.app",
+              "pathPrefix": "/shared"
+            },
+            {
+              "scheme": "exquiziteapp",
+              "host": "shared"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
     },
     "web": {
       "output": "static",
