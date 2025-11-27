@@ -55,9 +55,15 @@
           "image": "./assets/images/logo.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#FFFFFF",
+          "backgroundColor": "#1E5A7D",
+          "statusBar": {
+            "style": "light"
+          },
           "dark": {
-            "backgroundColor": "#0A0A0A"
+            "backgroundColor": "#0D2D3E",
+            "statusBar": {
+              "style": "light"
+            }
           }
         }
       ],
