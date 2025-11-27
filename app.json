@@ -4,7 +4,7 @@
     "slug": "exquizite-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/react-logo.png",
+    "icon": "./assets/images/logo.png",
     "scheme": "exquiziteapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -18,8 +18,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#5B9EFF",
-        "foregroundImage": "./assets/images/react-logo.png"
+        "backgroundColor": "#FFFFFF",
+        "foregroundImage": "./assets/images/logo.png"
       },
       "package": "com.shaggspeare.exquiziteapp",
       "edgeToEdgeEnabled": true,
@@ -45,17 +45,17 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/react-logo.png"
+      "favicon": "./assets/images/logo.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/react-logo.png",
+          "image": "./assets/images/logo.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#5B9EFF",
+          "backgroundColor": "#FFFFFF",
           "dark": {
             "backgroundColor": "#0A0A0A"
           }
