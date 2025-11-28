@@ -3,12 +3,9 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  TextInput,
   ActivityIndicator,
   Alert,
-  KeyboardAvoidingView,
   ScrollView,
-  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState, useEffect } from 'react';
@@ -27,6 +24,7 @@ interface FillBlankQuestion {
   translation: string;
   sentence: string;
   correctAnswer: string;
+  options: string[];
 }
 
 export default function FillBlankScreen() {
@@ -39,7 +37,7 @@ export default function FillBlankScreen() {
   const set = getSetById(id!);
   const [questions, setQuestions] = useState<FillBlankQuestion[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [userAnswer, setUserAnswer] = useState('');
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [score, setScore] = useState(0);
@@ -83,18 +81,30 @@ export default function FillBlankScreen() {
         translation: word.translation,
         sentence: sentences[index]?.sentence || `___ means ${word.translation}`,
         correctAnswer: sentences[index]?.correctAnswer || word.word,
+        options: sentences[index]?.options || [word.word],
       }));
 
       setQuestions(generatedQuestions);
     } catch (error) {
       console.error('Error generating questions:', error);
-      // Fallback: create simple questions
-      const fallbackQuestions: FillBlankQuestion[] = shuffledWords.map(word => ({
-        word: word.word,
-        translation: word.translation,
-        sentence: `___ means ${word.translation}`,
-        correctAnswer: word.word,
-      }));
+      // Fallback: create simple questions with options from other words
+      const fallbackQuestions: FillBlankQuestion[] = shuffledWords.map((word, index) => {
+        const otherWords = shuffledWords.filter((_, i) => i !== index).map(w => w.word);
+        const distractors = otherWords.slice(0, 3);
+        while (distractors.length < 3) {
+          distractors.push(`option${distractors.length + 1}`);
+        }
+        const allOptions = [word.word, ...distractors];
+        const shuffledOptions = allOptions.sort(() => Math.random() - 0.5);
+
+        return {
+          word: word.word,
+          translation: word.translation,
+          sentence: `___ means ${word.translation}`,
+          correctAnswer: word.word,
+          options: shuffledOptions,
+        };
+      });
       setQuestions(fallbackQuestions);
     }
 
@@ -102,11 +112,13 @@ export default function FillBlankScreen() {
   };
 
   const handleCheckAnswer = () => {
+    if (!selectedOption) return;
+
     const currentQuestion = questions[currentIndex];
-    const normalizedUserAnswer = userAnswer.trim().toLowerCase();
+    const normalizedSelectedAnswer = selectedOption.trim().toLowerCase();
     const normalizedCorrectAnswer = currentQuestion.correctAnswer.toLowerCase();
 
-    const correct = normalizedUserAnswer === normalizedCorrectAnswer;
+    const correct = normalizedSelectedAnswer === normalizedCorrectAnswer;
     setIsCorrect(correct);
     setIsAnswered(true);
 
@@ -118,7 +130,7 @@ export default function FillBlankScreen() {
   const handleNext = () => {
     if (currentIndex < questions.length - 1) {
       setCurrentIndex(currentIndex + 1);
-      setUserAnswer('');
+      setSelectedOption(null);
       setIsAnswered(false);
       setIsCorrect(false);
       setShowHint(false);
@@ -142,7 +154,7 @@ export default function FillBlankScreen() {
 
   const resetGame = () => {
     setCurrentIndex(0);
-    setUserAnswer('');
+    setSelectedOption(null);
     setIsAnswered(false);
     setIsCorrect(false);
     setScore(0);
@@ -201,86 +213,98 @@ export default function FillBlankScreen() {
         />
       </View>
 
-      <KeyboardAvoidingView
-        style={styles.keyboardAvoid}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={100}
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
       >
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={styles.scrollContent}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
-        >
-          {showHint && (
-            <View style={[styles.hintCard, { backgroundColor: `${colors.ai}20`, borderColor: colors.ai }]}>
-              <Ionicons name="bulb" size={24} color={colors.ai} />
-              <View style={styles.hintContent}>
-                <Text style={[styles.hintLabel, { color: colors.ai }]}>Translation:</Text>
-                <Text style={[styles.hintText, { color: colors.text }]}>{currentQuestion.translation}</Text>
-              </View>
-            </View>
-          )}
-
-          <LinearGradient
-            colors={['#FF6B35', '#FFBB00']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.sentenceCard}
+        {!showHint && !isAnswered && (
+          <TouchableOpacity
+            style={[styles.hintButton, { backgroundColor: `${colors.ai}15`, borderColor: colors.ai }]}
+            onPress={() => setShowHint(true)}
+            activeOpacity={0.7}
           >
-            <Ionicons name="create" size={48} color="#FFFFFF" style={{ marginBottom: Spacing.md }} />
-            <Text style={styles.sentenceLabel}>Fill in the blank:</Text>
-            <Text style={styles.sentenceText}>{currentQuestion.sentence}</Text>
-          </LinearGradient>
+            <Ionicons name="bulb-outline" size={20} color={colors.ai} />
+            <Text style={[styles.hintButtonText, { color: colors.ai }]}>Show Hint</Text>
+          </TouchableOpacity>
+        )}
 
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={[
-                styles.input,
-                { backgroundColor: colors.card, color: colors.text, borderColor: colors.border },
-                isAnswered && isCorrect && { borderColor: colors.success, backgroundColor: `${colors.success}15` },
-                isAnswered && !isCorrect && { borderColor: colors.error, backgroundColor: `${colors.error}15` },
-              ]}
-              value={userAnswer}
-              onChangeText={setUserAnswer}
-              placeholder="Type your answer here..."
-              placeholderTextColor={colors.textSecondary}
-              editable={!isAnswered}
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
-            {isAnswered && (
-              <View style={styles.feedbackIcon}>
-                <Ionicons
-                  name={isCorrect ? 'checkmark-circle' : 'close-circle'}
-                  size={32}
-                  color={isCorrect ? colors.success : colors.error}
-                />
-              </View>
-            )}
-          </View>
-
-          {!showHint && !isAnswered && (
-            <TouchableOpacity
-              style={[styles.hintButton, { backgroundColor: `${colors.ai}15`, borderColor: colors.ai }]}
-              onPress={() => setShowHint(true)}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="bulb-outline" size={20} color={colors.ai} />
-              <Text style={[styles.hintButtonText, { color: colors.ai }]}>Show Hint</Text>
-            </TouchableOpacity>
-          )}
-
-          {isAnswered && !isCorrect && (
-            <View style={[styles.correctAnswerContainer, { backgroundColor: colors.card, borderColor: colors.error }]}>
-              <Text style={[styles.correctAnswerLabel, { color: colors.textSecondary }]}>Correct answer:</Text>
-              <Text style={[styles.correctAnswerText, { color: colors.error }]}>
-                {currentQuestion.correctAnswer}
-              </Text>
+        {showHint && (
+          <View style={[styles.hintCard, { backgroundColor: `${colors.ai}20`, borderColor: colors.ai }]}>
+            <Ionicons name="bulb" size={20} color={colors.ai} />
+            <View style={styles.hintContent}>
+              <Text style={[styles.hintLabel, { color: colors.ai }]}>Translation:</Text>
+              <Text style={[styles.hintText, { color: colors.text }]}>{currentQuestion.translation}</Text>
             </View>
-          )}
-        </ScrollView>
-      </KeyboardAvoidingView>
+          </View>
+        )}
+
+        <LinearGradient
+          colors={['#FF6B35', '#FFBB00']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.sentenceCard}
+        >
+          <Text style={styles.sentenceLabel}>Fill in the blank:</Text>
+          <Text style={styles.sentenceText}>{currentQuestion.sentence}</Text>
+        </LinearGradient>
+
+        <Text style={[styles.optionsLabel, { color: colors.textSecondary }]}>Choose the correct word:</Text>
+
+        <View style={styles.optionsGrid}>
+          {currentQuestion.options.map((option, index) => {
+            const isSelected = selectedOption === option;
+            const isCorrectOption = option.toLowerCase() === currentQuestion.correctAnswer.toLowerCase();
+            const showCorrect = isAnswered && isCorrectOption;
+            const showIncorrect = isAnswered && isSelected && !isCorrect;
+
+            return (
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.optionButton,
+                  { backgroundColor: colors.card, borderColor: colors.border },
+                  isSelected && !isAnswered && { borderColor: colors.primary, backgroundColor: `${colors.primary}15` },
+                  showCorrect && { borderColor: colors.success, backgroundColor: `${colors.success}15` },
+                  showIncorrect && { borderColor: colors.error, backgroundColor: `${colors.error}15` },
+                ]}
+                onPress={() => !isAnswered && setSelectedOption(option)}
+                disabled={isAnswered}
+                activeOpacity={0.7}
+              >
+                <Text
+                  style={[
+                    styles.optionText,
+                    { color: colors.text },
+                    isSelected && !isAnswered && { color: colors.primary, fontWeight: '700' },
+                    showCorrect && { color: colors.success, fontWeight: '700' },
+                    showIncorrect && { color: colors.error, fontWeight: '700' },
+                  ]}
+                  numberOfLines={2}
+                  ellipsizeMode="tail"
+                >
+                  {option}
+                </Text>
+                {showCorrect && (
+                  <Ionicons name="checkmark-circle" size={20} color={colors.success} />
+                )}
+                {showIncorrect && (
+                  <Ionicons name="close-circle" size={20} color={colors.error} />
+                )}
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+
+        {isAnswered && !isCorrect && (
+          <View style={[styles.correctAnswerContainer, { backgroundColor: colors.card, borderColor: colors.error }]}>
+            <Text style={[styles.correctAnswerLabel, { color: colors.textSecondary }]}>Correct answer:</Text>
+            <Text style={[styles.correctAnswerText, { color: colors.error }]}>
+              {currentQuestion.correctAnswer}
+            </Text>
+          </View>
+        )}
+      </ScrollView>
 
       <View style={[styles.footer, { backgroundColor: colors.card, borderTopColor: colors.border }]}>
         {isAnswered ? (
@@ -294,7 +318,7 @@ export default function FillBlankScreen() {
           <Button
             title="Check Answer"
             onPress={handleCheckAnswer}
-            disabled={!userAnswer.trim()}
+            disabled={!selectedOption}
           />
         )}
       </View>
@@ -336,109 +360,121 @@ const styles = StyleSheet.create({
   progressFill: {
     height: '100%',
   },
-  keyboardAvoid: {
-    flex: 1,
-  },
   scrollView: {
     flex: 1,
   },
   scrollContent: {
     paddingHorizontal: Spacing.lg,
-    paddingTop: Spacing.xl,
-    paddingBottom: Spacing.xl,
+    paddingTop: Spacing.md,
+    paddingBottom: Spacing.lg,
   },
   hintCard: {
-    borderRadius: BorderRadius.cardLarge,
-    padding: Spacing.lg,
-    marginBottom: Spacing.lg,
-    borderLeftWidth: 4,
+    borderRadius: BorderRadius.button,
+    padding: Spacing.md,
+    marginBottom: Spacing.md,
+    borderLeftWidth: 3,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.md,
+    gap: Spacing.sm,
   },
   hintContent: {
     flex: 1,
   },
   hintLabel: {
     ...Typography.caption,
-    fontSize: 12,
-    marginBottom: Spacing.xs,
+    fontSize: 11,
+    marginBottom: 2,
     fontWeight: '600',
   },
   hintText: {
     ...Typography.body,
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: '500',
   },
   sentenceCard: {
     borderRadius: BorderRadius.cardLarge,
-    padding: Spacing.xl,
-    marginBottom: Spacing.xl,
+    padding: Spacing.lg,
+    marginBottom: Spacing.md,
     alignItems: 'center',
     ...Shadow.cardDeep,
   },
   sentenceLabel: {
     ...Typography.caption,
-    fontSize: 14,
-    color: 'rgba(255,255,255,0.9)',
-    marginBottom: Spacing.md,
+    fontSize: 12,
+    color: 'rgba(255,255,255,0.85)',
+    marginBottom: Spacing.xs,
     fontWeight: '600',
   },
   sentenceText: {
     ...Typography.h2,
-    fontSize: 28,
+    fontSize: 20,
     fontWeight: '700',
     color: '#FFFFFF',
     textAlign: 'center',
-    lineHeight: 40,
+    lineHeight: 28,
   },
-  inputContainer: {
-    position: 'relative',
+  optionsLabel: {
+    ...Typography.body,
+    fontSize: 13,
+    fontWeight: '600',
+    marginBottom: Spacing.sm,
+    marginTop: Spacing.sm,
+  },
+  optionsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
     marginBottom: Spacing.lg,
   },
-  input: {
+  optionButton: {
     borderRadius: BorderRadius.button,
-    padding: Spacing.lg,
-    fontSize: 18,
+    padding: Spacing.md,
     borderWidth: 2,
-    minHeight: 56,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 70,
+    width: '48.5%',
+    marginBottom: Spacing.md,
+    gap: Spacing.xs,
   },
-  feedbackIcon: {
-    position: 'absolute',
-    right: Spacing.md,
-    top: '50%',
-    marginTop: -16,
+  optionText: {
+    ...Typography.body,
+    fontSize: 16,
+    fontWeight: '500',
+    textAlign: 'center',
   },
   hintButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: Spacing.xs,
-    paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.md,
     borderRadius: BorderRadius.button,
     borderWidth: 2,
     borderStyle: 'dashed',
-    marginBottom: Spacing.lg,
+    marginBottom: Spacing.md,
   },
   hintButtonText: {
     ...Typography.body,
     fontWeight: '600',
-    fontSize: 16,
+    fontSize: 14,
   },
   correctAnswerContainer: {
     borderRadius: BorderRadius.button,
-    padding: Spacing.lg,
-    borderLeftWidth: 4,
+    padding: Spacing.md,
+    borderLeftWidth: 3,
+    marginTop: Spacing.sm,
   },
   correctAnswerLabel: {
     ...Typography.caption,
-    fontSize: 12,
-    marginBottom: Spacing.xs,
+    fontSize: 11,
+    marginBottom: 2,
   },
   correctAnswerText: {
     ...Typography.body,
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: '600',
   },
   footer: {

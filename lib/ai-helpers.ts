@@ -73,23 +73,39 @@ export async function generateMultipleSentencesWithGaps(
   words: Array<{ word: string; translation: string }>,
   targetLanguage: string = 'Ukrainian',
   nativeLanguage: string = 'English'
-): Promise<Array<{ sentence: string; correctAnswer: string }>> {
+): Promise<Array<{ sentence: string; correctAnswer: string; options: string[] }>> {
   try {
     console.log('[AI Helper] Requesting multiple sentences with gaps:', { count: words.length });
 
     const results = await OpenAIService.generateMultipleSentencesWithGaps(
       words,
       targetLanguage,
+      nativeLanguage
     );
 
     console.log('[AI Helper] Successfully generated', results.length, 'sentences with gaps');
     return results;
   } catch (error) {
     console.error('[AI Helper] Error generating multiple sentences with gaps:', error);
-    // Fallback to simple sentences
-    return words.map(w => ({
-      sentence: `___ means ${w.translation}`,
-      correctAnswer: w.word,
-    }));
+    // Fallback to simple sentences with basic options
+    return words.map((w, index) => {
+      // Create simple distractors from other words in the list
+      const otherWords = words.filter((_, i) => i !== index).map(word => word.word);
+      const distractors = otherWords.slice(0, 3);
+
+      // If not enough words, use placeholder distractors
+      while (distractors.length < 3) {
+        distractors.push(`option${distractors.length + 1}`);
+      }
+
+      const allOptions = [w.word, ...distractors];
+      const shuffledOptions = allOptions.sort(() => Math.random() - 0.5);
+
+      return {
+        sentence: `___ means ${w.translation}`,
+        correctAnswer: w.word,
+        options: shuffledOptions,
+      };
+    });
   }
 }

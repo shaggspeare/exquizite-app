@@ -377,7 +377,8 @@ Only return valid JSON, no additional text.`;
 export async function generateMultipleSentencesWithGaps(
   words: Array<{ word: string; translation: string }>,
   targetLanguage: string = 'Ukrainian',
-): Promise<Array<{ sentence: string; correctAnswer: string }>> {
+  nativeLanguage: string = 'English'
+): Promise<Array<{ sentence: string; correctAnswer: string; options: string[] }>> {
   try {
     console.log('[OpenAI] Generating multiple sentences with gaps:', { count: words.length, targetLanguage });
     const client = getOpenAIClient();
@@ -385,14 +386,26 @@ export async function generateMultipleSentencesWithGaps(
     const wordsList = words.map((w, i) => `${i + 1}. "${w.word}" (means "${w.translation}")`).join('\n');
 
     const prompt = `Generate simple, natural sentences in ${targetLanguage} for the following words. Each sentence should use the word and then have it replaced with "___" to create fill-in-the-blank exercises.
-The sentences should be appropriate for language learners and provide context clues.
+For each word, also generate 3 plausible but incorrect ${targetLanguage} words that could trick a language learner. These distractors should be different words that could grammatically fit in the sentence but have different meanings.
 
 Words:
 ${wordsList}
 
 Format the response as a JSON object with a "sentences" property containing an array of objects.
-Each object should have "sentence" (the sentence with ___) and "correctAnswer" (the original word) fields.
-Example format: {"sentences": [{"sentence": "Я люблю ___ на сніданок", "correctAnswer": "яблука"}, {"sentence": "Мій ___ дуже великий", "correctAnswer": "дім"}]}
+Each object should have:
+- "sentence": the sentence with ___
+- "correctAnswer": the original word
+- "distractors": array of 3 incorrect ${targetLanguage} words
+
+Example format: {
+  "sentences": [
+    {
+      "sentence": "Я люблю ___ на сніданок",
+      "correctAnswer": "яблука",
+      "distractors": ["банани", "молоко", "хліб"]
+    }
+  ]
+}
 Only return valid JSON, no additional text.`;
 
     const completion = await client.chat.completions.create({
@@ -401,14 +414,14 @@ Only return valid JSON, no additional text.`;
         {
           role: 'system',
           content:
-            'You are a language learning assistant that creates educational fill-in-the-blank exercises. Always respond with valid JSON only.',
+            'You are a language learning assistant that creates educational fill-in-the-blank exercises with multiple choice options. Always respond with valid JSON only.',
         },
         {
           role: 'user',
           content: prompt,
         },
       ],
-      max_completion_tokens: 1500,
+      max_completion_tokens: 2500,
       temperature: 0.7,
       response_format: { type: 'json_object' },
     });
@@ -423,17 +436,48 @@ Only return valid JSON, no additional text.`;
       throw new Error('Invalid response format');
     }
 
-    console.log('[OpenAI] Successfully generated', sentences.length, 'sentences with gaps');
-    return sentences;
+    // Process each sentence to create shuffled options array
+    const processedSentences = sentences.map((item: any) => {
+      const distractors = item.distractors || [];
+      const correctAnswer = item.correctAnswer;
+
+      // Combine correct answer with distractors and shuffle
+      const allOptions = [correctAnswer, ...distractors.slice(0, 3)];
+      const shuffledOptions = allOptions.sort(() => Math.random() - 0.5);
+
+      return {
+        sentence: item.sentence,
+        correctAnswer: correctAnswer,
+        options: shuffledOptions,
+      };
+    });
+
+    console.log('[OpenAI] Successfully generated', processedSentences.length, 'sentences with options');
+    return processedSentences;
   } catch (error: any) {
     console.error('[OpenAI] Error generating multiple sentences with gaps:', {
       message: error?.message,
       status: error?.status,
     });
-    // Fallback: return simple sentences for each word
-    return words.map(w => ({
-      sentence: `___ means ${w.translation}`,
-      correctAnswer: w.word,
-    }));
+    // Fallback: return simple sentences for each word with basic distractors
+    return words.map((w, index) => {
+      // Create simple distractors from other words in the list
+      const otherWords = words.filter((_, i) => i !== index).map(word => word.word);
+      const distractors = otherWords.slice(0, 3);
+
+      // If not enough words, use placeholder distractors
+      while (distractors.length < 3) {
+        distractors.push(`option${distractors.length + 1}`);
+      }
+
+      const allOptions = [w.word, ...distractors];
+      const shuffledOptions = allOptions.sort(() => Math.random() - 0.5);
+
+      return {
+        sentence: `___ means ${w.translation}`,
+        correctAnswer: w.word,
+        options: shuffledOptions,
+      };
+    });
   }
 }
