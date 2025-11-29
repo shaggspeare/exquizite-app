@@ -1,11 +1,25 @@
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
+import { Platform } from 'react-native';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { SetsProvider } from '@/contexts/SetsContext';
 import { ThemeProvider, useTheme } from '@/contexts/ThemeContext';
 import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext';
 import 'react-native-reanimated';
+
+// Add global emoji font support for web
+if (Platform.OS === 'web' && typeof document !== 'undefined') {
+  const style = document.createElement('style');
+  style.textContent = `
+    body, input, textarea, select, button {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Segoe UI Emoji", "Segoe UI Symbol", "Apple Color Emoji",
+        "Twemoji Mozilla", "Noto Color Emoji", "Android Emoji", sans-serif !important;
+    }
+  `;
+  document.head.appendChild(style);
+}
 
 function RootLayoutNav() {
   const { user, isLoading: authLoading } = useAuth();

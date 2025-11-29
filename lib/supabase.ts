@@ -1,20 +1,7 @@
 // Supabase client configuration
 import { createClient } from '@supabase/supabase-js';
-import * as SecureStore from 'expo-secure-store';
 import { config } from './config';
-
-// Custom storage adapter using Expo SecureStore
-const ExpoSecureStoreAdapter = {
-  getItem: (key: string) => {
-    return SecureStore.getItemAsync(key);
-  },
-  setItem: (key: string, value: string) => {
-    return SecureStore.setItemAsync(key, value);
-  },
-  removeItem: (key: string) => {
-    return SecureStore.deleteItemAsync(key);
-  },
-};
+import { storage } from './storage';
 
 // Create Supabase client
 export const supabase = createClient(
@@ -22,7 +9,7 @@ export const supabase = createClient(
   config.supabase.anonKey,
   {
     auth: {
-      storage: ExpoSecureStoreAdapter,
+      storage: storage,
       autoRefreshToken: true,
       persistSession: true,
       detectSessionInUrl: false,

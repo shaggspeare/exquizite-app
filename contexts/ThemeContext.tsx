@@ -6,8 +6,8 @@ import {
   ReactNode,
 } from 'react';
 import { useColorScheme } from 'react-native';
-import * as SecureStore from 'expo-secure-store';
 import { LightColors, DarkColors } from '@/lib/constants';
+import { storage } from '@/lib/storage';
 
 type ThemeMode = 'light' | 'dark' | 'auto';
 type ColorScheme = 'light' | 'dark';
@@ -36,7 +36,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   const loadThemePreference = async () => {
     try {
-      const savedTheme = await SecureStore.getItemAsync(THEME_STORAGE_KEY);
+      const savedTheme = await storage.getItem(THEME_STORAGE_KEY);
       if (savedTheme && ['light', 'dark', 'auto'].includes(savedTheme)) {
         setThemeState(savedTheme as ThemeMode);
       }
@@ -49,7 +49,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   const setTheme = async (newTheme: ThemeMode) => {
     try {
-      await SecureStore.setItemAsync(THEME_STORAGE_KEY, newTheme);
+      await storage.setItem(THEME_STORAGE_KEY, newTheme);
       setThemeState(newTheme);
     } catch (error) {
       console.error('Error saving theme preference:', error);

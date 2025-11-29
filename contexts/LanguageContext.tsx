@@ -5,10 +5,10 @@ import {
   useEffect,
   ReactNode,
 } from 'react';
-import * as SecureStore from 'expo-secure-store';
 import * as Localization from 'expo-localization';
 import { useAuth } from './AuthContext';
 import { supabase } from '@/lib/supabase';
+import { storage } from '@/lib/storage';
 
 export interface LanguagePreferences {
   targetLanguage: string; // Language user wants to learn
@@ -98,7 +98,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
       // Load preferences for this specific user
       const userStorageKey = `${LANGUAGE_STORAGE_KEY}_${user.id}`;
-      const stored = await SecureStore.getItemAsync(userStorageKey);
+      const stored = await storage.getItem(userStorageKey);
 
       if (stored) {
         const parsed = JSON.parse(stored);
@@ -130,7 +130,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
           };
 
           // Save the auto-configured preferences
-          await SecureStore.setItemAsync(
+          await storage.setItem(
             userStorageKey,
             JSON.stringify(autoConfiguredPrefs)
           );
@@ -173,7 +173,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       };
 
       const userStorageKey = `${LANGUAGE_STORAGE_KEY}_${user.id}`;
-      await SecureStore.setItemAsync(
+      await storage.setItem(
         userStorageKey,
         JSON.stringify(newPreferences)
       );

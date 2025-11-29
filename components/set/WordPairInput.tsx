@@ -1,4 +1,4 @@
-import { View, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, TextInput, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import { useTheme } from '@/contexts/ThemeContext';
 import { WordPair } from '@/lib/types';
 import { Spacing, Typography, BorderRadius } from '@/lib/constants';
@@ -74,11 +74,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: Spacing.md,
     gap: Spacing.sm,
+    ...Platform.select({
+      web: {
+        maxWidth: '100%',
+      },
+    }),
   },
   inputs: {
     flex: 1,
     flexDirection: 'row',
     gap: Spacing.sm,
+    ...Platform.select({
+      web: {
+        maxWidth: '100%',
+        width: '100%',
+      },
+    }),
   },
   input: {
     borderWidth: 1,
@@ -87,14 +98,35 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.sm,
     ...Typography.body,
     minHeight: 44,
+    ...Platform.select({
+      web: {
+        outlineStyle: 'none',
+        maxWidth: '50%',
+      },
+    }),
   },
   wordInput: {
     flex: 1,
+    ...Platform.select({
+      web: {
+        minWidth: 0,
+      },
+    }),
   },
   translationInput: {
     flex: 1,
+    ...Platform.select({
+      web: {
+        minWidth: 0,
+      },
+    }),
   },
   deleteButton: {
     padding: Spacing.xs,
+    ...Platform.select({
+      web: {
+        flexShrink: 0,
+      },
+    }),
   },
 });

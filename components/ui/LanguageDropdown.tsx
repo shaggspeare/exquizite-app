@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
   TextInput,
+  Platform,
 } from 'react-native';
 import { useState, useMemo } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -80,7 +81,15 @@ export function LanguageDropdown({
         <View style={styles.triggerContent}>
           {selectedLang ? (
             <>
-              <Text style={styles.flag}>{selectedLang.flag}</Text>
+              {Platform.OS === 'web' ? (
+                <View style={styles.countryCodeBadge}>
+                  <Text style={[styles.countryCode, { color: colors.primary }]}>
+                    {selectedLang.code.toUpperCase()}
+                  </Text>
+                </View>
+              ) : (
+                <Text style={styles.flag}>{selectedLang.flag}</Text>
+              )}
               <Text style={[styles.selectedText, { color: colors.text }]}>
                 {selectedLang.name}
               </Text>
@@ -164,7 +173,15 @@ export function LanguageDropdown({
                 ]}
                 onPress={() => handleSelect(item.code)}
               >
-                <Text style={styles.languageItemFlag}>{item.flag}</Text>
+                {Platform.OS === 'web' ? (
+                  <View style={styles.countryCodeBadge}>
+                    <Text style={[styles.countryCode, { color: colors.primary }]}>
+                      {item.code.toUpperCase()}
+                    </Text>
+                  </View>
+                ) : (
+                  <Text style={styles.languageItemFlag}>{item.flag}</Text>
+                )}
                 <Text style={[styles.languageItemName, { color: colors.text }]}>
                   {item.name}
                 </Text>
@@ -219,8 +236,26 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
     flex: 1,
   },
+  countryCodeBadge: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(91, 158, 255, 0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  countryCode: {
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
   flag: {
     fontSize: 28,
+    ...Platform.select({
+      web: {
+        fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Segoe UI Emoji", "Segoe UI Symbol", "Apple Color Emoji", "Twemoji Mozilla", "Noto Color Emoji", "Android Emoji"',
+      },
+    }),
   },
   selectedText: {
     ...Typography.body,
@@ -274,6 +309,11 @@ const styles = StyleSheet.create({
   },
   languageItemFlag: {
     fontSize: 32,
+    ...Platform.select({
+      web: {
+        fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Segoe UI Emoji", "Segoe UI Symbol", "Apple Color Emoji", "Twemoji Mozilla", "Noto Color Emoji", "Android Emoji"',
+      },
+    }),
   },
   languageItemName: {
     ...Typography.body,
