@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useState, useEffect } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -9,6 +9,7 @@ import { useSets } from '@/contexts/SetsContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { SharedSetDetails } from '@/lib/types';
 import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
+import { showAlert } from '@/lib/alert';
 
 export default function SharedSetScreen() {
   const { shareCode } = useLocalSearchParams<{ shareCode: string }>();
@@ -53,7 +54,7 @@ export default function SharedSetScreen() {
     if (!shareCode) return;
 
     if (!user) {
-      Alert.alert(
+      showAlert(
         'Sign In Required',
         'You need to sign in to save this set to your collection.',
         [
@@ -68,7 +69,7 @@ export default function SharedSetScreen() {
     try {
       const copiedSet = await copySharedSet(shareCode);
       if (copiedSet) {
-        Alert.alert(
+        showAlert(
           'Success!',
           'Set has been saved to your collection.',
           [
@@ -83,10 +84,10 @@ export default function SharedSetScreen() {
           ]
         );
       } else {
-        Alert.alert('Error', 'Failed to copy set. Please try again.');
+        showAlert('Error', 'Failed to copy set. Please try again.');
       }
     } catch (err) {
-      Alert.alert('Error', 'Failed to copy set. Please try again.');
+      showAlert('Error', 'Failed to copy set. Please try again.');
     } finally {
       setIsCopying(false);
     }

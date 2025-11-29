@@ -4,7 +4,6 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '@/contexts/AuthContext';
@@ -16,6 +15,7 @@ import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
+import { showAlert } from '@/lib/alert';
 
 export default function ProfileScreen() {
   const { user, signOut } = useAuth();
@@ -26,7 +26,7 @@ export default function ProfileScreen() {
   const totalWords = sets.reduce((sum, set) => sum + set.words.length, 0);
 
   const handleSignOut = () => {
-    Alert.alert('Sign Out', 'Are you sure you want to sign out?', [
+    showAlert('Sign Out', 'Are you sure you want to sign out?', [
       { text: 'Cancel', style: 'cancel' },
       {
         text: 'Sign Out',
@@ -39,7 +39,7 @@ export default function ProfileScreen() {
   };
 
   const handleDeleteSet = (setId: string, setName: string) => {
-    Alert.alert(
+    showAlert(
       'Delete Set',
       `Are you sure you want to delete "${setName}"?`,
       [
@@ -82,6 +82,30 @@ export default function ProfileScreen() {
             </Text>
           </View>
         </LinearGradient>
+
+        {/* Upgrade Account Banner for Guests */}
+        {user?.isGuest && (
+          <Card style={[styles.upgradeCard, { borderColor: colors.primary }]}>
+            <View style={styles.upgradeContent}>
+              <View style={[styles.upgradeIconContainer, { backgroundColor: `${colors.primary}20` }]}>
+                <Ionicons name="rocket" size={32} color={colors.primary} />
+              </View>
+              <View style={styles.upgradeTextContainer}>
+                <Text style={[styles.upgradeTitle, { color: colors.text }]}>
+                  Upgrade Your Account
+                </Text>
+                <Text style={[styles.upgradeDescription, { color: colors.textSecondary }]}>
+                  Create a full account to sync your data and never lose your progress
+                </Text>
+              </View>
+            </View>
+            <Button
+              title="Create Account"
+              onPress={() => router.push('/(auth)/login')}
+              style={styles.upgradeButton}
+            />
+          </Card>
+        )}
 
         {/* Stats Grid */}
         <View style={styles.statsGrid}>
@@ -252,6 +276,42 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#FFFFFF',
     fontWeight: '600',
+  },
+  upgradeCard: {
+    padding: Spacing.lg,
+    marginTop: Spacing.lg,
+    marginBottom: Spacing.lg,
+    borderWidth: 2,
+  },
+  upgradeContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
+    marginBottom: Spacing.md,
+  },
+  upgradeIconContainer: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  upgradeTextContainer: {
+    flex: 1,
+  },
+  upgradeTitle: {
+    ...Typography.h2,
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: Spacing.xs,
+  },
+  upgradeDescription: {
+    ...Typography.caption,
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  upgradeButton: {
+    marginTop: Spacing.sm,
   },
   statsGrid: {
     flexDirection: 'row',

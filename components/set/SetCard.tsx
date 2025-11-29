@@ -1,4 +1,4 @@
-import { TouchableOpacity, Text, StyleSheet, View, Alert } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { ShareModal } from './ShareModal';
+import { showAlert } from '@/lib/alert';
 
 interface SetCardProps {
   set: WordSet;
@@ -80,7 +81,7 @@ export function SetCard({ set, onPress }: SetCardProps) {
   };
 
   const handleDeletePress = () => {
-    Alert.alert(
+    showAlert(
       'Delete Set',
       `Are you sure you want to delete "${set.name}"? This action cannot be undone.`,
       [

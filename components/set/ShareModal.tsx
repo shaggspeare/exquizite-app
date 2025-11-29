@@ -1,4 +1,4 @@
-import { Modal, View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Alert, Platform, Share } from 'react-native';
+import { Modal, View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Platform, Share } from 'react-native';
 import { useState, useEffect } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
@@ -8,6 +8,7 @@ import { WordSet, ShareMetadata } from '@/lib/types';
 import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
 import { BlurView } from 'expo-blur';
 import { generateShareText } from '@/lib/share-utils';
+import { showAlert } from '@/lib/alert';
 
 interface ShareModalProps {
   visible: boolean;
@@ -37,12 +38,12 @@ export function ShareModal({ visible, set, onClose }: ShareModalProps) {
       if (data) {
         setShareData(data);
       } else {
-        Alert.alert('Error', 'Failed to generate share link. Please try again.');
+        showAlert('Error', 'Failed to generate share link. Please try again.');
         onClose();
       }
     } catch (error) {
       console.error('Error generating share link:', error);
-      Alert.alert('Error', 'Failed to generate share link. Please try again.');
+      showAlert('Error', 'Failed to generate share link. Please try again.');
       onClose();
     } finally {
       setIsLoading(false);
@@ -58,14 +59,14 @@ export function ShareModal({ visible, set, onClose }: ShareModalProps) {
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
       console.error('Error copying to clipboard:', error);
-      Alert.alert('Error', 'Failed to copy link to clipboard');
+      showAlert('Error', 'Failed to copy link to clipboard');
     }
   };
 
   const handleDeleteShare = () => {
     if (!set) return;
 
-    Alert.alert(
+    showAlert(
       'Deactivate Share Link',
       'Are you sure you want to deactivate this share link? Anyone with the link will no longer be able to access this set.',
       [
@@ -76,10 +77,10 @@ export function ShareModal({ visible, set, onClose }: ShareModalProps) {
           onPress: async () => {
             try {
               await deleteShare(set.id);
-              Alert.alert('Success', 'Share link has been deactivated');
+              showAlert('Success', 'Share link has been deactivated');
               onClose();
             } catch (error) {
-              Alert.alert('Error', 'Failed to deactivate share link');
+              showAlert('Error', 'Failed to deactivate share link');
             }
           },
         },

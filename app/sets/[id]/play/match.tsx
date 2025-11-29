@@ -3,7 +3,6 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Alert,
   ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -13,6 +12,7 @@ import { useSets } from '@/contexts/SetsContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
+import { showAlert } from '@/lib/alert';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 
@@ -141,7 +141,7 @@ export default function MatchScreen() {
 
   const handleComplete = () => {
     updateLastPracticed(id!);
-    Alert.alert(
+    showAlert(
       'Congratulations!',
       `You completed the match game in ${formatTime(timer)}!`,
       [

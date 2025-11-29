@@ -3,7 +3,6 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  Alert,
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
@@ -22,6 +21,7 @@ import { WordPair } from '@/lib/types';
 import { Spacing, Typography, MAX_WORDS_PER_SET, BorderRadius } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { showAlert } from '@/lib/alert';
 
 export default function CreateSetScreen() {
   const router = useRouter();
@@ -65,7 +65,7 @@ export default function CreateSetScreen() {
 
   const addWordPair = () => {
     if (wordPairs.length >= MAX_WORDS_PER_SET) {
-      Alert.alert(
+      showAlert(
         'Limit Reached',
         `Maximum ${MAX_WORDS_PER_SET} words per set`
       );
@@ -99,7 +99,7 @@ export default function CreateSetScreen() {
     const wordsToAdd = aiWords.slice(0, availableSlots);
 
     if (wordsToAdd.length < aiWords.length) {
-      Alert.alert(
+      showAlert(
         'Limit Reached',
         `Only ${wordsToAdd.length} words were added to stay within the ${MAX_WORDS_PER_SET} word limit.`
       );
@@ -123,7 +123,7 @@ export default function CreateSetScreen() {
     if (saving) return; // Prevent multiple clicks
 
     if (!setName.trim()) {
-      Alert.alert('Error', 'Please enter a set name');
+      showAlert('Error', 'Please enter a set name');
       return;
     }
 
@@ -132,7 +132,7 @@ export default function CreateSetScreen() {
     );
 
     if (validPairs.length === 0) {
-      Alert.alert('Error', 'Please add at least one word pair');
+      showAlert('Error', 'Please add at least one word pair');
       return;
     }
 
@@ -147,7 +147,7 @@ export default function CreateSetScreen() {
           preferences.targetLanguage,
           preferences.nativeLanguage
         );
-        Alert.alert('Success', 'Set updated successfully!', [
+        showAlert('Success', 'Set updated successfully!', [
           {
             text: 'OK',
             onPress: () => router.push(`/sets/${editingSetId}`),
@@ -163,14 +163,14 @@ export default function CreateSetScreen() {
         );
         if (newSet) {
           clearForm(); // Clear the form after successful creation
-          Alert.alert('Success', 'Set created successfully!', [
+          showAlert('Success', 'Set created successfully!', [
             {
               text: 'OK',
               onPress: () => router.push(`/sets/${newSet.id}`),
             },
           ]);
         } else {
-          Alert.alert('Error', 'Failed to create set. Please try again.');
+          showAlert('Error', 'Failed to create set. Please try again.');
         }
       }
     } catch (error: any) {
@@ -187,7 +187,7 @@ export default function CreateSetScreen() {
         }
       }
 
-      Alert.alert('Error', errorMessage);
+      showAlert('Error', errorMessage);
     } finally {
       setSaving(false);
     }

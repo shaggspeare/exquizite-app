@@ -10,10 +10,12 @@ import { useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage, AVAILABLE_LANGUAGES } from '@/contexts/LanguageContext';
 import { useSets } from '@/contexts/SetsContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
 import { LanguageDropdown } from '@/components/ui/LanguageDropdown';
 import { SetCard } from '@/components/set/SetCard';
-import { Spacing, Typography } from '@/lib/constants';
+import { Spacing, Typography, BorderRadius } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 
 type ThemeOption = 'light' | 'dark' | 'auto';
@@ -23,6 +25,7 @@ export default function SettingsScreen() {
   const { colors, theme, setTheme } = useTheme();
   const { preferences, setLanguages } = useLanguage();
   const { sets } = useSets();
+  const { user } = useAuth();
 
   const themeOptions: { value: ThemeOption; label: string; icon: keyof typeof Ionicons.glyphMap }[] = [
     { value: 'light', label: 'Light', icon: 'sunny' },
@@ -64,6 +67,29 @@ export default function SettingsScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
+        {/* Guest Upgrade Banner */}
+        {user?.isGuest && (
+          <Card style={[styles.upgradeNotice, { backgroundColor: `${colors.warning}15`, borderColor: colors.warning }]}>
+            <View style={styles.upgradeNoticeContent}>
+              <Ionicons name="information-circle" size={24} color={colors.warning} />
+              <View style={styles.upgradeNoticeText}>
+                <Text style={[styles.upgradeNoticeTitle, { color: colors.text }]}>
+                  You're using a guest account
+                </Text>
+                <Text style={[styles.upgradeNoticeDescription, { color: colors.textSecondary }]}>
+                  Create an account to save your progress permanently
+                </Text>
+              </View>
+            </View>
+            <Button
+              title="Upgrade Now"
+              onPress={() => router.push('/(auth)/login')}
+              variant="outline"
+              style={styles.upgradeNoticeButton}
+            />
+          </Card>
+        )}
+
         <Card style={styles.section}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>Languages</Text>
           <Text style={[styles.sectionDescription, { color: colors.textSecondary }]}>
@@ -247,5 +273,34 @@ const styles = StyleSheet.create({
   emptyText: {
     ...Typography.body,
     textAlign: 'center',
+  },
+  upgradeNotice: {
+    padding: Spacing.lg,
+    marginBottom: Spacing.lg,
+    borderWidth: 1.5,
+    borderRadius: BorderRadius.cardLarge,
+  },
+  upgradeNoticeContent: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: Spacing.md,
+    marginBottom: Spacing.md,
+  },
+  upgradeNoticeText: {
+    flex: 1,
+  },
+  upgradeNoticeTitle: {
+    ...Typography.body,
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: Spacing.xs,
+  },
+  upgradeNoticeDescription: {
+    ...Typography.caption,
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  upgradeNoticeButton: {
+    marginTop: Spacing.xs,
   },
 });

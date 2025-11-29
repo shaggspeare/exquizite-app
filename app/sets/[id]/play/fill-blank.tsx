@@ -4,7 +4,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
-  Alert,
   ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -13,6 +12,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useSets } from '@/contexts/SetsContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import { showAlert } from '@/lib/alert';
 import { Button } from '@/components/ui/Button';
 import { generateMultipleSentencesWithGaps } from '@/lib/ai-helpers';
 import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
@@ -142,7 +142,7 @@ export default function FillBlankScreen() {
   const handleComplete = () => {
     updateLastPracticed(id!);
     const percentage = Math.round((score / questions.length) * 100);
-    Alert.alert(
+    showAlert(
       'Exercise Complete!',
       `You scored ${score}/${questions.length} (${percentage}%)`,
       [

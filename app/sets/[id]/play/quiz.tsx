@@ -3,7 +3,6 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Alert,
   ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -13,6 +12,7 @@ import { useSets } from '@/contexts/SetsContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Button } from '@/components/ui/Button';
 import { QuizQuestion } from '@/lib/types';
+import { showAlert } from '@/lib/alert';
 import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -104,7 +104,7 @@ export default function QuizScreen() {
   const handleComplete = () => {
     updateLastPracticed(id!);
     const percentage = Math.round((score / questions.length) * 100);
-    Alert.alert(
+    showAlert(
       'Quiz Complete!',
       `You scored ${score}/${questions.length} (${percentage}%)`,
       [

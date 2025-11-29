@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Alert, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import { Button } from '@/components/ui/Button';
@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Spacing, Typography } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
+import { showAlert } from '@/lib/alert';
 
 export default function LoginScreen() {
   const { signInWithEmail, signUpWithEmail, signInAsGuest } = useAuth();
@@ -22,21 +23,21 @@ export default function LoginScreen() {
 
   const handleEmailAuth = async () => {
     if (!email.trim() || !password.trim()) {
-      Alert.alert('Error', 'Please fill in all fields');
+      showAlert('Error', 'Please fill in all fields');
       return;
     }
 
     if (isSignUp) {
       if (!name.trim()) {
-        Alert.alert('Error', 'Please enter your name');
+        showAlert('Error', 'Please enter your name');
         return;
       }
       if (password !== confirmPassword) {
-        Alert.alert('Error', 'Passwords do not match');
+        showAlert('Error', 'Passwords do not match');
         return;
       }
       if (password.length < 6) {
-        Alert.alert('Error', 'Password must be at least 6 characters');
+        showAlert('Error', 'Password must be at least 6 characters');
         return;
       }
     }
@@ -52,7 +53,7 @@ export default function LoginScreen() {
         await signInWithEmail(email.trim(), password);
       }
     } catch (error: any) {
-      Alert.alert('Error', error.message || 'Authentication failed');
+      showAlert('Error', error.message || 'Authentication failed');
     } finally {
       setIsLoading(false);
     }
@@ -63,7 +64,7 @@ export default function LoginScreen() {
     try {
       await signInAsGuest('Guest User');
     } catch (error: any) {
-      Alert.alert('Error', error.message || 'Failed to continue as guest');
+      showAlert('Error', error.message || 'Failed to continue as guest');
     } finally {
       setIsLoading(false);
     }

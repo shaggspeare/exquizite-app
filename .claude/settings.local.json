@@ -9,7 +9,8 @@
       "Bash(npm audit fix:*)",
       "Bash(npx expo install:*)",
       "Bash(npx expo-env-info)",
-      "Bash(npm run build:web:*)"
+      "Bash(npm run build:web:*)",
+      "Bash(tail:*)"
     ],
     "deny": [],
     "ask": []
