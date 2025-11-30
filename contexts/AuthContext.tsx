@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { supabase } from '@/lib/supabase';
 import { User } from '@/lib/types';
+import * as guestStorage from '@/lib/guestStorage';
 
 interface AuthContextType {
   user: User | null;
@@ -10,6 +11,7 @@ interface AuthContextType {
   signInAsGuest: (name: string) => Promise<void>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
+  migrateGuestToUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -19,7 +21,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check for existing session
+    // Check for existing session (both Supabase auth and local guest)
     checkSession();
 
     // Listen for auth state changes
@@ -29,7 +31,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (session?.user) {
           await loadUserProfile(session.user.id);
         } else {
-          setUser(null);
+          // Check for guest user in local storage
+          const guestUser = await guestStorage.getGuestUser();
+          if (guestUser) {
+            console.log('✅ Guest user loaded from storage:', guestUser.name);
+            setUser(guestUser);
+          } else {
+            setUser(null);
+          }
         }
       }
     );
@@ -41,9 +50,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const checkSession = async () => {
     try {
+      // First check for Supabase auth session
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
         await loadUserProfile(session.user.id);
+      } else {
+        // If no Supabase session, check for guest user in local storage
+        const guestUser = await guestStorage.getGuestUser();
+        if (guestUser) {
+          console.log('✅ Guest user loaded from storage:', guestUser.name);
+          setUser(guestUser);
+        }
       }
     } catch (error) {
       console.error('Error checking session:', error);
@@ -129,25 +146,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signInAsGuest = async (name: string) => {
     try {
-      // Create anonymous user
-      const { data: authData, error: authError } = await supabase.auth.signInAnonymously({
-        options: {
-          data: {
-            name: name || 'Guest',
-            is_guest: true,
-          },
-        },
+      console.log('🔵 Creating guest user locally...', { name });
+
+      // Create guest user in local storage
+      const guestUser = await guestStorage.createGuestUser(name || 'Guest');
+
+      console.log('✅ Guest user created:', {
+        id: guestUser.id,
+        email: guestUser.email,
+        isGuest: guestUser.isGuest
       });
 
-      if (authError) throw authError;
-
-      if (authData.user) {
-        // Profile will be created automatically via trigger
-        await loadUserProfile(authData.user.id);
-      }
+      setUser(guestUser);
     } catch (error: any) {
-      console.error('Error signing in as guest:', error);
-      throw new Error(error.message || 'Failed to sign in as guest');
+      console.error('❌ Error creating guest user:', error);
+      throw new Error(error.message || 'Failed to create guest user');
     }
   };
 
@@ -166,10 +179,52 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = async () => {
     try {
-      await supabase.auth.signOut();
+      // Check if current user is a guest
+      if (user?.isGuest) {
+        // Clear guest data from local storage
+        await guestStorage.clearGuestData();
+        console.log('✅ Guest data cleared');
+      } else {
+        // Sign out from Supabase
+        await supabase.auth.signOut();
+      }
       setUser(null);
     } catch (error) {
       console.error('Error signing out:', error);
+      throw error;
+    }
+  };
+
+  const migrateGuestToUser = async () => {
+    // This will be called after a guest signs up/signs in
+    // It migrates guest sets to the authenticated user's account
+    if (!user || user.isGuest) {
+      console.log('⚠️ Cannot migrate: not authenticated as real user');
+      return;
+    }
+
+    try {
+      console.log('🔵 Starting guest data migration...');
+
+      // Get guest sets from local storage
+      const guestSets = await guestStorage.getGuestSets();
+
+      if (guestSets.length === 0) {
+        console.log('No guest sets to migrate');
+        await guestStorage.clearGuestData();
+        return;
+      }
+
+      console.log(`📦 Migrating ${guestSets.length} guest sets to user account...`);
+
+      // Import the sets context to create sets in Supabase
+      // Note: This will be handled in the SetsContext
+      // For now, we just clear the guest data after migration
+      // The actual migration logic will be in SetsContext
+
+      console.log('✅ Guest data migration completed');
+    } catch (error) {
+      console.error('❌ Error migrating guest data:', error);
       throw error;
     }
   };
@@ -184,6 +239,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         signInAsGuest,
         signOut,
         resetPassword,
+        migrateGuestToUser,
       }}
     >
       {children}

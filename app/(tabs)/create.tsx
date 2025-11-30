@@ -26,7 +26,7 @@ import { showAlert } from '@/lib/alert';
 export default function CreateSetScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const { createSet, updateSet, getSetById } = useSets();
+  const { sets, createSet, updateSet, getSetById } = useSets();
   const { colors } = useTheme();
   const { preferences } = useLanguage();
 
@@ -122,14 +122,28 @@ export default function CreateSetScreen() {
   const handleSave = async () => {
     if (saving) return; // Prevent multiple clicks
 
-    if (!setName.trim()) {
-      showAlert('Error', 'Please enter a set name');
-      return;
+    // Generate default set name if empty
+    let finalSetName = setName.trim();
+    if (!finalSetName) {
+      // Find the next available set number
+      const setNumbers = sets
+        .map(s => {
+          const match = s.name.match(/^Set (\d+)$/);
+          return match ? parseInt(match[1], 10) : 0;
+        })
+        .filter(n => n > 0);
+      const nextNumber = setNumbers.length > 0 ? Math.max(...setNumbers) + 1 : 1;
+      finalSetName = `Set ${nextNumber}`;
     }
 
-    const validPairs = wordPairs.filter(
-      pair => pair.word.trim() && pair.translation.trim()
-    );
+    // Filter out empty pairs and trim whitespace from values
+    const validPairs = wordPairs
+      .filter(pair => pair.word.trim() && pair.translation.trim())
+      .map(pair => ({
+        ...pair,
+        word: pair.word.trim(),
+        translation: pair.translation.trim(),
+      }));
 
     if (validPairs.length === 0) {
       showAlert('Error', 'Please add at least one word pair');
@@ -142,7 +156,7 @@ export default function CreateSetScreen() {
         // Update existing set
         await updateSet(
           editingSetId,
-          setName,
+          finalSetName,
           validPairs,
           preferences.targetLanguage,
           preferences.nativeLanguage
@@ -156,7 +170,7 @@ export default function CreateSetScreen() {
       } else {
         // Create new set
         const newSet = await createSet(
-          setName,
+          finalSetName,
           validPairs,
           preferences.targetLanguage,
           preferences.nativeLanguage
