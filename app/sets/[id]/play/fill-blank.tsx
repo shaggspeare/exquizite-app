@@ -12,12 +12,15 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useSets } from '@/contexts/SetsContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useResponsive } from '@/hooks/useResponsive';
 import { showAlert } from '@/lib/alert';
 import { Button } from '@/components/ui/Button';
 import { generateMultipleSentencesWithGaps } from '@/lib/ai-helpers';
 import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { DesktopLayout } from '@/components/layout/DesktopLayout';
+import { DesktopContainer } from '@/components/layout/DesktopContainer';
 
 interface FillBlankQuestion {
   word: string;
@@ -33,6 +36,7 @@ export default function FillBlankScreen() {
   const { getSetById, updateLastPracticed } = useSets();
   const { preferences } = useLanguage();
   const { colors } = useTheme();
+  const { isDesktop } = useResponsive();
 
   const set = getSetById(id!);
   const [questions, setQuestions] = useState<FillBlankQuestion[]>([]);
@@ -182,6 +186,170 @@ export default function FillBlankScreen() {
   }
 
   const currentQuestion = questions[currentIndex];
+
+  if (isDesktop) {
+    return (
+      <DesktopLayout>
+        <View style={[styles.desktopContainer, { backgroundColor: colors.background }]}>
+          {/* Header */}
+          <View style={[styles.desktopHeader, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
+            <DesktopContainer>
+              <View style={styles.desktopHeaderContent}>
+                <TouchableOpacity
+                  onPress={() => router.back()}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                >
+                  <Ionicons name="close" size={28} color={colors.text} />
+                </TouchableOpacity>
+                <Text style={[styles.desktopTitle, { color: colors.text }]}>
+                  Fill in the Blank: {set.name}
+                </Text>
+                <View style={styles.desktopHeaderRight}>
+                  <Text style={[styles.progress, { color: colors.text }]}>
+                    Question {currentIndex + 1} / {questions.length}
+                  </Text>
+                  <View style={[styles.scoreContainer, { backgroundColor: `${colors.success}20` }]}>
+                    <Ionicons name="trophy" size={20} color={colors.success} />
+                    <Text style={[styles.scoreText, { color: colors.success }]}>{score}</Text>
+                  </View>
+                </View>
+              </View>
+            </DesktopContainer>
+          </View>
+
+          {/* Progress Bar */}
+          <View style={[styles.progressBarContainer, { backgroundColor: colors.border }]}>
+            <LinearGradient
+              colors={['#FF6B35', '#FFBB00']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={[
+                styles.progressFill,
+                { width: `${((currentIndex + 1) / questions.length) * 100}%` },
+              ]}
+            />
+          </View>
+
+          {/* Content */}
+          <ScrollView
+            style={styles.desktopContent}
+            contentContainerStyle={styles.desktopScrollContent}
+            showsVerticalScrollIndicator={false}
+          >
+            <DesktopContainer>
+              <View style={styles.desktopGameContent}>
+                {!showHint && !isAnswered && (
+                  <TouchableOpacity
+                    style={[styles.hintButton, { backgroundColor: `${colors.ai}15`, borderColor: colors.ai }]}
+                    onPress={() => setShowHint(true)}
+                    activeOpacity={0.7}
+                  >
+                    <Ionicons name="bulb-outline" size={20} color={colors.ai} />
+                    <Text style={[styles.hintButtonText, { color: colors.ai }]}>Show Hint</Text>
+                  </TouchableOpacity>
+                )}
+
+                {showHint && (
+                  <View style={[styles.hintCard, { backgroundColor: `${colors.ai}20`, borderColor: colors.ai }]}>
+                    <Ionicons name="bulb" size={20} color={colors.ai} />
+                    <View style={styles.hintContent}>
+                      <Text style={[styles.hintLabel, { color: colors.ai }]}>Translation:</Text>
+                      <Text style={[styles.hintText, { color: colors.text }]}>{currentQuestion.translation}</Text>
+                    </View>
+                  </View>
+                )}
+
+                <LinearGradient
+                  colors={['#FF6B35', '#FFBB00']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.desktopSentenceCard}
+                >
+                  <Text style={styles.sentenceLabel}>Fill in the blank:</Text>
+                  <Text style={styles.desktopSentenceText}>{currentQuestion.sentence}</Text>
+                </LinearGradient>
+
+                <Text style={[styles.optionsLabel, { color: colors.textSecondary }]}>Choose the correct word:</Text>
+
+                <View style={styles.desktopOptionsGrid}>
+                  {currentQuestion.options.map((option, index) => {
+                    const isSelected = selectedOption === option;
+                    const isCorrectOption = option.toLowerCase() === currentQuestion.correctAnswer.toLowerCase();
+                    const showCorrect = isAnswered && isCorrectOption;
+                    const showIncorrect = isAnswered && isSelected && !isCorrect;
+
+                    return (
+                      <TouchableOpacity
+                        key={index}
+                        style={[
+                          styles.desktopOptionButton,
+                          { backgroundColor: colors.card, borderColor: colors.border },
+                          isSelected && !isAnswered && { borderColor: colors.primary, backgroundColor: `${colors.primary}15` },
+                          showCorrect && { borderColor: colors.success, backgroundColor: `${colors.success}15` },
+                          showIncorrect && { borderColor: colors.error, backgroundColor: `${colors.error}15` },
+                        ]}
+                        onPress={() => !isAnswered && setSelectedOption(option)}
+                        disabled={isAnswered}
+                        activeOpacity={0.7}
+                      >
+                        <Text
+                          style={[
+                            styles.optionText,
+                            { color: colors.text },
+                            isSelected && !isAnswered && { color: colors.primary, fontWeight: '700' },
+                            showCorrect && { color: colors.success, fontWeight: '700' },
+                            showIncorrect && { color: colors.error, fontWeight: '700' },
+                          ]}
+                          numberOfLines={2}
+                          ellipsizeMode="tail"
+                        >
+                          {option}
+                        </Text>
+                        {showCorrect && (
+                          <Ionicons name="checkmark-circle" size={24} color={colors.success} />
+                        )}
+                        {showIncorrect && (
+                          <Ionicons name="close-circle" size={24} color={colors.error} />
+                        )}
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+
+                {isAnswered && !isCorrect && (
+                  <View style={[styles.correctAnswerContainer, { backgroundColor: colors.card, borderColor: colors.error }]}>
+                    <Text style={[styles.correctAnswerLabel, { color: colors.textSecondary }]}>Correct answer:</Text>
+                    <Text style={[styles.correctAnswerText, { color: colors.error }]}>
+                      {currentQuestion.correctAnswer}
+                    </Text>
+                  </View>
+                )}
+
+                <View style={styles.desktopFooter}>
+                  {isAnswered ? (
+                    <Button
+                      title={
+                        currentIndex === questions.length - 1 ? 'Finish' : 'Next Question'
+                      }
+                      onPress={handleNext}
+                      style={styles.desktopButton}
+                    />
+                  ) : (
+                    <Button
+                      title="Check Answer"
+                      onPress={handleCheckAnswer}
+                      disabled={!selectedOption}
+                      style={styles.desktopButton}
+                    />
+                  )}
+                </View>
+              </View>
+            </DesktopContainer>
+          </ScrollView>
+        </View>
+      </DesktopLayout>
+    );
+  }
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
@@ -494,5 +662,77 @@ const styles = StyleSheet.create({
     ...Typography.body,
     textAlign: 'center',
     marginTop: Spacing.xl,
+  },
+  // Desktop styles
+  desktopContainer: {
+    flex: 1,
+  },
+  desktopHeader: {
+    borderBottomWidth: 1,
+    paddingVertical: Spacing.lg,
+  },
+  desktopHeaderContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  desktopTitle: {
+    ...Typography.h2,
+    fontSize: 24,
+    fontWeight: '700',
+  },
+  desktopHeaderRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.lg,
+  },
+  desktopContent: {
+    flex: 1,
+  },
+  desktopScrollContent: {
+    paddingVertical: Spacing.xxl * 2,
+  },
+  desktopGameContent: {
+    maxWidth: 800,
+    marginHorizontal: 'auto' as any,
+    width: '100%',
+  },
+  desktopSentenceCard: {
+    borderRadius: BorderRadius.cardLarge,
+    padding: Spacing.xxl,
+    marginBottom: Spacing.lg,
+    alignItems: 'center',
+    ...Shadow.cardDeep,
+  },
+  desktopSentenceText: {
+    ...Typography.h2,
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    textAlign: 'center',
+    lineHeight: 40,
+  },
+  desktopOptionsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.md,
+    marginBottom: Spacing.lg,
+  },
+  desktopOptionButton: {
+    borderRadius: BorderRadius.button,
+    padding: Spacing.lg,
+    borderWidth: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 80,
+    width: 'calc(50% - 8px)' as any,
+    gap: Spacing.sm,
+  },
+  desktopFooter: {
+    alignItems: 'center',
+  },
+  desktopButton: {
+    minWidth: 300,
   },
 });

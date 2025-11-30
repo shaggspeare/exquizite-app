@@ -1,9 +1,11 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useResponsive } from '@/hooks/useResponsive';
 
 export default function TabsLayout() {
   const { colors } = useTheme();
+  const { isDesktop } = useResponsive();
 
   return (
     <Tabs
@@ -13,6 +15,7 @@ export default function TabsLayout() {
         tabBarStyle: {
           backgroundColor: colors.card,
           borderTopColor: colors.border,
+          display: isDesktop ? 'none' : 'flex', // Hide tab bar on desktop
         },
         headerShown: false,
       }}

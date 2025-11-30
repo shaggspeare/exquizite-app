@@ -10,11 +10,14 @@ import { useState, useEffect } from 'react';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useSets } from '@/contexts/SetsContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useResponsive } from '@/hooks/useResponsive';
 import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 import { showAlert } from '@/lib/alert';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import { DesktopLayout } from '@/components/layout/DesktopLayout';
+import { DesktopContainer } from '@/components/layout/DesktopContainer';
 
 // Utility function to shuffle array
 function shuffleArray<T>(array: T[]): T[] {
@@ -38,6 +41,7 @@ export default function MatchScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { getSetById, updateLastPracticed } = useSets();
   const { colors } = useTheme();
+  const { isDesktop } = useResponsive();
 
   const set = getSetById(id!);
   const [words, setWords] = useState<MatchItem[]>([]);
@@ -162,6 +166,104 @@ export default function MatchScreen() {
       <SafeAreaView style={styles.container}>
         <Text style={styles.errorText}>No words in this set</Text>
       </SafeAreaView>
+    );
+  }
+
+  if (isDesktop) {
+    return (
+      <DesktopLayout>
+        <View style={[styles.desktopContainer, { backgroundColor: colors.background }]}>
+          {/* Header */}
+          <View style={[styles.desktopHeader, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
+            <DesktopContainer>
+              <View style={styles.desktopHeaderContent}>
+                <TouchableOpacity
+                  onPress={() => router.back()}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                >
+                  <Ionicons name="close" size={28} color={colors.text} />
+                </TouchableOpacity>
+                <Text style={[styles.desktopTitle, { color: colors.text }]}>
+                  Match: {set.name}
+                </Text>
+                <View style={styles.stats}>
+                  <View style={[styles.statBadge, { backgroundColor: `${colors.ai}20` }]}>
+                    <Ionicons name="timer" size={18} color={colors.ai} />
+                    <Text style={[styles.statText, { color: colors.ai }]}>{formatTime(timer)}</Text>
+                  </View>
+                  <View style={[styles.statBadge, { backgroundColor: `${colors.success}20` }]}>
+                    <Ionicons name="checkmark-circle" size={18} color={colors.success} />
+                    <Text style={[styles.statText, { color: colors.success }]}>{score}/{set.words.length}</Text>
+                  </View>
+                </View>
+              </View>
+            </DesktopContainer>
+          </View>
+
+          {/* Content */}
+          <DesktopContainer>
+            <View style={styles.desktopContent}>
+              <View style={styles.desktopColumns}>
+                <View style={styles.desktopColumn}>
+                  <LinearGradient
+                    colors={['#B537F2', '#E066FF']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                    style={styles.columnHeader}
+                  >
+                    <Ionicons name="language" size={24} color="#FFFFFF" />
+                    <Text style={styles.columnTitle}>Words</Text>
+                  </LinearGradient>
+                  <ScrollView
+                    style={styles.scrollView}
+                    contentContainerStyle={styles.scrollContent}
+                    showsVerticalScrollIndicator={false}
+                  >
+                    {words.map(item => (
+                      <MatchCard
+                        key={item.id}
+                        item={item}
+                        isSelected={selectedWord === item.id}
+                        onPress={() => handleWordPress(item)}
+                        colors={colors}
+                        accentColor="#B537F2"
+                      />
+                    ))}
+                  </ScrollView>
+                </View>
+
+                <View style={styles.desktopColumn}>
+                  <LinearGradient
+                    colors={['#00D4FF', '#00E5A0']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                    style={styles.columnHeader}
+                  >
+                    <Ionicons name="text" size={24} color="#FFFFFF" />
+                    <Text style={styles.columnTitle}>Translations</Text>
+                  </LinearGradient>
+                  <ScrollView
+                    style={styles.scrollView}
+                    contentContainerStyle={styles.scrollContent}
+                    showsVerticalScrollIndicator={false}
+                  >
+                    {translations.map(item => (
+                      <MatchCard
+                        key={item.id}
+                        item={item}
+                        isSelected={selectedTranslation === item.id}
+                        onPress={() => handleTranslationPress(item)}
+                        colors={colors}
+                        accentColor="#00D4FF"
+                      />
+                    ))}
+                  </ScrollView>
+                </View>
+              </View>
+            </View>
+          </DesktopContainer>
+        </View>
+      </DesktopLayout>
     );
   }
 
@@ -404,5 +506,35 @@ const styles = StyleSheet.create({
     ...Typography.body,
     textAlign: 'center',
     marginTop: Spacing.xl,
+  },
+  // Desktop styles
+  desktopContainer: {
+    flex: 1,
+  },
+  desktopHeader: {
+    borderBottomWidth: 1,
+    paddingVertical: Spacing.lg,
+  },
+  desktopHeaderContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  desktopTitle: {
+    ...Typography.h2,
+    fontSize: 24,
+    fontWeight: '700',
+  },
+  desktopContent: {
+    flex: 1,
+    paddingVertical: Spacing.xxl,
+  },
+  desktopColumns: {
+    flexDirection: 'row',
+    gap: Spacing.xl,
+    flex: 1,
+  },
+  desktopColumn: {
+    flex: 1,
   },
 });

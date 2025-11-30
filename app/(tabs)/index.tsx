@@ -9,12 +9,27 @@ import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Card } from '@/components/ui/Card';
+import { useResponsive } from '@/hooks/useResponsive';
+import { DesktopLayout } from '@/components/layout/DesktopLayout';
+import { DesktopHomeView } from '@/components/home/DesktopHomeView';
 
 export default function HomeScreen() {
   const { user } = useAuth();
   const { sets } = useSets();
   const { colors } = useTheme();
   const router = useRouter();
+  const { isDesktop } = useResponsive();
+
+  // Use desktop layout for desktop screens
+  if (isDesktop) {
+    return (
+      <DesktopLayout>
+        <DesktopHomeView />
+      </DesktopLayout>
+    );
+  }
+
+  // Mobile layout below
 
   const totalWords = sets.reduce((sum, set) => sum + set.words.length, 0);
   const recentSets = sets.slice(0, 3);

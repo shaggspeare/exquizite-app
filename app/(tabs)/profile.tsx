@@ -16,12 +16,27 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { showAlert } from '@/lib/alert';
+import { useResponsive } from '@/hooks/useResponsive';
+import { DesktopLayout } from '@/components/layout/DesktopLayout';
+import { DesktopProfileView } from '@/components/profile/DesktopProfileView';
 
 export default function ProfileScreen() {
   const { user, signOut } = useAuth();
   const { sets, deleteSet } = useSets();
   const { colors } = useTheme();
   const router = useRouter();
+  const { isDesktop } = useResponsive();
+
+  // Use desktop layout for desktop screens
+  if (isDesktop) {
+    return (
+      <DesktopLayout>
+        <DesktopProfileView />
+      </DesktopLayout>
+    );
+  }
+
+  // Mobile layout below
 
   const totalWords = sets.reduce((sum, set) => sum + set.words.length, 0);
 

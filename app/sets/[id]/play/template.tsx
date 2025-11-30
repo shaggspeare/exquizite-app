@@ -2,10 +2,13 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-nati
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useResponsive } from '@/hooks/useResponsive';
 import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import { DesktopLayout } from '@/components/layout/DesktopLayout';
+import { DesktopContainer } from '@/components/layout/DesktopContainer';
 
 interface GameTemplate {
   id: string;
@@ -121,10 +124,55 @@ export default function TemplateSelectionScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { colors } = useTheme();
+  const { isDesktop } = useResponsive();
 
   const handleSelectTemplate = (template: GameTemplate) => {
     router.push(`/sets/${id}/play/${template.route}`);
   };
+
+  if (isDesktop) {
+    return (
+      <DesktopLayout>
+        <View style={[styles.desktopContainer, { backgroundColor: colors.background }]}>
+          {/* Header */}
+          <View style={[styles.desktopHeader, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
+            <DesktopContainer>
+              <View style={styles.desktopHeaderContent}>
+                <TouchableOpacity
+                  onPress={() => router.back()}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                >
+                  <Ionicons name="arrow-back" size={28} color={colors.text} />
+                </TouchableOpacity>
+                <Text style={[styles.headerTitle, { color: colors.text }]}>Choose Activity</Text>
+                <View style={styles.headerPlaceholder} />
+              </View>
+            </DesktopContainer>
+          </View>
+
+          {/* Content */}
+          <ScrollView
+            style={styles.desktopContent}
+            contentContainerStyle={styles.desktopScrollContent}
+            showsVerticalScrollIndicator={false}
+          >
+            <DesktopContainer>
+              <View style={styles.desktopGrid}>
+                {templates.map(template => (
+                  <View key={template.id} style={styles.desktopGridItem}>
+                    <GameCard
+                      template={template}
+                      onPress={() => handleSelectTemplate(template)}
+                    />
+                  </View>
+                ))}
+              </View>
+            </DesktopContainer>
+          </ScrollView>
+        </View>
+      </DesktopLayout>
+    );
+  }
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
@@ -244,5 +292,33 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.3)',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  // Desktop styles
+  desktopContainer: {
+    flex: 1,
+  },
+  desktopHeader: {
+    borderBottomWidth: 1,
+    paddingVertical: Spacing.lg,
+  },
+  desktopHeaderContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  desktopContent: {
+    flex: 1,
+  },
+  desktopScrollContent: {
+    paddingVertical: Spacing.xxl,
+  },
+  desktopGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.lg,
+  },
+  desktopGridItem: {
+    width: 'calc(50% - 12px)' as any,
+    minWidth: 300,
   },
 });

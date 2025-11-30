@@ -10,6 +10,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useSets } from '@/contexts/SetsContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useResponsive } from '@/hooks/useResponsive';
 import { Button } from '@/components/ui/Button';
 import { QuizQuestion } from '@/lib/types';
 import { showAlert } from '@/lib/alert';
@@ -17,6 +18,8 @@ import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import { DesktopLayout } from '@/components/layout/DesktopLayout';
+import { DesktopContainer } from '@/components/layout/DesktopContainer';
 
 // Utility function to shuffle array
 function shuffleArray<T>(array: T[]): T[] {
@@ -50,6 +53,7 @@ export default function QuizScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { getSetById, updateLastPracticed } = useSets();
   const { colors } = useTheme();
+  const { isDesktop } = useResponsive();
 
   const set = getSetById(id!);
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
@@ -142,6 +146,117 @@ export default function QuizScreen() {
 
   const currentQuestion = questions[currentIndex];
 
+  if (isDesktop) {
+    return (
+      <DesktopLayout>
+        <View style={[styles.desktopContainer, { backgroundColor: colors.background }]}>
+          {/* Header */}
+          <View style={[styles.desktopHeader, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
+            <DesktopContainer>
+              <View style={styles.desktopHeaderContent}>
+                <TouchableOpacity
+                  onPress={() => router.back()}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                >
+                  <Ionicons name="close" size={28} color={colors.text} />
+                </TouchableOpacity>
+                <Text style={[styles.desktopTitle, { color: colors.text }]}>
+                  Quiz: {set.name}
+                </Text>
+                <View style={styles.desktopHeaderRight}>
+                  <Text style={[styles.progress, { color: colors.text }]}>
+                    Question {currentIndex + 1} / {questions.length}
+                  </Text>
+                  <View style={[styles.scoreContainer, { backgroundColor: `${colors.success}20` }]}>
+                    <Ionicons name="trophy" size={20} color={colors.success} />
+                    <Text style={[styles.scoreText, { color: colors.success }]}>{score}</Text>
+                  </View>
+                </View>
+              </View>
+            </DesktopContainer>
+          </View>
+
+          {/* Progress Bar */}
+          <View style={[styles.progressBarContainer, { backgroundColor: colors.border }]}>
+            <LinearGradient
+              colors={['#00D4FF', '#00E5A0']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={[
+                styles.progressFill,
+                { width: `${((currentIndex + 1) / questions.length) * 100}%` },
+              ]}
+            />
+          </View>
+
+          {/* Content */}
+          <ScrollView
+            style={styles.desktopContent}
+            contentContainerStyle={styles.desktopScrollContent}
+            showsVerticalScrollIndicator={false}
+          >
+            <DesktopContainer>
+              <View style={styles.desktopQuizContent}>
+                <LinearGradient
+                  colors={['#00D4FF', '#00E5A0']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.desktopQuestionCard}
+                >
+                  <Ionicons name="help-circle" size={64} color="#FFFFFF" style={{ marginBottom: Spacing.lg }} />
+                  <Text style={styles.questionLabel}>Translate:</Text>
+                  <Text style={styles.desktopQuestionText}>{currentQuestion.word}</Text>
+                </LinearGradient>
+
+                <View style={styles.desktopOptions}>
+                  {currentQuestion.options.map((option, optionIndex) => {
+                    const isCorrect = option === currentQuestion.correctAnswer;
+                    const isSelected = selectedAnswer === option;
+                    const showCorrect = isAnswered && isCorrect;
+                    const showWrong = isAnswered && isSelected && !isCorrect;
+
+                    return (
+                      <OptionCard
+                        key={optionIndex}
+                        option={option}
+                        index={optionIndex}
+                        isSelected={isSelected}
+                        showCorrect={showCorrect}
+                        showWrong={showWrong}
+                        isAnswered={isAnswered}
+                        onPress={() => handleSelectAnswer(option)}
+                        colors={colors}
+                      />
+                    );
+                  })}
+                </View>
+
+                <View style={styles.desktopFooter}>
+                  {isAnswered ? (
+                    <Button
+                      title={
+                        currentIndex === questions.length - 1 ? 'Finish' : 'Next Question'
+                      }
+                      onPress={handleNext}
+                      style={styles.desktopButton}
+                    />
+                  ) : (
+                    <Button
+                      title="Skip"
+                      onPress={handleNext}
+                      variant="outline"
+                      style={styles.desktopButton}
+                    />
+                  )}
+                </View>
+              </View>
+            </DesktopContainer>
+          </ScrollView>
+        </View>
+      </DesktopLayout>
+    );
+  }
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
       <View style={styles.header}>
@@ -183,7 +298,7 @@ export default function QuizScreen() {
           end={{ x: 1, y: 1 }}
           style={styles.questionCard}
         >
-          <Ionicons name="help-circle" size={48} color="#FFFFFF" style={{ marginBottom: Spacing.md }} />
+          <Ionicons name="help-circle" size={36} color="#FFFFFF" style={{ marginBottom: Spacing.sm }} />
           <Text style={styles.questionLabel}>Translate:</Text>
           <Text style={styles.questionText}>{currentQuestion.word}</Text>
         </LinearGradient>
@@ -416,5 +531,63 @@ const styles = StyleSheet.create({
     ...Typography.body,
     textAlign: 'center',
     marginTop: Spacing.xl,
+  },
+  // Desktop styles
+  desktopContainer: {
+    flex: 1,
+  },
+  desktopHeader: {
+    borderBottomWidth: 1,
+    paddingVertical: Spacing.lg,
+  },
+  desktopHeaderContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  desktopTitle: {
+    ...Typography.h2,
+    fontSize: 24,
+    fontWeight: '700',
+  },
+  desktopHeaderRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.lg,
+  },
+  desktopContent: {
+    flex: 1,
+  },
+  desktopScrollContent: {
+    paddingVertical: Spacing.xxl * 2,
+  },
+  desktopQuizContent: {
+    maxWidth: 800,
+    marginHorizontal: 'auto' as any,
+    width: '100%',
+  },
+  desktopQuestionCard: {
+    borderRadius: BorderRadius.cardLarge,
+    padding: Spacing.xxl * 2,
+    marginBottom: Spacing.xxl,
+    alignItems: 'center',
+    ...Shadow.cardDeep,
+  },
+  desktopQuestionText: {
+    ...Typography.h1,
+    fontSize: 48,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    textAlign: 'center',
+  },
+  desktopOptions: {
+    gap: Spacing.lg,
+    marginBottom: Spacing.xxl,
+  },
+  desktopFooter: {
+    alignItems: 'center',
+  },
+  desktopButton: {
+    minWidth: 300,
   },
 });

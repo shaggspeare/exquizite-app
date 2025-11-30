@@ -22,6 +22,9 @@ import { Spacing, Typography, MAX_WORDS_PER_SET, BorderRadius } from '@/lib/cons
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { showAlert } from '@/lib/alert';
+import { useResponsive } from '@/hooks/useResponsive';
+import { DesktopLayout } from '@/components/layout/DesktopLayout';
+import { DesktopCreateView } from '@/components/create/DesktopCreateView';
 
 export default function CreateSetScreen() {
   const router = useRouter();
@@ -29,6 +32,18 @@ export default function CreateSetScreen() {
   const { sets, createSet, updateSet, getSetById } = useSets();
   const { colors } = useTheme();
   const { preferences } = useLanguage();
+  const { isDesktop } = useResponsive();
+
+  // Use desktop layout for desktop screens
+  if (isDesktop) {
+    return (
+      <DesktopLayout>
+        <DesktopCreateView />
+      </DesktopLayout>
+    );
+  }
+
+  // Mobile layout below
 
   const editingSetId = params.editId as string | undefined;
   const isEditing = !!editingSetId;

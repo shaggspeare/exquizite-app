@@ -10,11 +10,14 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSets } from '@/contexts/SetsContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useResponsive } from '@/hooks/useResponsive';
 import { Button } from '@/components/ui/Button';
 import { WordPair } from '@/lib/types';
 import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { DesktopLayout } from '@/components/layout/DesktopLayout';
+import { DesktopContainer } from '@/components/layout/DesktopContainer';
 
 // Utility function to shuffle array
 function shuffleArray<T>(array: T[]): T[] {
@@ -31,6 +34,7 @@ export default function FlashcardScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { getSetById, updateLastPracticed } = useSets();
   const { colors } = useTheme();
+  const { isDesktop } = useResponsive();
 
   const set = getSetById(id!);
   const [shuffledWords, setShuffledWords] = useState<WordPair[]>([]);
@@ -101,6 +105,98 @@ export default function FlashcardScreen() {
     updateLastPracticed(id!);
     router.back();
   };
+
+  if (isDesktop) {
+    return (
+      <DesktopLayout>
+        <View style={[styles.desktopContainer, { backgroundColor: colors.background }]}>
+          {/* Header */}
+          <View style={[styles.desktopHeader, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
+            <DesktopContainer>
+              <View style={styles.desktopHeaderContent}>
+                <TouchableOpacity
+                  onPress={() => router.back()}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                >
+                  <Ionicons name="close" size={28} color={colors.text} />
+                </TouchableOpacity>
+                <Text style={[styles.desktopTitle, { color: colors.text }]}>
+                  Flashcards: {set.name}
+                </Text>
+                <Text style={[styles.progress, { color: colors.text }]}>
+                  {currentIndex + 1} / {shuffledWords.length}
+                </Text>
+              </View>
+            </DesktopContainer>
+          </View>
+
+          {/* Progress Bar */}
+          <View style={[styles.progressBar, { backgroundColor: colors.border }]}>
+            <LinearGradient
+              colors={['#5B9EFF', '#E066FF']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={[
+                styles.progressFill,
+                { width: `${((currentIndex + 1) / shuffledWords.length) * 100}%` },
+              ]}
+            />
+          </View>
+
+          {/* Content */}
+          <DesktopContainer>
+            <View style={styles.desktopContent}>
+              <Pressable onPress={flipCard} style={styles.desktopCardContainer}>
+                <Animated.View style={[styles.desktopCard, { backgroundColor: colors.card }, frontAnimatedStyle]}>
+                  <Ionicons name="language" size={64} color={colors.primary} style={{ marginBottom: Spacing.xl }} />
+                  <Text style={[styles.desktopCardText, { color: colors.text }]}>{currentWord.word}</Text>
+                  <View style={[styles.tapHint, { backgroundColor: `${colors.primary}20` }]}>
+                    <Ionicons name="hand-left-outline" size={18} color={colors.primary} />
+                    <Text style={[styles.cardHint, { color: colors.primary }]}>Click to flip</Text>
+                  </View>
+                </Animated.View>
+
+                <Animated.View style={[styles.desktopCard, styles.cardBack, backAnimatedStyle]}>
+                  <LinearGradient
+                    colors={['#5B9EFF', '#E066FF']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={styles.cardBackGradient}
+                  >
+                    <Ionicons name="checkmark-circle" size={64} color="#FFFFFF" style={{ marginBottom: Spacing.xl }} />
+                    <Text style={[styles.desktopCardText, styles.cardTextBack]}>{currentWord.translation}</Text>
+                  </LinearGradient>
+                </Animated.View>
+              </Pressable>
+
+              <View style={styles.desktopNavigation}>
+                <Button
+                  title="Previous"
+                  onPress={goToPrevious}
+                  variant="outline"
+                  disabled={currentIndex === 0}
+                  style={styles.desktopNavButton}
+                />
+                {currentIndex === shuffledWords.length - 1 ? (
+                  <Button
+                    title="Complete"
+                    onPress={handleComplete}
+                    style={styles.desktopNavButton}
+                  />
+                ) : (
+                  <Button
+                    title="Next"
+                    onPress={goToNext}
+                    style={styles.desktopNavButton}
+                  />
+                )}
+              </View>
+            </View>
+          </DesktopContainer>
+        </View>
+      </DesktopLayout>
+    );
+  }
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
@@ -269,5 +365,58 @@ const styles = StyleSheet.create({
     ...Typography.body,
     textAlign: 'center',
     marginTop: Spacing.xl,
+  },
+  // Desktop styles
+  desktopContainer: {
+    flex: 1,
+  },
+  desktopHeader: {
+    borderBottomWidth: 1,
+    paddingVertical: Spacing.lg,
+  },
+  desktopHeaderContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  desktopTitle: {
+    ...Typography.h2,
+    fontSize: 24,
+    fontWeight: '700',
+  },
+  desktopContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: Spacing.xxl * 2,
+  },
+  desktopCardContainer: {
+    width: 700,
+    height: 500,
+    marginBottom: Spacing.xxl,
+  },
+  desktopCard: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    borderRadius: BorderRadius.cardLarge,
+    padding: Spacing.xxl * 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    ...Shadow.cardDeep,
+  },
+  desktopCardText: {
+    ...Typography.display,
+    fontSize: 64,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+  desktopNavigation: {
+    flexDirection: 'row',
+    gap: Spacing.lg,
+    width: 700,
+  },
+  desktopNavButton: {
+    flex: 1,
   },
 });

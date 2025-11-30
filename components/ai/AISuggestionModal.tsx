@@ -9,6 +9,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
 } from 'react-native';
 import { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/Input';
@@ -16,10 +17,11 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage, getLanguageName } from '@/contexts/LanguageContext';
+import { useResponsive } from '@/hooks/useResponsive';
 import { WordPair } from '@/lib/types';
 import { generateWordSuggestions } from '@/lib/ai-helpers';
 import * as OpenAIService from '@/lib/openai-service';
-import { Spacing, Typography, MAX_WORDS_PER_SET } from '@/lib/constants';
+import { Spacing, Typography, MAX_WORDS_PER_SET, BorderRadius, Shadow } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 
 interface AISuggestionModalProps {
@@ -37,6 +39,7 @@ export function AISuggestionModal({
 }: AISuggestionModalProps) {
   const { colors } = useTheme();
   const { preferences } = useLanguage();
+  const { isDesktop } = useResponsive();
   const [theme, setTheme] = useState('');
   const [count, setCount] = useState('5');
   const [suggestions, setSuggestions] = useState<WordPair[]>([]);
@@ -152,21 +155,25 @@ export function AISuggestionModal({
     <Modal
       visible={visible}
       animationType="slide"
-      presentationStyle="pageSheet"
+      presentationStyle={isDesktop ? "overFullScreen" : "pageSheet"}
       onRequestClose={handleClose}
+      transparent={isDesktop}
     >
-      <KeyboardAvoidingView
-        style={[styles.container, { backgroundColor: colors.background }]}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      >
-        <View style={[styles.header, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
-          <Text style={[styles.headerTitle, { color: colors.text }]}>AI Word Suggestions</Text>
-          <TouchableOpacity onPress={handleClose}>
-            <Ionicons name="close" size={28} color={colors.text} />
-          </TouchableOpacity>
-        </View>
+      {isDesktop ? (
+        // Desktop centered modal
+        <View style={styles.desktopOverlay}>
+          <View style={[styles.desktopModal, { backgroundColor: colors.background }]}>
+            <View style={[styles.header, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
+              <Text style={[styles.headerTitle, { color: colors.text }]}>AI Word Suggestions</Text>
+              <TouchableOpacity onPress={handleClose}>
+                <Ionicons name="close" size={28} color={colors.text} />
+              </TouchableOpacity>
+            </View>
 
-        <View style={styles.content}>
+            <ScrollView
+              style={styles.desktopContent}
+              showsVerticalScrollIndicator={false}
+            >
           {!hasExistingPairs && (
             <View style={styles.inputSection}>
               <View style={styles.inputRow}>
@@ -228,44 +235,86 @@ export function AISuggestionModal({
               <Text style={[styles.sectionTitle, { color: colors.text }]}>
                 Select words to add ({selectedIds.size} selected)
               </Text>
-              <FlatList
-                data={suggestions}
-                keyExtractor={item => item.id}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    onPress={() => toggleSelection(item.id)}
-                    activeOpacity={0.7}
-                  >
-                    <Card
-                      style={[
-                        styles.suggestionCard,
-                        selectedIds.has(item.id) && {
-                          borderWidth: 2,
-                          borderColor: colors.success,
-                          backgroundColor: `${colors.success}10`,
-                        },
-                      ]}
+              {isDesktop ? (
+                // Desktop grid layout
+                <View style={styles.desktopGrid}>
+                  {suggestions.map((item) => (
+                    <TouchableOpacity
+                      key={item.id}
+                      onPress={() => toggleSelection(item.id)}
+                      activeOpacity={0.7}
+                      style={styles.desktopGridItem}
                     >
-                      <View style={styles.suggestionContent}>
-                        <View style={styles.wordInfo}>
-                          <Text style={[styles.word, { color: colors.text }]}>{item.word}</Text>
-                          <Text style={[styles.translation, { color: colors.textSecondary }]}>
-                            {item.translation}
-                          </Text>
+                      <Card
+                        style={[
+                          styles.suggestionCard,
+                          selectedIds.has(item.id) && {
+                            borderWidth: 2,
+                            borderColor: colors.success,
+                            backgroundColor: `${colors.success}10`,
+                          },
+                        ]}
+                      >
+                        <View style={styles.suggestionContent}>
+                          <View style={styles.wordInfo}>
+                            <Text style={[styles.word, { color: colors.text }]}>{item.word}</Text>
+                            <Text style={[styles.translation, { color: colors.textSecondary }]}>
+                              {item.translation}
+                            </Text>
+                          </View>
+                          {selectedIds.has(item.id) && (
+                            <Ionicons
+                              name="checkmark-circle"
+                              size={24}
+                              color={colors.success}
+                            />
+                          )}
                         </View>
-                        {selectedIds.has(item.id) && (
-                          <Ionicons
-                            name="checkmark-circle"
-                            size={24}
-                            color={colors.success}
-                          />
-                        )}
-                      </View>
-                    </Card>
-                  </TouchableOpacity>
-                )}
-                showsVerticalScrollIndicator={false}
-              />
+                      </Card>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              ) : (
+                // Mobile list layout
+                <FlatList
+                  data={suggestions}
+                  keyExtractor={item => item.id}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity
+                      onPress={() => toggleSelection(item.id)}
+                      activeOpacity={0.7}
+                    >
+                      <Card
+                        style={[
+                          styles.suggestionCard,
+                          selectedIds.has(item.id) && {
+                            borderWidth: 2,
+                            borderColor: colors.success,
+                            backgroundColor: `${colors.success}10`,
+                          },
+                        ]}
+                      >
+                        <View style={styles.suggestionContent}>
+                          <View style={styles.wordInfo}>
+                            <Text style={[styles.word, { color: colors.text }]}>{item.word}</Text>
+                            <Text style={[styles.translation, { color: colors.textSecondary }]}>
+                              {item.translation}
+                            </Text>
+                          </View>
+                          {selectedIds.has(item.id) && (
+                            <Ionicons
+                              name="checkmark-circle"
+                              size={24}
+                              color={colors.success}
+                            />
+                          )}
+                        </View>
+                      </Card>
+                    </TouchableOpacity>
+                  )}
+                  showsVerticalScrollIndicator={false}
+                />
+              )}
 
               <View style={[styles.footer, { borderTopColor: colors.border }]}>
                 <Button
@@ -288,8 +337,147 @@ export function AISuggestionModal({
               </Text>
             </View>
           )}
+            </ScrollView>
+          </View>
         </View>
-      </KeyboardAvoidingView>
+      ) : (
+        // Mobile full-screen modal
+        <KeyboardAvoidingView
+          style={[styles.container, { backgroundColor: colors.background }]}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        >
+          <View style={[styles.header, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
+            <Text style={[styles.headerTitle, { color: colors.text }]}>AI Word Suggestions</Text>
+            <TouchableOpacity onPress={handleClose}>
+              <Ionicons name="close" size={28} color={colors.text} />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.content}>
+            {!hasExistingPairs && (
+              <View style={styles.inputSection}>
+                <View style={styles.inputRow}>
+                  <View style={styles.themeInputWrapper}>
+                    <Input
+                      placeholder="Theme (e.g., animals, food)"
+                      value={theme}
+                      onChangeText={setTheme}
+                      editable={!loading}
+                    />
+                  </View>
+                  <View style={styles.countInputWrapper}>
+                    <Input
+                      placeholder="#"
+                      value={count}
+                      onChangeText={setCount}
+                      keyboardType="number-pad"
+                      editable={!loading}
+                      maxLength={2}
+                    />
+                  </View>
+                </View>
+                <Text style={[styles.helperText, { color: colors.textSecondary }]}>
+                  Generate up to {maxCount} words (5 by default)
+                </Text>
+                <Button
+                  title={loading ? "Generating..." : "Generate"}
+                  onPress={handleGenerate}
+                  disabled={loading || !theme.trim()}
+                />
+              </View>
+            )}
+
+            {hasExistingPairs && (
+              <View style={styles.contextInfo}>
+                <Ionicons name="information-circle" size={20} color={colors.primary} />
+                <Text style={[styles.contextText, { color: colors.textSecondary }]}>
+                  Generating suggestions based on your {validExistingPairs.length} existing {validExistingPairs.length === 1 ? 'word' : 'words'}...
+                </Text>
+              </View>
+            )}
+
+            {loading && (
+              <View style={styles.loadingSection}>
+                <View style={styles.loadingHeader}>
+                  <ActivityIndicator size="small" color={colors.primary} />
+                  <Text style={[styles.loadingHeaderText, { color: colors.textSecondary }]}>
+                    Generating suggestions with AI...
+                  </Text>
+                </View>
+                {Array.from({ length: countNum }).map((_, index) => (
+                  <View key={index}>{renderSkeletonCard()}</View>
+                ))}
+              </View>
+            )}
+
+            {!loading && suggestions.length > 0 && (
+              <>
+                <Text style={[styles.sectionTitle, { color: colors.text }]}>
+                  Select words to add ({selectedIds.size} selected)
+                </Text>
+                <FlatList
+                  data={suggestions}
+                  keyExtractor={item => item.id}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity
+                      onPress={() => toggleSelection(item.id)}
+                      activeOpacity={0.7}
+                    >
+                      <Card
+                        style={[
+                          styles.suggestionCard,
+                          selectedIds.has(item.id) && {
+                            borderWidth: 2,
+                            borderColor: colors.success,
+                            backgroundColor: `${colors.success}10`,
+                          },
+                        ]}
+                      >
+                        <View style={styles.suggestionContent}>
+                          <View style={styles.wordInfo}>
+                            <Text style={[styles.word, { color: colors.text }]}>{item.word}</Text>
+                            <Text style={[styles.translation, { color: colors.textSecondary }]}>
+                              {item.translation}
+                            </Text>
+                          </View>
+                          {selectedIds.has(item.id) && (
+                            <Ionicons
+                              name="checkmark-circle"
+                              size={24}
+                              color={colors.success}
+                            />
+                          )}
+                        </View>
+                      </Card>
+                    </TouchableOpacity>
+                  )}
+                  showsVerticalScrollIndicator={false}
+                />
+
+                <View style={[styles.footer, { borderTopColor: colors.border }]}>
+                  <Button
+                    title={`Add ${selectedIds.size} ${
+                      selectedIds.size === 1 ? 'word' : 'words'
+                    }`}
+                    onPress={handleAdd}
+                    disabled={selectedIds.size === 0}
+                  />
+                </View>
+              </>
+            )}
+
+            {!loading && suggestions.length === 0 && theme && (
+              <View style={styles.emptyState}>
+                <Ionicons name="sparkles" size={64} color={colors.textSecondary} />
+                <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
+                  No suggestions yet. Click Generate to get AI-powered word
+                  suggestions!
+                </Text>
+              </View>
+            )}
+          </View>
+        </KeyboardAvoidingView>
+      )}
     </Modal>
   );
 }
@@ -297,6 +485,35 @@ export function AISuggestionModal({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  // Desktop modal styles
+  desktopOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: Spacing.xl,
+  },
+  desktopModal: {
+    width: '100%',
+    maxWidth: 900,
+    maxHeight: '90%',
+    borderRadius: BorderRadius.cardLarge,
+    overflow: 'hidden',
+    ...Shadow.cardDeep,
+  },
+  desktopContent: {
+    padding: Spacing.xxl,
+  },
+  desktopGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.md,
+    marginBottom: Spacing.lg,
+  },
+  desktopGridItem: {
+    width: 'calc(50% - 8px)' as any,
+    minWidth: 280,
   },
   header: {
     flexDirection: 'row',

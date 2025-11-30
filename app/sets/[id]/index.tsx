@@ -13,14 +13,29 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Spacing, Typography } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
+import { useResponsive } from '@/hooks/useResponsive';
+import { DesktopLayout } from '@/components/layout/DesktopLayout';
+import { DesktopSetDetailView } from '@/components/sets/DesktopSetDetailView';
 
 export default function SetDetailScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { getSetById } = useSets();
   const { colors } = useTheme();
+  const { isDesktop } = useResponsive();
 
   const set = getSetById(id!);
+
+  // Use desktop layout for desktop screens
+  if (isDesktop) {
+    return (
+      <DesktopLayout>
+        <DesktopSetDetailView />
+      </DesktopLayout>
+    );
+  }
+
+  // Mobile layout below
 
   if (!set) {
     return (
