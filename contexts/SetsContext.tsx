@@ -518,6 +518,9 @@ export function SetsProvider({ children }: { children: ReactNode }) {
       }
 
       console.log('Shared set fetched successfully:', data);
+      console.log('Word count:', data?.wordCount);
+      console.log('Words array length:', data?.words?.length);
+      console.log('First few words:', data?.words?.slice(0, 3));
       return data as SharedSetDetails;
     } catch (error: any) {
       console.error('Error getting shared set:', error);
