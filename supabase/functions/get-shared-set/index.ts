@@ -42,10 +42,10 @@ serve(async (req) => {
   }
 
   try {
-    // Get Supabase client (using anon key for public access)
+    // Get Supabase client (using service role key to bypass RLS for reading shared sets)
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? ''
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
     // Get share code from query parameter or body
