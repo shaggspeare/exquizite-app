@@ -10,7 +10,8 @@
       "Bash(npx expo install:*)",
       "Bash(npx expo-env-info)",
       "Bash(npm run build:web:*)",
-      "Bash(tail:*)"
+      "Bash(tail:*)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []

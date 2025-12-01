@@ -30,6 +30,7 @@ export function DesktopProfileView() {
         style: 'destructive',
         onPress: async () => {
           await signOut();
+          router.replace('/(auth)/login');
         },
       },
     ]);

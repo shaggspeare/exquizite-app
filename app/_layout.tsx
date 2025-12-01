@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Platform } from 'react-native';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
-import { SetsProvider } from '@/contexts/SetsContext';
+import { SetsProvider, useSets } from '@/contexts/SetsContext';
 import { ThemeProvider, useTheme } from '@/contexts/ThemeContext';
 import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext';
 import 'react-native-reanimated';
@@ -24,20 +24,28 @@ if (Platform.OS === 'web' && typeof document !== 'undefined') {
 function RootLayoutNav() {
   const { user, isLoading: authLoading } = useAuth();
   const { preferences, isLoading: langLoading } = useLanguage();
+  const { sets, isLoading: setsLoading } = useSets();
   const { isDark } = useTheme();
   const segments = useSegments();
   const router = useRouter();
 
   useEffect(() => {
+    const hasSets = sets.length > 0;
+    const shouldSkipLanguageSetup = preferences.isConfigured || hasSets;
+
     console.log('🔍 Routing check:', {
       authLoading,
       langLoading,
+      setsLoading,
       hasUser: !!user,
       isConfigured: preferences.isConfigured,
+      hasSets,
+      setsCount: sets.length,
+      shouldSkipLanguageSetup,
       segments,
     });
 
-    if (authLoading || langLoading) {
+    if (authLoading || langLoading || setsLoading) {
       console.log('⏳ Still loading, skipping navigation');
       return;
     }
@@ -49,18 +57,18 @@ function RootLayoutNav() {
       // Redirect to login if not authenticated
       console.log('➡️  Redirecting to login (no user)');
       router.replace('/(auth)/login');
-    } else if (user && !preferences.isConfigured && !onLanguageSetup) {
-      // Redirect to language setup if authenticated but languages not configured
-      console.log('➡️  Redirecting to language setup (user but no languages configured)');
+    } else if (user && !shouldSkipLanguageSetup && !onLanguageSetup) {
+      // Redirect to language setup if authenticated but languages not configured AND no sets created
+      console.log('➡️  Redirecting to language setup (user but no languages configured and no sets)');
       router.replace('/(auth)/language-setup');
-    } else if (user && preferences.isConfigured && inAuthGroup && !onLanguageSetup) {
-      // Redirect to main app if authenticated and languages configured
-      console.log('➡️  Redirecting to main app (user and languages configured)');
+    } else if (user && shouldSkipLanguageSetup && inAuthGroup && !onLanguageSetup) {
+      // Redirect to main app if authenticated and (languages configured OR has sets)
+      console.log('➡️  Redirecting to main app (user and languages configured or has sets)');
       router.replace('/(tabs)');
     } else {
       console.log('✅ No redirect needed, staying on current route');
     }
-  }, [user, authLoading, langLoading, preferences.isConfigured, segments]);
+  }, [user, authLoading, langLoading, setsLoading, preferences.isConfigured, sets.length, segments]);
 
   return (
     <>

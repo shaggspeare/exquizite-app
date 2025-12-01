@@ -203,7 +203,7 @@ export default function QuizScreen() {
                   end={{ x: 1, y: 1 }}
                   style={styles.desktopQuestionCard}
                 >
-                  <Ionicons name="help-circle" size={64} color="#FFFFFF" style={{ marginBottom: Spacing.lg }} />
+                  <Ionicons name="help-circle" size={48} color="#FFFFFF" style={{ marginBottom: Spacing.md }} />
                   <Text style={styles.questionLabel}>Translate:</Text>
                   <Text style={styles.desktopQuestionText}>{currentQuestion.word}</Text>
                 </LinearGradient>
@@ -468,8 +468,8 @@ const styles = StyleSheet.create({
   },
   questionCard: {
     borderRadius: BorderRadius.cardLarge,
-    padding: Spacing.xl,
-    marginBottom: Spacing.xl,
+    padding: Spacing.lg,
+    marginBottom: Spacing.lg,
     alignItems: 'center',
     ...Shadow.cardDeep,
   },
@@ -477,12 +477,12 @@ const styles = StyleSheet.create({
     ...Typography.caption,
     fontSize: 14,
     color: 'rgba(255,255,255,0.9)',
-    marginBottom: Spacing.sm,
+    marginBottom: Spacing.xs,
     fontWeight: '600',
   },
   questionText: {
     ...Typography.h1,
-    fontSize: 32,
+    fontSize: 26,
     fontWeight: '700',
     color: '#FFFFFF',
     textAlign: 'center',
@@ -568,14 +568,14 @@ const styles = StyleSheet.create({
   },
   desktopQuestionCard: {
     borderRadius: BorderRadius.cardLarge,
-    padding: Spacing.xxl * 2,
-    marginBottom: Spacing.xxl,
+    padding: Spacing.xxl,
+    marginBottom: Spacing.lg,
     alignItems: 'center',
     ...Shadow.cardDeep,
   },
   desktopQuestionText: {
     ...Typography.h1,
-    fontSize: 48,
+    fontSize: 36,
     fontWeight: '700',
     color: '#FFFFFF',
     textAlign: 'center',

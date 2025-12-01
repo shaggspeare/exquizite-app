@@ -98,53 +98,72 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
       // Load preferences for this specific user
       const userStorageKey = `${LANGUAGE_STORAGE_KEY}_${user.id}`;
+
+      // ALWAYS check if user has sets in Supabase (for non-guest users)
+      let hasExistingSets = false;
+      let firstSet: any = null;
+
+      if (!user.isGuest) {
+        try {
+          const { data: sets, error } = await supabase
+            .from('word_sets')
+            .select('id, target_language, native_language')
+            .eq('user_id', user.id)
+            .limit(1);
+
+          hasExistingSets = !error && sets && sets.length > 0;
+          if (hasExistingSets) {
+            firstSet = sets[0];
+          }
+        } catch (error) {
+          console.error('Error checking for existing sets:', error);
+        }
+      }
+
       const stored = await storage.getItem(userStorageKey);
 
       if (stored) {
         const parsed = JSON.parse(stored);
-        console.log('📚 Language preferences loaded for user', user.name, ':', parsed);
-        setPreferences(parsed);
-      } else {
-        // Check if user has any word sets (existing user)
-        const { data: sets, error } = await supabase
-          .from('word_sets')
-          .select('id, target_language, native_language')
-          .eq('user_id', user.id)
-          .limit(1);
+        console.log('📚 Language preferences loaded from storage for user', user.name, ':', parsed);
 
-        const hasExistingSets = !error && sets && sets.length > 0;
-        const deviceLang = getDeviceLanguage();
-
-        if (hasExistingSets) {
-          // Existing user with sets - auto-configure with their set's languages or defaults
-          const firstSet = sets[0];
-          const targetLang = firstSet.target_language || 'uk';
-          const nativeLang = firstSet.native_language || deviceLang;
-
-          console.log('📚 Existing user detected. Auto-configuring languages:', { targetLang, nativeLang });
-
-          const autoConfiguredPrefs = {
-            targetLanguage: targetLang,
-            nativeLanguage: nativeLang,
-            isConfigured: true, // Mark as configured to skip language setup
-          };
-
-          // Save the auto-configured preferences
-          await storage.setItem(
-            userStorageKey,
-            JSON.stringify(autoConfiguredPrefs)
-          );
-
-          setPreferences(autoConfiguredPrefs);
-        } else {
-          // New user - prompt for language selection
-          console.log('📚 New user detected. Device language:', deviceLang);
-          setPreferences({
-            targetLanguage: '',
-            nativeLanguage: deviceLang,
-            isConfigured: false,
-          });
+        // If user has sets but preferences say not configured, update to configured
+        if (hasExistingSets && !parsed.isConfigured) {
+          console.log('📚 User has sets but preferences not marked as configured. Updating...');
+          parsed.isConfigured = true;
+          await storage.setItem(userStorageKey, JSON.stringify(parsed));
         }
+
+        setPreferences(parsed);
+      } else if (hasExistingSets && firstSet) {
+        // User has sets but no stored preferences - auto-configure from sets
+        const deviceLang = getDeviceLanguage();
+        const targetLang = firstSet.target_language || 'uk';
+        const nativeLang = firstSet.native_language || deviceLang;
+
+        console.log('📚 User has sets but no stored preferences. Auto-configuring:', { targetLang, nativeLang });
+
+        const autoConfiguredPrefs = {
+          targetLanguage: targetLang,
+          nativeLanguage: nativeLang,
+          isConfigured: true, // Mark as configured to skip language setup
+        };
+
+        // Save the auto-configured preferences
+        await storage.setItem(
+          userStorageKey,
+          JSON.stringify(autoConfiguredPrefs)
+        );
+
+        setPreferences(autoConfiguredPrefs);
+      } else {
+        // New user - prompt for language selection
+        const deviceLang = getDeviceLanguage();
+        console.log('📚 New user detected (no sets, no stored preferences). Device language:', deviceLang);
+        setPreferences({
+          targetLanguage: '',
+          nativeLanguage: deviceLang,
+          isConfigured: false,
+        });
       }
     } catch (error) {
       console.error('Error loading language preferences:', error);
