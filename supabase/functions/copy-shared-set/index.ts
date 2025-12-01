@@ -165,6 +165,13 @@ serve(async (req) => {
       );
     }
 
+    // Fetch language info from shared_sets_with_details view
+    const { data: setDetails } = await supabaseClient
+      .from('shared_sets_with_details')
+      .select('target_language, native_language')
+      .eq('share_code', shareCode)
+      .single();
+
     // Create new set for current user
     const newSetName = customName || `${originalSet.name} (Copy)`;
     const { data: newSet, error: createError } = await supabaseClient
@@ -172,6 +179,8 @@ serve(async (req) => {
       .insert({
         user_id: user.id,
         name: newSetName,
+        target_language: setDetails?.target_language || originalSet.target_language,
+        native_language: setDetails?.native_language || originalSet.native_language,
         is_copy: true,
         original_author_id: originalSet.user_id,
       })

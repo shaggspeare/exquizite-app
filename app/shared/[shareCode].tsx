@@ -59,7 +59,7 @@ export default function SharedSetScreen() {
         'You need to sign in to save this set to your collection.',
         [
           { text: 'Cancel', style: 'cancel' },
-          { text: 'Sign In', onPress: () => router.push('/(auth)/signin') },
+          { text: 'Sign In', onPress: () => router.push('/(auth)/login') },
         ]
       );
       return;
@@ -71,23 +71,25 @@ export default function SharedSetScreen() {
       if (copiedSet) {
         showAlert(
           'Success!',
-          'Set has been saved to your collection.',
+          `"${copiedSet.name}" has been saved to your collection with ${copiedSet.words?.length || 0} words.`,
           [
             {
-              text: 'View Set',
-              onPress: () => router.replace(`/sets/${copiedSet.id}`),
+              text: 'Practice Now',
+              onPress: () => router.replace(`/sets/${copiedSet.id}/play/quiz`),
             },
             {
-              text: 'OK',
-              style: 'cancel',
+              text: 'View in My Sets',
+              onPress: () => router.replace('/'),
             },
           ]
         );
       } else {
+        console.error('copySharedSet returned null - check console for details');
         showAlert('Error', 'Failed to copy set. Please try again.');
       }
-    } catch (err) {
-      showAlert('Error', 'Failed to copy set. Please try again.');
+    } catch (err: any) {
+      console.error('Error in handleCopySet:', err);
+      showAlert('Error', err.message || 'Failed to copy set. Please try again.');
     } finally {
       setIsCopying(false);
     }
@@ -95,8 +97,15 @@ export default function SharedSetScreen() {
 
   const handlePractice = () => {
     if (!setData) return;
-    // Navigate to practice mode with the share code
-    router.push(`/sets/${setData.setId}`);
+    // User must copy the set first to practice it
+    showAlert(
+      'Copy Set First',
+      'You need to save this set to your collection before you can practice it.',
+      [
+        { text: 'OK', style: 'cancel' },
+        { text: 'Save Set', onPress: handleCopySet },
+      ]
+    );
   };
 
   // Generate gradient colors based on set ID
@@ -171,7 +180,12 @@ export default function SharedSetScreen() {
             <Ionicons name="arrow-back" size={24} color={colors.text} />
           </TouchableOpacity>
           <Text style={[styles.headerTitle, { color: colors.text }]}>Shared Set</Text>
-          <View style={styles.headerButton} />
+          <TouchableOpacity
+            style={[styles.headerButton, { backgroundColor: colors.card }]}
+            onPress={() => router.push('/')}
+          >
+            <Ionicons name="home" size={24} color={colors.text} />
+          </TouchableOpacity>
         </View>
 
         {/* Set Card */}
