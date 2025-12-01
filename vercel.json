@@ -6,15 +6,7 @@
   "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/shared/:shareCode",
-      "destination": "/shared/[shareCode].html"
-    },
-    {
-      "source": "/sets/:id/:path*",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/(.*)",
+      "source": "/:path*",
       "destination": "/index.html"
     }
   ],
