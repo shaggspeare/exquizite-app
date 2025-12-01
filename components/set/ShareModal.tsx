@@ -7,8 +7,17 @@ import { useSets } from '@/contexts/SetsContext';
 import { WordSet, ShareMetadata } from '@/lib/types';
 import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
 import { BlurView } from 'expo-blur';
-import { generateShareText } from '@/lib/share-utils';
+import { generateShareText, generateWebShareUrl } from '@/lib/share-utils';
 import { showAlert } from '@/lib/alert';
+import {
+  canUseWebShare,
+  canUseClipboard,
+  shareViaWebAPI,
+  copyToClipboard as copyToClipboardWeb,
+  getSocialShareUrls,
+  openInNewTab,
+  type SocialPlatform
+} from '@/lib/web-share';
 
 interface ShareModalProps {
   visible: boolean;
@@ -22,6 +31,15 @@ export function ShareModal({ visible, set, onClose }: ShareModalProps) {
   const [shareData, setShareData] = useState<ShareMetadata | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [canShare, setCanShare] = useState(false);
+  const [canCopy, setCanCopy] = useState(false);
+
+  useEffect(() => {
+    if (Platform.OS === 'web') {
+      setCanShare(canUseWebShare());
+      setCanCopy(canUseClipboard());
+    }
+  }, []);
 
   useEffect(() => {
     if (visible && set) {
@@ -54,7 +72,16 @@ export function ShareModal({ visible, set, onClose }: ShareModalProps) {
     if (!shareData) return;
 
     try {
-      await Clipboard.setStringAsync(shareData.shareUrl);
+      const urlToCopy = Platform.OS === 'web'
+        ? generateWebShareUrl(shareData.shareCode)
+        : shareData.shareUrl;
+
+      if (Platform.OS === 'web' && canCopy) {
+        await copyToClipboardWeb(urlToCopy);
+      } else {
+        await Clipboard.setStringAsync(urlToCopy);
+      }
+
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
@@ -104,6 +131,44 @@ export function ShareModal({ visible, set, onClose }: ShareModalProps) {
         console.error('Error sharing:', error);
       }
     }
+  };
+
+  const handleWebShare = async () => {
+    if (!set || !shareData) return;
+
+    const webUrl = generateWebShareUrl(shareData.shareCode);
+    const message = generateShareText(set.name, shareData.shareCode, set.words.length, true);
+
+    try {
+      if (canShare) {
+        const success = await shareViaWebAPI({
+          title: `Check out "${set.name}"`,
+          text: message,
+          url: webUrl,
+        });
+
+        if (success) return;
+      }
+
+      // Fallback to copy
+      await handleCopyLink();
+      showAlert('Link Copied', 'Share link copied to clipboard');
+    } catch (error) {
+      console.error('Error sharing:', error);
+      showAlert('Error', 'Failed to share');
+    }
+  };
+
+  const handleSocialShare = (platform: SocialPlatform) => {
+    if (!set || !shareData) return;
+
+    const webUrl = generateWebShareUrl(shareData.shareCode);
+    const message = `Check out my "${set.name}" word set with ${set.words.length} words!`;
+
+    const urls = getSocialShareUrls(webUrl, set.name, message);
+    const targetUrl = urls[platform];
+
+    openInNewTab(targetUrl);
   };
 
   if (!set) return null;
@@ -187,7 +252,9 @@ export function ShareModal({ visible, set, onClose }: ShareModalProps) {
                       numberOfLines={1}
                       ellipsizeMode="middle"
                     >
-                      {shareData.shareUrl}
+                      {Platform.OS === 'web'
+                        ? generateWebShareUrl(shareData.shareCode)
+                        : shareData.shareUrl}
                     </Text>
                     <Ionicons
                       name={copied ? 'checkmark-circle' : 'copy-outline'}
@@ -226,34 +293,121 @@ export function ShareModal({ visible, set, onClose }: ShareModalProps) {
 
                 {/* Actions */}
                 <View style={styles.actions}>
-                  <TouchableOpacity
-                    style={[styles.actionButton, { backgroundColor: colors.primary }]}
-                    onPress={handleCopyLink}
-                    activeOpacity={0.8}
-                  >
-                    <Ionicons name="copy-outline" size={20} color="#FFFFFF" />
-                    <Text style={styles.actionButtonText}>
-                      {copied ? 'Copied!' : 'Copy'}
-                    </Text>
-                  </TouchableOpacity>
+                  {Platform.OS === 'web' ? (
+                    <>
+                      {/* Web Share Button (if supported) */}
+                      {canShare && (
+                        <TouchableOpacity
+                          style={[styles.actionButton, { backgroundColor: colors.success }]}
+                          onPress={handleWebShare}
+                          activeOpacity={0.8}
+                          accessibilityLabel="Share via Web Share API"
+                          accessibilityRole="button"
+                        >
+                          <Ionicons name="share-outline" size={20} color="#FFFFFF" />
+                          <Text style={styles.actionButtonText}>Share</Text>
+                        </TouchableOpacity>
+                      )}
 
-                  <TouchableOpacity
-                    style={[styles.actionButton, { backgroundColor: colors.success }]}
-                    onPress={handleNativeShare}
-                    activeOpacity={0.8}
-                  >
-                    <Ionicons name="share-outline" size={20} color="#FFFFFF" />
-                    <Text style={styles.actionButtonText}>Share</Text>
-                  </TouchableOpacity>
+                      {/* Copy Button (always visible on web) */}
+                      <TouchableOpacity
+                        style={[styles.actionButton, { backgroundColor: colors.primary }]}
+                        onPress={handleCopyLink}
+                        activeOpacity={0.8}
+                        accessibilityLabel="Copy link to clipboard"
+                        accessibilityRole="button"
+                      >
+                        <Ionicons name="copy-outline" size={20} color="#FFFFFF" />
+                        <Text style={styles.actionButtonText}>
+                          {copied ? 'Copied!' : 'Copy Link'}
+                        </Text>
+                      </TouchableOpacity>
 
-                  <TouchableOpacity
-                    style={[styles.deleteButton, { borderColor: colors.error }]}
-                    onPress={handleDeleteShare}
-                    activeOpacity={0.7}
-                  >
-                    <Ionicons name="close-circle-outline" size={20} color={colors.error} />
-                  </TouchableOpacity>
+                      {/* Delete Share Button */}
+                      <TouchableOpacity
+                        style={[styles.deleteButton, { borderColor: colors.error }]}
+                        onPress={handleDeleteShare}
+                        activeOpacity={0.7}
+                        accessibilityLabel="Delete share link"
+                        accessibilityRole="button"
+                      >
+                        <Ionicons name="close-circle-outline" size={20} color={colors.error} />
+                      </TouchableOpacity>
+                    </>
+                  ) : (
+                    <>
+                      {/* Native Mobile Actions */}
+                      <TouchableOpacity
+                        style={[styles.actionButton, { backgroundColor: colors.primary }]}
+                        onPress={handleCopyLink}
+                        activeOpacity={0.8}
+                      >
+                        <Ionicons name="copy-outline" size={20} color="#FFFFFF" />
+                        <Text style={styles.actionButtonText}>
+                          {copied ? 'Copied!' : 'Copy'}
+                        </Text>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        style={[styles.actionButton, { backgroundColor: colors.success }]}
+                        onPress={handleNativeShare}
+                        activeOpacity={0.8}
+                      >
+                        <Ionicons name="share-outline" size={20} color="#FFFFFF" />
+                        <Text style={styles.actionButtonText}>Share</Text>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        style={[styles.deleteButton, { borderColor: colors.error }]}
+                        onPress={handleDeleteShare}
+                        activeOpacity={0.7}
+                      >
+                        <Ionicons name="close-circle-outline" size={20} color={colors.error} />
+                      </TouchableOpacity>
+                    </>
+                  )}
                 </View>
+
+                {/* Social Media Buttons (Web only) */}
+                {Platform.OS === 'web' && shareData && (
+                  <View style={styles.socialButtons}>
+                    <TouchableOpacity
+                      style={[styles.socialButton, { backgroundColor: '#1DA1F2' }]}
+                      onPress={() => handleSocialShare('twitter')}
+                      accessibilityLabel="Share on Twitter"
+                      accessibilityRole="button"
+                    >
+                      <Ionicons name="logo-twitter" size={20} color="#FFFFFF" />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={[styles.socialButton, { backgroundColor: '#4267B2' }]}
+                      onPress={() => handleSocialShare('facebook')}
+                      accessibilityLabel="Share on Facebook"
+                      accessibilityRole="button"
+                    >
+                      <Ionicons name="logo-facebook" size={20} color="#FFFFFF" />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={[styles.socialButton, { backgroundColor: '#25D366' }]}
+                      onPress={() => handleSocialShare('whatsapp')}
+                      accessibilityLabel="Share on WhatsApp"
+                      accessibilityRole="button"
+                    >
+                      <Ionicons name="logo-whatsapp" size={20} color="#FFFFFF" />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={[styles.socialButton, { backgroundColor: '#0088cc' }]}
+                      onPress={() => handleSocialShare('telegram')}
+                      accessibilityLabel="Share on Telegram"
+                      accessibilityRole="button"
+                    >
+                      <Ionicons name="paper-plane" size={20} color="#FFFFFF" />
+                    </TouchableOpacity>
+                  </View>
+                )}
               </>
             )}
           </View>
@@ -411,5 +565,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: BorderRadius.button,
     borderWidth: 2,
+  },
+  socialButtons: {
+    flexDirection: 'row',
+    gap: Spacing.sm,
+    marginTop: Spacing.md,
+    justifyContent: 'center',
+  },
+  socialButton: {
+    width: 44,
+    height: 44,
+    borderRadius: BorderRadius.button,
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...Shadow.button,
   },
 });

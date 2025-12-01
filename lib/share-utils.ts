@@ -1,12 +1,14 @@
 // Utility functions for handling share links and codes
+import { Platform } from 'react-native';
 
 /**
  * Share link configuration
+ * Note: Update WEB_URL to 'https://exquizite.app/shared' when custom domain is configured
  */
 export const SHARE_CONFIG = {
   SCHEME: 'exquiziteapp',
   HOST: 'shared',
-  WEB_URL: 'https://exquizite.app/shared',
+  WEB_URL: 'https://exquizite-app.vercel.app/shared',
   CODE_LENGTH: 12,
 } as const;
 
@@ -125,4 +127,15 @@ export function parseShareUrl(url: string): { shareCode: string } | null {
     return null;
   }
   return { shareCode };
+}
+
+/**
+ * Gets the appropriate share URL based on platform
+ * Returns web URL for web platform, app scheme URL for native platforms
+ */
+export function getPlatformShareUrl(shareCode: string): string {
+  if (Platform.OS === 'web') {
+    return generateWebShareUrl(shareCode);
+  }
+  return generateShareUrl(shareCode);
 }

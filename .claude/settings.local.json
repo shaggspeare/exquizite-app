@@ -11,7 +11,8 @@
       "Bash(npx expo-env-info)",
       "Bash(npm run build:web:*)",
       "Bash(tail:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []
