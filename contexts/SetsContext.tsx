@@ -556,11 +556,45 @@ export function SetsProvider({ children }: { children: ReactNode }) {
 
       const response = data as CopySetResponse;
 
-      // Reload sets to include the newly copied set
-      await loadSets();
+      // Fetch the newly created set with its word pairs directly from database
+      const { data: newSetData, error: fetchError } = await supabase
+        .from('word_sets')
+        .select(`
+          *,
+          word_pairs (*)
+        `)
+        .eq('id', response.setId)
+        .single();
 
-      // Return the newly created set
-      return getSetById(response.setId) || null;
+      if (fetchError || !newSetData) {
+        console.error('Error fetching newly copied set:', fetchError);
+        // Reload all sets as fallback
+        await loadSets();
+        return getSetById(response.setId) || null;
+      }
+
+      // Transform to WordSet format
+      const copiedSet: WordSet = {
+        id: newSetData.id,
+        name: newSetData.name,
+        words: (newSetData.word_pairs || [])
+          .sort((a: any, b: any) => a.position - b.position)
+          .map((pair: any) => ({
+            id: pair.id,
+            word: pair.word,
+            translation: pair.translation,
+          })),
+        targetLanguage: newSetData.target_language || 'uk',
+        nativeLanguage: newSetData.native_language || 'en',
+        createdAt: newSetData.created_at,
+        updatedAt: newSetData.updated_at,
+        lastPracticed: newSetData.last_practiced || undefined,
+      };
+
+      // Reload sets in background to update the list
+      loadSets();
+
+      return copiedSet;
     } catch (error: any) {
       console.error('Error copying shared set:', error);
       return null;
