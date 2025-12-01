@@ -115,7 +115,6 @@ export function DesktopSetDetailView() {
                   {set.words.length} {set.words.length === 1 ? 'word' : 'words'}
                 </Text>
               </View>
-
               <View style={styles.wordsGrid}>
                 {set.words.map((pair, index) => (
                   <Card key={pair.id} style={styles.wordCard}>
