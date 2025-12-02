@@ -7,6 +7,8 @@ import { SetsProvider, useSets } from '@/contexts/SetsContext';
 import { ThemeProvider, useTheme } from '@/contexts/ThemeContext';
 import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext';
 import { AlertProvider } from '@/contexts/AlertContext';
+import { TourProvider } from '@/contexts/TourContext';
+import { TourModal } from '@/components/tour/TourModal';
 import 'react-native-reanimated';
 
 // Add global emoji font support for web
@@ -90,6 +92,7 @@ function RootLayoutNav() {
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="sets" />
       </Stack>
+      <TourModal />
     </>
   );
 }
@@ -101,7 +104,9 @@ export default function RootLayout() {
         <AuthProvider>
           <LanguageProvider>
             <SetsProvider>
-              <RootLayoutNav />
+              <TourProvider>
+                <RootLayoutNav />
+              </TourProvider>
             </SetsProvider>
           </LanguageProvider>
         </AuthProvider>

@@ -1,9 +1,12 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import { useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSets } from '@/contexts/SetsContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useTour } from '@/contexts/TourContext';
 import { SetCard } from '@/components/set/SetCard';
 import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
@@ -14,11 +17,43 @@ import { DesktopLayout } from '@/components/layout/DesktopLayout';
 import { DesktopHomeView } from '@/components/home/DesktopHomeView';
 
 export default function HomeScreen() {
-  const { user } = useAuth();
-  const { sets } = useSets();
+  const { user, isLoading: authLoading } = useAuth();
+  const { sets, isLoading: setsLoading } = useSets();
+  const { preferences, isLoading: langLoading } = useLanguage();
+  const { hasCompletedTour, showTour, isLoading: tourLoading } = useTour();
   const { colors } = useTheme();
   const router = useRouter();
   const { isDesktop } = useResponsive();
+
+  // Tour trigger for new users
+  useEffect(() => {
+    // Wait for all contexts to load
+    if (authLoading || langLoading || setsLoading || tourLoading) {
+      return;
+    }
+
+    // Show tour to new users: configured languages but no sets and haven't completed tour
+    const isNewUser = user && preferences.isConfigured && sets.length === 0 && !hasCompletedTour;
+
+    if (isNewUser) {
+      // Small delay to allow UI to settle after navigation
+      const timer = setTimeout(() => {
+        showTour();
+      }, 500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [
+    user,
+    authLoading,
+    langLoading,
+    setsLoading,
+    tourLoading,
+    preferences.isConfigured,
+    sets.length,
+    hasCompletedTour,
+    showTour,
+  ]);
 
   // Use desktop layout for desktop screens
   if (isDesktop) {
