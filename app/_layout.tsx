@@ -68,10 +68,14 @@ function RootLayoutNav() {
       // 2. No existing sets (safety check)
       console.log('➡️  Redirecting to language setup (user but no languages configured and no sets)');
       router.replace('/(auth)/language-setup');
-    } else if (user && shouldSkipLanguageSetup && inAuthGroup && !onLanguageSetup) {
+    } else if (user && shouldSkipLanguageSetup && (onLanguageSetup || (inAuthGroup && !onLanguageSetup))) {
       // Redirect to main app if authenticated and (languages configured OR has sets)
+      // This handles both: being on language-setup page AND being elsewhere in auth group
       console.log('➡️  Redirecting to main app (user and languages configured or has sets)');
       router.replace('/(tabs)');
+    } else if (user && shouldSkipLanguageSetup && !inAuthGroup) {
+      // User is authenticated, configured, and already in main app - no redirect needed
+      console.log('✅ User properly in main app, no redirect needed');
     } else {
       console.log('✅ No redirect needed, staying on current route');
     }

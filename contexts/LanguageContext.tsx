@@ -82,6 +82,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, [user?.id, authLoading]);
 
   const loadLanguagePreferences = async () => {
+    setIsLoading(true);
     try {
       // If no user, set defaults and return
       if (!user) {
