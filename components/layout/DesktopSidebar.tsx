@@ -1,11 +1,10 @@
 // Desktop sidebar navigation
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { useRouter, usePathname } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Typography, Spacing, BorderRadius } from '@/lib/constants';
-import { LinearGradient } from 'expo-linear-gradient';
 import { showAlert } from '@/lib/alert';
 
 interface NavItem {
@@ -44,14 +43,11 @@ export function DesktopSidebar() {
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Logo/Brand */}
         <View style={styles.header}>
-          <LinearGradient
-            colors={['#5B9EFF', '#E066FF']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.logoGradient}
-          >
-            <Ionicons name="sparkles" size={24} color="#FFFFFF" />
-          </LinearGradient>
+          <Image
+            source={require('@/assets/images/logo.png')}
+            style={styles.logoImage}
+            resizeMode="cover"
+          />
           <Text style={[styles.logo, { color: colors.text }]}>Exquizite</Text>
         </View>
 
@@ -134,12 +130,10 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xl,
     paddingVertical: Spacing.md,
   },
-  logoGradient: {
+  logoImage: {
     width: 48,
     height: 48,
-    borderRadius: BorderRadius.button,
-    alignItems: 'center',
-    justifyContent: 'center',
+    borderRadius: 12,
   },
   logo: {
     ...Typography.h2,
