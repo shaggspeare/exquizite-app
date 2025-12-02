@@ -47,12 +47,29 @@ export default function FillBlankScreen() {
   const [score, setScore] = useState(0);
   const [loading, setLoading] = useState(true);
   const [showHint, setShowHint] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [totalExpectedQuestions, setTotalExpectedQuestions] = useState(0);
 
   useEffect(() => {
     if (set) {
       generateQuestions();
     }
   }, [set]);
+
+  // Auto-advance when next question becomes available
+  useEffect(() => {
+    const wasOnLastQuestion = isAnswered && currentIndex === questions.length - 1;
+    const nextQuestionNowAvailable = !isLoadingMore && questions.length > currentIndex + 1;
+
+    if (wasOnLastQuestion && nextQuestionNowAvailable) {
+      // Next question is now available, advance automatically
+      setCurrentIndex(currentIndex + 1);
+      setSelectedOption(null);
+      setIsAnswered(false);
+      setIsCorrect(false);
+      setShowHint(false);
+    }
+  }, [isLoadingMore, questions.length, currentIndex, isAnswered]);
 
   const generateQuestions = async () => {
     if (!set) return;
@@ -70,25 +87,55 @@ export default function FillBlankScreen() {
     };
 
     const shuffledWords = shuffleArray(set.words);
+    setTotalExpectedQuestions(shuffledWords.length);
+
+    // Split into initial batch (first ) and remaining
+    const initialBatchSize = Math.min(2, shuffledWords.length);
+    const initialWords = shuffledWords.slice(0, initialBatchSize);
+    const remainingWords = shuffledWords.slice(initialBatchSize);
 
     try {
-      // Generate all sentences in a single API call
-      const sentences = await generateMultipleSentencesWithGaps(
-        shuffledWords.map(w => ({ word: w.word, translation: w.translation })),
+      // Generate first 2 questions
+      const initialSentences = await generateMultipleSentencesWithGaps(
+        initialWords.map(w => ({ word: w.word, translation: w.translation })),
         preferences.targetLanguage,
         preferences.nativeLanguage
       );
 
-      // Map the results to questions
-      const generatedQuestions: FillBlankQuestion[] = shuffledWords.map((word, index) => ({
+      // Map the initial results to questions
+      const initialQuestions: FillBlankQuestion[] = initialWords.map((word, index) => ({
         word: word.word,
         translation: word.translation,
-        sentence: sentences[index]?.sentence || `___ means ${word.translation}`,
-        correctAnswer: sentences[index]?.correctAnswer || word.word,
-        options: sentences[index]?.options || [word.word],
+        sentence: initialSentences[index]?.sentence || `___ means ${word.translation}`,
+        correctAnswer: initialSentences[index]?.correctAnswer || word.word,
+        options: initialSentences[index]?.options || [word.word],
       }));
 
-      setQuestions(generatedQuestions);
+      // Set initial questions and hide loading immediately
+      setQuestions(initialQuestions);
+      setLoading(false);
+
+      // Generate remaining questions in background
+      if (remainingWords.length > 0) {
+        setIsLoadingMore(true);
+        const remainingSentences = await generateMultipleSentencesWithGaps(
+          remainingWords.map(w => ({ word: w.word, translation: w.translation })),
+          preferences.targetLanguage,
+          preferences.nativeLanguage
+        );
+
+        const remainingQuestions: FillBlankQuestion[] = remainingWords.map((word, index) => ({
+          word: word.word,
+          translation: word.translation,
+          sentence: remainingSentences[index]?.sentence || `___ means ${word.translation}`,
+          correctAnswer: remainingSentences[index]?.correctAnswer || word.word,
+          options: remainingSentences[index]?.options || [word.word],
+        }));
+
+        // Append remaining questions to existing ones
+        setQuestions(prev => [...prev, ...remainingQuestions]);
+        setIsLoadingMore(false);
+      }
     } catch (error) {
       console.error('Error generating questions:', error);
       // Fallback: create simple questions with options from other words
@@ -110,9 +157,9 @@ export default function FillBlankScreen() {
         };
       });
       setQuestions(fallbackQuestions);
+      setLoading(false);
+      setIsLoadingMore(false);
     }
-
-    setLoading(false);
   };
 
   const handleCheckAnswer = () => {
@@ -138,6 +185,10 @@ export default function FillBlankScreen() {
       setIsAnswered(false);
       setIsCorrect(false);
       setShowHint(false);
+    } else if (isLoadingMore && currentIndex + 1 < totalExpectedQuestions) {
+      // More questions are loading, wait for them
+      // Don't advance or complete yet
+      return;
     } else {
       handleComplete();
     }
@@ -186,6 +237,7 @@ export default function FillBlankScreen() {
   }
 
   const currentQuestion = questions[currentIndex];
+  const isWaitingForNextQuestion = isAnswered && currentIndex === questions.length - 1 && isLoadingMore;
 
   if (isDesktop) {
     return (
@@ -329,9 +381,14 @@ export default function FillBlankScreen() {
                   {isAnswered ? (
                     <Button
                       title={
-                        currentIndex === questions.length - 1 ? 'Finish' : 'Next Question'
+                        isWaitingForNextQuestion
+                          ? 'Loading next question...'
+                          : currentIndex === questions.length - 1
+                          ? 'Finish'
+                          : 'Next Question'
                       }
                       onPress={handleNext}
+                      disabled={isWaitingForNextQuestion}
                       style={styles.desktopButton}
                     />
                   ) : (
@@ -478,9 +535,14 @@ export default function FillBlankScreen() {
         {isAnswered ? (
           <Button
             title={
-              currentIndex === questions.length - 1 ? 'Finish' : 'Next Question'
+              isWaitingForNextQuestion
+                ? 'Loading next question...'
+                : currentIndex === questions.length - 1
+                ? 'Finish'
+                : 'Next Question'
             }
             onPress={handleNext}
+            disabled={isWaitingForNextQuestion}
           />
         ) : (
           <Button
@@ -731,6 +793,7 @@ const styles = StyleSheet.create({
   },
   desktopFooter: {
     alignItems: 'center',
+    marginTop: Spacing.xl,
   },
   desktopButton: {
     minWidth: 300,
