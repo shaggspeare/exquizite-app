@@ -148,14 +148,21 @@ serve(async (req) => {
       );
     }
 
-    // Fetch word pairs from original set
-    const { data: originalPairs, error: pairsError } = await supabaseClient
+    // Fetch word pairs from original set using service role to bypass RLS
+    // (This is safe because we've already verified the share is active and not expired)
+    const serviceClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    );
+
+    const { data: originalPairs, error: pairsError } = await serviceClient
       .from('word_pairs')
       .select('word, translation, position')
       .eq('set_id', share.set_id)
       .order('position', { ascending: true });
 
     if (pairsError || !originalPairs) {
+      console.error('Error fetching word pairs:', pairsError);
       return new Response(
         JSON.stringify({ error: 'Failed to fetch word pairs' }),
         {
@@ -165,8 +172,8 @@ serve(async (req) => {
       );
     }
 
-    // Fetch language info from shared_sets_with_details view
-    const { data: setDetails } = await supabaseClient
+    // Fetch language info from shared_sets_with_details view using service role
+    const { data: setDetails } = await serviceClient
       .from('shared_sets_with_details')
       .select('target_language, native_language')
       .eq('share_code', shareCode)
