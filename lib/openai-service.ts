@@ -93,14 +93,16 @@ Only return valid JSON, no additional text.`;
       throw new Error('Invalid response format from OpenAI');
     }
 
-    // Add IDs to each word pair
-    const result = words.map((word: any, index: number) => ({
-      id: `${Date.now()}_${index}`,
-      word: word.word || '',
-      translation: word.translation || '',
-    }));
+    // Add IDs to each word pair and limit to requested count
+    const result = words
+      .slice(0, count)
+      .map((word: any, index: number) => ({
+        id: `${Date.now()}_${index}`,
+        word: word.word || '',
+        translation: word.translation || '',
+      }));
 
-    console.log('[OpenAI] Successfully generated', result.length, 'words');
+    console.log('[OpenAI] Successfully generated', result.length, 'words (requested:', count, ')');
     return result;
   } catch (error: any) {
     console.error('[OpenAI] Error generating word suggestions:', {
@@ -180,17 +182,21 @@ Only return valid JSON, no additional text.`;
       throw new Error('Invalid response format from OpenAI');
     }
 
-    // Add IDs to each word pair
-    const result = words.map((word: any, index: number) => ({
-      id: `${Date.now()}_${index}`,
-      word: word.word || '',
-      translation: word.translation || '',
-    }));
+    // Add IDs to each word pair and limit to requested count
+    const result = words
+      .slice(0, count)
+      .map((word: any, index: number) => ({
+        id: `${Date.now()}_${index}`,
+        word: word.word || '',
+        translation: word.translation || '',
+      }));
 
     console.log(
       '[OpenAI] Successfully generated',
       result.length,
-      'words from context'
+      'words from context (requested:',
+      count,
+      ')'
     );
     return result;
   } catch (error: any) {

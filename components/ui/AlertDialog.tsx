@@ -1,8 +1,11 @@
-import { Modal, View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
+import { Modal, View, Text, StyleSheet, TouchableOpacity, Platform, Dimensions } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Spacing, BorderRadius, Typography, Shadow } from '@/lib/constants';
+import { isDesktopWeb } from '@/lib/platform-utils';
+
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
 interface AlertButton {
   text: string;
@@ -20,6 +23,8 @@ export interface AlertDialogProps {
 
 export function AlertDialog({ visible, title, message, buttons = [], onClose }: AlertDialogProps) {
   const { colors } = useTheme();
+  const isDesktop = Platform.OS === 'web' && isDesktopWeb();
+  const isMobile = SCREEN_WIDTH < 768;
 
   const handleButtonPress = (button: AlertButton) => {
     if (button.onPress) {
@@ -40,10 +45,11 @@ export function AlertDialog({ visible, title, message, buttons = [], onClose }: 
   // Get icon based on button styles
   const getIcon = () => {
     const hasDestructive = buttons.some(b => b.style === 'destructive');
+    const iconSize = isMobile ? 48 : 56;
     if (hasDestructive) {
-      return <Ionicons name="warning" size={32} color={colors.error} />;
+      return <Ionicons name="warning" size={iconSize} color={colors.error} />;
     }
-    return <Ionicons name="information-circle" size={32} color={colors.primary} />;
+    return <Ionicons name="information-circle" size={iconSize} color={colors.primary} />;
   };
 
   // Sort buttons: cancel buttons first, then default, then destructive
@@ -69,20 +75,32 @@ export function AlertDialog({ visible, title, message, buttons = [], onClose }: 
         )}
 
         <View style={styles.dialogContainer}>
-          <View style={[styles.dialog, { backgroundColor: colors.card }]}>
+          <View style={[
+            styles.dialog,
+            { backgroundColor: colors.card },
+            isMobile && styles.dialogMobile,
+          ]}>
             {/* Icon */}
-            <View style={styles.iconContainer}>
+            <View style={[styles.iconContainer, isMobile && styles.iconContainerMobile]}>
               {getIcon()}
             </View>
 
             {/* Title */}
-            <Text style={[styles.title, { color: colors.text }]}>
+            <Text style={[
+              styles.title,
+              { color: colors.text },
+              isMobile && styles.titleMobile,
+            ]}>
               {title}
             </Text>
 
             {/* Message */}
             {message && (
-              <Text style={[styles.message, { color: colors.textSecondary }]}>
+              <Text style={[
+                styles.message,
+                { color: colors.textSecondary },
+                isMobile && styles.messageMobile,
+              ]}>
                 {message}
               </Text>
             )}
@@ -91,11 +109,15 @@ export function AlertDialog({ visible, title, message, buttons = [], onClose }: 
             <View style={styles.buttonContainer}>
               {sortedButtons.length === 0 ? (
                 <TouchableOpacity
-                  style={[styles.button, { backgroundColor: colors.primary }]}
+                  style={[
+                    styles.button,
+                    { backgroundColor: colors.primary },
+                    isMobile && styles.buttonMobile,
+                  ]}
                   onPress={onClose}
                   activeOpacity={0.8}
                 >
-                  <Text style={[styles.buttonText, { color: '#FFFFFF' }]}>
+                  <Text style={[styles.buttonText, { color: '#FFFFFF' }]} numberOfLines={1}>
                     OK
                   </Text>
                 </TouchableOpacity>
@@ -108,12 +130,13 @@ export function AlertDialog({ visible, title, message, buttons = [], onClose }: 
                         sortedButtons[0].style === 'destructive'
                           ? colors.error
                           : colors.primary
-                    }
+                    },
+                    isMobile && styles.buttonMobile,
                   ]}
                   onPress={() => handleButtonPress(sortedButtons[0])}
                   activeOpacity={0.8}
                 >
-                  <Text style={[styles.buttonText, { color: '#FFFFFF' }]}>
+                  <Text style={[styles.buttonText, { color: '#FFFFFF' }]} numberOfLines={1}>
                     {sortedButtons[0].text}
                   </Text>
                 </TouchableOpacity>
@@ -127,6 +150,7 @@ export function AlertDialog({ visible, title, message, buttons = [], onClose }: 
                       button.style === 'destructive' && { backgroundColor: colors.error },
                       button.style === 'default' && { backgroundColor: colors.primary },
                       button.style === 'cancel' && { backgroundColor: 'transparent', borderWidth: 1, borderColor: colors.border },
+                      isMobile && styles.buttonMobile,
                     ]}
                     onPress={() => handleButtonPress(button)}
                     activeOpacity={0.8}
@@ -138,6 +162,7 @@ export function AlertDialog({ visible, title, message, buttons = [], onClose }: 
                           ? { color: colors.text }
                           : { color: '#FFFFFF' }
                       ]}
+                      numberOfLines={1}
                     >
                       {button.text}
                     </Text>
@@ -169,19 +194,32 @@ const styles = StyleSheet.create({
     ...Shadow.cardDeep,
     alignItems: 'center',
   },
+  dialogMobile: {
+    padding: Spacing.lg,
+  },
   iconContainer: {
     marginBottom: Spacing.md,
+  },
+  iconContainerMobile: {
+    marginBottom: Spacing.sm,
   },
   title: {
     ...Typography.h2,
     textAlign: 'center',
     marginBottom: Spacing.sm,
   },
+  titleMobile: {
+    fontSize: 20,
+  },
   message: {
     ...Typography.body,
     textAlign: 'center',
     marginBottom: Spacing.lg,
     lineHeight: 22,
+  },
+  messageMobile: {
+    fontSize: 15,
+    marginBottom: Spacing.md,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -197,6 +235,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     minHeight: 44,
     ...Shadow.button,
+  },
+  buttonMobile: {
+    paddingHorizontal: Spacing.sm,
+    minHeight: 48,
   },
   cancelButton: {
     borderWidth: 1,

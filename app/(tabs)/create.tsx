@@ -110,7 +110,12 @@ export default function CreateSetScreen() {
   };
 
   const handleAIWordsSelected = (aiWords: WordPair[]) => {
-    const availableSlots = MAX_WORDS_PER_SET - wordPairs.length;
+    // Filter out empty word pairs to calculate actual available slots
+    const nonEmptyPairs = wordPairs.filter(
+      pair => pair.word.trim() || pair.translation.trim()
+    );
+
+    const availableSlots = MAX_WORDS_PER_SET - nonEmptyPairs.length;
     const wordsToAdd = aiWords.slice(0, availableSlots);
 
     if (wordsToAdd.length < aiWords.length) {
@@ -126,7 +131,8 @@ export default function CreateSetScreen() {
       id: `${Date.now()}-${index}`,
     }));
 
-    setWordPairs([...wordPairs, ...wordsWithNewIds]);
+    // Replace all pairs with non-empty existing pairs + new AI words
+    setWordPairs([...nonEmptyPairs, ...wordsWithNewIds]);
   };
 
   const clearForm = () => {

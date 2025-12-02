@@ -315,16 +315,6 @@ export function AISuggestionModal({
                   showsVerticalScrollIndicator={false}
                 />
               )}
-
-              <View style={[styles.footer, { borderTopColor: colors.border }]}>
-                <Button
-                  title={`Add ${selectedIds.size} ${
-                    selectedIds.size === 1 ? 'word' : 'words'
-                  }`}
-                  onPress={handleAdd}
-                  disabled={selectedIds.size === 0}
-                />
-              </View>
             </>
           )}
 
@@ -338,6 +328,19 @@ export function AISuggestionModal({
             </View>
           )}
             </ScrollView>
+
+            {/* Sticky footer for desktop */}
+            {!loading && suggestions.length > 0 && (
+              <View style={[styles.desktopFooter, { borderTopColor: colors.border, backgroundColor: colors.card }]}>
+                <Button
+                  title={`Add ${selectedIds.size} ${
+                    selectedIds.size === 1 ? 'word' : 'words'
+                  }`}
+                  onPress={handleAdd}
+                  disabled={selectedIds.size === 0}
+                />
+              </View>
+            )}
           </View>
         </View>
       ) : (
@@ -619,6 +622,10 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.md,
     borderTopWidth: 1,
     marginTop: Spacing.md,
+  },
+  desktopFooter: {
+    padding: Spacing.lg,
+    borderTopWidth: 1,
   },
   contextInfo: {
     flexDirection: 'row',

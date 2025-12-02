@@ -201,7 +201,7 @@ export default function MatchScreen() {
           </View>
 
           {/* Content */}
-          <DesktopContainer>
+          <View style={styles.desktopContentWrapper}>
             <View style={styles.desktopContent}>
               <View style={styles.desktopColumns}>
                 <View style={styles.desktopColumn}>
@@ -217,7 +217,7 @@ export default function MatchScreen() {
                   <ScrollView
                     style={styles.scrollView}
                     contentContainerStyle={styles.scrollContent}
-                    showsVerticalScrollIndicator={false}
+                    showsVerticalScrollIndicator={true}
                   >
                     {words.map(item => (
                       <MatchCard
@@ -245,7 +245,7 @@ export default function MatchScreen() {
                   <ScrollView
                     style={styles.scrollView}
                     contentContainerStyle={styles.scrollContent}
-                    showsVerticalScrollIndicator={false}
+                    showsVerticalScrollIndicator={true}
                   >
                     {translations.map(item => (
                       <MatchCard
@@ -261,7 +261,7 @@ export default function MatchScreen() {
                 </View>
               </View>
             </View>
-          </DesktopContainer>
+          </View>
         </View>
       </DesktopLayout>
     );
@@ -525,9 +525,17 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '700',
   },
+  desktopContentWrapper: {
+    flex: 1, // Maintain flex chain for height constraint
+    width: '100%',
+    alignSelf: 'center',
+    maxWidth: 1400, // Same as MAX_CONTENT_WIDTH
+    paddingHorizontal: 32, // Same as DesktopContainer padding
+  },
   desktopContent: {
     flex: 1,
-    paddingVertical: Spacing.xxl,
+    paddingTop: Spacing.xxl,
+    paddingBottom: Spacing.xxl,
   },
   desktopColumns: {
     flexDirection: 'row',
