@@ -121,54 +121,58 @@ export default function HomeScreen() {
 
         {sets.length > 0 ? (
           <>
-            {/* Stats Grid */}
-            <View style={styles.statsGrid}>
-              <Card style={styles.statCard}>
-                <View style={[styles.statIconContainer, { backgroundColor: `${colors.primary}20` }]}>
-                  <Ionicons name="library" size={32} color={colors.primary} />
-                </View>
-                <Text style={[styles.statValue, { color: colors.text }]}>{sets.length}</Text>
-                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Sets</Text>
-              </Card>
+            {/* Stats Grid and Quick Practice - Hidden for guests */}
+            {!user?.isGuest && (
+              <>
+                <View style={styles.statsGrid}>
+                  <Card style={styles.statCard}>
+                    <View style={[styles.statIconContainer, { backgroundColor: `${colors.primary}20` }]}>
+                      <Ionicons name="library" size={32} color={colors.primary} />
+                    </View>
+                    <Text style={[styles.statValue, { color: colors.text }]}>{sets.length}</Text>
+                    <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Sets</Text>
+                  </Card>
 
-              <Card style={styles.statCard}>
-                <View style={[styles.statIconContainer, { backgroundColor: `${colors.success}20` }]}>
-                  <Ionicons name="book" size={32} color={colors.success} />
-                </View>
-                <Text style={[styles.statValue, { color: colors.text }]}>{totalWords}</Text>
-                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Words</Text>
-              </Card>
+                  <Card style={styles.statCard}>
+                    <View style={[styles.statIconContainer, { backgroundColor: `${colors.success}20` }]}>
+                      <Ionicons name="book" size={32} color={colors.success} />
+                    </View>
+                    <Text style={[styles.statValue, { color: colors.text }]}>{totalWords}</Text>
+                    <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Words</Text>
+                  </Card>
 
-              <Card style={styles.statCard}>
-                <View style={[styles.statIconContainer, { backgroundColor: `${colors.ai}20` }]}>
-                  <Ionicons name="flame" size={32} color={colors.ai} />
+                  <Card style={styles.statCard}>
+                    <View style={[styles.statIconContainer, { backgroundColor: `${colors.ai}20` }]}>
+                      <Ionicons name="flame" size={32} color={colors.ai} />
+                    </View>
+                    <Text style={[styles.statValue, { color: colors.text }]}>{streak}</Text>
+                    <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Streak</Text>
+                  </Card>
                 </View>
-                <Text style={[styles.statValue, { color: colors.text }]}>{streak}</Text>
-                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Streak</Text>
-              </Card>
-            </View>
 
-            {/* Quick Practice Widget */}
-            {recentSets.length > 0 && (
-              <TouchableOpacity
-                onPress={() => router.push(`/sets/${recentSets[0].id}`)}
-                activeOpacity={0.8}
-              >
-                <LinearGradient
-                  colors={['#00D4FF', '#00E5A0']}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                  style={styles.quickPracticeWidget}
-                >
-                  <View>
-                    <Text style={styles.quickPracticeTitle}>Quick Practice</Text>
-                    <Text style={styles.quickPracticeSubtitle}>{recentSets[0].name}</Text>
-                  </View>
-                  <View style={styles.playIconContainer}>
-                    <Ionicons name="play" size={28} color="#FFFFFF" />
-                  </View>
-                </LinearGradient>
-              </TouchableOpacity>
+                {/* Quick Practice Widget */}
+                {recentSets.length > 0 && (
+                  <TouchableOpacity
+                    onPress={() => router.push(`/sets/${recentSets[0].id}`)}
+                    activeOpacity={0.8}
+                  >
+                    <LinearGradient
+                      colors={['#00D4FF', '#00E5A0']}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 1 }}
+                      style={styles.quickPracticeWidget}
+                    >
+                      <View>
+                        <Text style={styles.quickPracticeTitle}>Quick Practice</Text>
+                        <Text style={styles.quickPracticeSubtitle}>{recentSets[0].name}</Text>
+                      </View>
+                      <View style={styles.playIconContainer}>
+                        <Ionicons name="play" size={28} color="#FFFFFF" />
+                      </View>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                )}
+              </>
             )}
 
             {/* My Sets Section */}
@@ -186,6 +190,32 @@ export default function HomeScreen() {
               {sets.map(set => (
                 <SetCard key={set.id} set={set} />
               ))}
+
+              {/* Upgrade Account Banner for Guests */}
+              {user?.isGuest && (
+                <Card style={[styles.upgradeCard, { borderColor: colors.primary }]}>
+                  <View style={styles.upgradeContent}>
+                    <View style={[styles.upgradeIconContainer, { backgroundColor: `${colors.primary}20` }]}>
+                      <Ionicons name="rocket" size={28} color={colors.primary} />
+                    </View>
+                    <View style={styles.upgradeTextContainer}>
+                      <Text style={[styles.upgradeTitle, { color: colors.text }]}>
+                        Create a Full Account
+                      </Text>
+                      <Text style={[styles.upgradeDescription, { color: colors.textSecondary }]}>
+                        Sync your data and never lose your progress
+                      </Text>
+                    </View>
+                  </View>
+                  <TouchableOpacity
+                    style={[styles.upgradeButton, { backgroundColor: colors.primary }]}
+                    onPress={() => router.push('/(auth)/login?mode=signup')}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={styles.upgradeButtonText}>Create Account</Text>
+                  </TouchableOpacity>
+                </Card>
+              )}
             </View>
           </>
         ) : (
@@ -337,6 +367,50 @@ const styles = StyleSheet.create({
     ...Shadow.button,
   },
   emptyButtonText: {
+    ...Typography.body,
+    color: '#FFFFFF',
+    fontWeight: '600',
+  },
+  upgradeCard: {
+    padding: Spacing.lg,
+    marginTop: Spacing.lg,
+    borderWidth: 2,
+  },
+  upgradeContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
+    marginBottom: Spacing.md,
+  },
+  upgradeIconContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  upgradeTextContainer: {
+    flex: 1,
+  },
+  upgradeTitle: {
+    ...Typography.body,
+    fontSize: 16,
+    fontWeight: '700',
+    marginBottom: Spacing.xs,
+  },
+  upgradeDescription: {
+    ...Typography.caption,
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  upgradeButton: {
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.lg,
+    borderRadius: BorderRadius.button,
+    alignItems: 'center',
+    ...Shadow.button,
+  },
+  upgradeButtonText: {
     ...Typography.body,
     color: '#FFFFFF',
     fontWeight: '600',

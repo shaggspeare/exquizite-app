@@ -117,7 +117,7 @@ export default function ProfileScreen() {
             </View>
             <Button
               title="Create Account"
-              onPress={() => router.push('/(auth)/login')}
+              onPress={() => router.push('/(auth)/login?mode=signup')}
               style={styles.upgradeButton}
             />
           </Card>

@@ -34,10 +34,9 @@ function RootLayoutNav() {
 
   useEffect(() => {
     const hasSets = sets.length > 0;
-    // User should skip language setup if:
-    // 1. Languages are already configured, OR
-    // 2. User has sets (even if not formally configured - this is a safety fallback)
-    const shouldSkipLanguageSetup = preferences.isConfigured || hasSets;
+    // User should skip language setup only if languages are already configured
+    // This ensures guest users who created sets still go through language setup when they sign up
+    const shouldSkipLanguageSetup = preferences.isConfigured;
 
     console.log('🔍 Routing check:', {
       authLoading,
@@ -66,18 +65,18 @@ function RootLayoutNav() {
       console.log('➡️  Redirecting to login (no user)');
       router.replace('/(auth)/login');
     } else if (user && !shouldSkipLanguageSetup && !onLanguageSetup) {
-      // Redirect to language setup only if both conditions are true:
-      // 1. Languages not configured
-      // 2. No existing sets (safety check)
-      console.log('➡️  Redirecting to language setup (user but no languages configured and no sets)');
+      // Redirect to language setup if languages not configured
+      // This includes newly signed up users (even if they were guests with sets)
+      console.log('➡️  Redirecting to language setup (user but no languages configured)');
       router.replace('/(auth)/language-setup');
-    } else if (user && shouldSkipLanguageSetup && (onLanguageSetup || (inAuthGroup && !onLanguageSetup))) {
-      // Redirect to main app if authenticated and (languages configured OR has sets)
+    } else if (user && shouldSkipLanguageSetup && (onLanguageSetup || (inAuthGroup && !onLanguageSetup)) && !user.isGuest) {
+      // Redirect to main app if authenticated (NOT guest) and languages configured
+      // Guest users can stay in auth group to sign up
       // This handles both: being on language-setup page AND being elsewhere in auth group
-      console.log('➡️  Redirecting to main app (user and languages configured or has sets)');
+      console.log('➡️  Redirecting to main app (user and languages configured)');
       router.replace('/(tabs)');
-    } else if (user && shouldSkipLanguageSetup && !inAuthGroup) {
-      // User is authenticated, configured, and already in main app - no redirect needed
+    } else if (user && shouldSkipLanguageSetup && !inAuthGroup && !user.isGuest) {
+      // User is authenticated (NOT guest), configured, and already in main app - no redirect needed
       console.log('✅ User properly in main app, no redirect needed');
     } else {
       console.log('✅ No redirect needed, staying on current route');

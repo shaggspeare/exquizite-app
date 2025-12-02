@@ -1,5 +1,11 @@
 // Desktop home screen layout with bento grid
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSets } from '@/contexts/SetsContext';
@@ -24,7 +30,9 @@ export function DesktopHomeView() {
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
       <Ionicons name="book-outline" size={80} color={colors.textSecondary} />
-      <Text style={[styles.emptyTitle, { color: colors.text }]}>No sets yet</Text>
+      <Text style={[styles.emptyTitle, { color: colors.text }]}>
+        No sets yet
+      </Text>
       <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
         Create your first word set to get started!
       </Text>
@@ -52,7 +60,9 @@ export function DesktopHomeView() {
             <Text style={[styles.pageTitle, { color: colors.text }]}>
               Welcome back, {user?.name || 'there'}! 👋
             </Text>
-            <Text style={[styles.pageSubtitle, { color: colors.textSecondary }]}>
+            <Text
+              style={[styles.pageSubtitle, { color: colors.textSecondary }]}
+            >
               Ready to continue your learning journey?
             </Text>
           </View>
@@ -71,63 +81,134 @@ export function DesktopHomeView() {
             <View style={styles.bentoGrid}>
               {/* Left Column - Stats and Quick Practice */}
               <View style={styles.leftColumn}>
-                {/* Stats Grid - 3 columns in one row */}
-                <View style={styles.statsRow}>
-                  <Card style={[styles.statCard, styles.bentoCard]}>
-                    <View style={[styles.statIconContainer, { backgroundColor: `${colors.primary}20` }]}>
-                      <Ionicons name="library" size={28} color={colors.primary} />
-                    </View>
-                    <Text style={[styles.statValue, { color: colors.text }]}>{sets.length}</Text>
-                    <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Sets</Text>
-                  </Card>
+                {/* Stats Grid and Quick Practice - Hidden for guests mobile*/}
 
-                  <Card style={[styles.statCard, styles.bentoCard]}>
-                    <View style={[styles.statIconContainer, { backgroundColor: `${colors.success}20` }]}>
-                      <Ionicons name="book" size={28} color={colors.success} />
-                    </View>
-                    <Text style={[styles.statValue, { color: colors.text }]}>{totalWords}</Text>
-                    <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Words</Text>
-                  </Card>
-
-                  <Card style={[styles.statCard, styles.bentoCard]}>
-                    <View style={[styles.statIconContainer, { backgroundColor: `${colors.ai}20` }]}>
-                      <Ionicons name="flame" size={28} color={colors.ai} />
-                    </View>
-                    <Text style={[styles.statValue, { color: colors.text }]}>{streak}</Text>
-                    <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Streak</Text>
-                  </Card>
-                </View>
-
-                {/* Quick Practice - Larger */}
-                {recentSets.length > 0 && (
-                  <TouchableOpacity
-                    onPress={() => router.push(`/sets/${recentSets[0].id}`)}
-                    activeOpacity={0.8}
-                    style={styles.bentoCard}
-                  >
-                    <LinearGradient
-                      colors={['#00D4FF', '#00E5A0']}
-                      start={{ x: 0, y: 0 }}
-                      end={{ x: 1, y: 1 }}
-                      style={styles.quickPracticeCard}
-                    >
-                      <Ionicons name="play-circle" size={64} color="#FFFFFF" />
-                      <Text style={styles.quickPracticeTitle}>Quick Practice</Text>
-                      <Text style={styles.quickPracticeSubtitle}>{recentSets[0].name}</Text>
-                      <View style={styles.wordCount}>
-                        <Ionicons name="book-outline" size={18} color="rgba(255,255,255,0.8)" />
-                        <Text style={styles.wordCountText}>{recentSets[0].words.length} words</Text>
+                <>
+                  <View style={styles.statsRow}>
+                    <Card style={[styles.statCard, styles.bentoCard]}>
+                      <View
+                        style={[
+                          styles.statIconContainer,
+                          { backgroundColor: `${colors.primary}20` },
+                        ]}
+                      >
+                        <Ionicons
+                          name="library"
+                          size={28}
+                          color={colors.primary}
+                        />
                       </View>
-                    </LinearGradient>
-                  </TouchableOpacity>
-                )}
+                      <Text style={[styles.statValue, { color: colors.text }]}>
+                        {sets.length}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.statLabel,
+                          { color: colors.textSecondary },
+                        ]}
+                      >
+                        Sets
+                      </Text>
+                    </Card>
+
+                    <Card style={[styles.statCard, styles.bentoCard]}>
+                      <View
+                        style={[
+                          styles.statIconContainer,
+                          { backgroundColor: `${colors.success}20` },
+                        ]}
+                      >
+                        <Ionicons
+                          name="book"
+                          size={28}
+                          color={colors.success}
+                        />
+                      </View>
+                      <Text style={[styles.statValue, { color: colors.text }]}>
+                        {totalWords}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.statLabel,
+                          { color: colors.textSecondary },
+                        ]}
+                      >
+                        Words
+                      </Text>
+                    </Card>
+
+                    <Card style={[styles.statCard, styles.bentoCard]}>
+                      <View
+                        style={[
+                          styles.statIconContainer,
+                          { backgroundColor: `${colors.ai}20` },
+                        ]}
+                      >
+                        <Ionicons name="flame" size={28} color={colors.ai} />
+                      </View>
+                      <Text style={[styles.statValue, { color: colors.text }]}>
+                        {streak}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.statLabel,
+                          { color: colors.textSecondary },
+                        ]}
+                      >
+                        Streak
+                      </Text>
+                    </Card>
+                  </View>
+
+                  {/* Quick Practice - Larger */}
+                  {recentSets.length > 0 && (
+                    <TouchableOpacity
+                      onPress={() => router.push(`/sets/${recentSets[0].id}`)}
+                      activeOpacity={0.8}
+                      style={styles.bentoCard}
+                    >
+                      <LinearGradient
+                        colors={['#00D4FF', '#00E5A0']}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 1 }}
+                        style={styles.quickPracticeCard}
+                      >
+                        <Ionicons
+                          name="play-circle"
+                          size={64}
+                          color="#FFFFFF"
+                        />
+                        <Text style={styles.quickPracticeTitle}>
+                          Quick Practice
+                        </Text>
+                        <Text style={styles.quickPracticeSubtitle}>
+                          {recentSets[0].name}
+                        </Text>
+                        <View style={styles.wordCount}>
+                          <Ionicons
+                            name="book-outline"
+                            size={18}
+                            color="rgba(255,255,255,0.8)"
+                          />
+                          <Text style={styles.wordCountText}>
+                            {recentSets[0].words.length} words
+                          </Text>
+                        </View>
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  )}
+                </>
               </View>
 
               {/* Right Column - Sets List */}
               <View style={styles.rightColumn}>
                 <View style={styles.setsHeader}>
-                  <Text style={[styles.setsTitle, { color: colors.text }]}>My Sets</Text>
-                  <Text style={[styles.setsCount, { color: colors.textSecondary }]}>
+                  <Text style={[styles.setsTitle, { color: colors.text }]}>
+                    My Sets
+                  </Text>
+                  <Text
+                    style={[styles.setsCount, { color: colors.textSecondary }]}
+                  >
                     {sets.length} {sets.length === 1 ? 'set' : 'sets'}
                   </Text>
                 </View>
@@ -137,6 +218,64 @@ export function DesktopHomeView() {
                     <DesktopSetCard key={set.id} set={set} />
                   ))}
                 </View>
+
+                {/* Upgrade Account Banner for Guests */}
+                {user?.isGuest && (
+                  <Card
+                    style={[
+                      styles.upgradeCard,
+                      { borderColor: colors.primary },
+                    ]}
+                  >
+                    <View style={styles.upgradeContent}>
+                      <View
+                        style={[
+                          styles.upgradeIconContainer,
+                          { backgroundColor: `${colors.primary}20` },
+                        ]}
+                      >
+                        <Ionicons
+                          name="rocket"
+                          size={32}
+                          color={colors.primary}
+                        />
+                      </View>
+                      <View style={styles.upgradeTextContainer}>
+                        <Text
+                          style={[styles.upgradeTitle, { color: colors.text }]}
+                        >
+                          Create a Full Account
+                        </Text>
+                        <Text
+                          style={[
+                            styles.upgradeDescription,
+                            { color: colors.textSecondary },
+                          ]}
+                        >
+                          Sync your data across devices and never lose your
+                          progress
+                        </Text>
+                      </View>
+                      <TouchableOpacity
+                        style={[
+                          styles.upgradeButton,
+                          { backgroundColor: colors.primary },
+                        ]}
+                        onPress={() => router.push('/(auth)/login?mode=signup')}
+                        activeOpacity={0.7}
+                      >
+                        <Ionicons
+                          name="arrow-forward"
+                          size={20}
+                          color="#FFFFFF"
+                        />
+                        <Text style={styles.upgradeButtonText}>
+                          Create Account
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </Card>
+                )}
               </View>
             </View>
           </>
@@ -311,5 +450,50 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontWeight: '600',
     fontSize: 16,
+  },
+  upgradeCard: {
+    padding: Spacing.lg,
+    marginTop: Spacing.lg,
+    borderWidth: 2,
+  },
+  upgradeContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.lg,
+  },
+  upgradeIconContainer: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  upgradeTextContainer: {
+    flex: 1,
+  },
+  upgradeTitle: {
+    ...Typography.h2,
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: Spacing.xs,
+  },
+  upgradeDescription: {
+    ...Typography.body,
+    fontSize: 14,
+  },
+  upgradeButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.lg,
+    borderRadius: BorderRadius.button,
+    ...Shadow.button,
+  },
+  upgradeButtonText: {
+    ...Typography.body,
+    color: '#FFFFFF',
+    fontWeight: '600',
+    fontSize: 15,
   },
 });

@@ -81,7 +81,7 @@ export function DesktopProfileView() {
                 <Text style={[styles.upgradeDescription, { color: colors.textSecondary }]}>
                   Create a full account to sync your data across devices and never lose your progress
                 </Text>
-                <Button title="Create Account" onPress={() => router.push('/(auth)/login')} style={styles.upgradeButton} />
+                <Button title="Create Account" onPress={() => router.push('/(auth)/login?mode=signup')} style={styles.upgradeButton} />
               </Card>
             )}
 

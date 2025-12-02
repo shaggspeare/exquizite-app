@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
+import { useLocalSearchParams } from 'expo-router';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card } from '@/components/ui/Card';
@@ -17,7 +18,8 @@ export default function LoginScreen() {
   const { signInWithEmail, signUpWithEmail, signInAsGuest } = useAuth();
   const { colors } = useTheme();
   const { isDesktop } = useResponsive();
-  const [isSignUp, setIsSignUp] = useState(false);
+  const { mode } = useLocalSearchParams();
+  const [isSignUp, setIsSignUp] = useState(mode === 'signup');
   const [isLoading, setIsLoading] = useState(false);
 
   // Form state
