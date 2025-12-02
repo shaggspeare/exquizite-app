@@ -31,6 +31,9 @@ function RootLayoutNav() {
 
   useEffect(() => {
     const hasSets = sets.length > 0;
+    // User should skip language setup if:
+    // 1. Languages are already configured, OR
+    // 2. User has sets (even if not formally configured - this is a safety fallback)
     const shouldSkipLanguageSetup = preferences.isConfigured || hasSets;
 
     console.log('🔍 Routing check:', {
@@ -42,6 +45,8 @@ function RootLayoutNav() {
       hasSets,
       setsCount: sets.length,
       shouldSkipLanguageSetup,
+      targetLanguage: preferences.targetLanguage,
+      nativeLanguage: preferences.nativeLanguage,
       segments,
     });
 
@@ -58,7 +63,9 @@ function RootLayoutNav() {
       console.log('➡️  Redirecting to login (no user)');
       router.replace('/(auth)/login');
     } else if (user && !shouldSkipLanguageSetup && !onLanguageSetup) {
-      // Redirect to language setup if authenticated but languages not configured AND no sets created
+      // Redirect to language setup only if both conditions are true:
+      // 1. Languages not configured
+      // 2. No existing sets (safety check)
       console.log('➡️  Redirecting to language setup (user but no languages configured and no sets)');
       router.replace('/(auth)/language-setup');
     } else if (user && shouldSkipLanguageSetup && inAuthGroup && !onLanguageSetup) {
@@ -68,7 +75,7 @@ function RootLayoutNav() {
     } else {
       console.log('✅ No redirect needed, staying on current route');
     }
-  }, [user, authLoading, langLoading, setsLoading, preferences.isConfigured, sets.length, segments]);
+  }, [user, authLoading, langLoading, setsLoading, preferences.isConfigured, preferences.targetLanguage, preferences.nativeLanguage, sets.length, segments]);
 
   return (
     <>

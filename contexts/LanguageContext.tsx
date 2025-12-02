@@ -105,18 +105,26 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
       if (!user.isGuest) {
         try {
+          console.log('📚 Checking Supabase for existing sets for user:', user.id);
           const { data: sets, error } = await supabase
             .from('word_sets')
             .select('id, target_language, native_language')
             .eq('user_id', user.id)
             .limit(1);
 
-          hasExistingSets = !error && sets && sets.length > 0;
-          if (hasExistingSets) {
-            firstSet = sets[0];
+          if (error) {
+            console.error('❌ Error querying sets from Supabase:', error);
+          } else {
+            hasExistingSets = sets && sets.length > 0;
+            if (hasExistingSets) {
+              firstSet = sets[0];
+              console.log('✅ Found existing sets in Supabase:', firstSet);
+            } else {
+              console.log('ℹ️ No existing sets found in Supabase');
+            }
           }
         } catch (error) {
-          console.error('Error checking for existing sets:', error);
+          console.error('❌ Exception checking for existing sets:', error);
         }
       }
 
@@ -129,6 +137,16 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         // If user has sets but preferences say not configured, update to configured
         if (hasExistingSets && !parsed.isConfigured) {
           console.log('📚 User has sets but preferences not marked as configured. Updating...');
+          parsed.isConfigured = true;
+          await storage.setItem(userStorageKey, JSON.stringify(parsed));
+        }
+
+        // Also update target/native language if missing but user has sets
+        if (hasExistingSets && firstSet && (!parsed.targetLanguage || !parsed.nativeLanguage)) {
+          console.log('📚 Updating missing language info from existing sets...');
+          const deviceLang = getDeviceLanguage();
+          parsed.targetLanguage = parsed.targetLanguage || firstSet.target_language || 'uk';
+          parsed.nativeLanguage = parsed.nativeLanguage || firstSet.native_language || deviceLang;
           parsed.isConfigured = true;
           await storage.setItem(userStorageKey, JSON.stringify(parsed));
         }

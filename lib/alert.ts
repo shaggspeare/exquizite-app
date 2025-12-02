@@ -23,7 +23,18 @@ export function showAlert(
       // Single button alert
       window.alert(message ? `${title}\n\n${message}` : title);
       if (buttons[0].onPress) {
-        buttons[0].onPress();
+        try {
+          const result = buttons[0].onPress();
+          if (result instanceof Promise) {
+            result.catch((error) => {
+              console.error('Error in alert button handler:', error);
+              window.alert(`Error: ${error.message || 'An error occurred'}`);
+            });
+          }
+        } catch (error: any) {
+          console.error('Error in alert button handler:', error);
+          window.alert(`Error: ${error.message || 'An error occurred'}`);
+        }
       }
     } else {
       // Confirmation dialog (2+ buttons)
@@ -34,9 +45,31 @@ export function showAlert(
       const cancelButton = buttons.find(b => b.style === 'cancel');
 
       if (confirmed && confirmButton?.onPress) {
-        confirmButton.onPress();
+        // Wrap in try-catch and handle async operations
+        try {
+          const result = confirmButton.onPress();
+          // If the onPress returns a promise, handle errors
+          if (result instanceof Promise) {
+            result.catch((error) => {
+              console.error('Error in alert button handler:', error);
+              window.alert(`Error: ${error.message || 'An error occurred'}`);
+            });
+          }
+        } catch (error: any) {
+          console.error('Error in alert button handler:', error);
+          window.alert(`Error: ${error.message || 'An error occurred'}`);
+        }
       } else if (!confirmed && cancelButton?.onPress) {
-        cancelButton.onPress();
+        try {
+          const result = cancelButton.onPress();
+          if (result instanceof Promise) {
+            result.catch((error) => {
+              console.error('Error in alert button handler:', error);
+            });
+          }
+        } catch (error: any) {
+          console.error('Error in alert button handler:', error);
+        }
       }
     }
   } else {
