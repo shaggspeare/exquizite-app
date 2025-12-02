@@ -9,10 +9,17 @@ let openai: OpenAI | null = null;
 function getOpenAIClient(): OpenAI {
   if (!openai) {
     if (!config.openai.apiKey) {
-      console.error('[OpenAI] API key not configured. Please set EXPO_PUBLIC_OPENAI_API_KEY in your .env file');
-      throw new Error('OpenAI API key not configured. Check your environment variables.');
+      console.error(
+        '[OpenAI] API key not configured. Please set EXPO_PUBLIC_OPENAI_API_KEY in your .env file'
+      );
+      throw new Error(
+        'OpenAI API key not configured. Check your environment variables.'
+      );
     }
-    console.log('[OpenAI] Initializing client with API key:', config.openai.apiKey.substring(0, 10) + '...');
+    console.log(
+      '[OpenAI] Initializing client with API key:',
+      config.openai.apiKey.substring(0, 10) + '...'
+    );
     openai = new OpenAI({
       apiKey: config.openai.apiKey,
       dangerouslyAllowBrowser: true, // Required for React Native/Expo
@@ -38,7 +45,12 @@ export async function generateWordSuggestions(
   count: number = 5
 ): Promise<WordPair[]> {
   try {
-    console.log('[OpenAI] Generating word suggestions:', { theme, targetLanguage, nativeLanguage, count });
+    console.log('[OpenAI] Generating word suggestions:', {
+      theme,
+      targetLanguage,
+      nativeLanguage,
+      count,
+    });
     const client = getOpenAIClient();
 
     const prompt = `Generate ${count} ${targetLanguage} words related to "${theme}" with their ${nativeLanguage} translations.
@@ -72,7 +84,9 @@ Only return valid JSON, no additional text.`;
     const responseData = JSON.parse(responseText);
 
     // Handle both direct array and object with array property
-    const words = Array.isArray(responseData) ? responseData : (responseData.words || []);
+    const words = Array.isArray(responseData)
+      ? responseData
+      : responseData.words || [];
 
     if (!Array.isArray(words) || words.length === 0) {
       console.error('[OpenAI] Invalid response format:', responseData);
@@ -109,7 +123,12 @@ export async function generateWordSuggestionsFromContext(
   count: number = 5
 ): Promise<WordPair[]> {
   try {
-    console.log('[OpenAI] Generating word suggestions from context:', { existingPairs: existingPairs.length, targetLanguage, nativeLanguage, count });
+    console.log('[OpenAI] Generating word suggestions from context:', {
+      existingPairs: existingPairs.length,
+      targetLanguage,
+      nativeLanguage,
+      count,
+    });
     const client = getOpenAIClient();
 
     // Create a context string from existing pairs
@@ -152,7 +171,9 @@ Only return valid JSON, no additional text.`;
     const responseData = JSON.parse(responseText);
 
     // Handle both direct array and object with array property
-    const words = Array.isArray(responseData) ? responseData : (responseData.words || []);
+    const words = Array.isArray(responseData)
+      ? responseData
+      : responseData.words || [];
 
     if (!Array.isArray(words) || words.length === 0) {
       console.error('[OpenAI] Invalid response format:', responseData);
@@ -166,7 +187,11 @@ Only return valid JSON, no additional text.`;
       translation: word.translation || '',
     }));
 
-    console.log('[OpenAI] Successfully generated', result.length, 'words from context');
+    console.log(
+      '[OpenAI] Successfully generated',
+      result.length,
+      'words from context'
+    );
     return result;
   } catch (error: any) {
     console.error('[OpenAI] Error generating word suggestions from context:', {
@@ -244,7 +269,13 @@ export async function generateQuizDistractors(params: {
   } = params;
 
   try {
-    console.log('[OpenAI] Generating quiz distractors:', { word, correctAnswer, targetLanguage, nativeLanguage, count });
+    console.log('[OpenAI] Generating quiz distractors:', {
+      word,
+      correctAnswer,
+      targetLanguage,
+      nativeLanguage,
+      count,
+    });
     const client = getOpenAIClient();
 
     // First, try to use existing translations from the set
@@ -293,7 +324,11 @@ Only return valid JSON, no additional text.`;
     const shuffled = combined.sort(() => Math.random() - 0.5);
 
     const result = shuffled.slice(0, count);
-    console.log('[OpenAI] Successfully generated', result.length, 'distractors');
+    console.log(
+      '[OpenAI] Successfully generated',
+      result.length,
+      'distractors'
+    );
     return result;
   } catch (error: any) {
     console.error('[OpenAI] Error generating quiz distractors:', {
@@ -316,7 +351,11 @@ export async function generateSentenceWithGap(
   nativeLanguage: string = 'English'
 ): Promise<{ sentence: string; correctAnswer: string }> {
   try {
-    console.log('[OpenAI] Generating sentence with gap:', { word, translation, targetLanguage });
+    console.log('[OpenAI] Generating sentence with gap:', {
+      word,
+      translation,
+      targetLanguage,
+    });
     const client = getOpenAIClient();
 
     const prompt = `Generate a simple, natural sentence in ${targetLanguage} that uses the word "${word}" (which means "${translation}" in ${nativeLanguage}).
@@ -378,15 +417,22 @@ export async function generateMultipleSentencesWithGaps(
   words: Array<{ word: string; translation: string }>,
   targetLanguage: string = 'Ukrainian',
   nativeLanguage: string = 'English'
-): Promise<Array<{ sentence: string; correctAnswer: string; options: string[] }>> {
+): Promise<
+  Array<{ sentence: string; correctAnswer: string; options: string[] }>
+> {
   try {
-    console.log('[OpenAI] Generating multiple sentences with gaps:', { count: words.length, targetLanguage });
+    console.log('[OpenAI] Generating multiple sentences with gaps:', {
+      count: words.length,
+      targetLanguage,
+    });
     const client = getOpenAIClient();
 
-    const wordsList = words.map((w, i) => `${i + 1}. "${w.word}" (means "${w.translation}")`).join('\n');
+    const wordsList = words
+      .map((w, i) => `${i + 1}. "${w.word}" (means "${w.translation}")`)
+      .join('\n');
 
     const prompt = `Generate simple, natural sentences in ${targetLanguage} for the following words. Each sentence should use the word and then have it replaced with "___" to create fill-in-the-blank exercises.
-For each word, also generate 3 plausible but incorrect ${targetLanguage} words that could trick a language learner. These distractors should be different words that could grammatically fit in the sentence but have different meanings.
+For each word, also generate 3 plausible but incorrect ${targetLanguage} words that could trick a language learner. These distractors should be different words that could grammatically fit in the sentence but doesnt fit to it in term of sense. If user understands the word correctly he should have no doubt to select right word.
 
 Words:
 ${wordsList}
@@ -452,7 +498,11 @@ Only return valid JSON, no additional text.`;
       };
     });
 
-    console.log('[OpenAI] Successfully generated', processedSentences.length, 'sentences with options');
+    console.log(
+      '[OpenAI] Successfully generated',
+      processedSentences.length,
+      'sentences with options'
+    );
     return processedSentences;
   } catch (error: any) {
     console.error('[OpenAI] Error generating multiple sentences with gaps:', {
@@ -462,7 +512,9 @@ Only return valid JSON, no additional text.`;
     // Fallback: return simple sentences for each word with basic distractors
     return words.map((w, index) => {
       // Create simple distractors from other words in the list
-      const otherWords = words.filter((_, i) => i !== index).map(word => word.word);
+      const otherWords = words
+        .filter((_, i) => i !== index)
+        .map(word => word.word);
       const distractors = otherWords.slice(0, 3);
 
       // If not enough words, use placeholder distractors
