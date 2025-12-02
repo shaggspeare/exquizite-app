@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Platform, Dimensions } from 'react-native';
 import { useState, useEffect } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -69,20 +69,15 @@ export default function SharedSetScreen() {
     try {
       const copiedSet = await copySharedSet(shareCode);
       if (copiedSet) {
+        // Show success message and redirect to home
         showAlert(
           'Success!',
-          `"${copiedSet.name}" has been saved to your collection with ${copiedSet.words?.length || 0} words.`,
-          [
-            {
-              text: 'Practice Now',
-              onPress: () => router.replace(`/sets/${copiedSet.id}/play/quiz`),
-            },
-            {
-              text: 'View in My Sets',
-              onPress: () => router.replace('/'),
-            },
-          ]
+          `"${copiedSet.name}" has been saved to your collection with ${copiedSet.words?.length || 0} words.`
         );
+        // Redirect to home after a brief delay
+        setTimeout(() => {
+          router.replace('/');
+        }, 1000);
       } else {
         console.error('copySharedSet returned null - check console for details');
         showAlert('Error', 'Failed to copy set. Please try again.');
@@ -95,18 +90,6 @@ export default function SharedSetScreen() {
     }
   };
 
-  const handlePractice = () => {
-    if (!setData) return;
-    // User must copy the set first to practice it
-    showAlert(
-      'Copy Set First',
-      'You need to save this set to your collection before you can practice it.',
-      [
-        { text: 'OK', style: 'cancel' },
-        { text: 'Save Set', onPress: handleCopySet },
-      ]
-    );
-  };
 
   // Generate gradient colors based on set ID
   const getGradientColors = () => {
@@ -152,10 +135,10 @@ export default function SharedSetScreen() {
           </Text>
           <TouchableOpacity
             style={[styles.backButton, { backgroundColor: colors.primary }]}
-            onPress={() => router.back()}
+            onPress={() => router.push('/')}
           >
-            <Ionicons name="arrow-back" size={20} color="#FFFFFF" />
-            <Text style={styles.backButtonText}>Go Back</Text>
+            <Ionicons name="home" size={20} color="#FFFFFF" />
+            <Text style={styles.backButtonText}>Go to Home</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -175,17 +158,12 @@ export default function SharedSetScreen() {
         <View style={styles.header}>
           <TouchableOpacity
             style={[styles.headerButton, { backgroundColor: colors.card }]}
-            onPress={() => router.back()}
-          >
-            <Ionicons name="arrow-back" size={24} color={colors.text} />
-          </TouchableOpacity>
-          <Text style={[styles.headerTitle, { color: colors.text }]}>Shared Set</Text>
-          <TouchableOpacity
-            style={[styles.headerButton, { backgroundColor: colors.card }]}
             onPress={() => router.push('/')}
           >
             <Ionicons name="home" size={24} color={colors.text} />
           </TouchableOpacity>
+          <Text style={[styles.headerTitle, { color: colors.text }]}>Shared Set</Text>
+          <View style={styles.headerButton} />
         </View>
 
         {/* Set Card */}
@@ -286,10 +264,10 @@ export default function SharedSetScreen() {
         </View>
       </ScrollView>
 
-      {/* Action Buttons */}
+      {/* Action Button */}
       <View style={[styles.actionBar, { backgroundColor: colors.card, borderTopColor: colors.border }]}>
         <TouchableOpacity
-          style={[styles.actionButton, styles.copyButton, { backgroundColor: colors.success }]}
+          style={[styles.actionButton, { backgroundColor: colors.success }]}
           onPress={handleCopySet}
           disabled={isCopying}
           activeOpacity={0.8}
@@ -298,19 +276,10 @@ export default function SharedSetScreen() {
             <ActivityIndicator color="#FFFFFF" />
           ) : (
             <>
-              <Ionicons name="add-circle" size={22} color="#FFFFFF" />
+              <Ionicons name="add-circle" size={24} color="#FFFFFF" />
               <Text style={styles.actionButtonText}>Save to My Sets</Text>
             </>
           )}
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.actionButton, styles.practiceButton, { backgroundColor: colors.primary }]}
-          onPress={handlePractice}
-          activeOpacity={0.8}
-        >
-          <Ionicons name="play-circle" size={22} color="#FFFFFF" />
-          <Text style={styles.actionButtonText}>Practice Now</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -327,6 +296,9 @@ const styles = StyleSheet.create({
   scrollContent: {
     padding: Spacing.lg,
     paddingBottom: 100, // Space for action bar
+    maxWidth: Platform.OS === 'web' ? 800 : undefined,
+    width: '100%',
+    alignSelf: 'center',
   },
   loadingContainer: {
     flex: 1,
@@ -370,7 +342,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: Spacing.lg,
+    marginBottom: Spacing.xl,
+    paddingHorizontal: Platform.OS === 'web' ? Spacing.md : 0,
   },
   headerButton: {
     width: 44,
@@ -384,8 +357,8 @@ const styles = StyleSheet.create({
   },
   setCard: {
     borderRadius: BorderRadius.cardLarge,
-    padding: Spacing.xl,
-    marginBottom: Spacing.lg,
+    padding: Platform.OS === 'web' ? Spacing.xl * 1.5 : Spacing.xl,
+    marginBottom: Spacing.xl,
     ...Shadow.cardDeep,
   },
   setHeader: {
@@ -448,8 +421,8 @@ const styles = StyleSheet.create({
   statsCard: {
     flexDirection: 'row',
     borderRadius: BorderRadius.card,
-    padding: Spacing.lg,
-    marginBottom: Spacing.lg,
+    padding: Platform.OS === 'web' ? Spacing.xl : Spacing.lg,
+    marginBottom: Spacing.xl,
     ...Shadow.card,
   },
   stat: {
@@ -470,8 +443,9 @@ const styles = StyleSheet.create({
   },
   previewCard: {
     borderRadius: BorderRadius.card,
-    padding: Spacing.lg,
+    padding: Platform.OS === 'web' ? Spacing.xl : Spacing.lg,
     ...Shadow.card,
+    marginBottom: Platform.OS === 'web' ? Spacing.xl : 0,
   },
   previewHeader: {
     flexDirection: 'row',
@@ -518,24 +492,27 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     flexDirection: 'row',
-    gap: Spacing.md,
     padding: Spacing.lg,
     borderTopWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   actionButton: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: Spacing.md,
+    paddingVertical: Spacing.lg,
+    paddingHorizontal: Spacing.xl,
     borderRadius: BorderRadius.button,
     gap: Spacing.sm,
     ...Shadow.button,
+    width: Platform.OS === 'web' ? '100%' : undefined,
+    maxWidth: Platform.OS === 'web' ? 400 : undefined,
+    minWidth: 200,
   },
-  copyButton: {},
-  practiceButton: {},
   actionButtonText: {
     ...Typography.body,
+    fontSize: 16,
     color: '#FFFFFF',
     fontWeight: '600',
   },
