@@ -1,4 +1,4 @@
-import { Modal, View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Platform, Share } from 'react-native';
+import { Modal, View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Platform, Share, ScrollView } from 'react-native';
 import { useState, useEffect } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
@@ -201,7 +201,7 @@ export function ShareModal({ visible, set, onClose }: ShareModalProps) {
 
         <View style={styles.modalContainer}>
           <View style={[styles.modal, { backgroundColor: colors.card }]}>
-            {/* Header */}
+            {/* Header - Fixed at top */}
             <View style={styles.header}>
               <View style={[styles.iconContainer, { backgroundColor: colors.primary }]}>
                 <Ionicons name="share-social" size={24} color="#FFFFFF" />
@@ -216,13 +216,20 @@ export function ShareModal({ visible, set, onClose }: ShareModalProps) {
               </TouchableOpacity>
             </View>
 
-            {/* Set Info */}
-            <View style={[styles.setInfo, { backgroundColor: colors.background }]}>
-              <Text style={[styles.setName, { color: colors.text }]}>{set.name}</Text>
-              <Text style={[styles.setMeta, { color: colors.textSecondary }]}>
-                {set.words.length} words • {set.targetLanguage.toUpperCase()} → {set.nativeLanguage.toUpperCase()}
-              </Text>
-            </View>
+            {/* Scrollable Content */}
+            <ScrollView
+              style={styles.scrollView}
+              contentContainerStyle={styles.scrollContent}
+              showsVerticalScrollIndicator={true}
+              bounces={true}
+            >
+              {/* Set Info */}
+              <View style={[styles.setInfo, { backgroundColor: colors.background }]}>
+                <Text style={[styles.setName, { color: colors.text }]}>{set.name}</Text>
+                <Text style={[styles.setMeta, { color: colors.textSecondary }]}>
+                  {set.words.length} words • {set.targetLanguage.toUpperCase()} → {set.nativeLanguage.toUpperCase()}
+                </Text>
+              </View>
 
             {/* Loading State */}
             {isLoading && (
@@ -422,6 +429,7 @@ export function ShareModal({ visible, set, onClose }: ShareModalProps) {
                 )}
               </>
             )}
+            </ScrollView>
           </View>
         </View>
       </View>
@@ -439,21 +447,34 @@ const styles = StyleSheet.create({
   modalContainer: {
     width: '100%',
     maxWidth: 500,
+    maxHeight: Platform.OS === 'web' ? '90%' : '80%',
   },
   modal: {
     borderRadius: BorderRadius.cardLarge,
-    padding: Spacing.xl,
+    paddingTop: Spacing.lg,
+    paddingHorizontal: Spacing.lg,
+    paddingBottom: Spacing.md,
     ...Shadow.cardDeep,
+    maxHeight: '100%',
+  },
+  scrollView: {
+    maxHeight: Platform.OS === 'web' ? undefined : 500,
+  },
+  scrollContent: {
+    paddingBottom: Spacing.md,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: Spacing.lg,
-    gap: Spacing.md,
+    marginBottom: Spacing.md,
+    gap: Spacing.sm,
+    paddingBottom: Spacing.sm,
+    borderBottomWidth: Platform.OS === 'web' ? 0 : 1,
+    borderBottomColor: 'rgba(0,0,0,0.05)',
   },
   iconContainer: {
-    width: 48,
-    height: 48,
+    width: 40,
+    height: 40,
     borderRadius: BorderRadius.round,
     alignItems: 'center',
     justifyContent: 'center',
@@ -466,9 +487,9 @@ const styles = StyleSheet.create({
     padding: Spacing.xs,
   },
   setInfo: {
-    padding: Spacing.md,
+    padding: Spacing.sm,
     borderRadius: BorderRadius.input,
-    marginBottom: Spacing.lg,
+    marginBottom: Spacing.md,
   },
   setName: {
     ...Typography.h3,
@@ -486,7 +507,7 @@ const styles = StyleSheet.create({
     marginTop: Spacing.md,
   },
   section: {
-    marginBottom: Spacing.lg,
+    marginBottom: Spacing.md,
   },
   sectionLabel: {
     ...Typography.caption,
@@ -519,9 +540,9 @@ const styles = StyleSheet.create({
   },
   statsContainer: {
     flexDirection: 'row',
-    padding: Spacing.md,
+    padding: Spacing.sm,
     borderRadius: BorderRadius.input,
-    marginBottom: Spacing.lg,
+    marginBottom: Spacing.md,
   },
   stat: {
     flex: 1,
@@ -542,10 +563,10 @@ const styles = StyleSheet.create({
   infoBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: Spacing.md,
+    padding: Spacing.sm,
     borderRadius: BorderRadius.input,
-    gap: Spacing.sm,
-    marginBottom: Spacing.lg,
+    gap: Spacing.xs,
+    marginBottom: Spacing.md,
   },
   infoText: {
     ...Typography.caption,
@@ -560,7 +581,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: Spacing.md,
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.md,
     borderRadius: BorderRadius.button,
     gap: Spacing.xs,
     ...Shadow.button,
@@ -571,8 +593,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   deleteButton: {
-    width: 48,
-    height: 48,
+    width: 44,
+    height: 44,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: BorderRadius.button,
