@@ -6,6 +6,7 @@ import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { SetsProvider, useSets } from '@/contexts/SetsContext';
 import { ThemeProvider, useTheme } from '@/contexts/ThemeContext';
 import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext';
+import { AlertProvider } from '@/contexts/AlertContext';
 import 'react-native-reanimated';
 
 // Add global emoji font support for web
@@ -96,13 +97,15 @@ function RootLayoutNav() {
 export default function RootLayout() {
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <LanguageProvider>
-          <SetsProvider>
-            <RootLayoutNav />
-          </SetsProvider>
-        </LanguageProvider>
-      </AuthProvider>
+      <AlertProvider>
+        <AuthProvider>
+          <LanguageProvider>
+            <SetsProvider>
+              <RootLayoutNav />
+            </SetsProvider>
+          </LanguageProvider>
+        </AuthProvider>
+      </AlertProvider>
     </ThemeProvider>
   );
 }

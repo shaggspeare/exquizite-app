@@ -1,9 +1,29 @@
 import { Alert, Platform } from 'react-native';
+import { isDesktopWeb } from './platform-utils';
+
+// Global reference to the custom alert function (set by AlertProvider)
+let customAlertFn: ((config: {
+  title: string;
+  message?: string;
+  buttons?: Array<{
+    text: string;
+    onPress?: () => void;
+    style?: 'default' | 'cancel' | 'destructive';
+  }>;
+}) => void) | null = null;
+
+/**
+ * Sets the custom alert function (called by AlertProvider)
+ * @internal
+ */
+export function setCustomAlertFn(fn: typeof customAlertFn) {
+  customAlertFn = fn;
+}
 
 /**
  * Cross-platform alert function
- * - Native: Uses Alert.alert
- * - Web: Uses window.confirm for confirmations, window.alert for simple alerts
+ * - Desktop Web: Uses custom AlertDialog component (UX-friendly)
+ * - Mobile Web & iOS/Android: Uses native Alert.alert
  */
 export function showAlert(
   title: string,
@@ -14,8 +34,15 @@ export function showAlert(
     style?: 'default' | 'cancel' | 'destructive';
   }>
 ): void {
+  // Use custom alert for desktop web
+  if (Platform.OS === 'web' && isDesktopWeb() && customAlertFn) {
+    customAlertFn({ title, message, buttons });
+    return;
+  }
+
+  // Use native alert for mobile web and native platforms
   if (Platform.OS === 'web') {
-    // Web implementation
+    // Fallback to browser alerts for mobile web
     if (!buttons || buttons.length === 0) {
       // Simple alert
       window.alert(message ? `${title}\n\n${message}` : title);
@@ -73,7 +100,7 @@ export function showAlert(
       }
     }
   } else {
-    // Native implementation
+    // Native implementation (iOS/Android)
     Alert.alert(title, message, buttons);
   }
 }
