@@ -43,16 +43,28 @@ export function ShareModal({ visible, set, onClose }: ShareModalProps) {
 
   useEffect(() => {
     if (visible && set) {
+      // Clear previous share data when opening modal for a new set
+      setShareData(null);
+      setCopied(false);
+      setIsLoading(true);
       generateShareLink();
+    } else if (!visible) {
+      // Cleanup when modal closes
+      setShareData(null);
+      setCopied(false);
+      setIsLoading(false);
     }
   }, [visible, set]);
 
   const generateShareLink = async () => {
-    if (!set) return;
+    if (!set || isLoading) return; // Prevent multiple simultaneous calls
 
     setIsLoading(true);
     try {
+      console.log('ShareModal: Generating share link for set:', set.id);
       const data = await shareSet(set.id);
+      console.log('ShareModal: Share link result:', data);
+
       if (data) {
         setShareData(data);
       } else {
@@ -60,7 +72,7 @@ export function ShareModal({ visible, set, onClose }: ShareModalProps) {
         onClose();
       }
     } catch (error) {
-      console.error('Error generating share link:', error);
+      console.error('ShareModal: Error generating share link:', error);
       showAlert('Error', 'Failed to generate share link. Please try again.');
       onClose();
     } finally {

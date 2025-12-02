@@ -483,7 +483,12 @@ export function SetsProvider({ children }: { children: ReactNode }) {
     try {
       console.log('Sharing set:', { setId, options });
 
-      const { data, error } = await supabase.functions.invoke('generate-share-link', {
+      // Add timeout to prevent infinite loading
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Share link generation timed out after 30 seconds')), 30000);
+      });
+
+      const invokePromise = supabase.functions.invoke('generate-share-link', {
         body: {
           setId,
           isPublic: options?.isPublic ?? true,
@@ -491,8 +496,11 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         },
       });
 
+      const { data, error } = await Promise.race([invokePromise, timeoutPromise]) as any;
+
       if (error) {
         console.error('Error generating share link:', error);
+        console.error('Error details:', JSON.stringify(error, null, 2));
         throw error;
       }
 
@@ -500,6 +508,8 @@ export function SetsProvider({ children }: { children: ReactNode }) {
       return data as ShareMetadata;
     } catch (error: any) {
       console.error('Error sharing set:', error);
+      console.error('Error message:', error?.message);
+      console.error('Error stack:', error?.stack);
       return null;
     }
   };
