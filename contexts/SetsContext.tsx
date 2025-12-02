@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useRef, ReactNode } from 'react';
 import { supabase, retryOperation } from '@/lib/supabase';
 import { useAuth } from './AuthContext';
 import { WordSet, WordPair, ShareMetadata, ShareOptions, SharedSetDetails, CopySetResponse } from '@/lib/types';
@@ -28,6 +28,7 @@ export function SetsProvider({ children }: { children: ReactNode }) {
   const [sets, setSets] = useState<WordSet[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMigrated, setHasMigrated] = useState(false);
+  const isMigratingRef = useRef(false);
 
   useEffect(() => {
     if (user) {
@@ -40,19 +41,29 @@ export function SetsProvider({ children }: { children: ReactNode }) {
     } else {
       setSets([]);
       setHasMigrated(false);
+      isMigratingRef.current = false;
     }
   }, [user]);
 
   const checkAndMigrateGuestData = async () => {
+    // Prevent concurrent migrations
+    if (isMigratingRef.current) {
+      console.log('⏭️ Migration already in progress, skipping...');
+      return;
+    }
+
     try {
       const hasGuest = await guestStorage.hasGuestData();
       if (hasGuest) {
         console.log('🔔 Guest data detected, starting automatic migration...');
+        isMigratingRef.current = true;
         await migrateGuestSetsToUser();
         setHasMigrated(true);
+        isMigratingRef.current = false;
       }
     } catch (error) {
       console.error('Error checking/migrating guest data:', error);
+      isMigratingRef.current = false;
     }
   };
 
