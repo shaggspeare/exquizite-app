@@ -196,10 +196,11 @@ export default function FillBlankScreen() {
 
   const handleComplete = () => {
     updateLastPracticed(id!);
-    const percentage = Math.round((score / questions.length) * 100);
+    const totalQuestions = totalExpectedQuestions || questions.length;
+    const percentage = Math.round((score / totalQuestions) * 100);
     showAlert(
       'Exercise Complete!',
-      `You scored ${score}/${questions.length} (${percentage}%)`,
+      `You scored ${score}/${totalQuestions} (${percentage}%)`,
       [
         { text: 'Try Again', onPress: () => resetGame() },
         { text: 'Done', onPress: () => router.back() },
@@ -258,7 +259,7 @@ export default function FillBlankScreen() {
                 </Text>
                 <View style={styles.desktopHeaderRight}>
                   <Text style={[styles.progress, { color: colors.text }]}>
-                    Question {currentIndex + 1} / {questions.length}
+                    Question {currentIndex + 1} / {totalExpectedQuestions || questions.length}
                   </Text>
                   <View style={[styles.scoreContainer, { backgroundColor: `${colors.success}20` }]}>
                     <Ionicons name="trophy" size={20} color={colors.success} />
@@ -277,7 +278,7 @@ export default function FillBlankScreen() {
               end={{ x: 1, y: 0 }}
               style={[
                 styles.progressFill,
-                { width: `${((currentIndex + 1) / questions.length) * 100}%` },
+                { width: `${((currentIndex + 1) / (totalExpectedQuestions || questions.length)) * 100}%` },
               ]}
             />
           </View>
@@ -418,7 +419,7 @@ export default function FillBlankScreen() {
           <Ionicons name="close" size={28} color={colors.text} />
         </TouchableOpacity>
         <Text style={[styles.progress, { color: colors.text }]}>
-          Question {currentIndex + 1} of {questions.length}
+          Question {currentIndex + 1} of {totalExpectedQuestions || questions.length}
         </Text>
         <View style={[styles.scoreContainer, { backgroundColor: `${colors.success}20` }]}>
           <Ionicons name="trophy" size={20} color={colors.success} />
@@ -433,7 +434,7 @@ export default function FillBlankScreen() {
           end={{ x: 1, y: 0 }}
           style={[
             styles.progressFill,
-            { width: `${((currentIndex + 1) / questions.length) * 100}%` },
+            { width: `${((currentIndex + 1) / (totalExpectedQuestions || questions.length)) * 100}%` },
           ]}
         />
       </View>

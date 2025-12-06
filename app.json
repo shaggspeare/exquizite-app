@@ -14,7 +14,9 @@
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       },
-      "associatedDomains": ["applinks:exquizite.app"]
+      "associatedDomains": [
+        "applinks:exquizite.app"
+      ]
     },
     "android": {
       "adaptiveIcon": {
@@ -39,7 +41,10 @@
               "host": "shared"
             }
           ],
-          "category": ["BROWSABLE", "DEFAULT"]
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
         }
       ]
     },
@@ -68,7 +73,9 @@
         }
       ],
       "expo-secure-store",
-      "expo-localization"
+      "expo-localization",
+      "expo-web-browser",
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true,

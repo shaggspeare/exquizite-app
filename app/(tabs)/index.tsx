@@ -1,7 +1,7 @@
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSets } from '@/contexts/SetsContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -18,12 +18,13 @@ import { DesktopHomeView } from '@/components/home/DesktopHomeView';
 
 export default function HomeScreen() {
   const { user, isLoading: authLoading } = useAuth();
-  const { sets, isLoading: setsLoading } = useSets();
+  const { sets, isLoading: setsLoading, refreshSets } = useSets();
   const { preferences, isLoading: langLoading } = useLanguage();
   const { hasCompletedTour, showTour, isLoading: tourLoading } = useTour();
   const { colors } = useTheme();
   const router = useRouter();
   const { isDesktop } = useResponsive();
+  const [refreshing, setRefreshing] = useState(false);
 
   // Tour trigger for new users
   useEffect(() => {
@@ -72,6 +73,15 @@ export default function HomeScreen() {
   // Calculate streak (mock for now)
   const streak = sets.filter(s => s.lastPracticed).length;
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await refreshSets();
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
       <Ionicons name="book-outline" size={64} color={colors.textSecondary} />
@@ -96,6 +106,14 @@ export default function HomeScreen() {
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={colors.primary}
+            colors={[colors.primary]}
+          />
+        }
       >
         {/* Welcome Widget */}
         <LinearGradient

@@ -5,7 +5,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  RefreshControl,
 } from 'react-native';
+import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSets } from '@/contexts/SetsContext';
@@ -19,13 +21,23 @@ import { DesktopContainer } from '@/components/layout/DesktopContainer';
 
 export function DesktopHomeView() {
   const { user } = useAuth();
-  const { sets } = useSets();
+  const { sets, refreshSets } = useSets();
   const { colors } = useTheme();
   const router = useRouter();
+  const [refreshing, setRefreshing] = useState(false);
 
   const totalWords = sets.reduce((sum, set) => sum + set.words.length, 0);
   const recentSets = sets.slice(0, 3);
   const streak = sets.filter(s => s.lastPracticed).length;
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await refreshSets();
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
@@ -52,6 +64,14 @@ export function DesktopHomeView() {
       style={styles.scrollView}
       contentContainerStyle={styles.scrollContent}
       showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          tintColor={colors.primary}
+          colors={[colors.primary]}
+        />
+      }
     >
       <DesktopContainer>
         {/* Page Header */}
