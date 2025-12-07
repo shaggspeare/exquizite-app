@@ -18,6 +18,7 @@ export interface WordSet {
   isCopy?: boolean;
   isShareable?: boolean;
   originalAuthorId?: string;
+  isFeatured?: boolean;
 }
 
 export interface User {

@@ -44,7 +44,7 @@ export default function LanguageSetupScreen() {
 
   if (isDesktop) {
     return (
-      <DesktopLayout>
+      <DesktopLayout hideSidebar={true}>
         <View style={[styles.desktopContainer, { backgroundColor: colors.background }]}>
           <ScrollView
             style={styles.desktopContent}

@@ -67,11 +67,15 @@ export default function HomeScreen() {
 
   // Mobile layout below
 
-  const totalWords = sets.reduce((sum, set) => sum + set.words.length, 0);
-  const recentSets = sets.slice(0, 3);
+  // Filter to get user sets (non-featured) and featured sets
+  const userSets = sets.filter(set => !set.isFeatured);
+  const featuredSets = sets.filter(set => set.isFeatured);
+
+  const totalWords = userSets.reduce((sum, set) => sum + set.words.length, 0);
+  const recentSets = userSets.slice(0, 3);
 
   // Calculate streak (mock for now)
-  const streak = sets.filter(s => s.lastPracticed).length;
+  const streak = userSets.filter(s => s.lastPracticed).length;
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -137,108 +141,82 @@ export default function HomeScreen() {
           </TouchableOpacity>
         </LinearGradient>
 
-        {sets.length > 0 ? (
+        {/* Stats Grid and Quick Practice - Only for logged users with sets */}
+        {!user?.isGuest && userSets.length > 0 && (
           <>
-            {/* Stats Grid and Quick Practice - Hidden for guests */}
-            {!user?.isGuest && (
-              <>
-                <View style={styles.statsGrid}>
-                  <Card style={styles.statCard}>
-                    <View style={[styles.statIconContainer, { backgroundColor: `${colors.primary}20` }]}>
-                      <Ionicons name="library" size={32} color={colors.primary} />
-                    </View>
-                    <Text style={[styles.statValue, { color: colors.text }]}>{sets.length}</Text>
-                    <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Sets</Text>
-                  </Card>
-
-                  <Card style={styles.statCard}>
-                    <View style={[styles.statIconContainer, { backgroundColor: `${colors.success}20` }]}>
-                      <Ionicons name="book" size={32} color={colors.success} />
-                    </View>
-                    <Text style={[styles.statValue, { color: colors.text }]}>{totalWords}</Text>
-                    <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Words</Text>
-                  </Card>
-
-                  <Card style={styles.statCard}>
-                    <View style={[styles.statIconContainer, { backgroundColor: `${colors.ai}20` }]}>
-                      <Ionicons name="flame" size={32} color={colors.ai} />
-                    </View>
-                    <Text style={[styles.statValue, { color: colors.text }]}>{streak}</Text>
-                    <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Streak</Text>
-                  </Card>
+            <View style={styles.statsGrid}>
+              <Card style={styles.statCard}>
+                <View style={[styles.statIconContainer, { backgroundColor: `${colors.primary}20` }]}>
+                  <Ionicons name="library" size={32} color={colors.primary} />
                 </View>
+                <Text style={[styles.statValue, { color: colors.text }]}>{userSets.length}</Text>
+                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Sets</Text>
+              </Card>
 
-                {/* Quick Practice Widget */}
-                {recentSets.length > 0 && (
-                  <TouchableOpacity
-                    onPress={() => router.push(`/sets/${recentSets[0].id}`)}
-                    activeOpacity={0.8}
-                  >
-                    <LinearGradient
-                      colors={['#00D4FF', '#00E5A0']}
-                      start={{ x: 0, y: 0 }}
-                      end={{ x: 1, y: 1 }}
-                      style={styles.quickPracticeWidget}
-                    >
-                      <View>
-                        <Text style={styles.quickPracticeTitle}>Quick Practice</Text>
-                        <Text style={styles.quickPracticeSubtitle}>{recentSets[0].name}</Text>
-                      </View>
-                      <View style={styles.playIconContainer}>
-                        <Ionicons name="play" size={28} color="#FFFFFF" />
-                      </View>
-                    </LinearGradient>
-                  </TouchableOpacity>
-                )}
-              </>
-            )}
+              <Card style={styles.statCard}>
+                <View style={[styles.statIconContainer, { backgroundColor: `${colors.success}20` }]}>
+                  <Ionicons name="book" size={32} color={colors.success} />
+                </View>
+                <Text style={[styles.statValue, { color: colors.text }]}>{totalWords}</Text>
+                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Words</Text>
+              </Card>
 
-            {/* My Sets Section */}
-            <View style={styles.setsSection}>
-              <View style={styles.sectionHeader}>
-                <Text style={[styles.sectionTitle, { color: colors.text }]}>My Sets</Text>
-                <TouchableOpacity
-                  onPress={() => router.push('/(tabs)/create')}
-                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                >
-                  <Ionicons name="add-circle" size={28} color={colors.primary} />
-                </TouchableOpacity>
-              </View>
-
-              {sets.map(set => (
-                <SetCard key={set.id} set={set} />
-              ))}
-
-              {/* Upgrade Account Banner for Guests */}
-              {user?.isGuest && (
-                <Card style={[styles.upgradeCard, { borderColor: colors.primary }]}>
-                  <View style={styles.upgradeContent}>
-                    <View style={[styles.upgradeIconContainer, { backgroundColor: `${colors.primary}20` }]}>
-                      <Ionicons name="rocket" size={28} color={colors.primary} />
-                    </View>
-                    <View style={styles.upgradeTextContainer}>
-                      <Text style={[styles.upgradeTitle, { color: colors.text }]}>
-                        Create a Full Account
-                      </Text>
-                      <Text style={[styles.upgradeDescription, { color: colors.textSecondary }]}>
-                        Sync your data and never lose your progress
-                      </Text>
-                    </View>
-                  </View>
-                  <TouchableOpacity
-                    style={[styles.upgradeButton, { backgroundColor: colors.primary }]}
-                    onPress={() => router.push('/(auth)/login?mode=signup')}
-                    activeOpacity={0.7}
-                  >
-                    <Text style={styles.upgradeButtonText}>Create Account</Text>
-                  </TouchableOpacity>
-                </Card>
-              )}
+              <Card style={styles.statCard}>
+                <View style={[styles.statIconContainer, { backgroundColor: `${colors.ai}20` }]}>
+                  <Ionicons name="flame" size={32} color={colors.ai} />
+                </View>
+                <Text style={[styles.statValue, { color: colors.text }]}>{streak}</Text>
+                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Streak</Text>
+              </Card>
             </View>
+
+            {/* Quick Practice Widget */}
+            {recentSets.length > 0 && (
+              <TouchableOpacity
+                onPress={() => router.push(`/sets/${recentSets[0].id}`)}
+                activeOpacity={0.8}
+              >
+                <LinearGradient
+                  colors={['#00D4FF', '#00E5A0']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.quickPracticeWidget}
+                >
+                  <View>
+                    <Text style={styles.quickPracticeTitle}>Quick Practice</Text>
+                    <Text style={styles.quickPracticeSubtitle}>{recentSets[0].name}</Text>
+                  </View>
+                  <View style={styles.playIconContainer}>
+                    <Ionicons name="play" size={28} color="#FFFFFF" />
+                  </View>
+                </LinearGradient>
+              </TouchableOpacity>
+            )}
           </>
-        ) : (
-          renderEmptyState()
         )}
+
+        {/* Featured Sets Section - Show for all users */}
+        {featuredSets.length > 0 && (
+          <View style={styles.setsSection}>
+            <View style={styles.sectionHeader}>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>Featured Sets</Text>
+              <View style={[styles.featuredBadge, { backgroundColor: colors.ai + '20' }]}>
+                <Ionicons name="star" size={16} color={colors.ai} />
+                <Text style={[styles.featuredBadgeText, { color: colors.ai }]}>Try them!</Text>
+              </View>
+            </View>
+            <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>
+              Practice with these demo sets to get started
+            </Text>
+
+            {featuredSets.map(set => (
+              <SetCard key={set.id} set={set} />
+            ))}
+          </View>
+        )}
+
+        {/* Empty state - only show if no user sets and no featured sets */}
+        {userSets.length === 0 && featuredSets.length === 0 && renderEmptyState()}
       </ScrollView>
     </SafeAreaView>
   );
@@ -361,6 +339,25 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '700',
   },
+  sectionSubtitle: {
+    ...Typography.body,
+    fontSize: 14,
+    marginBottom: Spacing.md,
+    marginTop: -Spacing.sm,
+  },
+  featuredBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.xs,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.round,
+  },
+  featuredBadgeText: {
+    ...Typography.caption,
+    fontSize: 12,
+    fontWeight: '600',
+  },
   emptyState: {
     alignItems: 'center',
     paddingVertical: Spacing.xxl * 2,
@@ -385,50 +382,6 @@ const styles = StyleSheet.create({
     ...Shadow.button,
   },
   emptyButtonText: {
-    ...Typography.body,
-    color: '#FFFFFF',
-    fontWeight: '600',
-  },
-  upgradeCard: {
-    padding: Spacing.lg,
-    marginTop: Spacing.lg,
-    borderWidth: 2,
-  },
-  upgradeContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.md,
-    marginBottom: Spacing.md,
-  },
-  upgradeIconContainer: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  upgradeTextContainer: {
-    flex: 1,
-  },
-  upgradeTitle: {
-    ...Typography.body,
-    fontSize: 16,
-    fontWeight: '700',
-    marginBottom: Spacing.xs,
-  },
-  upgradeDescription: {
-    ...Typography.caption,
-    fontSize: 13,
-    lineHeight: 18,
-  },
-  upgradeButton: {
-    paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.lg,
-    borderRadius: BorderRadius.button,
-    alignItems: 'center',
-    ...Shadow.button,
-  },
-  upgradeButtonText: {
     ...Typography.body,
     color: '#FFFFFF',
     fontWeight: '600',

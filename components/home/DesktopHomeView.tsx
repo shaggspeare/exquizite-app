@@ -26,9 +26,13 @@ export function DesktopHomeView() {
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
 
-  const totalWords = sets.reduce((sum, set) => sum + set.words.length, 0);
-  const recentSets = sets.slice(0, 3);
-  const streak = sets.filter(s => s.lastPracticed).length;
+  // Filter to get user sets (non-featured) and featured sets
+  const userSets = sets.filter(set => !set.isFeatured);
+  const featuredSets = sets.filter(set => set.isFeatured);
+
+  const totalWords = userSets.reduce((sum, set) => sum + set.words.length, 0);
+  const recentSets = userSets.slice(0, 3);
+  const streak = userSets.filter(s => s.lastPracticed).length;
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -95,15 +99,13 @@ export function DesktopHomeView() {
           </TouchableOpacity>
         </View>
 
-        {sets.length > 0 ? (
+        {/* Bento Grid Layout - Show if user has sets OR featured sets */}
+        {(userSets.length > 0 || featuredSets.length > 0) && (
           <>
-            {/* Bento Grid Layout */}
             <View style={styles.bentoGrid}>
-              {/* Left Column - Stats and Quick Practice */}
-              <View style={styles.leftColumn}>
-                {/* Stats Grid and Quick Practice - Hidden for guests mobile*/}
-
-                <>
+              {/* Left Column - Stats and Quick Practice - Only show for users with sets */}
+              {userSets.length > 0 && !user?.isGuest && (
+                <View style={styles.leftColumn}>
                   <View style={styles.statsRow}>
                     <Card style={[styles.statCard, styles.bentoCard]}>
                       <View
@@ -119,7 +121,7 @@ export function DesktopHomeView() {
                         />
                       </View>
                       <Text style={[styles.statValue, { color: colors.text }]}>
-                        {sets.length}
+                        {userSets.length}
                       </Text>
                       <Text
                         style={[
@@ -217,91 +219,40 @@ export function DesktopHomeView() {
                       </LinearGradient>
                     </TouchableOpacity>
                   )}
-                </>
-              </View>
-
-              {/* Right Column - Sets List */}
-              <View style={styles.rightColumn}>
-                <View style={styles.setsHeader}>
-                  <Text style={[styles.setsTitle, { color: colors.text }]}>
-                    My Sets
-                  </Text>
-                  <Text
-                    style={[styles.setsCount, { color: colors.textSecondary }]}
-                  >
-                    {sets.length} {sets.length === 1 ? 'set' : 'sets'}
-                  </Text>
                 </View>
+              )}
 
-                <View style={styles.setsList}>
-                  {sets.map(set => (
-                    <DesktopSetCard key={set.id} set={set} />
-                  ))}
-                </View>
-
-                {/* Upgrade Account Banner for Guests */}
-                {user?.isGuest && (
-                  <Card
-                    style={[
-                      styles.upgradeCard,
-                      { borderColor: colors.primary },
-                    ]}
-                  >
-                    <View style={styles.upgradeContent}>
-                      <View
-                        style={[
-                          styles.upgradeIconContainer,
-                          { backgroundColor: `${colors.primary}20` },
-                        ]}
-                      >
-                        <Ionicons
-                          name="rocket"
-                          size={32}
-                          color={colors.primary}
-                        />
-                      </View>
-                      <View style={styles.upgradeTextContainer}>
-                        <Text
-                          style={[styles.upgradeTitle, { color: colors.text }]}
-                        >
-                          Create a Full Account
-                        </Text>
-                        <Text
-                          style={[
-                            styles.upgradeDescription,
-                            { color: colors.textSecondary },
-                          ]}
-                        >
-                          Sync your data across devices and never lose your
-                          progress
-                        </Text>
-                      </View>
-                      <TouchableOpacity
-                        style={[
-                          styles.upgradeButton,
-                          { backgroundColor: colors.primary },
-                        ]}
-                        onPress={() => router.push('/(auth)/login?mode=signup')}
-                        activeOpacity={0.7}
-                      >
-                        <Ionicons
-                          name="arrow-forward"
-                          size={20}
-                          color="#FFFFFF"
-                        />
-                        <Text style={styles.upgradeButtonText}>
-                          Create Account
-                        </Text>
-                      </TouchableOpacity>
+              {/* Featured Sets - Centered Column */}
+              {featuredSets.length > 0 && (
+                <View style={styles.featuredSetsColumn}>
+                  <View style={styles.setsHeader}>
+                    <Text style={[styles.setsTitle, { color: colors.text }]}>
+                      Featured Sets
+                    </Text>
+                    <View style={[styles.featuredBadge, { backgroundColor: colors.ai + '20' }]}>
+                      <Ionicons name="star" size={16} color={colors.ai} />
+                      <Text style={[styles.featuredBadgeText, { color: colors.ai }]}>
+                        Try them!
+                      </Text>
                     </View>
-                  </Card>
-                )}
-              </View>
+                  </View>
+                  <Text style={[styles.setsSubtitle, { color: colors.textSecondary }]}>
+                    Practice with these demo sets to get started
+                  </Text>
+
+                  <View style={styles.setsList}>
+                    {featuredSets.map(set => (
+                      <DesktopSetCard key={set.id} set={set} />
+                    ))}
+                  </View>
+                </View>
+              )}
             </View>
           </>
-        ) : (
-          renderEmptyState()
         )}
+
+        {/* Empty state - only show if no user sets and no featured sets */}
+        {userSets.length === 0 && featuredSets.length === 0 && renderEmptyState()}
       </DesktopContainer>
     </ScrollView>
   );
@@ -355,6 +306,11 @@ const styles = StyleSheet.create({
   },
   rightColumn: {
     flex: 1,
+  },
+  featuredSetsColumn: {
+    flex: 1,
+    maxWidth: 700,
+    alignSelf: 'center',
   },
   bentoCard: {
     ...Shadow.card,
@@ -436,6 +392,25 @@ const styles = StyleSheet.create({
     ...Typography.body,
     fontSize: 16,
   },
+  setsSubtitle: {
+    ...Typography.body,
+    fontSize: 14,
+    marginBottom: Spacing.lg,
+    marginTop: -Spacing.sm,
+  },
+  featuredBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.xs,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.round,
+  },
+  featuredBadgeText: {
+    ...Typography.caption,
+    fontSize: 12,
+    fontWeight: '600',
+  },
   setsList: {
     gap: Spacing.md,
   },
@@ -470,50 +445,5 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontWeight: '600',
     fontSize: 16,
-  },
-  upgradeCard: {
-    padding: Spacing.lg,
-    marginTop: Spacing.lg,
-    borderWidth: 2,
-  },
-  upgradeContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.lg,
-  },
-  upgradeIconContainer: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  upgradeTextContainer: {
-    flex: 1,
-  },
-  upgradeTitle: {
-    ...Typography.h2,
-    fontSize: 18,
-    fontWeight: '700',
-    marginBottom: Spacing.xs,
-  },
-  upgradeDescription: {
-    ...Typography.body,
-    fontSize: 14,
-  },
-  upgradeButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.sm,
-    paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.lg,
-    borderRadius: BorderRadius.button,
-    ...Shadow.button,
-  },
-  upgradeButtonText: {
-    ...Typography.body,
-    color: '#FFFFFF',
-    fontWeight: '600',
-    fontSize: 15,
   },
 });

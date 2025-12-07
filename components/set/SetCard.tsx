@@ -107,6 +107,14 @@ export function SetCard({ set, onPress }: SetCardProps) {
 
   return (
     <Animated.View style={[styles.cardWrapper, animatedStyle]}>
+      {/* Featured badge - absolutely positioned outside gradient */}
+      {set.isFeatured && (
+        <View style={[styles.featuredBadge, { backgroundColor: 'rgba(255,215,0,0.9)' }]}>
+          <Ionicons name="star" size={12} color="#000" />
+          <Text style={styles.featuredBadgeText}>Featured</Text>
+        </View>
+      )}
+
       <TouchableOpacity
         onPress={handleCardPress}
         onPressIn={handlePressIn}
@@ -181,25 +189,34 @@ export function SetCard({ set, onPress }: SetCardProps) {
               </Text>
             </View>
 
-            <View style={styles.actions}>
-              <TouchableOpacity
-                style={[styles.actionButton, { backgroundColor: colors.success }]}
-                onPress={handleSharePress}
-                activeOpacity={0.7}
-              >
-                <Ionicons name="share-social" size={20} color="#FFFFFF" />
-                <Text style={styles.actionButtonText}>Share</Text>
-              </TouchableOpacity>
+            {set.isFeatured ? (
+              <View style={[styles.featuredInfo, { backgroundColor: colors.backgroundSecondary }]}>
+                <Ionicons name="information-circle" size={20} color={colors.textSecondary} />
+                <Text style={[styles.featuredInfoText, { color: colors.textSecondary }]}>
+                  This is a demo set. Create your own set to get started!
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.actions}>
+                <TouchableOpacity
+                  style={[styles.actionButton, { backgroundColor: colors.success }]}
+                  onPress={handleSharePress}
+                  activeOpacity={0.7}
+                >
+                  <Ionicons name="share-social" size={20} color="#FFFFFF" />
+                  <Text style={styles.actionButtonText}>Share</Text>
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                style={[styles.actionButton, { backgroundColor: colors.error }]}
-                onPress={handleDeletePress}
-                activeOpacity={0.7}
-              >
-                <Ionicons name="trash" size={20} color="#FFFFFF" />
-                <Text style={styles.actionButtonText}>Delete</Text>
-              </TouchableOpacity>
-            </View>
+                <TouchableOpacity
+                  style={[styles.actionButton, { backgroundColor: colors.error }]}
+                  onPress={handleDeletePress}
+                  activeOpacity={0.7}
+                >
+                  <Ionicons name="trash" size={20} color="#FFFFFF" />
+                  <Text style={styles.actionButtonText}>Delete</Text>
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
         )}
       </TouchableOpacity>
@@ -216,6 +233,8 @@ export function SetCard({ set, onPress }: SetCardProps) {
 const styles = StyleSheet.create({
   cardWrapper: {
     marginBottom: Spacing.md,
+    marginTop: Spacing.sm,
+    position: 'relative',
   },
   gradientCard: {
     borderRadius: BorderRadius.cardLarge,
@@ -259,6 +278,37 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
     color: '#FFFFFF',
+  },
+  featuredBadge: {
+    position: 'absolute',
+    top: 0,
+    left: Spacing.lg,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 4,
+    borderRadius: BorderRadius.round,
+    zIndex: 10,
+    ...Shadow.button,
+  },
+  featuredBadgeText: {
+    ...Typography.caption,
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#000',
+  },
+  featuredInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.input,
+  },
+  featuredInfoText: {
+    ...Typography.body,
+    fontSize: 14,
+    flex: 1,
   },
   progressSection: {
     marginBottom: Spacing.sm,

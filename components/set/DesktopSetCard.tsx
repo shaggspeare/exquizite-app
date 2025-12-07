@@ -74,6 +74,14 @@ export function DesktopSetCard({ set }: DesktopSetCardProps) {
         onPress={() => router.push(`/sets/${set.id}`)}
         activeOpacity={0.9}
       >
+        {/* Featured badge - absolutely positioned outside gradient */}
+        {set.isFeatured && (
+          <View style={styles.featuredBadge}>
+            <Ionicons name="star" size={10} color="#000" />
+            <Text style={styles.featuredBadgeText}>Featured</Text>
+          </View>
+        )}
+
         <LinearGradient
           colors={gradientColors}
           start={{ x: 0, y: 0 }}
@@ -130,21 +138,23 @@ export function DesktopSetCard({ set }: DesktopSetCardProps) {
           <Text style={styles.playButtonText}>Play</Text>
         </TouchableOpacity>
 
-        <View style={styles.iconButtonsRow}>
-          <TouchableOpacity
-            style={[styles.smallIconButton, { backgroundColor: colors.card }]}
-            onPress={() => setShowShareModal(true)}
-          >
-            <Ionicons name="share-social-outline" size={18} color={colors.primary} />
-          </TouchableOpacity>
+        {!set.isFeatured && (
+          <View style={styles.iconButtonsRow}>
+            <TouchableOpacity
+              style={[styles.smallIconButton, { backgroundColor: colors.card }]}
+              onPress={() => setShowShareModal(true)}
+            >
+              <Ionicons name="share-social-outline" size={18} color={colors.primary} />
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[styles.smallIconButton, { backgroundColor: colors.card }]}
-            onPress={handleDeletePress}
-          >
-            <Ionicons name="trash-outline" size={18} color={colors.error} />
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity
+              style={[styles.smallIconButton, { backgroundColor: colors.card }]}
+              onPress={handleDeletePress}
+            >
+              <Ionicons name="trash-outline" size={18} color={colors.error} />
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
 
       <ShareModal
@@ -162,9 +172,11 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
     alignItems: 'center',
     marginBottom: Spacing.md,
+    marginTop: Spacing.sm,
   },
   cardWrapper: {
     flex: 1,
+    position: 'relative',
   },
   gradientCard: {
     borderRadius: BorderRadius.cardLarge,
@@ -188,6 +200,26 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     flex: 1,
     marginRight: Spacing.sm,
+  },
+  featuredBadge: {
+    position: 'absolute',
+    top: 0,
+    left: Spacing.lg,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    paddingHorizontal: Spacing.xs,
+    paddingVertical: 2,
+    borderRadius: BorderRadius.round,
+    backgroundColor: 'rgba(255,215,0,0.9)',
+    zIndex: 10,
+    ...Shadow.button,
+  },
+  featuredBadgeText: {
+    ...Typography.caption,
+    fontSize: 9,
+    fontWeight: '700',
+    color: '#000',
   },
   wordBadge: {
     flexDirection: 'row',

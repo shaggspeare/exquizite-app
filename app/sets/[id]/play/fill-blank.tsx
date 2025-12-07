@@ -1,26 +1,26 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ActivityIndicator,
-  ScrollView,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useState, useEffect } from 'react';
-import { useRouter, useLocalSearchParams } from 'expo-router';
-import { useSets } from '@/contexts/SetsContext';
+import { DesktopContainer } from '@/components/layout/DesktopContainer';
+import { DesktopLayout } from '@/components/layout/DesktopLayout';
+import { Button } from '@/components/ui/Button';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useSets } from '@/contexts/SetsContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useResponsive } from '@/hooks/useResponsive';
-import { showAlert } from '@/lib/alert';
-import { Button } from '@/components/ui/Button';
 import { generateMultipleSentencesWithGaps } from '@/lib/ai-helpers';
-import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
+import { showAlert } from '@/lib/alert';
+import { BorderRadius, Shadow, Spacing, Typography } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { DesktopLayout } from '@/components/layout/DesktopLayout';
-import { DesktopContainer } from '@/components/layout/DesktopContainer';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface FillBlankQuestion {
   word: string;

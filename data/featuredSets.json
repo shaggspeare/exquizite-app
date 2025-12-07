@@ -1,0 +1,382 @@
+[
+  {
+    "id": "featured-es-1",
+    "name": "Spanish Greetings & Basics",
+    "targetLanguage": "es",
+    "nativeLanguage": "en",
+    "isFeatured": true,
+    "words": [
+      { "id": "es-1-1", "word": "Hola", "translation": "Hello" },
+      { "id": "es-1-2", "word": "Buenos días", "translation": "Good morning" },
+      { "id": "es-1-3", "word": "Buenas tardes", "translation": "Good afternoon" },
+      { "id": "es-1-4", "word": "Buenas noches", "translation": "Good evening" },
+      { "id": "es-1-5", "word": "Adiós", "translation": "Goodbye" },
+      { "id": "es-1-6", "word": "Por favor", "translation": "Please" },
+      { "id": "es-1-7", "word": "Gracias", "translation": "Thank you" },
+      { "id": "es-1-8", "word": "De nada", "translation": "You're welcome" },
+      { "id": "es-1-9", "word": "Perdón", "translation": "Sorry" },
+      { "id": "es-1-10", "word": "Sí", "translation": "Yes" }
+    ]
+  },
+  {
+    "id": "featured-es-2",
+    "name": "Spanish Food & Dining",
+    "targetLanguage": "es",
+    "nativeLanguage": "en",
+    "isFeatured": true,
+    "words": [
+      { "id": "es-2-1", "word": "Agua", "translation": "Water" },
+      { "id": "es-2-2", "word": "Pan", "translation": "Bread" },
+      { "id": "es-2-3", "word": "Carne", "translation": "Meat" },
+      { "id": "es-2-4", "word": "Pescado", "translation": "Fish" },
+      { "id": "es-2-5", "word": "Fruta", "translation": "Fruit" },
+      { "id": "es-2-6", "word": "Verdura", "translation": "Vegetable" },
+      { "id": "es-2-7", "word": "Café", "translation": "Coffee" },
+      { "id": "es-2-8", "word": "Leche", "translation": "Milk" },
+      { "id": "es-2-9", "word": "Vino", "translation": "Wine" },
+      { "id": "es-2-10", "word": "Cerveza", "translation": "Beer" }
+    ]
+  },
+  {
+    "id": "featured-es-3",
+    "name": "Spanish Travel Essentials",
+    "targetLanguage": "es",
+    "nativeLanguage": "en",
+    "isFeatured": true,
+    "words": [
+      { "id": "es-3-1", "word": "Aeropuerto", "translation": "Airport" },
+      { "id": "es-3-2", "word": "Estación", "translation": "Station" },
+      { "id": "es-3-3", "word": "Hotel", "translation": "Hotel" },
+      { "id": "es-3-4", "word": "Taxi", "translation": "Taxi" },
+      { "id": "es-3-5", "word": "Autobús", "translation": "Bus" },
+      { "id": "es-3-6", "word": "Tren", "translation": "Train" },
+      { "id": "es-3-7", "word": "Billete", "translation": "Ticket" },
+      { "id": "es-3-8", "word": "Maleta", "translation": "Suitcase" },
+      { "id": "es-3-9", "word": "Mapa", "translation": "Map" },
+      { "id": "es-3-10", "word": "Reserva", "translation": "Reservation" }
+    ]
+  },
+  {
+    "id": "featured-fr-1",
+    "name": "French Greetings & Basics",
+    "targetLanguage": "fr",
+    "nativeLanguage": "en",
+    "isFeatured": true,
+    "words": [
+      { "id": "fr-1-1", "word": "Bonjour", "translation": "Hello" },
+      { "id": "fr-1-2", "word": "Bonsoir", "translation": "Good evening" },
+      { "id": "fr-1-3", "word": "Au revoir", "translation": "Goodbye" },
+      { "id": "fr-1-4", "word": "S'il vous plaît", "translation": "Please" },
+      { "id": "fr-1-5", "word": "Merci", "translation": "Thank you" },
+      { "id": "fr-1-6", "word": "De rien", "translation": "You're welcome" },
+      { "id": "fr-1-7", "word": "Excusez-moi", "translation": "Excuse me" },
+      { "id": "fr-1-8", "word": "Oui", "translation": "Yes" },
+      { "id": "fr-1-9", "word": "Non", "translation": "No" },
+      { "id": "fr-1-10", "word": "Pardon", "translation": "Sorry" }
+    ]
+  },
+  {
+    "id": "featured-fr-2",
+    "name": "French Food Vocabulary",
+    "targetLanguage": "fr",
+    "nativeLanguage": "en",
+    "isFeatured": true,
+    "words": [
+      { "id": "fr-2-1", "word": "Eau", "translation": "Water" },
+      { "id": "fr-2-2", "word": "Pain", "translation": "Bread" },
+      { "id": "fr-2-3", "word": "Fromage", "translation": "Cheese" },
+      { "id": "fr-2-4", "word": "Viande", "translation": "Meat" },
+      { "id": "fr-2-5", "word": "Poisson", "translation": "Fish" },
+      { "id": "fr-2-6", "word": "Légume", "translation": "Vegetable" },
+      { "id": "fr-2-7", "word": "Fruit", "translation": "Fruit" },
+      { "id": "fr-2-8", "word": "Café", "translation": "Coffee" },
+      { "id": "fr-2-9", "word": "Vin", "translation": "Wine" },
+      { "id": "fr-2-10", "word": "Chocolat", "translation": "Chocolate" }
+    ]
+  },
+  {
+    "id": "featured-fr-3",
+    "name": "French Numbers 1-10",
+    "targetLanguage": "fr",
+    "nativeLanguage": "en",
+    "isFeatured": true,
+    "words": [
+      { "id": "fr-3-1", "word": "Un", "translation": "One" },
+      { "id": "fr-3-2", "word": "Deux", "translation": "Two" },
+      { "id": "fr-3-3", "word": "Trois", "translation": "Three" },
+      { "id": "fr-3-4", "word": "Quatre", "translation": "Four" },
+      { "id": "fr-3-5", "word": "Cinq", "translation": "Five" },
+      { "id": "fr-3-6", "word": "Six", "translation": "Six" },
+      { "id": "fr-3-7", "word": "Sept", "translation": "Seven" },
+      { "id": "fr-3-8", "word": "Huit", "translation": "Eight" },
+      { "id": "fr-3-9", "word": "Neuf", "translation": "Nine" },
+      { "id": "fr-3-10", "word": "Dix", "translation": "Ten" }
+    ]
+  },
+  {
+    "id": "featured-de-1",
+    "name": "German Greetings & Basics",
+    "targetLanguage": "de",
+    "nativeLanguage": "en",
+    "isFeatured": true,
+    "words": [
+      { "id": "de-1-1", "word": "Hallo", "translation": "Hello" },
+      { "id": "de-1-2", "word": "Guten Morgen", "translation": "Good morning" },
+      { "id": "de-1-3", "word": "Guten Tag", "translation": "Good day" },
+      { "id": "de-1-4", "word": "Guten Abend", "translation": "Good evening" },
+      { "id": "de-1-5", "word": "Auf Wiedersehen", "translation": "Goodbye" },
+      { "id": "de-1-6", "word": "Bitte", "translation": "Please" },
+      { "id": "de-1-7", "word": "Danke", "translation": "Thank you" },
+      { "id": "de-1-8", "word": "Ja", "translation": "Yes" },
+      { "id": "de-1-9", "word": "Nein", "translation": "No" },
+      { "id": "de-1-10", "word": "Entschuldigung", "translation": "Excuse me" }
+    ]
+  },
+  {
+    "id": "featured-de-2",
+    "name": "German Food & Drinks",
+    "targetLanguage": "de",
+    "nativeLanguage": "en",
+    "isFeatured": true,
+    "words": [
+      { "id": "de-2-1", "word": "Wasser", "translation": "Water" },
+      { "id": "de-2-2", "word": "Brot", "translation": "Bread" },
+      { "id": "de-2-3", "word": "Käse", "translation": "Cheese" },
+      { "id": "de-2-4", "word": "Fleisch", "translation": "Meat" },
+      { "id": "de-2-5", "word": "Fisch", "translation": "Fish" },
+      { "id": "de-2-6", "word": "Gemüse", "translation": "Vegetable" },
+      { "id": "de-2-7", "word": "Obst", "translation": "Fruit" },
+      { "id": "de-2-8", "word": "Kaffee", "translation": "Coffee" },
+      { "id": "de-2-9", "word": "Bier", "translation": "Beer" },
+      { "id": "de-2-10", "word": "Wein", "translation": "Wine" }
+    ]
+  },
+  {
+    "id": "featured-de-3",
+    "name": "German Common Verbs",
+    "targetLanguage": "de",
+    "nativeLanguage": "en",
+    "isFeatured": true,
+    "words": [
+      { "id": "de-3-1", "word": "Sein", "translation": "To be" },
+      { "id": "de-3-2", "word": "Haben", "translation": "To have" },
+      { "id": "de-3-3", "word": "Gehen", "translation": "To go" },
+      { "id": "de-3-4", "word": "Kommen", "translation": "To come" },
+      { "id": "de-3-5", "word": "Machen", "translation": "To make" },
+      { "id": "de-3-6", "word": "Essen", "translation": "To eat" },
+      { "id": "de-3-7", "word": "Trinken", "translation": "To drink" },
+      { "id": "de-3-8", "word": "Sprechen", "translation": "To speak" },
+      { "id": "de-3-9", "word": "Lernen", "translation": "To learn" },
+      { "id": "de-3-10", "word": "Verstehen", "translation": "To understand" }
+    ]
+  },
+  {
+    "id": "featured-it-1",
+    "name": "Italian Greetings & Basics",
+    "targetLanguage": "it",
+    "nativeLanguage": "en",
+    "isFeatured": true,
+    "words": [
+      { "id": "it-1-1", "word": "Ciao", "translation": "Hello/Goodbye" },
+      { "id": "it-1-2", "word": "Buongiorno", "translation": "Good morning" },
+      { "id": "it-1-3", "word": "Buonasera", "translation": "Good evening" },
+      { "id": "it-1-4", "word": "Arrivederci", "translation": "Goodbye" },
+      { "id": "it-1-5", "word": "Per favore", "translation": "Please" },
+      { "id": "it-1-6", "word": "Grazie", "translation": "Thank you" },
+      { "id": "it-1-7", "word": "Prego", "translation": "You're welcome" },
+      { "id": "it-1-8", "word": "Sì", "translation": "Yes" },
+      { "id": "it-1-9", "word": "No", "translation": "No" },
+      { "id": "it-1-10", "word": "Scusa", "translation": "Excuse me" }
+    ]
+  },
+  {
+    "id": "featured-it-2",
+    "name": "Italian Food & Dining",
+    "targetLanguage": "it",
+    "nativeLanguage": "en",
+    "isFeatured": true,
+    "words": [
+      { "id": "it-2-1", "word": "Acqua", "translation": "Water" },
+      { "id": "it-2-2", "word": "Pane", "translation": "Bread" },
+      { "id": "it-2-3", "word": "Pasta", "translation": "Pasta" },
+      { "id": "it-2-4", "word": "Pizza", "translation": "Pizza" },
+      { "id": "it-2-5", "word": "Formaggio", "translation": "Cheese" },
+      { "id": "it-2-6", "word": "Carne", "translation": "Meat" },
+      { "id": "it-2-7", "word": "Pesce", "translation": "Fish" },
+      { "id": "it-2-8", "word": "Caffè", "translation": "Coffee" },
+      { "id": "it-2-9", "word": "Vino", "translation": "Wine" },
+      { "id": "it-2-10", "word": "Gelato", "translation": "Ice cream" }
+    ]
+  },
+  {
+    "id": "featured-it-3",
+    "name": "Italian Travel Words",
+    "targetLanguage": "it",
+    "nativeLanguage": "en",
+    "isFeatured": true,
+    "words": [
+      { "id": "it-3-1", "word": "Aeroporto", "translation": "Airport" },
+      { "id": "it-3-2", "word": "Stazione", "translation": "Station" },
+      { "id": "it-3-3", "word": "Albergo", "translation": "Hotel" },
+      { "id": "it-3-4", "word": "Taxi", "translation": "Taxi" },
+      { "id": "it-3-5", "word": "Autobus", "translation": "Bus" },
+      { "id": "it-3-6", "word": "Treno", "translation": "Train" },
+      { "id": "it-3-7", "word": "Biglietto", "translation": "Ticket" },
+      { "id": "it-3-8", "word": "Valigia", "translation": "Suitcase" },
+      { "id": "it-3-9", "word": "Strada", "translation": "Street" },
+      { "id": "it-3-10", "word": "Centro", "translation": "Center" }
+    ]
+  },
+  {
+    "id": "featured-pt-1",
+    "name": "Portuguese Greetings",
+    "targetLanguage": "pt",
+    "nativeLanguage": "en",
+    "isFeatured": true,
+    "words": [
+      { "id": "pt-1-1", "word": "Olá", "translation": "Hello" },
+      { "id": "pt-1-2", "word": "Bom dia", "translation": "Good morning" },
+      { "id": "pt-1-3", "word": "Boa tarde", "translation": "Good afternoon" },
+      { "id": "pt-1-4", "word": "Boa noite", "translation": "Good night" },
+      { "id": "pt-1-5", "word": "Tchau", "translation": "Bye" },
+      { "id": "pt-1-6", "word": "Por favor", "translation": "Please" },
+      { "id": "pt-1-7", "word": "Obrigado", "translation": "Thank you" },
+      { "id": "pt-1-8", "word": "Sim", "translation": "Yes" },
+      { "id": "pt-1-9", "word": "Não", "translation": "No" },
+      { "id": "pt-1-10", "word": "Desculpa", "translation": "Sorry" }
+    ]
+  },
+  {
+    "id": "featured-pt-2",
+    "name": "Portuguese Food Words",
+    "targetLanguage": "pt",
+    "nativeLanguage": "en",
+    "isFeatured": true,
+    "words": [
+      { "id": "pt-2-1", "word": "Água", "translation": "Water" },
+      { "id": "pt-2-2", "word": "Pão", "translation": "Bread" },
+      { "id": "pt-2-3", "word": "Queijo", "translation": "Cheese" },
+      { "id": "pt-2-4", "word": "Carne", "translation": "Meat" },
+      { "id": "pt-2-5", "word": "Peixe", "translation": "Fish" },
+      { "id": "pt-2-6", "word": "Fruta", "translation": "Fruit" },
+      { "id": "pt-2-7", "word": "Legume", "translation": "Vegetable" },
+      { "id": "pt-2-8", "word": "Café", "translation": "Coffee" },
+      { "id": "pt-2-9", "word": "Vinho", "translation": "Wine" },
+      { "id": "pt-2-10", "word": "Cerveja", "translation": "Beer" }
+    ]
+  },
+  {
+    "id": "featured-pt-3",
+    "name": "Portuguese Colors",
+    "targetLanguage": "pt",
+    "nativeLanguage": "en",
+    "isFeatured": true,
+    "words": [
+      { "id": "pt-3-1", "word": "Vermelho", "translation": "Red" },
+      { "id": "pt-3-2", "word": "Azul", "translation": "Blue" },
+      { "id": "pt-3-3", "word": "Verde", "translation": "Green" },
+      { "id": "pt-3-4", "word": "Amarelo", "translation": "Yellow" },
+      { "id": "pt-3-5", "word": "Branco", "translation": "White" },
+      { "id": "pt-3-6", "word": "Preto", "translation": "Black" },
+      { "id": "pt-3-7", "word": "Laranja", "translation": "Orange" },
+      { "id": "pt-3-8", "word": "Rosa", "translation": "Pink" },
+      { "id": "pt-3-9", "word": "Roxo", "translation": "Purple" },
+      { "id": "pt-3-10", "word": "Cinza", "translation": "Gray" }
+    ]
+  },
+  {
+    "id": "featured-ja-1",
+    "name": "Japanese Greetings",
+    "targetLanguage": "ja",
+    "nativeLanguage": "en",
+    "isFeatured": true,
+    "words": [
+      { "id": "ja-1-1", "word": "こんにちは", "translation": "Hello" },
+      { "id": "ja-1-2", "word": "おはよう", "translation": "Good morning" },
+      { "id": "ja-1-3", "word": "こんばんは", "translation": "Good evening" },
+      { "id": "ja-1-4", "word": "さようなら", "translation": "Goodbye" },
+      { "id": "ja-1-5", "word": "ありがとう", "translation": "Thank you" },
+      { "id": "ja-1-6", "word": "すみません", "translation": "Excuse me" },
+      { "id": "ja-1-7", "word": "はい", "translation": "Yes" },
+      { "id": "ja-1-8", "word": "いいえ", "translation": "No" },
+      { "id": "ja-1-9", "word": "ごめんなさい", "translation": "Sorry" },
+      { "id": "ja-1-10", "word": "どういたしまして", "translation": "You're welcome" }
+    ]
+  },
+  {
+    "id": "featured-ja-2",
+    "name": "Japanese Numbers 1-10",
+    "targetLanguage": "ja",
+    "nativeLanguage": "en",
+    "isFeatured": true,
+    "words": [
+      { "id": "ja-2-1", "word": "いち", "translation": "One" },
+      { "id": "ja-2-2", "word": "に", "translation": "Two" },
+      { "id": "ja-2-3", "word": "さん", "translation": "Three" },
+      { "id": "ja-2-4", "word": "よん", "translation": "Four" },
+      { "id": "ja-2-5", "word": "ご", "translation": "Five" },
+      { "id": "ja-2-6", "word": "ろく", "translation": "Six" },
+      { "id": "ja-2-7", "word": "なな", "translation": "Seven" },
+      { "id": "ja-2-8", "word": "はち", "translation": "Eight" },
+      { "id": "ja-2-9", "word": "きゅう", "translation": "Nine" },
+      { "id": "ja-2-10", "word": "じゅう", "translation": "Ten" }
+    ]
+  },
+  {
+    "id": "featured-ja-3",
+    "name": "Japanese Food Basics",
+    "targetLanguage": "ja",
+    "nativeLanguage": "en",
+    "isFeatured": true,
+    "words": [
+      { "id": "ja-3-1", "word": "みず", "translation": "Water" },
+      { "id": "ja-3-2", "word": "パン", "translation": "Bread" },
+      { "id": "ja-3-3", "word": "ごはん", "translation": "Rice" },
+      { "id": "ja-3-4", "word": "にく", "translation": "Meat" },
+      { "id": "ja-3-5", "word": "さかな", "translation": "Fish" },
+      { "id": "ja-3-6", "word": "やさい", "translation": "Vegetable" },
+      { "id": "ja-3-7", "word": "くだもの", "translation": "Fruit" },
+      { "id": "ja-3-8", "word": "コーヒー", "translation": "Coffee" },
+      { "id": "ja-3-9", "word": "おちゃ", "translation": "Tea" },
+      { "id": "ja-3-10", "word": "すし", "translation": "Sushi" }
+    ]
+  },
+  {
+    "id": "featured-zh-1",
+    "name": "Chinese Greetings",
+    "targetLanguage": "zh",
+    "nativeLanguage": "en",
+    "isFeatured": true,
+    "words": [
+      { "id": "zh-1-1", "word": "你好", "translation": "Hello" },
+      { "id": "zh-1-2", "word": "早上好", "translation": "Good morning" },
+      { "id": "zh-1-3", "word": "晚上好", "translation": "Good evening" },
+      { "id": "zh-1-4", "word": "再见", "translation": "Goodbye" },
+      { "id": "zh-1-5", "word": "谢谢", "translation": "Thank you" },
+      { "id": "zh-1-6", "word": "对不起", "translation": "Sorry" },
+      { "id": "zh-1-7", "word": "是", "translation": "Yes" },
+      { "id": "zh-1-8", "word": "不是", "translation": "No" },
+      { "id": "zh-1-9", "word": "请", "translation": "Please" },
+      { "id": "zh-1-10", "word": "不客气", "translation": "You're welcome" }
+    ]
+  },
+  {
+    "id": "featured-zh-2",
+    "name": "Chinese Numbers 1-10",
+    "targetLanguage": "zh",
+    "nativeLanguage": "en",
+    "isFeatured": true,
+    "words": [
+      { "id": "zh-2-1", "word": "一", "translation": "One" },
+      { "id": "zh-2-2", "word": "二", "translation": "Two" },
+      { "id": "zh-2-3", "word": "三", "translation": "Three" },
+      { "id": "zh-2-4", "word": "四", "translation": "Four" },
+      { "id": "zh-2-5", "word": "五", "translation": "Five" },
+      { "id": "zh-2-6", "word": "六", "translation": "Six" },
+      { "id": "zh-2-7", "word": "七", "translation": "Seven" },
+      { "id": "zh-2-8", "word": "八", "translation": "Eight" },
+      { "id": "zh-2-9", "word": "九", "translation": "Nine" },
+      { "id": "zh-2-10", "word": "十", "translation": "Ten" }
+    ]
+  }
+]

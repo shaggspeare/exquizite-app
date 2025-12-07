@@ -15,6 +15,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { label: 'Home', icon: 'home', route: '/(tabs)' },
+  { label: 'My Sets', icon: 'library', route: '/(tabs)/my-sets' },
   { label: 'Create Set', icon: 'add-circle', route: '/(tabs)/create' },
   { label: 'Profile', icon: 'person', route: '/(tabs)/profile' },
 ];

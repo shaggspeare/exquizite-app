@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { AppState, AppStateStatus } from 'react-native';
 import { supabase } from '@/lib/supabase';
 import { User } from '@/lib/types';
 import * as guestStorage from '@/lib/guestStorage';
@@ -43,12 +44,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     );
 
+    // Listen for app state changes (foreground/background)
+    const appStateSubscription = AppState.addEventListener('change', (nextAppState: AppStateStatus) => {
+      if (nextAppState === 'active') {
+        console.log('App became active, refreshing session...');
+        checkSession(false); // Don't show loading state when resuming from background
+      }
+    });
+
     return () => {
       authListener?.subscription.unsubscribe();
+      appStateSubscription.remove();
     };
   }, []);
 
-  const checkSession = async () => {
+  const checkSession = async (shouldSetLoading: boolean = true) => {
     try {
       // First check for Supabase auth session
       const { data: { session } } = await supabase.auth.getSession();
@@ -65,7 +75,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       console.error('Error checking session:', error);
     } finally {
-      setIsLoading(false);
+      if (shouldSetLoading) {
+        setIsLoading(false);
+      }
     }
   };
 

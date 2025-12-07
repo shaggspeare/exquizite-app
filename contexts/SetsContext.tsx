@@ -1,8 +1,10 @@
 import { createContext, useContext, useState, useEffect, useRef, ReactNode } from 'react';
 import { supabase, retryOperation } from '@/lib/supabase';
 import { useAuth } from './AuthContext';
+import { useLanguage } from './LanguageContext';
 import { WordSet, WordPair, ShareMetadata, ShareOptions, SharedSetDetails, CopySetResponse } from '@/lib/types';
 import * as guestStorage from '@/lib/guestStorage';
+import featuredSetsData from '@/data/featuredSets.json';
 
 interface SetsContextType {
   sets: WordSet[];
@@ -23,8 +25,30 @@ interface SetsContextType {
 
 const SetsContext = createContext<SetsContextType | undefined>(undefined);
 
+// Helper function to select 3 featured sets based on user's target language
+function selectFeaturedSets(targetLanguage: string): WordSet[] {
+  console.log('🎯 Selecting featured sets for target language:', targetLanguage);
+
+  // Filter sets by target language
+  const matchingSets = featuredSetsData.filter(
+    (set: any) => set.targetLanguage === targetLanguage
+  );
+
+  console.log(`✅ Found ${matchingSets.length} featured sets for ${targetLanguage}`);
+
+  // Return up to 3 sets for this language
+  const selectedSets = matchingSets.slice(0, 3);
+
+  return selectedSets.map((set: any) => ({
+    ...set,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  }));
+}
+
 export function SetsProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
+  const { preferences } = useLanguage();
   const [sets, setSets] = useState<WordSet[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMigrated, setHasMigrated] = useState(false);
@@ -43,7 +67,7 @@ export function SetsProvider({ children }: { children: ReactNode }) {
       setHasMigrated(false);
       isMigratingRef.current = false;
     }
-  }, [user]);
+  }, [user, preferences.targetLanguage]);
 
   const checkAndMigrateGuestData = async () => {
     // Prevent concurrent migrations
@@ -77,11 +101,13 @@ export function SetsProvider({ children }: { children: ReactNode }) {
 
     setIsLoading(true);
     try {
+      let userSets: WordSet[] = [];
+
       // If guest user, load from local storage
       if (isGuestUser()) {
         console.log('📱 Loading guest sets from local storage...');
         const guestSets = await guestStorage.getGuestSets();
-        setSets(guestSets);
+        userSets = guestSets;
         console.log(`✅ Loaded ${guestSets.length} guest sets`);
       } else {
         // Load from Supabase for authenticated users
@@ -98,7 +124,7 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         if (setsError) throw setsError;
 
         // Transform database format to app format
-        const transformedSets: WordSet[] = (setsData || []).map(set => ({
+        userSets = (setsData || []).map(set => ({
           id: set.id,
           name: set.name,
           words: (set.word_pairs || [])
@@ -118,8 +144,24 @@ export function SetsProvider({ children }: { children: ReactNode }) {
           originalAuthorId: set.original_author_id || undefined,
         }));
 
-        setSets(transformedSets);
-        console.log(`✅ Loaded ${transformedSets.length} sets from Supabase`);
+        console.log(`✅ Loaded ${userSets.length} sets from Supabase`);
+      }
+
+      // For guest users, always show featured sets alongside their own sets
+      if (isGuestUser() && preferences.targetLanguage) {
+        console.log('🎯 Guest user: adding featured sets...');
+        const featured = selectFeaturedSets(preferences.targetLanguage);
+        // Combine user sets and featured sets (user sets first)
+        setSets([...userSets, ...featured]);
+        console.log(`✅ Added ${featured.length} featured sets for guest user`);
+      } else if (userSets.length === 0 && preferences.targetLanguage) {
+        // For non-guest users with no sets, show featured sets
+        console.log('🎯 User has no sets, adding featured sets...');
+        const featured = selectFeaturedSets(preferences.targetLanguage);
+        setSets(featured);
+        console.log(`✅ Added ${featured.length} featured sets for ${preferences.targetLanguage}`);
+      } else {
+        setSets(userSets);
       }
     } catch (error) {
       console.error('Error loading sets:', error);
@@ -142,7 +184,16 @@ export function SetsProvider({ children }: { children: ReactNode }) {
       if (isGuestUser()) {
         console.log('📱 Creating guest set in local storage...');
         const newSet = await guestStorage.createGuestSet(name, words, targetLanguage, nativeLanguage);
-        setSets(prev => [newSet, ...prev]);
+
+        // For guest users, keep featured sets and add new set at the top
+        setSets(prev => {
+          // Separate user sets from featured sets
+          const userSets = prev.filter(s => !s.isFeatured);
+          const featuredSets = prev.filter(s => s.isFeatured);
+          // Add new set at the top, followed by other user sets, then featured sets
+          return [newSet, ...userSets, ...featuredSets];
+        });
+
         console.log('✅ Guest set created successfully');
         return newSet;
       }
@@ -226,8 +277,16 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         lastPracticed: undefined,
       };
 
-      // Update local state
-      setSets(prev => [newSet, ...prev]);
+      // Update local state - remove featured sets if this is the first user-created set
+      setSets(prev => {
+        const hasFeaturedSets = prev.some(set => set.isFeatured);
+        if (hasFeaturedSets) {
+          console.log('🗑️ Removing featured sets as user created their first set');
+          return [newSet];
+        }
+        return [newSet, ...prev];
+      });
+
       return newSet;
     } catch (error: any) {
       console.error('Error creating set - Full error:', error);
@@ -252,6 +311,12 @@ export function SetsProvider({ children }: { children: ReactNode }) {
   const updateSet = async (id: string, name: string, words: WordPair[], targetLanguage: string, nativeLanguage: string) => {
     if (!user) {
       throw new Error('No user found when updating set');
+    }
+
+    // Prevent editing featured sets
+    const setToUpdate = sets.find(set => set.id === id);
+    if (setToUpdate?.isFeatured) {
+      throw new Error('Featured sets cannot be edited. Please create your own set instead.');
     }
 
     try {
@@ -330,6 +395,12 @@ export function SetsProvider({ children }: { children: ReactNode }) {
 
   const deleteSet = async (id: string) => {
     if (!user) return;
+
+    // Prevent deleting featured sets
+    const setToDelete = sets.find(set => set.id === id);
+    if (setToDelete?.isFeatured) {
+      throw new Error('Featured sets cannot be deleted.');
+    }
 
     try {
       // If guest user, delete from local storage
@@ -489,6 +560,12 @@ export function SetsProvider({ children }: { children: ReactNode }) {
     if (isGuestUser()) {
       console.error('Guest users cannot share sets. Please sign up to share sets.');
       throw new Error('Please create an account to share sets with others.');
+    }
+
+    // Prevent sharing featured sets
+    const setToShare = sets.find(set => set.id === setId);
+    if (setToShare?.isFeatured) {
+      throw new Error('Featured sets cannot be shared. Please create your own set instead.');
     }
 
     try {
