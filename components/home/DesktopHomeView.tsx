@@ -114,8 +114,11 @@ export function DesktopHomeView() {
         {/* Bento Grid Layout - Show if user has sets OR featured sets */}
         {(userSets.length > 0 || featuredSets.length > 0) && (
           <>
-            <View style={styles.bentoGrid}>
-              {/* Left Column - Stats and Quick Practice - Only show for users with sets */}
+            <View style={[
+              styles.bentoGrid,
+              (user?.isGuest || userSets.length === 0) && styles.bentoGridCentered
+            ]}>
+              {/* Left Column - Stats and Quick Practice - Only show for logged users with sets */}
               {userSets.length > 0 && !user?.isGuest && (
                 <View style={styles.leftColumn}>
                   <View style={styles.statsRow}>
@@ -231,26 +234,12 @@ export function DesktopHomeView() {
                       </LinearGradient>
                     </TouchableOpacity>
                   )}
-
-                  {/* Last Practiced Sets - Show for logged users with practiced sets */}
-                  {practicedSets.length > 0 && (
-                    <View style={styles.lastPracticedSection}>
-                      <Text style={[styles.lastPracticedTitle, { color: colors.text }]}>
-                        {t('dashboard.lastPracticed')}
-                      </Text>
-                      <View style={styles.lastPracticedList}>
-                        {practicedSets.map(set => (
-                          <DesktopSetCard key={set.id} set={set} compact />
-                        ))}
-                      </View>
-                    </View>
-                  )}
                 </View>
               )}
 
-              {/* Featured Sets - Centered Column */}
+              {/* Center Column - Featured Sets */}
               {featuredSets.length > 0 && (
-                <View style={styles.featuredSetsColumn}>
+                <View style={styles.centerColumn}>
                   <View style={styles.setsHeader}>
                     <Text style={[styles.setsTitle, { color: colors.text }]}>
                       Featured Sets
@@ -282,6 +271,22 @@ export function DesktopHomeView() {
                     {featuredSets.map(set => (
                       <DesktopSetCard key={set.id} set={set} />
                     ))}
+                  </View>
+                </View>
+              )}
+
+              {/* Right Column - Last Practiced Sets - Show for logged users with practiced sets */}
+              {userSets.length > 0 && !user?.isGuest && practicedSets.length > 0 && (
+                <View style={styles.rightColumn}>
+                  <View style={styles.lastPracticedSection}>
+                    <Text style={[styles.lastPracticedTitle, { color: colors.text }]}>
+                      {t('dashboard.lastPracticed')}
+                    </Text>
+                    <View style={styles.lastPracticedList}>
+                      {practicedSets.map(set => (
+                        <DesktopSetCard key={set.id} set={set} compact />
+                      ))}
+                    </View>
                   </View>
                 </View>
               )}
@@ -340,17 +345,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: Spacing.lg,
   },
+  bentoGridCentered: {
+    justifyContent: 'center',
+  },
   leftColumn: {
     width: 380,
     gap: Spacing.lg,
   },
-  rightColumn: {
-    flex: 1,
-  },
-  featuredSetsColumn: {
+  centerColumn: {
     flex: 1,
     maxWidth: 700,
-    alignSelf: 'center',
+  },
+  rightColumn: {
+    width: 380,
+    gap: Spacing.lg,
   },
   bentoCard: {
     ...Shadow.card,
@@ -421,11 +429,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: Spacing.lg,
+    marginBottom: Spacing.sm,
   },
   setsTitle: {
     ...Typography.h2,
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: '700',
   },
   setsCount: {
@@ -490,9 +498,10 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
   },
   lastPracticedTitle: {
-    ...Typography.h3,
-    fontSize: 20,
+    ...Typography.h2,
+    fontSize: 24,
     fontWeight: '700',
+    marginBottom: Spacing.sm,
   },
   lastPracticedList: {
     gap: Spacing.sm,

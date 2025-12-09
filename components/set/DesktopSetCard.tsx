@@ -14,9 +14,10 @@ import { showAlert } from '@/lib/alert';
 
 interface DesktopSetCardProps {
   set: WordSet;
+  compact?: boolean;
 }
 
-export function DesktopSetCard({ set }: DesktopSetCardProps) {
+export function DesktopSetCard({ set, compact = false }: DesktopSetCardProps) {
   const { t } = useTranslation('games');
   const { colors } = useTheme();
   const { deleteSet } = useSets();
@@ -72,7 +73,7 @@ export function DesktopSetCard({ set }: DesktopSetCardProps) {
   const gradientColors = getGradientColors();
 
   return (
-    <View style={styles.horizontalContainer}>
+    <View style={[styles.horizontalContainer, compact && styles.compactContainer]}>
       <TouchableOpacity
         style={styles.cardWrapper}
         onPress={() => router.push(`/sets/${set.id}`)}
@@ -90,11 +91,11 @@ export function DesktopSetCard({ set }: DesktopSetCardProps) {
           colors={gradientColors}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={styles.gradientCard}
+          style={[styles.gradientCard, compact && styles.compactGradientCard]}
         >
           <View style={styles.cardContent}>
             <View style={styles.header}>
-              <Text style={styles.title} numberOfLines={2}>
+              <Text style={[styles.title, compact && styles.compactTitle]} numberOfLines={2}>
                 {set.name}
               </Text>
               {/* Word count badge */}
@@ -136,38 +137,40 @@ export function DesktopSetCard({ set }: DesktopSetCardProps) {
         </LinearGradient>
       </TouchableOpacity>
 
-      {/* Action Buttons on the Right */}
-      <View style={styles.actionsColumn}>
-        <TouchableOpacity
-          style={[styles.playButton, { backgroundColor: colors.primary }]}
-          onPress={() => router.push(`/sets/${set.id}/play/template`)}
-        >
-          <Ionicons name="play" size={18} color="#FFFFFF" />
-          <Text style={styles.playButtonText}>{t('common:buttons.play')}</Text>
-        </TouchableOpacity>
+      {/* Action Buttons on the Right - hide in compact mode */}
+      {!compact && (
+        <View style={styles.actionsColumn}>
+          <TouchableOpacity
+            style={[styles.playButton, { backgroundColor: colors.primary }]}
+            onPress={() => router.push(`/sets/${set.id}/play/template`)}
+          >
+            <Ionicons name="play" size={18} color="#FFFFFF" />
+            <Text style={styles.playButtonText}>{t('common:buttons.play')}</Text>
+          </TouchableOpacity>
 
-        {!set.isFeatured && (
-          <View style={styles.iconButtonsRow}>
-            <TouchableOpacity
-              style={[styles.smallIconButton, { backgroundColor: colors.card }]}
-              onPress={() => setShowShareModal(true)}
-            >
-              <Ionicons
-                name="share-social-outline"
-                size={18}
-                color={colors.primary}
-              />
-            </TouchableOpacity>
+          {!set.isFeatured && (
+            <View style={styles.iconButtonsRow}>
+              <TouchableOpacity
+                style={[styles.smallIconButton, { backgroundColor: colors.card }]}
+                onPress={() => setShowShareModal(true)}
+              >
+                <Ionicons
+                  name="share-social-outline"
+                  size={18}
+                  color={colors.primary}
+                />
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[styles.smallIconButton, { backgroundColor: colors.card }]}
-              onPress={handleDeletePress}
-            >
-              <Ionicons name="trash-outline" size={18} color={colors.error} />
-            </TouchableOpacity>
-          </View>
-        )}
-      </View>
+              <TouchableOpacity
+                style={[styles.smallIconButton, { backgroundColor: colors.card }]}
+                onPress={handleDeletePress}
+              >
+                <Ionicons name="trash-outline" size={18} color={colors.error} />
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
+      )}
 
       <ShareModal
         visible={showShareModal}
@@ -186,6 +189,10 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
     marginTop: Spacing.sm,
   },
+  compactContainer: {
+    marginBottom: Spacing.sm,
+    marginTop: 0,
+  },
   cardWrapper: {
     flex: 1,
     position: 'relative',
@@ -195,6 +202,10 @@ const styles = StyleSheet.create({
     padding: Spacing.lg,
     minHeight: 110,
     ...Shadow.card,
+  },
+  compactGradientCard: {
+    padding: Spacing.md,
+    minHeight: 90,
   },
   cardContent: {
     flex: 1,
@@ -212,6 +223,9 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     flex: 1,
     marginRight: Spacing.sm,
+  },
+  compactTitle: {
+    fontSize: 15,
   },
   featuredBadge: {
     position: 'absolute',

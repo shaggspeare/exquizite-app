@@ -185,21 +185,13 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         console.log(`✅ Loaded ${userSets.length} sets from Supabase`);
       }
 
-      // For guest users, always show featured sets alongside their own sets
-      if (isGuestUser() && preferences.targetLanguage) {
-        console.log('🎯 Guest user: adding featured sets...');
+      // Always show featured sets for all users when target language is set
+      if (preferences.targetLanguage) {
+        console.log('🎯 Adding featured sets...');
         const featured = selectFeaturedSets(preferences.targetLanguage);
         // Combine user sets and featured sets (user sets first)
         setSets([...userSets, ...featured]);
-        console.log(`✅ Added ${featured.length} featured sets for guest user`);
-      } else if (userSets.length === 0 && preferences.targetLanguage) {
-        // For non-guest users with no sets, show featured sets
-        console.log('🎯 User has no sets, adding featured sets...');
-        const featured = selectFeaturedSets(preferences.targetLanguage);
-        setSets(featured);
-        console.log(
-          `✅ Added ${featured.length} featured sets for ${preferences.targetLanguage}`
-        );
+        console.log(`✅ Added ${featured.length} featured sets`);
       } else {
         setSets(userSets);
       }

@@ -59,7 +59,7 @@ export function DesktopMySetsView() {
             onPress={() => router.push('/(tabs)/create')}
             activeOpacity={0.8}
           >
-            <Ionicons name="add" size={20} color="#FFFFFF" />
+            <Ionicons name="add" size={24} color="#FFFFFF" />
             <Text style={styles.createButtonText}>Create Set</Text>
           </TouchableOpacity>
         </View>
@@ -67,10 +67,12 @@ export function DesktopMySetsView() {
         {/* Content */}
         {userSets.length > 0 ? (
           <>
-            <View style={styles.setsGrid}>
-              {userSets.map(set => (
-                <DesktopSetCard key={set.id} set={set} />
-              ))}
+            <View style={styles.setsWrapper}>
+              <View style={styles.setsGrid}>
+                {userSets.map(set => (
+                  <DesktopSetCard key={set.id} set={set} />
+                ))}
+              </View>
             </View>
 
             {/* Upgrade Account Banner for Guests */}
@@ -154,6 +156,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#FFFFFF',
+  },
+  setsWrapper: {
+    paddingHorizontal: Spacing.xxl * 2,
   },
   setsGrid: {
     gap: Spacing.md,
