@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSets } from '@/contexts/SetsContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -16,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/ui/Card';
 
 export function DesktopMySetsView() {
+  const { t } = useTranslation('games');
   const { user } = useAuth();
   const { sets } = useSets();
   const { colors } = useTheme();
@@ -28,10 +30,10 @@ export function DesktopMySetsView() {
     <View style={styles.emptyState}>
       <Ionicons name="book-outline" size={80} color={colors.textSecondary} />
       <Text style={[styles.emptyTitle, { color: colors.text }]}>
-        No sets yet
+        {t('mySets.noSets')}
       </Text>
       <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
-        Create your first word set to get started!
+        {t('mySets.createFirstSet')}
       </Text>
       <TouchableOpacity
         style={[styles.emptyButton, { backgroundColor: colors.primary }]}
@@ -39,7 +41,7 @@ export function DesktopMySetsView() {
         activeOpacity={0.7}
       >
         <Ionicons name="add" size={20} color="#FFFFFF" />
-        <Text style={styles.emptyButtonText}>Create Set</Text>
+        <Text style={styles.emptyButtonText}>{t('mySets.createSet')}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -53,14 +55,14 @@ export function DesktopMySetsView() {
       <DesktopContainer>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={[styles.title, { color: colors.text }]}>My Sets</Text>
+          <Text style={[styles.title, { color: colors.text }]}>{t('mySets.title')}</Text>
           <TouchableOpacity
             style={[styles.createButton, { backgroundColor: colors.primary }]}
             onPress={() => router.push('/(tabs)/create')}
             activeOpacity={0.8}
           >
             <Ionicons name="add" size={24} color="#FFFFFF" />
-            <Text style={styles.createButtonText}>Create Set</Text>
+            <Text style={styles.createButtonText}>{t('mySets.createSet')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -91,7 +93,7 @@ export function DesktopMySetsView() {
                   </View>
                   <View style={styles.upgradeTextContainer}>
                     <Text style={[styles.upgradeTitle, { color: colors.text }]}>
-                      Create a Full Account
+                      {t('auth:guest.createFullAccount', { defaultValue: 'Create a Full Account' })}
                     </Text>
                     <Text
                       style={[
@@ -99,7 +101,7 @@ export function DesktopMySetsView() {
                         { color: colors.textSecondary },
                       ]}
                     >
-                      Sync your data across devices and never lose your progress
+                      {t('auth:guest.syncData', { defaultValue: 'Sync your data across devices and never lose your progress' })}
                     </Text>
                   </View>
                   <TouchableOpacity
@@ -110,7 +112,7 @@ export function DesktopMySetsView() {
                     onPress={() => router.push('/(auth)/login?mode=signup')}
                     activeOpacity={0.7}
                   >
-                    <Text style={styles.upgradeButtonText}>Create Account</Text>
+                    <Text style={styles.upgradeButtonText}>{t('auth:guest.createAccount', { defaultValue: 'Create Account' })}</Text>
                   </TouchableOpacity>
                 </View>
               </Card>

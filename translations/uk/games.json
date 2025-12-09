@@ -76,7 +76,8 @@
   },
   "dashboard": {
     "title": "Панель керування",
-    "lastPracticed": "Останні практики"
+    "lastPracticed": "Останні практики",
+    "streak": "Серія"
   },
   "mySets": {
     "title": "Мої набори",

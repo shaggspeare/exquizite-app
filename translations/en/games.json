@@ -76,7 +76,8 @@
   },
   "dashboard": {
     "title": "Dashboard",
-    "lastPracticed": "Last Practiced"
+    "lastPracticed": "Last Practiced",
+    "streak": "Streak"
   },
   "mySets": {
     "title": "My Sets",

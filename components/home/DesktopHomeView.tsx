@@ -59,10 +59,10 @@ export function DesktopHomeView() {
     <View style={styles.emptyState}>
       <Ionicons name="book-outline" size={80} color={colors.textSecondary} />
       <Text style={[styles.emptyTitle, { color: colors.text }]}>
-        No sets yet
+        {t('mySets.noSets')}
       </Text>
       <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
-        Create your first word set to get started!
+        {t('mySets.createFirstSet')}
       </Text>
       <TouchableOpacity
         style={[styles.emptyButton, { backgroundColor: colors.primary }]}
@@ -70,7 +70,7 @@ export function DesktopHomeView() {
         activeOpacity={0.7}
       >
         <Ionicons name="add" size={20} color="#FFFFFF" />
-        <Text style={styles.emptyButtonText}>Create Set</Text>
+        <Text style={styles.emptyButtonText}>{t('mySets.createSet')}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -94,12 +94,12 @@ export function DesktopHomeView() {
         <View style={styles.pageHeader}>
           <View>
             <Text style={[styles.pageTitle, { color: colors.text }]}>
-              Welcome back, {user?.name || 'there'}! 👋
+              {t('home.greeting', { name: user?.name || 'there' })} 👋
             </Text>
             <Text
               style={[styles.pageSubtitle, { color: colors.textSecondary }]}
             >
-              Ready to continue your learning journey?
+              {t('home.readyToLearn')}
             </Text>
           </View>
           <TouchableOpacity
@@ -107,7 +107,7 @@ export function DesktopHomeView() {
             onPress={() => router.push('/(tabs)/create')}
           >
             <Ionicons name="add" size={24} color="#FFFFFF" />
-            <Text style={styles.createButtonText}>Create Set</Text>
+            <Text style={styles.createButtonText}>{t('home.createSet')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -144,7 +144,7 @@ export function DesktopHomeView() {
                           { color: colors.textSecondary },
                         ]}
                       >
-                        Sets
+                        {t('common:counts.sets')}
                       </Text>
                     </Card>
 
@@ -170,7 +170,7 @@ export function DesktopHomeView() {
                           { color: colors.textSecondary },
                         ]}
                       >
-                        Words
+                        {t('common:counts.words')}
                       </Text>
                     </Card>
 
@@ -192,7 +192,7 @@ export function DesktopHomeView() {
                           { color: colors.textSecondary },
                         ]}
                       >
-                        Streak
+                        {t('dashboard.streak')}
                       </Text>
                     </Card>
                   </View>
@@ -216,7 +216,7 @@ export function DesktopHomeView() {
                           color="#FFFFFF"
                         />
                         <Text style={styles.quickPracticeTitle}>
-                          Quick Practice
+                          {t('quickPractice')}
                         </Text>
                         <Text style={styles.quickPracticeSubtitle}>
                           {recentSets[0].name}
@@ -228,7 +228,7 @@ export function DesktopHomeView() {
                             color="rgba(255,255,255,0.8)"
                           />
                           <Text style={styles.wordCountText}>
-                            {recentSets[0].words.length} words
+                            {t('common:counts.wordCount', { count: recentSets[0].words.length })}
                           </Text>
                         </View>
                       </LinearGradient>
@@ -242,7 +242,7 @@ export function DesktopHomeView() {
                 <View style={styles.centerColumn}>
                   <View style={styles.setsHeader}>
                     <Text style={[styles.setsTitle, { color: colors.text }]}>
-                      Featured Sets
+                      {t('home.featuredSets')}
                     </Text>
                     <View
                       style={[
@@ -254,7 +254,7 @@ export function DesktopHomeView() {
                       <Text
                         style={[styles.featuredBadgeText, { color: colors.ai }]}
                       >
-                        Try them!
+                        {t('home.tryThem')}
                       </Text>
                     </View>
                   </View>
@@ -264,7 +264,7 @@ export function DesktopHomeView() {
                       { color: colors.textSecondary },
                     ]}
                   >
-                    Practice with these demo sets to get started
+                    {t('home.demoDescription')}
                   </Text>
 
                   <View style={styles.setsList}>

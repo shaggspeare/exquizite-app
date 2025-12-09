@@ -65,19 +65,18 @@ export function I18nProvider({ children }: { children: ReactNode }) {
         I18nManager.forceRTL(newIsRTL);
 
         // Reload the app to apply RTL changes
-        if (__DEV__) {
-          console.log('RTL direction changed. App reload required.');
-          alert('The app will reload to apply the language direction change.');
-        }
-
-        // Reload the app
-        if (Updates.reloadAsync) {
-          await Updates.reloadAsync();
+        // Only reload if we're not in development mode
+        if (!__DEV__) {
+          try {
+            await Updates.reloadAsync();
+          } catch (error) {
+            console.warn('Failed to reload app:', error);
+            alert('Language direction changed. Please restart the app to see the changes.');
+          }
         } else {
-          // Fallback for development
-          console.warn(
-            'Cannot reload app automatically. Please restart the app manually.'
-          );
+          // In development, just notify the user
+          console.log('RTL direction changed. Please restart the app manually to apply changes.');
+          alert('Language direction changed. Please restart the app to see the changes.');
         }
       }
 

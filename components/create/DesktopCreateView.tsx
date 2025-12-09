@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { useState, useRef, useCallback } from 'react';
 import { useRouter, useLocalSearchParams, useFocusEffect } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/ui/Input';
 import { WordPairInput } from '@/components/set/WordPairInput';
 import { AISuggestionModal } from '@/components/ai/AISuggestionModal';
@@ -27,6 +28,7 @@ import { DesktopContainer } from '@/components/layout/DesktopContainer';
 import { Card } from '@/components/ui/Card';
 
 export function DesktopCreateView() {
+  const { t } = useTranslation('create');
   const router = useRouter();
   const params = useLocalSearchParams();
   const { sets, createSet, updateSet, getSetById } = useSets();
@@ -68,7 +70,7 @@ export function DesktopCreateView() {
 
   const addWordPair = () => {
     if (wordPairs.length >= MAX_WORDS_PER_SET) {
-      showAlert('Limit Reached', `Maximum ${MAX_WORDS_PER_SET} words per set`);
+      showAlert(t('limitReached'), t('limitMessage', { max: MAX_WORDS_PER_SET }));
       return;
     }
     setWordPairs([
@@ -102,8 +104,8 @@ export function DesktopCreateView() {
 
     if (wordsToAdd.length < aiWords.length) {
       showAlert(
-        'Limit Reached',
-        `Only ${wordsToAdd.length} words were added to stay within the ${MAX_WORDS_PER_SET} word limit.`
+        t('limitReached'),
+        t('limitMessage', { max: MAX_WORDS_PER_SET })
       );
     }
 
@@ -146,7 +148,7 @@ export function DesktopCreateView() {
       }));
 
     if (validPairs.length === 0) {
-      showAlert('Error', 'Please add at least one word pair');
+      showAlert(t('common:status.error'), t('errors.atLeastOneWord'));
       return;
     }
 
@@ -160,7 +162,7 @@ export function DesktopCreateView() {
           preferences.targetLanguage,
           preferences.nativeLanguage
         );
-        showAlert('Success', 'Set updated successfully!', [
+        showAlert(t('common:status.success'), t('success.updated'), [
           { text: 'OK', onPress: () => router.push(`/sets/${editingSetId}`) },
         ]);
       } else {
@@ -172,25 +174,24 @@ export function DesktopCreateView() {
         );
         if (newSet) {
           clearForm();
-          showAlert('Success', 'Set created successfully!', [
+          showAlert(t('common:status.success'), t('success.created'), [
             { text: 'OK', onPress: () => router.push(`/sets/${newSet.id}`) },
           ]);
         } else {
-          showAlert('Error', 'Failed to create set. Please try again.');
+          showAlert(t('common:status.error'), t('errors.createFailed'));
         }
       }
     } catch (error: any) {
       console.error('Error saving set:', error);
-      let errorMessage = `Failed to ${isEditing ? 'update' : 'create'} set.`;
+      let errorMessage = t('errors.createFailed');
       if (error?.message) {
         if (error.message.includes('Network request failed')) {
-          errorMessage =
-            'Network error. Please check your connection and try again.';
+          errorMessage = t('errors.networkError');
         } else {
           errorMessage = error.message;
         }
       }
-      showAlert('Error', errorMessage);
+      showAlert(t('common:status.error'), errorMessage);
     } finally {
       setSaving(false);
     }
@@ -219,7 +220,7 @@ export function DesktopCreateView() {
                 <Ionicons name="arrow-back" size={28} color={colors.text} />
               </TouchableOpacity>
               <Text style={[styles.headerTitle, { color: colors.text }]}>
-                {isEditing ? 'Edit Set' : 'Create New Set'}
+                {isEditing ? t('editTitle') : t('title')}
               </Text>
             </View>
             <TouchableOpacity
@@ -233,7 +234,7 @@ export function DesktopCreateView() {
             >
               <Ionicons name="checkmark" size={20} color="#FFFFFF" />
               <Text style={styles.saveButtonText}>
-                {saving ? 'Saving...' : 'Save Set'}
+                {saving ? t('common:buttons.saving') : t('common:buttons.save')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -251,16 +252,16 @@ export function DesktopCreateView() {
             {/* Left Column - Form */}
             <View style={styles.leftColumn}>
               <Input
-                label="Set Name"
+                label={t('setName')}
                 value={setName}
                 onChangeText={setSetName}
-                placeholder="e.g., Spanish Vocabulary"
+                placeholder={t('setNamePlaceholder')}
               />
 
               <View style={styles.wordsSection}>
                 <View style={styles.wordsSectionHeader}>
                   <Text style={[styles.sectionTitle, { color: colors.text }]}>
-                    Words
+                    {t('words')}
                   </Text>
                   <Text
                     style={[styles.wordCount, { color: colors.textSecondary }]}
@@ -307,7 +308,7 @@ export function DesktopCreateView() {
                       },
                     ]}
                   >
-                    Add Word
+                    {t('addWord')}
                   </Text>
                 </TouchableOpacity>
 
@@ -342,7 +343,7 @@ export function DesktopCreateView() {
                       },
                     ]}
                   >
-                    AI Suggestions
+                    {t('aiSuggestions')}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -352,14 +353,14 @@ export function DesktopCreateView() {
             <View style={styles.rightColumn}>
               <Card style={styles.previewCard}>
                 <Text style={[styles.previewTitle, { color: colors.text }]}>
-                  Preview
+                  {t('common:buttons.preview', { defaultValue: 'Preview' })}
                 </Text>
                 <View style={styles.previewContent}>
                   <View style={styles.previewHeader}>
                     <Text
                       style={[styles.previewSetName, { color: colors.text }]}
                     >
-                      {setName.trim() || 'Untitled Set'}
+                      {setName.trim() || t('common:status.untitled', { defaultValue: 'Untitled Set' })}
                     </Text>
                     <View style={styles.previewStats}>
                       <Ionicons
@@ -373,8 +374,7 @@ export function DesktopCreateView() {
                           { color: colors.textSecondary },
                         ]}
                       >
-                        {filledPairs.length}{' '}
-                        {filledPairs.length === 1 ? 'word' : 'words'}
+                        {t('common:counts.wordCount', { count: filledPairs.length })}
                       </Text>
                     </View>
                   </View>
@@ -411,8 +411,7 @@ export function DesktopCreateView() {
                             { color: colors.textSecondary },
                           ]}
                         >
-                          +{filledPairs.length - 5} more{' '}
-                          {filledPairs.length - 5 === 1 ? 'word' : 'words'}
+                          +{t('common:counts.wordCount', { count: filledPairs.length - 5 })} {t('common:buttons.more', { defaultValue: 'more' })}
                         </Text>
                       )}
                     </View>
@@ -429,7 +428,7 @@ export function DesktopCreateView() {
                           { color: colors.textSecondary },
                         ]}
                       >
-                        Add words to see preview
+                        {t('common:status.addWordsPreview', { defaultValue: 'Add words to see preview' })}
                       </Text>
                     </View>
                   )}
