@@ -1,0 +1,32 @@
+{
+  "title": "Set erstellen",
+  "editTitle": "Set bearbeiten",
+  "setName": "Set-Name",
+  "setNamePlaceholder": "z.B. Spanisches Vokabular",
+  "words": "Wörter",
+  "addWord": "Wort hinzufügen",
+  "aiSuggestions": "KI-Vorschläge",
+  "limitReached": "Limit erreicht",
+  "limitMessage": "Maximal {{max}} Wörter pro Set",
+  "errors": {
+    "fillAllFields": "Bitte fülle alle Felder aus",
+    "atLeastOneWord": "Bitte füge mindestens ein Wortpaar hinzu",
+    "createFailed": "Set konnte nicht erstellt werden. Bitte versuche es erneut.",
+    "networkError": "Netzwerkfehler. Bitte überprüfe deine Verbindung und versuche es erneut."
+  },
+  "success": {
+    "created": "Set erfolgreich erstellt!",
+    "updated": "Set erfolgreich aktualisiert!"
+  },
+  "ai": {
+    "modalTitle": "KI-Wortvorschläge",
+    "themePlaceholder": "Thema (z.B. Tiere, Essen)",
+    "countPlaceholder": "#",
+    "countHint": "Generiere bis zu {{max}} Wörter (5 standardmäßig)",
+    "generatingWithContext": "Generiere Vorschläge basierend auf deinen {{count}} vorhandenen {{word}}...",
+    "generatingGeneric": "Generiere Vorschläge mit KI...",
+    "selectPrompt": "Wähle Wörter zum Hinzufügen aus ({{count}} ausgewählt)",
+    "noSuggestions": "Noch keine Vorschläge. Klicke auf Generieren, um KI-gestützte Wortvorschläge zu erhalten!",
+    "addSelected": "{{count}} {{word}} hinzufügen"
+  }
+}

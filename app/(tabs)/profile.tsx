@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSets } from '@/contexts/SetsContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -21,6 +22,7 @@ import { DesktopLayout } from '@/components/layout/DesktopLayout';
 import { DesktopProfileView } from '@/components/profile/DesktopProfileView';
 
 export default function ProfileScreen() {
+  const { t } = useTranslation(['profile', 'auth']);
   const { user, signOut } = useAuth();
   const { sets, deleteSet } = useSets();
   const { colors } = useTheme();
@@ -41,10 +43,10 @@ export default function ProfileScreen() {
   const totalWords = sets.reduce((sum, set) => sum + set.words.length, 0);
 
   const handleSignOut = () => {
-    showAlert('Sign Out', 'Are you sure you want to sign out?', [
-      { text: 'Cancel', style: 'cancel' },
+    showAlert(t('auth:signOut.title'), t('auth:signOut.message'), [
+      { text: t('common:buttons.cancel'), style: 'cancel' },
       {
-        text: 'Sign Out',
+        text: t('auth:signOut.confirm'),
         style: 'destructive',
         onPress: async () => {
           await signOut();
@@ -55,25 +57,25 @@ export default function ProfileScreen() {
   };
 
   const handleDeleteSet = (setId: string, setName: string) => {
-    showAlert(
-      'Delete Set',
-      `Are you sure you want to delete "${setName}"?`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: () => deleteSet(setId),
-        },
-      ]
-    );
+    showAlert(t('deleteSet.title'), t('deleteSet.message', { setName }), [
+      { text: t('common:buttons.cancel'), style: 'cancel' },
+      {
+        text: t('deleteSet.confirm'),
+        style: 'destructive',
+        onPress: () => deleteSet(setId),
+      },
+    ]);
   };
 
   const practicedSets = sets.filter(s => s.lastPracticed).length;
-  const accuracy = sets.length > 0 ? Math.round((practicedSets / sets.length) * 100) : 0;
+  const accuracy =
+    sets.length > 0 ? Math.round((practicedSets / sets.length) * 100) : 0;
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+      edges={['top']}
+    >
       <ScrollView
         style={styles.content}
         contentContainerStyle={styles.scrollContent}
@@ -89,12 +91,16 @@ export default function ProfileScreen() {
           <View style={styles.avatarContainer}>
             <Ionicons name="person" size={56} color="#FFFFFF" />
           </View>
-          <Text style={styles.userName}>{user?.name || 'Guest'}</Text>
+          <Text style={styles.userName}>{user?.name || t('guest')}</Text>
           {user?.email && <Text style={styles.userEmail}>{user.email}</Text>}
           <View style={styles.accountBadge}>
-            <Ionicons name={user?.isGuest ? 'person-outline' : 'shield-checkmark'} size={14} color="#FFFFFF" />
+            <Ionicons
+              name={user?.isGuest ? 'person-outline' : 'shield-checkmark'}
+              size={14}
+              color="#FFFFFF"
+            />
             <Text style={styles.accountBadgeText}>
-              {user?.isGuest ? 'Guest Account' : 'App Account'}
+              {user?.isGuest ? t('guestAccount') : t('appAccount')}
             </Text>
           </View>
         </LinearGradient>
@@ -103,20 +109,30 @@ export default function ProfileScreen() {
         {user?.isGuest && (
           <Card style={[styles.upgradeCard, { borderColor: colors.primary }]}>
             <View style={styles.upgradeContent}>
-              <View style={[styles.upgradeIconContainer, { backgroundColor: `${colors.primary}20` }]}>
+              <View
+                style={[
+                  styles.upgradeIconContainer,
+                  { backgroundColor: `${colors.primary}20` },
+                ]}
+              >
                 <Ionicons name="rocket" size={32} color={colors.primary} />
               </View>
               <View style={styles.upgradeTextContainer}>
                 <Text style={[styles.upgradeTitle, { color: colors.text }]}>
-                  Upgrade Your Account
+                  {t('auth:guest.upgradeTitle')}
                 </Text>
-                <Text style={[styles.upgradeDescription, { color: colors.textSecondary }]}>
-                  Create a full account to sync your data and never lose your progress
+                <Text
+                  style={[
+                    styles.upgradeDescription,
+                    { color: colors.textSecondary },
+                  ]}
+                >
+                  {t('auth:guest.upgradeMessage')}
                 </Text>
               </View>
             </View>
             <Button
-              title="Create Account"
+              title={t('auth:guest.createAccount')}
               onPress={() => router.push('/(auth)/login?mode=signup')}
               style={styles.upgradeButton}
             />
@@ -134,7 +150,7 @@ export default function ProfileScreen() {
             >
               <Ionicons name="library" size={36} color="#FFFFFF" />
               <Text style={styles.statValue}>{sets.length}</Text>
-              <Text style={styles.statLabel}>Sets</Text>
+              <Text style={styles.statLabel}>{t('stats.sets')}</Text>
             </LinearGradient>
           </Card>
 
@@ -147,7 +163,7 @@ export default function ProfileScreen() {
             >
               <Ionicons name="book" size={36} color="#FFFFFF" />
               <Text style={styles.statValue}>{totalWords}</Text>
-              <Text style={styles.statLabel}>Words</Text>
+              <Text style={styles.statLabel}>{t('stats.words')}</Text>
             </LinearGradient>
           </Card>
         </View>
@@ -162,7 +178,7 @@ export default function ProfileScreen() {
             >
               <Ionicons name="flame" size={36} color="#FFFFFF" />
               <Text style={styles.statValue}>{practicedSets}</Text>
-              <Text style={styles.statLabel}>Practiced</Text>
+              <Text style={styles.statLabel}>{t('stats.practiced')}</Text>
             </LinearGradient>
           </Card>
 
@@ -175,50 +191,83 @@ export default function ProfileScreen() {
             >
               <Ionicons name="trophy" size={36} color="#FFFFFF" />
               <Text style={styles.statValue}>{accuracy}%</Text>
-              <Text style={styles.statLabel}>Progress</Text>
+              <Text style={styles.statLabel}>{t('progress')}</Text>
             </LinearGradient>
           </Card>
         </View>
 
         {/* Settings Section */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Settings</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            {t('settings.title')}
+          </Text>
           <TouchableOpacity
-            style={[styles.settingsCard, { backgroundColor: colors.card, borderColor: colors.border }]}
+            style={[
+              styles.settingsCard,
+              { backgroundColor: colors.card, borderColor: colors.border },
+            ]}
             onPress={() => router.push('/settings')}
             activeOpacity={0.7}
           >
-            <View style={[styles.settingsIconContainer, { backgroundColor: `${colors.primary}20` }]}>
+            <View
+              style={[
+                styles.settingsIconContainer,
+                { backgroundColor: `${colors.primary}20` },
+              ]}
+            >
               <Ionicons name="settings" size={24} color={colors.primary} />
             </View>
             <View style={styles.settingsInfo}>
-              <Text style={[styles.settingsLabel, { color: colors.text }]}>App Settings</Text>
-              <Text style={[styles.settingsDescription, { color: colors.textSecondary }]}>
-                Theme, languages, and preferences
+              <Text style={[styles.settingsLabel, { color: colors.text }]}>
+                {t('settings.subtitle')}
+              </Text>
+              <Text
+                style={[
+                  styles.settingsDescription,
+                  { color: colors.textSecondary },
+                ]}
+              >
+                {t('settings.description')}
               </Text>
             </View>
-            <Ionicons name="chevron-forward" size={24} color={colors.textSecondary} />
+            <Ionicons
+              name="chevron-forward"
+              size={24}
+              color={colors.textSecondary}
+            />
           </TouchableOpacity>
         </View>
 
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Your Sets</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            {t('yourSets')}
+          </Text>
           {sets.length === 0 ? (
-            <Text style={[styles.emptyText, { color: colors.textSecondary }]}>No sets created yet</Text>
+            <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
+              {t('noSetsYet')}
+            </Text>
           ) : (
             sets.map(set => (
               <Card key={set.id} style={styles.setCard}>
                 <View style={styles.setInfo}>
-                  <Text style={[styles.setName, { color: colors.text }]}>{set.name}</Text>
-                  <Text style={[styles.setMeta, { color: colors.textSecondary }]}>
-                    {set.words.length} {set.words.length === 1 ? 'word' : 'words'}
+                  <Text style={[styles.setName, { color: colors.text }]}>
+                    {set.name}
+                  </Text>
+                  <Text
+                    style={[styles.setMeta, { color: colors.textSecondary }]}
+                  >
+                    {t('common:counts.wordCount', { count: set.words.length })}
                   </Text>
                 </View>
                 <TouchableOpacity
                   onPress={() => handleDeleteSet(set.id, set.name)}
                   hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 >
-                  <Ionicons name="trash-outline" size={24} color={colors.error} />
+                  <Ionicons
+                    name="trash-outline"
+                    size={24}
+                    color={colors.error}
+                  />
                 </TouchableOpacity>
               </Card>
             ))
@@ -226,11 +275,7 @@ export default function ProfileScreen() {
         </View>
 
         <View style={styles.actions}>
-          <Button
-            title="Sign Out"
-            onPress={handleSignOut}
-            variant="outline"
-          />
+          <Button title={t('auth:signOut.title')} onPress={handleSignOut} variant="outline" />
         </View>
       </ScrollView>
     </SafeAreaView>

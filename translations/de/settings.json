@@ -1,0 +1,24 @@
+{
+  "title": "Einstellungen",
+  "languages": {
+    "title": "Sprachen",
+    "description": "Wähle, welche Sprachen du lernen und übersetzen möchtest.",
+    "targetLanguage": "Sprache zum Lernen",
+    "targetPlaceholder": "Sprache zum Lernen wählen",
+    "nativeLanguage": "Übersetzen nach",
+    "nativePlaceholder": "Deine Muttersprache wählen"
+  },
+  "appearance": {
+    "title": "Erscheinungsbild",
+    "description": "Wähle, wie die App aussieht. Auto passt sich dem Design deines Geräts an.",
+    "light": "Hell",
+    "dark": "Dunkel",
+    "auto": "Auto",
+    "info": "Design-Änderungen werden sofort auf alle Bildschirme angewendet"
+  },
+  "mySets": {
+    "title": "Meine Sets",
+    "manage": "Verwalte deine Wortsets. Klicke, um zu erweitern und Wörter anzuzeigen.",
+    "noSets": "Noch keine Sets erstellt"
+  }
+}

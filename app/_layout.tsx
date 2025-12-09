@@ -6,9 +6,11 @@ import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { SetsProvider, useSets } from '@/contexts/SetsContext';
 import { ThemeProvider, useTheme } from '@/contexts/ThemeContext';
 import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext';
+import { I18nProvider } from '@/contexts/I18nContext';
 import { AlertProvider } from '@/contexts/AlertContext';
 import { TourProvider } from '@/contexts/TourContext';
 import { TourModal } from '@/components/tour/TourModal';
+import '@/lib/i18n';
 import 'react-native-reanimated';
 
 // Add global emoji font support for web
@@ -67,21 +69,45 @@ function RootLayoutNav() {
     } else if (user && !shouldSkipLanguageSetup && !onLanguageSetup) {
       // Redirect to language setup if languages not configured
       // This includes newly signed up users (even if they were guests with sets)
-      console.log('➡️  Redirecting to language setup (user but no languages configured)');
+      console.log(
+        '➡️  Redirecting to language setup (user but no languages configured)'
+      );
       router.replace('/(auth)/language-setup');
-    } else if (user && shouldSkipLanguageSetup && (onLanguageSetup || (inAuthGroup && !onLanguageSetup)) && !user.isGuest) {
+    } else if (
+      user &&
+      shouldSkipLanguageSetup &&
+      (onLanguageSetup || (inAuthGroup && !onLanguageSetup)) &&
+      !user.isGuest
+    ) {
       // Redirect to main app if authenticated (NOT guest) and languages configured
       // Guest users can stay in auth group to sign up
       // This handles both: being on language-setup page AND being elsewhere in auth group
-      console.log('➡️  Redirecting to main app (user and languages configured)');
+      console.log(
+        '➡️  Redirecting to main app (user and languages configured)'
+      );
       router.replace('/(tabs)');
-    } else if (user && shouldSkipLanguageSetup && !inAuthGroup && !user.isGuest) {
+    } else if (
+      user &&
+      shouldSkipLanguageSetup &&
+      !inAuthGroup &&
+      !user.isGuest
+    ) {
       // User is authenticated (NOT guest), configured, and already in main app - no redirect needed
       console.log('✅ User properly in main app, no redirect needed');
     } else {
       console.log('✅ No redirect needed, staying on current route');
     }
-  }, [user, authLoading, langLoading, setsLoading, preferences.isConfigured, preferences.targetLanguage, preferences.nativeLanguage, sets.length, segments]);
+  }, [
+    user,
+    authLoading,
+    langLoading,
+    setsLoading,
+    preferences.isConfigured,
+    preferences.targetLanguage,
+    preferences.nativeLanguage,
+    sets.length,
+    segments,
+  ]);
 
   return (
     <>
@@ -99,17 +125,19 @@ function RootLayoutNav() {
 export default function RootLayout() {
   return (
     <ThemeProvider>
-      <AlertProvider>
-        <AuthProvider>
-          <LanguageProvider>
-            <SetsProvider>
-              <TourProvider>
-                <RootLayoutNav />
-              </TourProvider>
-            </SetsProvider>
-          </LanguageProvider>
-        </AuthProvider>
-      </AlertProvider>
+      <I18nProvider>
+        <AlertProvider>
+          <AuthProvider>
+            <LanguageProvider>
+              <SetsProvider>
+                <TourProvider>
+                  <RootLayoutNav />
+                </TourProvider>
+              </SetsProvider>
+            </LanguageProvider>
+          </AuthProvider>
+        </AlertProvider>
+      </I18nProvider>
     </ThemeProvider>
   );
 }

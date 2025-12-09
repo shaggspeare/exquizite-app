@@ -1,0 +1,24 @@
+{
+  "title": "Perfil",
+  "guest": "Invitado",
+  "guestAccount": "Cuenta de invitado",
+  "appAccount": "Cuenta de la aplicación",
+  "stats": {
+    "sets": "Conjuntos",
+    "words": "Palabras",
+    "practiced": "Practicado"
+  },
+  "progress": "Progreso",
+  "settings": {
+    "title": "Configuración",
+    "subtitle": "Configuración de la aplicación",
+    "description": "Tema, idiomas y preferencias"
+  },
+  "yourSets": "Tus conjuntos",
+  "noSetsYet": "Aún no hay conjuntos creados",
+  "deleteSet": {
+    "title": "Eliminar conjunto",
+    "message": "¿Estás seguro de que quieres eliminar \"{{setName}}\"?",
+    "confirm": "Eliminar"
+  }
+}

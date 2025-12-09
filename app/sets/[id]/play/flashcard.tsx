@@ -1,4 +1,10 @@
-import { View, Text, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Pressable,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState, useEffect } from 'react';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -18,6 +24,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { DesktopLayout } from '@/components/layout/DesktopLayout';
 import { DesktopContainer } from '@/components/layout/DesktopContainer';
+import { useTranslation } from 'react-i18next';
 
 // Utility function to shuffle array
 function shuffleArray<T>(array: T[]): T[] {
@@ -40,6 +47,7 @@ export default function FlashcardScreen() {
   const [shuffledWords, setShuffledWords] = useState<WordPair[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const rotation = useSharedValue(0);
+  const { t } = useTranslation('games');
 
   // Shuffle words on mount
   useEffect(() => {
@@ -69,7 +77,7 @@ export default function FlashcardScreen() {
   if (!set || set.words.length === 0) {
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.errorText}>No words in this set</Text>
+        <Text style={styles.errorText}>{t('common:status.noWords')}</Text>
       </SafeAreaView>
     );
   }
@@ -109,9 +117,22 @@ export default function FlashcardScreen() {
   if (isDesktop) {
     return (
       <DesktopLayout>
-        <View style={[styles.desktopContainer, { backgroundColor: colors.background }]}>
+        <View
+          style={[
+            styles.desktopContainer,
+            { backgroundColor: colors.background },
+          ]}
+        >
           {/* Header */}
-          <View style={[styles.desktopHeader, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
+          <View
+            style={[
+              styles.desktopHeader,
+              {
+                backgroundColor: colors.card,
+                borderBottomColor: colors.border,
+              },
+            ]}
+          >
             <DesktopContainer>
               <View style={styles.desktopHeaderContent}>
                 <TouchableOpacity
@@ -121,7 +142,7 @@ export default function FlashcardScreen() {
                   <Ionicons name="close" size={28} color={colors.text} />
                 </TouchableOpacity>
                 <Text style={[styles.desktopTitle, { color: colors.text }]}>
-                  Flashcards: {set.name}
+                  {t('flashcard.title', { setName: set.name })}
                 </Text>
                 <Text style={[styles.progress, { color: colors.text }]}>
                   {currentIndex + 1} / {shuffledWords.length}
@@ -131,14 +152,18 @@ export default function FlashcardScreen() {
           </View>
 
           {/* Progress Bar */}
-          <View style={[styles.progressBar, { backgroundColor: colors.border }]}>
+          <View
+            style={[styles.progressBar, { backgroundColor: colors.border }]}
+          >
             <LinearGradient
               colors={['#5B9EFF', '#E066FF']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={[
                 styles.progressFill,
-                { width: `${((currentIndex + 1) / shuffledWords.length) * 100}%` },
+                {
+                  width: `${((currentIndex + 1) / shuffledWords.length) * 100}%`,
+                },
               ]}
             />
           </View>
@@ -147,31 +172,70 @@ export default function FlashcardScreen() {
           <DesktopContainer>
             <View style={styles.desktopContent}>
               <Pressable onPress={flipCard} style={styles.desktopCardContainer}>
-                <Animated.View style={[styles.desktopCard, { backgroundColor: colors.card }, frontAnimatedStyle]}>
-                  <Ionicons name="language" size={64} color={colors.primary} style={{ marginBottom: Spacing.xl }} />
-                  <Text style={[styles.desktopCardText, { color: colors.text }]}>{currentWord.word}</Text>
-                  <View style={[styles.tapHint, { backgroundColor: `${colors.primary}20` }]}>
-                    <Ionicons name="hand-left-outline" size={18} color={colors.primary} />
-                    <Text style={[styles.cardHint, { color: colors.primary }]}>Click to flip</Text>
+                <Animated.View
+                  style={[
+                    styles.desktopCard,
+                    { backgroundColor: colors.card },
+                    frontAnimatedStyle,
+                  ]}
+                >
+                  <Ionicons
+                    name="language"
+                    size={64}
+                    color={colors.primary}
+                    style={{ marginBottom: Spacing.xl }}
+                  />
+                  <Text
+                    style={[styles.desktopCardText, { color: colors.text }]}
+                  >
+                    {currentWord.word}
+                  </Text>
+                  <View
+                    style={[
+                      styles.tapHint,
+                      { backgroundColor: `${colors.primary}20` },
+                    ]}
+                  >
+                    <Ionicons
+                      name="hand-left-outline"
+                      size={18}
+                      color={colors.primary}
+                    />
+                    <Text style={[styles.cardHint, { color: colors.primary }]}>
+                      {t('flashcard.clickToFlip')}
+                    </Text>
                   </View>
                 </Animated.View>
 
-                <Animated.View style={[styles.desktopCard, styles.cardBack, backAnimatedStyle]}>
+                <Animated.View
+                  style={[
+                    styles.desktopCard,
+                    styles.cardBack,
+                    backAnimatedStyle,
+                  ]}
+                >
                   <LinearGradient
                     colors={['#5B9EFF', '#E066FF']}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
                     style={styles.cardBackGradient}
                   >
-                    <Ionicons name="checkmark-circle" size={64} color="#FFFFFF" style={{ marginBottom: Spacing.xl }} />
-                    <Text style={[styles.desktopCardText, styles.cardTextBack]}>{currentWord.translation}</Text>
+                    <Ionicons
+                      name="checkmark-circle"
+                      size={64}
+                      color="#FFFFFF"
+                      style={{ marginBottom: Spacing.xl }}
+                    />
+                    <Text style={[styles.desktopCardText, styles.cardTextBack]}>
+                      {currentWord.translation}
+                    </Text>
                   </LinearGradient>
                 </Animated.View>
               </Pressable>
 
               <View style={styles.desktopNavigation}>
                 <Button
-                  title="Previous"
+                  title={t('common:buttons.previous')}
                   onPress={goToPrevious}
                   variant="outline"
                   disabled={currentIndex === 0}
@@ -179,13 +243,13 @@ export default function FlashcardScreen() {
                 />
                 {currentIndex === shuffledWords.length - 1 ? (
                   <Button
-                    title="Complete"
+                    title={t('flashcard.complete')}
                     onPress={handleComplete}
                     style={styles.desktopNavButton}
                   />
                 ) : (
                   <Button
-                    title="Next"
+                    title={t('common:buttons.next')}
                     onPress={goToNext}
                     style={styles.desktopNavButton}
                   />
@@ -199,7 +263,10 @@ export default function FlashcardScreen() {
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+      edges={['top']}
+    >
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => router.back()}
@@ -227,31 +294,64 @@ export default function FlashcardScreen() {
 
       <View style={styles.content}>
         <Pressable onPress={flipCard} style={styles.cardContainer}>
-          <Animated.View style={[styles.card, { backgroundColor: colors.card }, frontAnimatedStyle]}>
-            <Ionicons name="language" size={48} color={colors.primary} style={{ marginBottom: Spacing.lg }} />
-            <Text style={[styles.cardText, { color: colors.text }]}>{currentWord.word}</Text>
-            <View style={[styles.tapHint, { backgroundColor: `${colors.primary}20` }]}>
-              <Ionicons name="hand-left-outline" size={16} color={colors.primary} />
-              <Text style={[styles.cardHint, { color: colors.primary }]}>Tap to flip</Text>
+          <Animated.View
+            style={[
+              styles.card,
+              { backgroundColor: colors.card },
+              frontAnimatedStyle,
+            ]}
+          >
+            <Ionicons
+              name="language"
+              size={48}
+              color={colors.primary}
+              style={{ marginBottom: Spacing.lg }}
+            />
+            <Text style={[styles.cardText, { color: colors.text }]}>
+              {currentWord.word}
+            </Text>
+            <View
+              style={[
+                styles.tapHint,
+                { backgroundColor: `${colors.primary}20` },
+              ]}
+            >
+              <Ionicons
+                name="hand-left-outline"
+                size={16}
+                color={colors.primary}
+              />
+              <Text style={[styles.cardHint, { color: colors.primary }]}>
+                {t('flashcard.tapToFlip')}
+              </Text>
             </View>
           </Animated.View>
 
-          <Animated.View style={[styles.card, styles.cardBack, backAnimatedStyle]}>
+          <Animated.View
+            style={[styles.card, styles.cardBack, backAnimatedStyle]}
+          >
             <LinearGradient
               colors={['#5B9EFF', '#E066FF']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.cardBackGradient}
             >
-              <Ionicons name="checkmark-circle" size={48} color="#FFFFFF" style={{ marginBottom: Spacing.lg }} />
-              <Text style={[styles.cardText, styles.cardTextBack]}>{currentWord.translation}</Text>
+              <Ionicons
+                name="checkmark-circle"
+                size={48}
+                color="#FFFFFF"
+                style={{ marginBottom: Spacing.lg }}
+              />
+              <Text style={[styles.cardText, styles.cardTextBack]}>
+                {currentWord.translation}
+              </Text>
             </LinearGradient>
           </Animated.View>
         </Pressable>
 
         <View style={styles.navigation}>
           <Button
-            title="Previous"
+            title={t('common:buttons.previous')}
             onPress={goToPrevious}
             variant="outline"
             disabled={currentIndex === 0}
@@ -259,16 +359,12 @@ export default function FlashcardScreen() {
           />
           {currentIndex === shuffledWords.length - 1 ? (
             <Button
-              title="Complete"
+              title={t('flashcard.complete')}
               onPress={handleComplete}
               style={styles.navButton}
             />
           ) : (
-            <Button
-              title="Next"
-              onPress={goToNext}
-              style={styles.navButton}
-            />
+            <Button title={t('common:buttons.next')} onPress={goToNext} style={styles.navButton} />
           )}
         </View>
       </View>

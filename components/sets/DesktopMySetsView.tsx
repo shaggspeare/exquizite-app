@@ -1,4 +1,10 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSets } from '@/contexts/SetsContext';
@@ -21,7 +27,9 @@ export function DesktopMySetsView() {
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
       <Ionicons name="book-outline" size={80} color={colors.textSecondary} />
-      <Text style={[styles.emptyTitle, { color: colors.text }]}>No sets yet</Text>
+      <Text style={[styles.emptyTitle, { color: colors.text }]}>
+        No sets yet
+      </Text>
       <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
         Create your first word set to get started!
       </Text>
@@ -67,21 +75,36 @@ export function DesktopMySetsView() {
 
             {/* Upgrade Account Banner for Guests */}
             {user?.isGuest && (
-              <Card style={[styles.upgradeCard, { borderColor: colors.primary }]}>
+              <Card
+                style={[styles.upgradeCard, { borderColor: colors.primary }]}
+              >
                 <View style={styles.upgradeContent}>
-                  <View style={[styles.upgradeIconContainer, { backgroundColor: `${colors.primary}20` }]}>
+                  <View
+                    style={[
+                      styles.upgradeIconContainer,
+                      { backgroundColor: `${colors.primary}20` },
+                    ]}
+                  >
                     <Ionicons name="rocket" size={32} color={colors.primary} />
                   </View>
                   <View style={styles.upgradeTextContainer}>
                     <Text style={[styles.upgradeTitle, { color: colors.text }]}>
                       Create a Full Account
                     </Text>
-                    <Text style={[styles.upgradeDescription, { color: colors.textSecondary }]}>
+                    <Text
+                      style={[
+                        styles.upgradeDescription,
+                        { color: colors.textSecondary },
+                      ]}
+                    >
                       Sync your data across devices and never lose your progress
                     </Text>
                   </View>
                   <TouchableOpacity
-                    style={[styles.upgradeButton, { backgroundColor: colors.primary }]}
+                    style={[
+                      styles.upgradeButton,
+                      { backgroundColor: colors.primary },
+                    ]}
                     onPress={() => router.push('/(auth)/login?mode=signup')}
                     activeOpacity={0.7}
                   >

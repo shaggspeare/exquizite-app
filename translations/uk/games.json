@@ -1,0 +1,92 @@
+{
+  "chooseActivity": "Вибрати активність",
+  "setNotFound": "Набір не знайдено",
+  "wordsInSet": "Слова в цьому наборі",
+  "startPractice": "Почати практику",
+  "quickPractice": "Швидка практика",
+  "templates": {
+    "flashcard": {
+      "name": "Картки",
+      "description": "Переверніть, щоб побачити переклади"
+    },
+    "match": {
+      "name": "Підбір пар",
+      "description": "Перетягуйте та з'єднуйте пари"
+    },
+    "quiz": {
+      "name": "Вікторина",
+      "description": "Запитання з множинним вибором"
+    },
+    "fillBlank": {
+      "name": "Заповнення пропусків",
+      "description": "Доповніть речення правильним словом",
+      "aiHints": "Доступні підказки ШІ"
+    }
+  },
+  "flashcard": {
+    "title": "Картки: {{setName}}",
+    "tapToFlip": "Торкніться, щоб перевернути",
+    "clickToFlip": "Клацніть, щоб перевернути",
+    "complete": "Завершено"
+  },
+  "quiz": {
+    "title": "Вікторина: {{setName}}",
+    "question": "Запитання {{current}} / {{total}}",
+    "translate": "Перекласти:",
+    "nextQuestion": "Наступне запитання",
+    "loadingQuiz": "Завантаження вікторини...",
+    "complete": {
+      "title": "Вікторину завершено!",
+      "score": "Ви набрали {{score}}/{{total}} ({{percentage}}%)"
+    }
+  },
+  "match": {
+    "title": "Підбір пар: {{setName}}",
+    "words": "Слова",
+    "translations": "Переклади",
+    "complete": {
+      "title": "Вітаємо!",
+      "message": "Ви завершили гру на підбір пар за {{time}}!"
+    }
+  },
+  "fillBlank": {
+    "title": "Заповнення пропусків: {{setName}}",
+    "question": "Запитання {{current}} / {{total}}",
+    "translation": "Переклад:",
+    "fillPrompt": "Заповніть пропуск:",
+    "choosePrompt": "Виберіть правильне слово:",
+    "loadingNext": "Завантаження наступного запитання...",
+    "generatingSentences": "Генерування речень...",
+    "correctAnswer": "Правильна відповідь:",
+    "complete": {
+      "title": "Вправу завершено!",
+      "score": "Ви набрали {{score}}/{{total}} ({{percentage}}%)"
+    }
+  },
+  "home": {
+    "title": "Головна",
+    "greeting": "Привіт, {{name}}!",
+    "readyToLearn": "Готові вчитися сьогодні?",
+    "noSets": "Наборів ще немає",
+    "createFirstSet": "Створіть свій перший набір слів, щоб почати!",
+    "createSet": "Створити набір",
+    "featuredSets": "Рекомендовані набори",
+    "tryThem": "Спробуйте їх!",
+    "demoDescription": "Практикуйтеся з цими демонстраційними наборами, щоб почати"
+  },
+  "dashboard": {
+    "title": "Панель керування",
+    "lastPracticed": "Останні практики"
+  },
+  "mySets": {
+    "title": "Мої набори",
+    "noSets": "Наборів ще немає",
+    "createFirstSet": "Створіть свій перший набір слів, щоб почати!",
+    "createSet": "Створити набір"
+  },
+  "setCard": {
+    "featured": "Рекомендований",
+    "complete": "{{percent}}% завершено",
+    "demoInfo": "Це демонстраційний набір. Створіть свій власний набір, щоб почати!"
+  }
+}

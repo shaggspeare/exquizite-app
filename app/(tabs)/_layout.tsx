@@ -1,11 +1,15 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useResponsive } from '@/hooks/useResponsive';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function TabsLayout() {
+  const { t } = useTranslation(['games', 'profile']);
   const { colors } = useTheme();
   const { isDesktop } = useResponsive();
+  const { user } = useAuth();
 
   return (
     <Tabs
@@ -23,16 +27,17 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          // For guests: show as "Home", for logged users: show as "Dashboard"
+          title: user?.isGuest ? t('games:home.title') : t('games:dashboard.title'),
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" size={size} color={color} />
+            <Ionicons name={user?.isGuest ? 'home' : 'stats-chart'} size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
         name="my-sets"
         options={{
-          title: 'My Sets',
+          title: t('games:mySets.title'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="library" size={size} color={color} />
           ),
@@ -41,7 +46,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: 'Profile',
+          title: t('profile:title'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person" size={size} color={color} />
           ),

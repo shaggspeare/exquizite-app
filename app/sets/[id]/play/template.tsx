@@ -1,4 +1,10 @@
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -6,9 +12,14 @@ import { useResponsive } from '@/hooks/useResponsive';
 import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+} from 'react-native-reanimated';
 import { DesktopLayout } from '@/components/layout/DesktopLayout';
 import { DesktopContainer } from '@/components/layout/DesktopContainer';
+import { useTranslation } from 'react-i18next';
 
 interface GameTemplate {
   id: string;
@@ -20,11 +31,11 @@ interface GameTemplate {
   gradientColors: string[];
 }
 
-const templates: GameTemplate[] = [
+const getTemplates = (t: any): GameTemplate[] => [
   {
     id: 'flashcard',
-    title: 'Flashcard',
-    description: 'Flip to reveal translations',
+    title: t('templates.flashcard.name'),
+    description: t('templates.flashcard.description'),
     icon: 'layers',
     route: 'flashcard',
     aiEnabled: false,
@@ -32,16 +43,16 @@ const templates: GameTemplate[] = [
   },
   {
     id: 'match',
-    title: 'Match',
-    description: 'Drag and connect pairs',
+    title: t('templates.match.name'),
+    description: t('templates.match.description'),
     icon: 'git-compare',
     route: 'match',
     gradientColors: ['#B537F2', '#E066FF'],
   },
   {
     id: 'quiz',
-    title: 'Quiz',
-    description: 'Multiple choice questions',
+    title: t('templates.quiz.name'),
+    description: t('templates.quiz.description'),
     icon: 'help-circle',
     route: 'quiz',
     aiEnabled: false,
@@ -49,8 +60,8 @@ const templates: GameTemplate[] = [
   },
   {
     id: 'fill-blank',
-    title: 'Fill in the Blank',
-    description: 'Complete sentences with the right word',
+    title: t('templates.fillBlank.name'),
+    description: t('templates.fillBlank.description'),
     icon: 'create',
     route: 'fill-blank',
     aiEnabled: false,
@@ -96,18 +107,14 @@ function GameCard({ template, onPress }: GameCardProps) {
         >
           <View style={styles.gameCardContent}>
             <View style={styles.iconCircle}>
-              <Ionicons
-                name={template.icon}
-                size={48}
-                color="#FFFFFF"
-              />
+              <Ionicons name={template.icon} size={48} color="#FFFFFF" />
             </View>
             <Text style={styles.gameTitle}>{template.title}</Text>
             <Text style={styles.gameDescription}>{template.description}</Text>
             {template.aiEnabled && (
               <View style={styles.aiBadge}>
                 <Ionicons name="sparkles" size={14} color="#FFFFFF" />
-                <Text style={styles.aiBadgeText}>AI hints available</Text>
+                <Text style={styles.aiBadgeText}>{template.id === 'fill-blank' ? 'templates.fillBlank.aiHints' : 'AI hints available'}</Text>
               </View>
             )}
           </View>
@@ -125,6 +132,9 @@ export default function TemplateSelectionScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { colors } = useTheme();
   const { isDesktop } = useResponsive();
+  const { t } = useTranslation('games');
+
+  const templates = getTemplates(t);
 
   const handleSelectTemplate = (template: GameTemplate) => {
     router.push(`/sets/${id}/play/${template.route}`);
@@ -133,9 +143,22 @@ export default function TemplateSelectionScreen() {
   if (isDesktop) {
     return (
       <DesktopLayout>
-        <View style={[styles.desktopContainer, { backgroundColor: colors.background }]}>
+        <View
+          style={[
+            styles.desktopContainer,
+            { backgroundColor: colors.background },
+          ]}
+        >
           {/* Header */}
-          <View style={[styles.desktopHeader, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
+          <View
+            style={[
+              styles.desktopHeader,
+              {
+                backgroundColor: colors.card,
+                borderBottomColor: colors.border,
+              },
+            ]}
+          >
             <DesktopContainer>
               <View style={styles.desktopHeaderContent}>
                 <TouchableOpacity
@@ -144,7 +167,9 @@ export default function TemplateSelectionScreen() {
                 >
                   <Ionicons name="arrow-back" size={28} color={colors.text} />
                 </TouchableOpacity>
-                <Text style={[styles.headerTitle, { color: colors.text }]}>Choose Activity</Text>
+                <Text style={[styles.headerTitle, { color: colors.text }]}>
+                  {t('chooseActivity')}
+                </Text>
                 <View style={styles.headerPlaceholder} />
               </View>
             </DesktopContainer>
@@ -175,7 +200,10 @@ export default function TemplateSelectionScreen() {
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+      edges={['top']}
+    >
       <View style={[styles.header, { borderBottomColor: colors.border }]}>
         <TouchableOpacity
           onPress={() => router.back()}
@@ -183,7 +211,9 @@ export default function TemplateSelectionScreen() {
         >
           <Ionicons name="arrow-back" size={28} color={colors.text} />
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, { color: colors.text }]}>Choose Activity</Text>
+        <Text style={[styles.headerTitle, { color: colors.text }]}>
+          {t('chooseActivity')}
+        </Text>
         <View style={styles.headerPlaceholder} />
       </View>
 

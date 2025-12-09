@@ -1,0 +1,96 @@
+{
+  "buttons": {
+    "add": "Añadir",
+    "done": "Hecho",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "share": "Compartir",
+    "play": "Jugar",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "skip": "Saltar",
+    "check": "Verificar respuesta",
+    "save": "Guardar",
+    "saving": "Guardando...",
+    "finish": "Finalizar",
+    "tryAgain": "Intentar de nuevo",
+    "playAgain": "Jugar de nuevo",
+    "showHint": "Mostrar pista",
+    "generate": "Generar",
+    "generating": "Generando..."
+  },
+  "status": {
+    "loading": "Cargando...",
+    "saving": "Guardando...",
+    "generating": "Generando...",
+    "noWords": "No hay palabras en este conjunto",
+    "success": "Éxito",
+    "error": "Error"
+  },
+  "time": {
+    "never": "Nunca",
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "daysAgo": "hace {{count}} días",
+    "lastPracticed": "Última práctica {{date}}"
+  },
+  "counts": {
+    "word": "palabra",
+    "words": "palabras",
+    "set": "conjunto",
+    "sets": "conjuntos",
+    "wordCount": "{{count}} palabra",
+    "wordCount_other": "{{count}} palabras",
+    "setCount": "{{count}} conjunto",
+    "setCount_other": "{{count}} conjuntos",
+    "progress": "{{current}}/{{total}}"
+  },
+  "dialogs": {
+    "areYouSure": "¿Estás seguro?",
+    "cannotUndo": "Esta acción no se puede deshacer."
+  },
+  "sharing": {
+    "shareSet": "Compartir conjunto",
+    "shareCode": "Código para compartir",
+    "shareLink": "Enlace para compartir",
+    "copyLink": "Copiar enlace",
+    "copied": "¡Copiado!",
+    "copy": "Copiar",
+    "views": "Vistas",
+    "copies": "Copias",
+    "generatingLink": "Generando enlace para compartir...",
+    "linkInfo": "Cualquiera con este enlace puede ver y copiar tu conjunto",
+    "deactivateLink": "Desactivar enlace para compartir",
+    "deactivateConfirm": "¿Estás seguro de que quieres desactivar este enlace? Nadie podrá acceder a este conjunto con el enlace.",
+    "deactivate": "Desactivar",
+    "linkDeactivated": "El enlace para compartir ha sido desactivado",
+    "shareError": "Error al generar el enlace. Por favor, inténtalo de nuevo.",
+    "copyError": "Error al copiar el enlace al portapapeles",
+    "linkCopied": "Enlace copiado",
+    "linkCopiedToClipboard": "Enlace copiado al portapapeles"
+  },
+  "tour": {
+    "skip": "Saltar",
+    "next": "Siguiente",
+    "back": "Atrás",
+    "getStarted": "Comenzar",
+    "slides": {
+      "vocabulary": {
+        "title": "Construye tu vocabulario",
+        "description": "Añade palabras manualmente o usa IA para generar conjuntos de vocabulario temático. Crea hasta 20 palabras por conjunto."
+      },
+      "organize": {
+        "title": "Organiza tu aprendizaje",
+        "description": "Agrupa palabras en conjuntos temáticos como \"Comida española\" o \"Viajes alemanes\". Nombra tus conjuntos para acceder fácilmente."
+      },
+      "learn": {
+        "title": "Aprende a tu manera",
+        "description": "Practica con 4 modos de juego: Tarjetas, Emparejar, Prueba de opción múltiple y Completar espacios en blanco."
+      },
+      "share": {
+        "title": "Comparte tu conocimiento",
+        "description": "Genera enlaces para compartir tus conjuntos. Otros pueden verlos y copiarlos a su biblioteca."
+      }
+    }
+  }
+}

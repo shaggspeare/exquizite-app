@@ -21,6 +21,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 interface FillBlankQuestion {
   word: string;
@@ -49,6 +50,7 @@ export default function FillBlankScreen() {
   const [showHint, setShowHint] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [totalExpectedQuestions, setTotalExpectedQuestions] = useState(0);
+  const { t } = useTranslation('games');
 
   useEffect(() => {
     if (set) {
@@ -58,8 +60,10 @@ export default function FillBlankScreen() {
 
   // Auto-advance when next question becomes available
   useEffect(() => {
-    const wasOnLastQuestion = isAnswered && currentIndex === questions.length - 1;
-    const nextQuestionNowAvailable = !isLoadingMore && questions.length > currentIndex + 1;
+    const wasOnLastQuestion =
+      isAnswered && currentIndex === questions.length - 1;
+    const nextQuestionNowAvailable =
+      !isLoadingMore && questions.length > currentIndex + 1;
 
     if (wasOnLastQuestion && nextQuestionNowAvailable) {
       // Next question is now available, advance automatically
@@ -103,13 +107,17 @@ export default function FillBlankScreen() {
       );
 
       // Map the initial results to questions
-      const initialQuestions: FillBlankQuestion[] = initialWords.map((word, index) => ({
-        word: word.word,
-        translation: word.translation,
-        sentence: initialSentences[index]?.sentence || `___ means ${word.translation}`,
-        correctAnswer: initialSentences[index]?.correctAnswer || word.word,
-        options: initialSentences[index]?.options || [word.word],
-      }));
+      const initialQuestions: FillBlankQuestion[] = initialWords.map(
+        (word, index) => ({
+          word: word.word,
+          translation: word.translation,
+          sentence:
+            initialSentences[index]?.sentence ||
+            `___ means ${word.translation}`,
+          correctAnswer: initialSentences[index]?.correctAnswer || word.word,
+          options: initialSentences[index]?.options || [word.word],
+        })
+      );
 
       // Set initial questions and hide loading immediately
       setQuestions(initialQuestions);
@@ -119,18 +127,26 @@ export default function FillBlankScreen() {
       if (remainingWords.length > 0) {
         setIsLoadingMore(true);
         const remainingSentences = await generateMultipleSentencesWithGaps(
-          remainingWords.map(w => ({ word: w.word, translation: w.translation })),
+          remainingWords.map(w => ({
+            word: w.word,
+            translation: w.translation,
+          })),
           preferences.targetLanguage,
           preferences.nativeLanguage
         );
 
-        const remainingQuestions: FillBlankQuestion[] = remainingWords.map((word, index) => ({
-          word: word.word,
-          translation: word.translation,
-          sentence: remainingSentences[index]?.sentence || `___ means ${word.translation}`,
-          correctAnswer: remainingSentences[index]?.correctAnswer || word.word,
-          options: remainingSentences[index]?.options || [word.word],
-        }));
+        const remainingQuestions: FillBlankQuestion[] = remainingWords.map(
+          (word, index) => ({
+            word: word.word,
+            translation: word.translation,
+            sentence:
+              remainingSentences[index]?.sentence ||
+              `___ means ${word.translation}`,
+            correctAnswer:
+              remainingSentences[index]?.correctAnswer || word.word,
+            options: remainingSentences[index]?.options || [word.word],
+          })
+        );
 
         // Append remaining questions to existing ones
         setQuestions(prev => [...prev, ...remainingQuestions]);
@@ -139,23 +155,27 @@ export default function FillBlankScreen() {
     } catch (error) {
       console.error('Error generating questions:', error);
       // Fallback: create simple questions with options from other words
-      const fallbackQuestions: FillBlankQuestion[] = shuffledWords.map((word, index) => {
-        const otherWords = shuffledWords.filter((_, i) => i !== index).map(w => w.word);
-        const distractors = otherWords.slice(0, 3);
-        while (distractors.length < 3) {
-          distractors.push(`option${distractors.length + 1}`);
-        }
-        const allOptions = [word.word, ...distractors];
-        const shuffledOptions = allOptions.sort(() => Math.random() - 0.5);
+      const fallbackQuestions: FillBlankQuestion[] = shuffledWords.map(
+        (word, index) => {
+          const otherWords = shuffledWords
+            .filter((_, i) => i !== index)
+            .map(w => w.word);
+          const distractors = otherWords.slice(0, 3);
+          while (distractors.length < 3) {
+            distractors.push(`option${distractors.length + 1}`);
+          }
+          const allOptions = [word.word, ...distractors];
+          const shuffledOptions = allOptions.sort(() => Math.random() - 0.5);
 
-        return {
-          word: word.word,
-          translation: word.translation,
-          sentence: `___ means ${word.translation}`,
-          correctAnswer: word.word,
-          options: shuffledOptions,
-        };
-      });
+          return {
+            word: word.word,
+            translation: word.translation,
+            sentence: `___ means ${word.translation}`,
+            correctAnswer: word.word,
+            options: shuffledOptions,
+          };
+        }
+      );
       setQuestions(fallbackQuestions);
       setLoading(false);
       setIsLoadingMore(false);
@@ -199,11 +219,11 @@ export default function FillBlankScreen() {
     const totalQuestions = totalExpectedQuestions || questions.length;
     const percentage = Math.round((score / totalQuestions) * 100);
     showAlert(
-      'Exercise Complete!',
-      `You scored ${score}/${totalQuestions} (${percentage}%)`,
+      t('fillBlank.complete.title'),
+      t('fillBlank.complete.score', { score, total: totalQuestions, percentage }),
       [
-        { text: 'Try Again', onPress: () => resetGame() },
-        { text: 'Done', onPress: () => router.back() },
+        { text: t('common:buttons.tryAgain'), onPress: () => resetGame() },
+        { text: t('common:buttons.done'), onPress: () => router.back() },
       ]
     );
   };
@@ -221,31 +241,49 @@ export default function FillBlankScreen() {
   if (!set || set.words.length === 0) {
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.errorText}>No words in this set</Text>
+        <Text style={styles.errorText}>{t('common:status.noWords')}</Text>
       </SafeAreaView>
     );
   }
 
   if (loading || questions.length === 0) {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+      <SafeAreaView
+        style={[styles.container, { backgroundColor: colors.background }]}
+      >
         <View style={styles.loading}>
           <ActivityIndicator size="large" color={colors.primary} />
-          <Text style={[styles.loadingText, { color: colors.text }]}>Generating sentences...</Text>
+          <Text style={[styles.loadingText, { color: colors.text }]}>
+            {t('fillBlank.generatingSentences')}
+          </Text>
         </View>
       </SafeAreaView>
     );
   }
 
   const currentQuestion = questions[currentIndex];
-  const isWaitingForNextQuestion = isAnswered && currentIndex === questions.length - 1 && isLoadingMore;
+  const isWaitingForNextQuestion =
+    isAnswered && currentIndex === questions.length - 1 && isLoadingMore;
 
   if (isDesktop) {
     return (
       <DesktopLayout>
-        <View style={[styles.desktopContainer, { backgroundColor: colors.background }]}>
+        <View
+          style={[
+            styles.desktopContainer,
+            { backgroundColor: colors.background },
+          ]}
+        >
           {/* Header */}
-          <View style={[styles.desktopHeader, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
+          <View
+            style={[
+              styles.desktopHeader,
+              {
+                backgroundColor: colors.card,
+                borderBottomColor: colors.border,
+              },
+            ]}
+          >
             <DesktopContainer>
               <View style={styles.desktopHeaderContent}>
                 <TouchableOpacity
@@ -255,15 +293,22 @@ export default function FillBlankScreen() {
                   <Ionicons name="close" size={28} color={colors.text} />
                 </TouchableOpacity>
                 <Text style={[styles.desktopTitle, { color: colors.text }]}>
-                  Fill in the Blank: {set.name}
+                  {t('fillBlank.title', { setName: set.name })}
                 </Text>
                 <View style={styles.desktopHeaderRight}>
                   <Text style={[styles.progress, { color: colors.text }]}>
-                    Question {currentIndex + 1} / {totalExpectedQuestions || questions.length}
+                    {t('fillBlank.question', { current: currentIndex + 1, total: totalExpectedQuestions || questions.length })}
                   </Text>
-                  <View style={[styles.scoreContainer, { backgroundColor: `${colors.success}20` }]}>
+                  <View
+                    style={[
+                      styles.scoreContainer,
+                      { backgroundColor: `${colors.success}20` },
+                    ]}
+                  >
                     <Ionicons name="trophy" size={20} color={colors.success} />
-                    <Text style={[styles.scoreText, { color: colors.success }]}>{score}</Text>
+                    <Text style={[styles.scoreText, { color: colors.success }]}>
+                      {score}
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -271,14 +316,21 @@ export default function FillBlankScreen() {
           </View>
 
           {/* Progress Bar */}
-          <View style={[styles.progressBarContainer, { backgroundColor: colors.border }]}>
+          <View
+            style={[
+              styles.progressBarContainer,
+              { backgroundColor: colors.border },
+            ]}
+          >
             <LinearGradient
               colors={['#FF6B35', '#FFBB00']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={[
                 styles.progressFill,
-                { width: `${((currentIndex + 1) / (totalExpectedQuestions || questions.length)) * 100}%` },
+                {
+                  width: `${((currentIndex + 1) / (totalExpectedQuestions || questions.length)) * 100}%`,
+                },
               ]}
             />
           </View>
@@ -293,21 +345,41 @@ export default function FillBlankScreen() {
               <View style={styles.desktopGameContent}>
                 {!showHint && !isAnswered && (
                   <TouchableOpacity
-                    style={[styles.hintButton, { backgroundColor: `${colors.ai}15`, borderColor: colors.ai }]}
+                    style={[
+                      styles.hintButton,
+                      {
+                        backgroundColor: `${colors.ai}15`,
+                        borderColor: colors.ai,
+                      },
+                    ]}
                     onPress={() => setShowHint(true)}
                     activeOpacity={0.7}
                   >
                     <Ionicons name="bulb-outline" size={20} color={colors.ai} />
-                    <Text style={[styles.hintButtonText, { color: colors.ai }]}>Show Hint</Text>
+                    <Text style={[styles.hintButtonText, { color: colors.ai }]}>
+                      {t('common:buttons.showHint')}
+                    </Text>
                   </TouchableOpacity>
                 )}
 
                 {showHint && (
-                  <View style={[styles.hintCard, { backgroundColor: `${colors.ai}20`, borderColor: colors.ai }]}>
+                  <View
+                    style={[
+                      styles.hintCard,
+                      {
+                        backgroundColor: `${colors.ai}20`,
+                        borderColor: colors.ai,
+                      },
+                    ]}
+                  >
                     <Ionicons name="bulb" size={20} color={colors.ai} />
                     <View style={styles.hintContent}>
-                      <Text style={[styles.hintLabel, { color: colors.ai }]}>Translation:</Text>
-                      <Text style={[styles.hintText, { color: colors.text }]}>{currentQuestion.translation}</Text>
+                      <Text style={[styles.hintLabel, { color: colors.ai }]}>
+                        {t('fillBlank.translation')}
+                      </Text>
+                      <Text style={[styles.hintText, { color: colors.text }]}>
+                        {currentQuestion.translation}
+                      </Text>
                     </View>
                   </View>
                 )}
@@ -318,28 +390,50 @@ export default function FillBlankScreen() {
                   end={{ x: 1, y: 1 }}
                   style={styles.desktopSentenceCard}
                 >
-                  <Text style={styles.sentenceLabel}>Fill in the blank:</Text>
-                  <Text style={styles.desktopSentenceText}>{currentQuestion.sentence}</Text>
+                  <Text style={styles.sentenceLabel}>{t('fillBlank.fillPrompt')}</Text>
+                  <Text style={styles.desktopSentenceText}>
+                    {currentQuestion.sentence}
+                  </Text>
                 </LinearGradient>
 
-                <Text style={[styles.optionsLabel, { color: colors.textSecondary }]}>Choose the correct word:</Text>
+                <Text
+                  style={[styles.optionsLabel, { color: colors.textSecondary }]}
+                >
+                  {t('fillBlank.choosePrompt')}
+                </Text>
 
                 <View style={styles.desktopOptionsGrid}>
                   {currentQuestion.options.map((option, index) => {
                     const isSelected = selectedOption === option;
-                    const isCorrectOption = option.toLowerCase() === currentQuestion.correctAnswer.toLowerCase();
+                    const isCorrectOption =
+                      option.toLowerCase() ===
+                      currentQuestion.correctAnswer.toLowerCase();
                     const showCorrect = isAnswered && isCorrectOption;
-                    const showIncorrect = isAnswered && isSelected && !isCorrect;
+                    const showIncorrect =
+                      isAnswered && isSelected && !isCorrect;
 
                     return (
                       <TouchableOpacity
                         key={index}
                         style={[
                           styles.desktopOptionButton,
-                          { backgroundColor: colors.card, borderColor: colors.border },
-                          isSelected && !isAnswered && { borderColor: colors.primary, backgroundColor: `${colors.primary}15` },
-                          showCorrect && { borderColor: colors.success, backgroundColor: `${colors.success}15` },
-                          showIncorrect && { borderColor: colors.error, backgroundColor: `${colors.error}15` },
+                          {
+                            backgroundColor: colors.card,
+                            borderColor: colors.border,
+                          },
+                          isSelected &&
+                            !isAnswered && {
+                              borderColor: colors.primary,
+                              backgroundColor: `${colors.primary}15`,
+                            },
+                          showCorrect && {
+                            borderColor: colors.success,
+                            backgroundColor: `${colors.success}15`,
+                          },
+                          showIncorrect && {
+                            borderColor: colors.error,
+                            backgroundColor: `${colors.error}15`,
+                          },
                         ]}
                         onPress={() => !isAnswered && setSelectedOption(option)}
                         disabled={isAnswered}
@@ -349,9 +443,19 @@ export default function FillBlankScreen() {
                           style={[
                             styles.optionText,
                             { color: colors.text },
-                            isSelected && !isAnswered && { color: colors.primary, fontWeight: '700' },
-                            showCorrect && { color: colors.success, fontWeight: '700' },
-                            showIncorrect && { color: colors.error, fontWeight: '700' },
+                            isSelected &&
+                              !isAnswered && {
+                                color: colors.primary,
+                                fontWeight: '700',
+                              },
+                            showCorrect && {
+                              color: colors.success,
+                              fontWeight: '700',
+                            },
+                            showIncorrect && {
+                              color: colors.error,
+                              fontWeight: '700',
+                            },
                           ]}
                           numberOfLines={2}
                           ellipsizeMode="tail"
@@ -359,10 +463,18 @@ export default function FillBlankScreen() {
                           {option}
                         </Text>
                         {showCorrect && (
-                          <Ionicons name="checkmark-circle" size={24} color={colors.success} />
+                          <Ionicons
+                            name="checkmark-circle"
+                            size={24}
+                            color={colors.success}
+                          />
                         )}
                         {showIncorrect && (
-                          <Ionicons name="close-circle" size={24} color={colors.error} />
+                          <Ionicons
+                            name="close-circle"
+                            size={24}
+                            color={colors.error}
+                          />
                         )}
                       </TouchableOpacity>
                     );
@@ -370,9 +482,29 @@ export default function FillBlankScreen() {
                 </View>
 
                 {isAnswered && !isCorrect && (
-                  <View style={[styles.correctAnswerContainer, { backgroundColor: colors.card, borderColor: colors.error }]}>
-                    <Text style={[styles.correctAnswerLabel, { color: colors.textSecondary }]}>Correct answer:</Text>
-                    <Text style={[styles.correctAnswerText, { color: colors.error }]}>
+                  <View
+                    style={[
+                      styles.correctAnswerContainer,
+                      {
+                        backgroundColor: colors.card,
+                        borderColor: colors.error,
+                      },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.correctAnswerLabel,
+                        { color: colors.textSecondary },
+                      ]}
+                    >
+                      {t('fillBlank.correctAnswer')}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.correctAnswerText,
+                        { color: colors.error },
+                      ]}
+                    >
                       {currentQuestion.correctAnswer}
                     </Text>
                   </View>
@@ -383,10 +515,10 @@ export default function FillBlankScreen() {
                     <Button
                       title={
                         isWaitingForNextQuestion
-                          ? 'Loading next question...'
+                          ? t('fillBlank.loadingNext')
                           : currentIndex === questions.length - 1
-                          ? 'Finish'
-                          : 'Next Question'
+                            ? t('common:buttons.finish')
+                            : t('quiz.nextQuestion')
                       }
                       onPress={handleNext}
                       disabled={isWaitingForNextQuestion}
@@ -394,7 +526,7 @@ export default function FillBlankScreen() {
                     />
                   ) : (
                     <Button
-                      title="Check Answer"
+                      title={t('common:buttons.check')}
                       onPress={handleCheckAnswer}
                       disabled={!selectedOption}
                       style={styles.desktopButton}
@@ -410,7 +542,10 @@ export default function FillBlankScreen() {
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+      edges={['top']}
+    >
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => router.back()}
@@ -419,22 +554,36 @@ export default function FillBlankScreen() {
           <Ionicons name="close" size={28} color={colors.text} />
         </TouchableOpacity>
         <Text style={[styles.progress, { color: colors.text }]}>
-          Question {currentIndex + 1} of {totalExpectedQuestions || questions.length}
+          {t('fillBlank.question', { current: currentIndex + 1, total: totalExpectedQuestions || questions.length })}
         </Text>
-        <View style={[styles.scoreContainer, { backgroundColor: `${colors.success}20` }]}>
+        <View
+          style={[
+            styles.scoreContainer,
+            { backgroundColor: `${colors.success}20` },
+          ]}
+        >
           <Ionicons name="trophy" size={20} color={colors.success} />
-          <Text style={[styles.scoreText, { color: colors.success }]}>{score}</Text>
+          <Text style={[styles.scoreText, { color: colors.success }]}>
+            {score}
+          </Text>
         </View>
       </View>
 
-      <View style={[styles.progressBarContainer, { backgroundColor: colors.border }]}>
+      <View
+        style={[
+          styles.progressBarContainer,
+          { backgroundColor: colors.border },
+        ]}
+      >
         <LinearGradient
           colors={['#FF6B35', '#FFBB00']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={[
             styles.progressFill,
-            { width: `${((currentIndex + 1) / (totalExpectedQuestions || questions.length)) * 100}%` },
+            {
+              width: `${((currentIndex + 1) / (totalExpectedQuestions || questions.length)) * 100}%`,
+            },
           ]}
         />
       </View>
@@ -446,21 +595,35 @@ export default function FillBlankScreen() {
       >
         {!showHint && !isAnswered && (
           <TouchableOpacity
-            style={[styles.hintButton, { backgroundColor: `${colors.ai}15`, borderColor: colors.ai }]}
+            style={[
+              styles.hintButton,
+              { backgroundColor: `${colors.ai}15`, borderColor: colors.ai },
+            ]}
             onPress={() => setShowHint(true)}
             activeOpacity={0.7}
           >
             <Ionicons name="bulb-outline" size={20} color={colors.ai} />
-            <Text style={[styles.hintButtonText, { color: colors.ai }]}>Show Hint</Text>
+            <Text style={[styles.hintButtonText, { color: colors.ai }]}>
+              {t('common:buttons.showHint')}
+            </Text>
           </TouchableOpacity>
         )}
 
         {showHint && (
-          <View style={[styles.hintCard, { backgroundColor: `${colors.ai}20`, borderColor: colors.ai }]}>
+          <View
+            style={[
+              styles.hintCard,
+              { backgroundColor: `${colors.ai}20`, borderColor: colors.ai },
+            ]}
+          >
             <Ionicons name="bulb" size={20} color={colors.ai} />
             <View style={styles.hintContent}>
-              <Text style={[styles.hintLabel, { color: colors.ai }]}>Translation:</Text>
-              <Text style={[styles.hintText, { color: colors.text }]}>{currentQuestion.translation}</Text>
+              <Text style={[styles.hintLabel, { color: colors.ai }]}>
+                {t('fillBlank.translation')}
+              </Text>
+              <Text style={[styles.hintText, { color: colors.text }]}>
+                {currentQuestion.translation}
+              </Text>
             </View>
           </View>
         )}
@@ -471,16 +634,20 @@ export default function FillBlankScreen() {
           end={{ x: 1, y: 1 }}
           style={styles.sentenceCard}
         >
-          <Text style={styles.sentenceLabel}>Fill in the blank:</Text>
+          <Text style={styles.sentenceLabel}>{t('fillBlank.fillPrompt')}</Text>
           <Text style={styles.sentenceText}>{currentQuestion.sentence}</Text>
         </LinearGradient>
 
-        <Text style={[styles.optionsLabel, { color: colors.textSecondary }]}>Choose the correct word:</Text>
+        <Text style={[styles.optionsLabel, { color: colors.textSecondary }]}>
+          {t('fillBlank.choosePrompt')}
+        </Text>
 
         <View style={styles.optionsGrid}>
           {currentQuestion.options.map((option, index) => {
             const isSelected = selectedOption === option;
-            const isCorrectOption = option.toLowerCase() === currentQuestion.correctAnswer.toLowerCase();
+            const isCorrectOption =
+              option.toLowerCase() ===
+              currentQuestion.correctAnswer.toLowerCase();
             const showCorrect = isAnswered && isCorrectOption;
             const showIncorrect = isAnswered && isSelected && !isCorrect;
 
@@ -490,9 +657,19 @@ export default function FillBlankScreen() {
                 style={[
                   styles.optionButton,
                   { backgroundColor: colors.card, borderColor: colors.border },
-                  isSelected && !isAnswered && { borderColor: colors.primary, backgroundColor: `${colors.primary}15` },
-                  showCorrect && { borderColor: colors.success, backgroundColor: `${colors.success}15` },
-                  showIncorrect && { borderColor: colors.error, backgroundColor: `${colors.error}15` },
+                  isSelected &&
+                    !isAnswered && {
+                      borderColor: colors.primary,
+                      backgroundColor: `${colors.primary}15`,
+                    },
+                  showCorrect && {
+                    borderColor: colors.success,
+                    backgroundColor: `${colors.success}15`,
+                  },
+                  showIncorrect && {
+                    borderColor: colors.error,
+                    backgroundColor: `${colors.error}15`,
+                  },
                 ]}
                 onPress={() => !isAnswered && setSelectedOption(option)}
                 disabled={isAnswered}
@@ -502,7 +679,11 @@ export default function FillBlankScreen() {
                   style={[
                     styles.optionText,
                     { color: colors.text },
-                    isSelected && !isAnswered && { color: colors.primary, fontWeight: '700' },
+                    isSelected &&
+                      !isAnswered && {
+                        color: colors.primary,
+                        fontWeight: '700',
+                      },
                     showCorrect && { color: colors.success, fontWeight: '700' },
                     showIncorrect && { color: colors.error, fontWeight: '700' },
                   ]}
@@ -512,10 +693,18 @@ export default function FillBlankScreen() {
                   {option}
                 </Text>
                 {showCorrect && (
-                  <Ionicons name="checkmark-circle" size={20} color={colors.success} />
+                  <Ionicons
+                    name="checkmark-circle"
+                    size={20}
+                    color={colors.success}
+                  />
                 )}
                 {showIncorrect && (
-                  <Ionicons name="close-circle" size={20} color={colors.error} />
+                  <Ionicons
+                    name="close-circle"
+                    size={20}
+                    color={colors.error}
+                  />
                 )}
               </TouchableOpacity>
             );
@@ -523,8 +712,20 @@ export default function FillBlankScreen() {
         </View>
 
         {isAnswered && !isCorrect && (
-          <View style={[styles.correctAnswerContainer, { backgroundColor: colors.card, borderColor: colors.error }]}>
-            <Text style={[styles.correctAnswerLabel, { color: colors.textSecondary }]}>Correct answer:</Text>
+          <View
+            style={[
+              styles.correctAnswerContainer,
+              { backgroundColor: colors.card, borderColor: colors.error },
+            ]}
+          >
+            <Text
+              style={[
+                styles.correctAnswerLabel,
+                { color: colors.textSecondary },
+              ]}
+            >
+              {t('fillBlank.correctAnswer')}
+            </Text>
             <Text style={[styles.correctAnswerText, { color: colors.error }]}>
               {currentQuestion.correctAnswer}
             </Text>
@@ -532,22 +733,27 @@ export default function FillBlankScreen() {
         )}
       </ScrollView>
 
-      <View style={[styles.footer, { backgroundColor: colors.card, borderTopColor: colors.border }]}>
+      <View
+        style={[
+          styles.footer,
+          { backgroundColor: colors.card, borderTopColor: colors.border },
+        ]}
+      >
         {isAnswered ? (
           <Button
             title={
               isWaitingForNextQuestion
-                ? 'Loading next question...'
+                ? t('fillBlank.loadingNext')
                 : currentIndex === questions.length - 1
-                ? 'Finish'
-                : 'Next Question'
+                  ? t('common:buttons.finish')
+                  : t('quiz.nextQuestion')
             }
             onPress={handleNext}
             disabled={isWaitingForNextQuestion}
           />
         ) : (
           <Button
-            title="Check Answer"
+            title={t('common:buttons.check')}
             onPress={handleCheckAnswer}
             disabled={!selectedOption}
           />

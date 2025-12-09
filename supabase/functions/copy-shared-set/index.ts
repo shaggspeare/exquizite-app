@@ -6,7 +6,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
 interface RequestBody {
@@ -21,7 +22,7 @@ interface CopyResponse {
   success: boolean;
 }
 
-serve(async (req) => {
+serve(async req => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
@@ -32,7 +33,9 @@ serve(async (req) => {
     const authHeader = req.headers.get('Authorization');
     if (!authHeader) {
       return new Response(
-        JSON.stringify({ error: 'Missing authorization header. Please sign in to copy sets.' }),
+        JSON.stringify({
+          error: 'Missing authorization header. Please sign in to copy sets.',
+        }),
         {
           status: 401,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -61,7 +64,10 @@ serve(async (req) => {
     if (userError || !user) {
       console.error('Auth error:', userError);
       return new Response(
-        JSON.stringify({ error: 'Unauthorized. Please sign in to copy sets.', details: userError?.message }),
+        JSON.stringify({
+          error: 'Unauthorized. Please sign in to copy sets.',
+          details: userError?.message,
+        }),
         {
           status: 401,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -73,13 +79,10 @@ serve(async (req) => {
     const { shareCode, customName }: RequestBody = await req.json();
 
     if (!shareCode) {
-      return new Response(
-        JSON.stringify({ error: 'shareCode is required' }),
-        {
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        }
-      );
+      return new Response(JSON.stringify({ error: 'shareCode is required' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     // Fetch share information
@@ -90,13 +93,10 @@ serve(async (req) => {
       .single();
 
     if (shareError || !share) {
-      return new Response(
-        JSON.stringify({ error: 'Share not found' }),
-        {
-          status: 404,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        }
-      );
+      return new Response(JSON.stringify({ error: 'Share not found' }), {
+        status: 404,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     // Check if share is active and not expired
@@ -186,8 +186,10 @@ serve(async (req) => {
       .insert({
         user_id: user.id,
         name: newSetName,
-        target_language: setDetails?.target_language || originalSet.target_language,
-        native_language: setDetails?.native_language || originalSet.native_language,
+        target_language:
+          setDetails?.target_language || originalSet.target_language,
+        native_language:
+          setDetails?.native_language || originalSet.native_language,
         is_copy: true,
         original_author_id: originalSet.user_id,
       })
@@ -206,7 +208,7 @@ serve(async (req) => {
     }
 
     // Copy word pairs to new set
-    const newPairs = originalPairs.map((pair) => ({
+    const newPairs = originalPairs.map(pair => ({
       set_id: newSet.id,
       word: pair.word,
       translation: pair.translation,
@@ -257,7 +259,10 @@ serve(async (req) => {
   } catch (error) {
     console.error('Unexpected error:', error);
     return new Response(
-      JSON.stringify({ error: 'Internal server error', details: error.message }),
+      JSON.stringify({
+        error: 'Internal server error',
+        details: error.message,
+      }),
       {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },

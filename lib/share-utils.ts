@@ -32,7 +32,9 @@ export function generateWebShareUrl(shareCode: string): string {
 export function extractShareCode(url: string): string | null {
   try {
     // Handle app scheme URLs: exquiziteapp://shared/CODE
-    const appSchemePattern = new RegExp(`${SHARE_CONFIG.SCHEME}://${SHARE_CONFIG.HOST}/([A-Za-z0-9]+)`);
+    const appSchemePattern = new RegExp(
+      `${SHARE_CONFIG.SCHEME}://${SHARE_CONFIG.HOST}/([A-Za-z0-9]+)`
+    );
     const appMatch = url.match(appSchemePattern);
     if (appMatch && appMatch[1]) {
       return appMatch[1];
@@ -62,8 +64,7 @@ export function extractShareCode(url: string): string | null {
  */
 export function isValidShareCode(code: string): boolean {
   return (
-    code.length === SHARE_CONFIG.CODE_LENGTH &&
-    /^[A-Za-z0-9]+$/.test(code)
+    code.length === SHARE_CONFIG.CODE_LENGTH && /^[A-Za-z0-9]+$/.test(code)
   );
 }
 
@@ -87,7 +88,9 @@ export function generateShareText(
   wordCount: number,
   includeWebUrl: boolean = false
 ): string {
-  const url = includeWebUrl ? generateWebShareUrl(shareCode) : generateShareUrl(shareCode);
+  const url = includeWebUrl
+    ? generateWebShareUrl(shareCode)
+    : generateShareUrl(shareCode);
   return formatShareMessage(setName, url, wordCount);
 }
 

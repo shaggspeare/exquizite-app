@@ -1,0 +1,25 @@
+{
+  "_note": "This is a placeholder file. Please replace with zh translations.",
+  "title": "Profile",
+  "guest": "Guest",
+  "guestAccount": "Guest Account",
+  "appAccount": "App Account",
+  "stats": {
+    "sets": "Sets",
+    "words": "Words",
+    "practiced": "Practiced"
+  },
+  "progress": "Progress",
+  "settings": {
+    "title": "Settings",
+    "subtitle": "App Settings",
+    "description": "Theme, languages, and preferences"
+  },
+  "yourSets": "Your Sets",
+  "noSetsYet": "No sets created yet",
+  "deleteSet": {
+    "title": "Delete Set",
+    "message": "Are you sure you want to delete \"{{setName}}\"?",
+    "confirm": "Delete"
+  }
+}

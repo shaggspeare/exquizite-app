@@ -1,13 +1,18 @@
 import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useSets } from '@/contexts/SetsContext';
 import { WordSet } from '@/lib/types';
 import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+} from 'react-native-reanimated';
 import { ShareModal } from './ShareModal';
 import { showAlert } from '@/lib/alert';
 
@@ -17,6 +22,7 @@ interface SetCardProps {
 }
 
 export function SetCard({ set, onPress }: SetCardProps) {
+  const { t } = useTranslation('games');
   const { colors } = useTheme();
   const { deleteSet } = useSets();
   const router = useRouter();
@@ -26,31 +32,33 @@ export function SetCard({ set, onPress }: SetCardProps) {
 
   // Generate a consistent gradient based on set ID
   const getGradientColors = () => {
-    const hash = set.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const hash = set.id
+      .split('')
+      .reduce((acc, char) => acc + char.charCodeAt(0), 0);
     const gradients = [
-      ['#4A90E2', '#5B9EFF'],      // Blue
-      ['#B537F2', '#E066FF'],      // Purple
-      ['#00D4FF', '#06593f'],      // Teal/Dark
-      ['#EF4444', '#F97316'],      // Red/Orange
-      ['#EC4899', '#F472B6'],      // Pink
-      ['#10B981', '#059669'],      // Green
-      ['#581C87', '#7C3AED'],      // Deep Purple
-      ['#FF006E', '#8338EC'],      // Pink/Purple
-      ['#FF9E00', '#FF0099'],      // Orange/Pink
+      ['#4A90E2', '#5B9EFF'], // Blue
+      ['#B537F2', '#E066FF'], // Purple
+      ['#00D4FF', '#06593f'], // Teal/Dark
+      ['#EF4444', '#F97316'], // Red/Orange
+      ['#EC4899', '#F472B6'], // Pink
+      ['#10B981', '#059669'], // Green
+      ['#581C87', '#7C3AED'], // Deep Purple
+      ['#FF006E', '#8338EC'], // Pink/Purple
+      ['#FF9E00', '#FF0099'], // Orange/Pink
     ];
     return gradients[hash % gradients.length];
   };
 
   const formatDate = (dateString?: string) => {
-    if (!dateString) return 'Never';
+    if (!dateString) return t('common:time.never');
     const date = new Date(dateString);
     const now = new Date();
     const diffTime = Math.abs(now.getTime() - date.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    if (diffDays === 0) return 'Today';
-    if (diffDays === 1) return 'Yesterday';
-    if (diffDays < 7) return `${diffDays} days ago`;
+    if (diffDays === 0) return t('common:time.today');
+    if (diffDays === 1) return t('common:time.yesterday');
+    if (diffDays < 7) return t('common:time.daysAgo', { count: diffDays });
     return date.toLocaleDateString();
   };
 
@@ -82,12 +90,12 @@ export function SetCard({ set, onPress }: SetCardProps) {
 
   const handleDeletePress = () => {
     showAlert(
-      'Delete Set',
-      `Are you sure you want to delete "${set.name}"? This action cannot be undone.`,
+      t('setCard.deleteSet'),
+      t('setCard.deleteConfirm', { setName: set.name }),
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('common:buttons.cancel'), style: 'cancel' },
         {
-          text: 'Delete',
+          text: t('common:buttons.delete'),
           style: 'destructive',
           onPress: () => deleteSet(set.id),
         },
@@ -99,9 +107,7 @@ export function SetCard({ set, onPress }: SetCardProps) {
     setShowShareModal(true);
   };
 
-  const wordPairsList = set.words
-    .map(word => word.word)
-    .join(', ');
+  const wordPairsList = set.words.map(word => word.word).join(', ');
 
   const gradientColors = getGradientColors();
 
@@ -109,9 +115,14 @@ export function SetCard({ set, onPress }: SetCardProps) {
     <Animated.View style={[styles.cardWrapper, animatedStyle]}>
       {/* Featured badge - absolutely positioned outside gradient */}
       {set.isFeatured && (
-        <View style={[styles.featuredBadge, { backgroundColor: 'rgba(255,215,0,0.9)' }]}>
+        <View
+          style={[
+            styles.featuredBadge,
+            { backgroundColor: 'rgba(255,215,0,0.9)' },
+          ]}
+        >
           <Ionicons name="star" size={12} color="#000" />
-          <Text style={styles.featuredBadgeText}>Featured</Text>
+          <Text style={styles.featuredBadgeText}>{t('setCard.featured')}</Text>
         </View>
       )}
 
@@ -146,32 +157,39 @@ export function SetCard({ set, onPress }: SetCardProps) {
                 />
               </View>
               <Text style={styles.progressText}>
-                {Math.round((set.words.length / 20) * 100)}% complete
+                {t('setCard.complete', { percent: Math.round((set.words.length / 20) * 100) })}
               </Text>
             </View>
 
             {set.lastPracticed && (
               <View style={styles.metaRow}>
-                <Ionicons name="time-outline" size={14} color="rgba(255,255,255,0.8)" />
+                <Ionicons
+                  name="time-outline"
+                  size={14}
+                  color="rgba(255,255,255,0.8)"
+                />
                 <Text style={styles.metaText}>
-                  Last practiced {formatDate(set.lastPracticed)}
+                  {t('setCard.lastPracticed', { date: formatDate(set.lastPracticed) })}
                 </Text>
               </View>
             )}
           </View>
 
           {/* Word count badge at top right */}
-          <View style={[styles.wordBadge, { backgroundColor: 'rgba(255,255,255,0.3)' }]}>
+          <View
+            style={[
+              styles.wordBadge,
+              { backgroundColor: 'rgba(255,255,255,0.3)' },
+            ]}
+          >
             <Ionicons name="book" size={14} color="#FFFFFF" />
-            <Text style={styles.wordBadgeText}>
-              {set.words.length}
-            </Text>
+            <Text style={styles.wordBadgeText}>{set.words.length}</Text>
           </View>
 
           {/* Always visible practice button */}
           <TouchableOpacity
             style={styles.practiceButton}
-            onPress={(e) => {
+            onPress={e => {
               e.stopPropagation();
               handlePlayPress();
             }}
@@ -182,38 +200,67 @@ export function SetCard({ set, onPress }: SetCardProps) {
         </LinearGradient>
 
         {isExpanded && (
-          <View style={[styles.expandedContent, { backgroundColor: colors.card }]}>
-            <View style={[styles.wordListContainer, { backgroundColor: colors.background }]}>
-              <Text style={[styles.wordListText, { color: colors.textSecondary }]}>
-                {wordPairsList || 'No words in this set'}
+          <View
+            style={[styles.expandedContent, { backgroundColor: colors.card }]}
+          >
+            <View
+              style={[
+                styles.wordListContainer,
+                { backgroundColor: colors.background },
+              ]}
+            >
+              <Text
+                style={[styles.wordListText, { color: colors.textSecondary }]}
+              >
+                {wordPairsList || t('common:status.noWords')}
               </Text>
             </View>
 
             {set.isFeatured ? (
-              <View style={[styles.featuredInfo, { backgroundColor: colors.backgroundSecondary }]}>
-                <Ionicons name="information-circle" size={20} color={colors.textSecondary} />
-                <Text style={[styles.featuredInfoText, { color: colors.textSecondary }]}>
-                  This is a demo set. Create your own set to get started!
+              <View
+                style={[
+                  styles.featuredInfo,
+                  { backgroundColor: colors.backgroundSecondary },
+                ]}
+              >
+                <Ionicons
+                  name="information-circle"
+                  size={20}
+                  color={colors.textSecondary}
+                />
+                <Text
+                  style={[
+                    styles.featuredInfoText,
+                    { color: colors.textSecondary },
+                  ]}
+                >
+                  {t('setCard.demoInfo')}
                 </Text>
               </View>
             ) : (
               <View style={styles.actions}>
                 <TouchableOpacity
-                  style={[styles.actionButton, { backgroundColor: colors.success }]}
+                  style={[
+                    styles.actionButton,
+                    { backgroundColor: colors.success },
+                  ]}
                   onPress={handleSharePress}
                   activeOpacity={0.7}
                 >
                   <Ionicons name="share-social" size={20} color="#FFFFFF" />
-                  <Text style={styles.actionButtonText}>Share</Text>
+                  <Text style={styles.actionButtonText}>{t('common:buttons.share')}</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  style={[styles.actionButton, { backgroundColor: colors.error }]}
+                  style={[
+                    styles.actionButton,
+                    { backgroundColor: colors.error },
+                  ]}
                   onPress={handleDeletePress}
                   activeOpacity={0.7}
                 >
                   <Ionicons name="trash" size={20} color="#FFFFFF" />
-                  <Text style={styles.actionButtonText}>Delete</Text>
+                  <Text style={styles.actionButtonText}>{t('common:buttons.delete')}</Text>
                 </TouchableOpacity>
               </View>
             )}
@@ -281,7 +328,7 @@ const styles = StyleSheet.create({
   },
   featuredBadge: {
     position: 'absolute',
-    top: 0,
+    top: -Spacing.sm,
     left: Spacing.lg,
     flexDirection: 'row',
     alignItems: 'center',

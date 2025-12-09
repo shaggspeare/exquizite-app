@@ -13,7 +13,7 @@ interface DesktopContainerProps {
 export function DesktopContainer({
   children,
   maxWidth = MAX_CONTENT_WIDTH,
-  noPadding = false
+  noPadding = false,
 }: DesktopContainerProps) {
   const { isDesktop } = useResponsive();
 
@@ -22,11 +22,9 @@ export function DesktopContainer({
   }
 
   return (
-    <View style={[
-      styles.container,
-      { maxWidth },
-      noPadding && styles.noPadding
-    ]}>
+    <View
+      style={[styles.container, { maxWidth }, noPadding && styles.noPadding]}
+    >
       {children}
     </View>
   );

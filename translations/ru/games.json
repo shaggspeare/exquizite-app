@@ -1,0 +1,92 @@
+{
+  "chooseActivity": "Выбрать активность",
+  "setNotFound": "Набор не найден",
+  "wordsInSet": "Слова в этом наборе",
+  "startPractice": "Начать практику",
+  "quickPractice": "Быстрая практика",
+  "templates": {
+    "flashcard": {
+      "name": "Карточки",
+      "description": "Переверните, чтобы увидеть переводы"
+    },
+    "match": {
+      "name": "Подбор пар",
+      "description": "Перетаскивайте и соединяйте пары"
+    },
+    "quiz": {
+      "name": "Викторина",
+      "description": "Вопросы с множественным выбором"
+    },
+    "fillBlank": {
+      "name": "Заполнение пропусков",
+      "description": "Дополните предложения правильным словом",
+      "aiHints": "Доступны подсказки ИИ"
+    }
+  },
+  "flashcard": {
+    "title": "Карточки: {{setName}}",
+    "tapToFlip": "Нажмите, чтобы перевернуть",
+    "clickToFlip": "Щелкните, чтобы перевернуть",
+    "complete": "Завершено"
+  },
+  "quiz": {
+    "title": "Викторина: {{setName}}",
+    "question": "Вопрос {{current}} / {{total}}",
+    "translate": "Перевести:",
+    "nextQuestion": "Следующий вопрос",
+    "loadingQuiz": "Загрузка викторины...",
+    "complete": {
+      "title": "Викторина завершена!",
+      "score": "Вы набрали {{score}}/{{total}} ({{percentage}}%)"
+    }
+  },
+  "match": {
+    "title": "Подбор пар: {{setName}}",
+    "words": "Слова",
+    "translations": "Переводы",
+    "complete": {
+      "title": "Поздравляем!",
+      "message": "Вы завершили игру на подбор пар за {{time}}!"
+    }
+  },
+  "fillBlank": {
+    "title": "Заполнение пропусков: {{setName}}",
+    "question": "Вопрос {{current}} / {{total}}",
+    "translation": "Перевод:",
+    "fillPrompt": "Заполните пропуск:",
+    "choosePrompt": "Выберите правильное слово:",
+    "loadingNext": "Загрузка следующего вопроса...",
+    "generatingSentences": "Генерация предложений...",
+    "correctAnswer": "Правильный ответ:",
+    "complete": {
+      "title": "Упражнение завершено!",
+      "score": "Вы набрали {{score}}/{{total}} ({{percentage}}%)"
+    }
+  },
+  "home": {
+    "title": "Главная",
+    "greeting": "Привет, {{name}}!",
+    "readyToLearn": "Готовы учиться сегодня?",
+    "noSets": "Наборов пока нет",
+    "createFirstSet": "Создайте свой первый набор слов, чтобы начать!",
+    "createSet": "Создать набор",
+    "featuredSets": "Рекомендуемые наборы",
+    "tryThem": "Попробуйте их!",
+    "demoDescription": "Практикуйтесь с этими демонстрационными наборами, чтобы начать"
+  },
+  "dashboard": {
+    "title": "Панель управления",
+    "lastPracticed": "Последние практики"
+  },
+  "mySets": {
+    "title": "Мои наборы",
+    "noSets": "Наборов пока нет",
+    "createFirstSet": "Создайте свой первый набор слов, чтобы начать!",
+    "createSet": "Создать набор"
+  },
+  "setCard": {
+    "featured": "Рекомендуемый",
+    "complete": "{{percent}}% завершено",
+    "demoInfo": "Это демонстрационный набор. Создайте свой собственный набор, чтобы начать!"
+  }
+}

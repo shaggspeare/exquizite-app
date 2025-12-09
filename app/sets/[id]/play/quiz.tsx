@@ -17,9 +17,14 @@ import { showAlert } from '@/lib/alert';
 import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+} from 'react-native-reanimated';
 import { DesktopLayout } from '@/components/layout/DesktopLayout';
 import { DesktopContainer } from '@/components/layout/DesktopContainer';
+import { useTranslation } from 'react-i18next';
 
 // Utility function to shuffle array
 function shuffleArray<T>(array: T[]): T[] {
@@ -61,6 +66,7 @@ export default function QuizScreen() {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [score, setScore] = useState(0);
+  const { t } = useTranslation('games');
 
   useEffect(() => {
     if (set) {
@@ -75,7 +81,7 @@ export default function QuizScreen() {
     const shuffledWords = shuffleArray(set.words);
 
     // Generate questions
-    const quizQuestions: QuizQuestion[] = shuffledWords.map((word) => ({
+    const quizQuestions: QuizQuestion[] = shuffledWords.map(word => ({
       word: word.word,
       correctAnswer: word.translation,
       options: generateQuizOptions(word.translation, allTranslations),
@@ -109,11 +115,11 @@ export default function QuizScreen() {
     updateLastPracticed(id!);
     const percentage = Math.round((score / questions.length) * 100);
     showAlert(
-      'Quiz Complete!',
-      `You scored ${score}/${questions.length} (${percentage}%)`,
+      t('quiz.complete.title'),
+      t('quiz.complete.score', { score, total: questions.length, percentage }),
       [
-        { text: 'Try Again', onPress: () => resetQuiz() },
-        { text: 'Done', onPress: () => router.back() },
+        { text: t('common:buttons.tryAgain'), onPress: () => resetQuiz() },
+        { text: t('common:buttons.done'), onPress: () => router.back() },
       ]
     );
   };
@@ -129,7 +135,7 @@ export default function QuizScreen() {
   if (!set || set.words.length === 0) {
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.errorText}>No words in this set</Text>
+        <Text style={styles.errorText}>{t('common:status.noWords')}</Text>
       </SafeAreaView>
     );
   }
@@ -138,7 +144,7 @@ export default function QuizScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loading}>
-          <Text>Loading quiz...</Text>
+          <Text>{t('quiz.loadingQuiz')}</Text>
         </View>
       </SafeAreaView>
     );
@@ -149,9 +155,22 @@ export default function QuizScreen() {
   if (isDesktop) {
     return (
       <DesktopLayout>
-        <View style={[styles.desktopContainer, { backgroundColor: colors.background }]}>
+        <View
+          style={[
+            styles.desktopContainer,
+            { backgroundColor: colors.background },
+          ]}
+        >
           {/* Header */}
-          <View style={[styles.desktopHeader, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
+          <View
+            style={[
+              styles.desktopHeader,
+              {
+                backgroundColor: colors.card,
+                borderBottomColor: colors.border,
+              },
+            ]}
+          >
             <DesktopContainer>
               <View style={styles.desktopHeaderContent}>
                 <TouchableOpacity
@@ -161,15 +180,22 @@ export default function QuizScreen() {
                   <Ionicons name="close" size={28} color={colors.text} />
                 </TouchableOpacity>
                 <Text style={[styles.desktopTitle, { color: colors.text }]}>
-                  Quiz: {set.name}
+                  {t('quiz.title', { setName: set.name })}
                 </Text>
                 <View style={styles.desktopHeaderRight}>
                   <Text style={[styles.progress, { color: colors.text }]}>
-                    Question {currentIndex + 1} / {questions.length}
+                    {t('quiz.question', { current: currentIndex + 1, total: questions.length })}
                   </Text>
-                  <View style={[styles.scoreContainer, { backgroundColor: `${colors.success}20` }]}>
+                  <View
+                    style={[
+                      styles.scoreContainer,
+                      { backgroundColor: `${colors.success}20` },
+                    ]}
+                  >
                     <Ionicons name="trophy" size={20} color={colors.success} />
-                    <Text style={[styles.scoreText, { color: colors.success }]}>{score}</Text>
+                    <Text style={[styles.scoreText, { color: colors.success }]}>
+                      {score}
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -177,7 +203,12 @@ export default function QuizScreen() {
           </View>
 
           {/* Progress Bar */}
-          <View style={[styles.progressBarContainer, { backgroundColor: colors.border }]}>
+          <View
+            style={[
+              styles.progressBarContainer,
+              { backgroundColor: colors.border },
+            ]}
+          >
             <LinearGradient
               colors={['#00D4FF', '#00E5A0']}
               start={{ x: 0, y: 0 }}
@@ -203,9 +234,16 @@ export default function QuizScreen() {
                   end={{ x: 1, y: 1 }}
                   style={styles.desktopQuestionCard}
                 >
-                  <Ionicons name="help-circle" size={48} color="#FFFFFF" style={{ marginBottom: Spacing.md }} />
-                  <Text style={styles.questionLabel}>Translate:</Text>
-                  <Text style={styles.desktopQuestionText}>{currentQuestion.word}</Text>
+                  <Ionicons
+                    name="help-circle"
+                    size={48}
+                    color="#FFFFFF"
+                    style={{ marginBottom: Spacing.md }}
+                  />
+                  <Text style={styles.questionLabel}>{t('quiz.translate')}</Text>
+                  <Text style={styles.desktopQuestionText}>
+                    {currentQuestion.word}
+                  </Text>
                 </LinearGradient>
 
                 <View style={styles.desktopOptions}>
@@ -235,14 +273,16 @@ export default function QuizScreen() {
                   {isAnswered ? (
                     <Button
                       title={
-                        currentIndex === questions.length - 1 ? 'Finish' : 'Next Question'
+                        currentIndex === questions.length - 1
+                          ? t('common:buttons.finish')
+                          : t('quiz.nextQuestion')
                       }
                       onPress={handleNext}
                       style={styles.desktopButton}
                     />
                   ) : (
                     <Button
-                      title="Skip"
+                      title={t('common:buttons.skip')}
                       onPress={handleNext}
                       variant="outline"
                       style={styles.desktopButton}
@@ -258,7 +298,10 @@ export default function QuizScreen() {
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+      edges={['top']}
+    >
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => router.back()}
@@ -267,15 +310,27 @@ export default function QuizScreen() {
           <Ionicons name="close" size={28} color={colors.text} />
         </TouchableOpacity>
         <Text style={[styles.progress, { color: colors.text }]}>
-          Question {currentIndex + 1} of {questions.length}
+          {t('quiz.question', { current: currentIndex + 1, total: questions.length })}
         </Text>
-        <View style={[styles.scoreContainer, { backgroundColor: `${colors.success}20` }]}>
+        <View
+          style={[
+            styles.scoreContainer,
+            { backgroundColor: `${colors.success}20` },
+          ]}
+        >
           <Ionicons name="trophy" size={20} color={colors.success} />
-          <Text style={[styles.scoreText, { color: colors.success }]}>{score}</Text>
+          <Text style={[styles.scoreText, { color: colors.success }]}>
+            {score}
+          </Text>
         </View>
       </View>
 
-      <View style={[styles.progressBarContainer, { backgroundColor: colors.border }]}>
+      <View
+        style={[
+          styles.progressBarContainer,
+          { backgroundColor: colors.border },
+        ]}
+      >
         <LinearGradient
           colors={['#00D4FF', '#00E5A0']}
           start={{ x: 0, y: 0 }}
@@ -298,8 +353,13 @@ export default function QuizScreen() {
           end={{ x: 1, y: 1 }}
           style={styles.questionCard}
         >
-          <Ionicons name="help-circle" size={36} color="#FFFFFF" style={{ marginBottom: Spacing.sm }} />
-          <Text style={styles.questionLabel}>Translate:</Text>
+          <Ionicons
+            name="help-circle"
+            size={36}
+            color="#FFFFFF"
+            style={{ marginBottom: Spacing.sm }}
+          />
+          <Text style={styles.questionLabel}>{t('quiz.translate')}</Text>
           <Text style={styles.questionText}>{currentQuestion.word}</Text>
         </LinearGradient>
 
@@ -327,20 +387,21 @@ export default function QuizScreen() {
         </View>
       </ScrollView>
 
-      <View style={[styles.footer, { backgroundColor: colors.card, borderTopColor: colors.border }]}>
+      <View
+        style={[
+          styles.footer,
+          { backgroundColor: colors.card, borderTopColor: colors.border },
+        ]}
+      >
         {isAnswered ? (
           <Button
             title={
-              currentIndex === questions.length - 1 ? 'Finish' : 'Next Question'
+              currentIndex === questions.length - 1 ? t('common:buttons.finish') : t('quiz.nextQuestion')
             }
             onPress={handleNext}
           />
         ) : (
-          <Button
-            title="Skip"
-            onPress={handleNext}
-            variant="outline"
-          />
+          <Button title={t('common:buttons.skip')} onPress={handleNext} variant="outline" />
         )}
       </View>
     </SafeAreaView>
@@ -358,7 +419,16 @@ interface OptionCardProps {
   colors: any;
 }
 
-function OptionCard({ option, index, isSelected, showCorrect, showWrong, isAnswered, onPress, colors }: OptionCardProps) {
+function OptionCard({
+  option,
+  index,
+  isSelected,
+  showCorrect,
+  showWrong,
+  isAnswered,
+  onPress,
+  colors,
+}: OptionCardProps) {
   const scale = useSharedValue(1);
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -408,7 +478,9 @@ function OptionCard({ option, index, isSelected, showCorrect, showWrong, isAnswe
         activeOpacity={1}
       >
         <View style={[styles.optionNumber, { backgroundColor: colors.border }]}>
-          <Text style={[styles.optionNumberText, { color: colors.text }]}>{String.fromCharCode(65 + index)}</Text>
+          <Text style={[styles.optionNumberText, { color: colors.text }]}>
+            {String.fromCharCode(65 + index)}
+          </Text>
         </View>
         <Text style={[styles.optionText, { color: colors.text }]}>
           {option}

@@ -9,6 +9,7 @@
 5. Click **Run** to execute the SQL
 
 This will create:
+
 - `profiles` table - User profiles
 - `word_sets` table - Word sets created by users
 - `word_pairs` table - Individual word-translation pairs
@@ -44,6 +45,7 @@ If you want Google Sign-in:
 ### Tables
 
 **profiles**
+
 - `id` - UUID (references auth.users)
 - `email` - User's email
 - `name` - Display name
@@ -52,6 +54,7 @@ If you want Google Sign-in:
 - `created_at`, `updated_at` - Timestamps
 
 **word_sets**
+
 - `id` - UUID
 - `user_id` - References profiles
 - `name` - Set name
@@ -59,6 +62,7 @@ If you want Google Sign-in:
 - `last_practiced` - Last practice date
 
 **word_pairs**
+
 - `id` - UUID
 - `set_id` - References word_sets
 - `word` - English word
@@ -69,6 +73,7 @@ If you want Google Sign-in:
 ### Security
 
 All tables have Row Level Security (RLS) enabled:
+
 - Users can only see/modify their own data
 - Cascading deletes ensure data integrity
 - Automatic profile creation on signup
@@ -85,15 +90,18 @@ After running the schema:
 ## Troubleshooting
 
 **Issue: Can't insert data**
+
 - Check RLS policies in **Authentication** > **Policies**
 - Verify you're authenticated (check `auth.users` table)
 
 **Issue: Tables not created**
+
 - Make sure UUID extension is enabled
 - Check SQL Editor for error messages
 - Run queries one section at a time
 
 **Issue: Google OAuth not working**
+
 - Verify redirect URLs match exactly
 - Check Google Cloud Console credentials
 - Enable Google+ API in Google Cloud

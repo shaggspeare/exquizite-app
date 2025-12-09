@@ -14,9 +14,7 @@
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       },
-      "associatedDomains": [
-        "applinks:exquizite.app"
-      ]
+      "associatedDomains": ["applinks:exquizite.app"]
     },
     "android": {
       "adaptiveIcon": {
@@ -41,10 +39,7 @@
               "host": "shared"
             }
           ],
-          "category": [
-            "BROWSABLE",
-            "DEFAULT"
-          ]
+          "category": ["BROWSABLE", "DEFAULT"]
         }
       ]
     },

@@ -1,14 +1,11 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-} from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage, AVAILABLE_LANGUAGES } from '@/contexts/LanguageContext';
+import { useI18n } from '@/contexts/I18nContext';
 import { useResponsive } from '@/hooks/useResponsive';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -17,20 +14,30 @@ import { Spacing, Typography } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 import { DesktopLayout } from '@/components/layout/DesktopLayout';
 import { DesktopContainer } from '@/components/layout/DesktopContainer';
+import { FULLY_TRANSLATED_LANGUAGES } from '@/lib/i18n/languages';
 
 export default function LanguageSetupScreen() {
+  const { t } = useTranslation('auth');
   const router = useRouter();
   const { colors } = useTheme();
   const { isDesktop } = useResponsive();
   const { preferences, setLanguages } = useLanguage();
+  const { changeLanguage } = useI18n();
 
-  const [targetLanguage, setTargetLanguage] = useState(preferences.targetLanguage || '');
-  const [nativeLanguage, setNativeLanguage] = useState(preferences.nativeLanguage || 'en');
+  const [targetLanguage, setTargetLanguage] = useState(
+    preferences.targetLanguage || ''
+  );
+  const [nativeLanguage, setNativeLanguage] = useState(
+    preferences.nativeLanguage || 'en'
+  );
 
   const handleComplete = async () => {
     if (!targetLanguage || !nativeLanguage) return;
 
     try {
+      // Change UI language to the native language (translate-to language)
+      await changeLanguage(nativeLanguage);
+      // Save language preferences
       await setLanguages(targetLanguage, nativeLanguage);
       router.replace('/(tabs)');
     } catch (error) {
@@ -38,14 +45,21 @@ export default function LanguageSetupScreen() {
     }
   };
 
+  // Filter native language options to only show fully translated languages
   const nativeLanguageOptions = AVAILABLE_LANGUAGES.filter(
-    lang => lang.code !== targetLanguage
+    lang => lang.code !== targetLanguage &&
+            FULLY_TRANSLATED_LANGUAGES.includes(lang.code as any)
   );
 
   if (isDesktop) {
     return (
       <DesktopLayout hideSidebar={true}>
-        <View style={[styles.desktopContainer, { backgroundColor: colors.background }]}>
+        <View
+          style={[
+            styles.desktopContainer,
+            { backgroundColor: colors.background },
+          ]}
+        >
           <ScrollView
             style={styles.desktopContent}
             contentContainerStyle={styles.desktopScrollContent}
@@ -54,19 +68,20 @@ export default function LanguageSetupScreen() {
             <DesktopContainer>
               <View style={styles.desktopCenteredContent}>
                 <View style={styles.desktopIconContainer}>
-                  <Ionicons
-                    name="language"
-                    size={80}
-                    color={colors.primary}
-                  />
+                  <Ionicons name="language" size={80} color={colors.primary} />
                 </View>
 
                 <Text style={[styles.desktopTitle, { color: colors.text }]}>
-                  Choose Your Languages
+                  {t('languageSetup.heading')}
                 </Text>
 
-                <Text style={[styles.desktopSubtitle, { color: colors.textSecondary }]}>
-                  Select the language you want to learn and your native language
+                <Text
+                  style={[
+                    styles.desktopSubtitle,
+                    { color: colors.textSecondary },
+                  ]}
+                >
+                  {t('languageSetup.description')}
                 </Text>
 
                 <Card style={styles.desktopLanguageCard}>
@@ -75,8 +90,8 @@ export default function LanguageSetupScreen() {
                       languages={AVAILABLE_LANGUAGES}
                       selectedLanguage={targetLanguage}
                       onSelect={setTargetLanguage}
-                      placeholder="Select language to learn"
-                      label="Language to Learn"
+                      placeholder={t('languageSetup.targetPlaceholder')}
+                      label={t('languageSetup.targetLanguage')}
                     />
                   </View>
 
@@ -85,16 +100,25 @@ export default function LanguageSetupScreen() {
                       languages={nativeLanguageOptions}
                       selectedLanguage={nativeLanguage}
                       onSelect={setNativeLanguage}
-                      placeholder="Select your native language"
-                      label="Your Native Language"
+                      placeholder={t('languageSetup.nativePlaceholder')}
+                      label={t('languageSetup.nativeLanguage')}
                     />
                   </View>
 
                   {targetLanguage && nativeLanguage && (
                     <View style={styles.desktopInfoContainer}>
-                      <Ionicons name="information-circle" size={20} color={colors.primary} />
-                      <Text style={[styles.desktopInfoText, { color: colors.textSecondary }]}>
-                        You can change these settings later in your profile
+                      <Ionicons
+                        name="information-circle"
+                        size={20}
+                        color={colors.primary}
+                      />
+                      <Text
+                        style={[
+                          styles.desktopInfoText,
+                          { color: colors.textSecondary },
+                        ]}
+                      >
+                        {t('languageSetup.info')}
                       </Text>
                     </View>
                   )}
@@ -102,7 +126,7 @@ export default function LanguageSetupScreen() {
 
                 {targetLanguage && nativeLanguage && (
                   <Button
-                    title="Get Started"
+                    title={t('languageSetup.getStarted')}
                     onPress={handleComplete}
                     style={styles.desktopButton}
                   />
@@ -116,10 +140,17 @@ export default function LanguageSetupScreen() {
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={[styles.header, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
+      <View
+        style={[
+          styles.header,
+          { backgroundColor: colors.card, borderBottomColor: colors.border },
+        ]}
+      >
         <Text style={[styles.headerTitle, { color: colors.text }]}>
-          Language Setup
+          {t('languageSetup.title')}
         </Text>
       </View>
 
@@ -129,19 +160,15 @@ export default function LanguageSetupScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.iconContainer}>
-          <Ionicons
-            name="language"
-            size={64}
-            color={colors.primary}
-          />
+          <Ionicons name="language" size={64} color={colors.primary} />
         </View>
 
         <Text style={[styles.title, { color: colors.text }]}>
-          Choose Your Languages
+          {t('languageSetup.heading')}
         </Text>
 
         <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-          Select the language you want to learn and your native language
+          {t('languageSetup.description')}
         </Text>
 
         <Card style={styles.languageSection}>
@@ -150,8 +177,8 @@ export default function LanguageSetupScreen() {
               languages={AVAILABLE_LANGUAGES}
               selectedLanguage={targetLanguage}
               onSelect={setTargetLanguage}
-              placeholder="Select language to learn"
-              label="Language to Learn"
+              placeholder={t('languageSetup.targetPlaceholder')}
+              label={t('languageSetup.targetLanguage')}
             />
           </View>
 
@@ -160,16 +187,20 @@ export default function LanguageSetupScreen() {
               languages={nativeLanguageOptions}
               selectedLanguage={nativeLanguage}
               onSelect={setNativeLanguage}
-              placeholder="Select your native language"
-              label="Your Native Language"
+              placeholder={t('languageSetup.nativePlaceholder')}
+              label={t('languageSetup.nativeLanguage')}
             />
           </View>
 
           {targetLanguage && nativeLanguage && (
             <View style={styles.infoContainer}>
-              <Ionicons name="information-circle" size={20} color={colors.primary} />
+              <Ionicons
+                name="information-circle"
+                size={20}
+                color={colors.primary}
+              />
               <Text style={[styles.infoText, { color: colors.textSecondary }]}>
-                You can change these settings later in your profile
+                {t('languageSetup.info')}
               </Text>
             </View>
           )}
@@ -177,11 +208,13 @@ export default function LanguageSetupScreen() {
       </ScrollView>
 
       {targetLanguage && nativeLanguage && (
-        <View style={[styles.footer, { backgroundColor: colors.card, borderTopColor: colors.border }]}>
-          <Button
-            title="Get Started"
-            onPress={handleComplete}
-          />
+        <View
+          style={[
+            styles.footer,
+            { backgroundColor: colors.card, borderTopColor: colors.border },
+          ]}
+        >
+          <Button title={t('languageSetup.getStarted')} onPress={handleComplete} />
         </View>
       )}
     </SafeAreaView>

@@ -1,25 +1,56 @@
-import { createContext, useContext, useState, useEffect, useRef, ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+  ReactNode,
+} from 'react';
 import { supabase, retryOperation } from '@/lib/supabase';
 import { useAuth } from './AuthContext';
 import { useLanguage } from './LanguageContext';
-import { WordSet, WordPair, ShareMetadata, ShareOptions, SharedSetDetails, CopySetResponse } from '@/lib/types';
+import {
+  WordSet,
+  WordPair,
+  ShareMetadata,
+  ShareOptions,
+  SharedSetDetails,
+  CopySetResponse,
+} from '@/lib/types';
 import * as guestStorage from '@/lib/guestStorage';
 import featuredSetsData from '@/data/featuredSets.json';
 
 interface SetsContextType {
   sets: WordSet[];
   isLoading: boolean;
-  createSet: (name: string, words: WordPair[], targetLanguage: string, nativeLanguage: string) => Promise<WordSet | null>;
-  updateSet: (id: string, name: string, words: WordPair[], targetLanguage: string, nativeLanguage: string) => Promise<void>;
+  createSet: (
+    name: string,
+    words: WordPair[],
+    targetLanguage: string,
+    nativeLanguage: string
+  ) => Promise<WordSet | null>;
+  updateSet: (
+    id: string,
+    name: string,
+    words: WordPair[],
+    targetLanguage: string,
+    nativeLanguage: string
+  ) => Promise<void>;
   deleteSet: (id: string) => Promise<void>;
   getSetById: (id: string) => WordSet | undefined;
   updateLastPracticed: (id: string) => Promise<void>;
   refreshSets: () => Promise<void>;
   migrateGuestSetsToUser: () => Promise<void>;
   // Sharing methods
-  shareSet: (setId: string, options?: ShareOptions) => Promise<ShareMetadata | null>;
+  shareSet: (
+    setId: string,
+    options?: ShareOptions
+  ) => Promise<ShareMetadata | null>;
   getSharedSet: (shareCode: string) => Promise<SharedSetDetails | null>;
-  copySharedSet: (shareCode: string, customName?: string) => Promise<WordSet | null>;
+  copySharedSet: (
+    shareCode: string,
+    customName?: string
+  ) => Promise<WordSet | null>;
   deleteShare: (setId: string) => Promise<void>;
 }
 
@@ -27,14 +58,19 @@ const SetsContext = createContext<SetsContextType | undefined>(undefined);
 
 // Helper function to select 3 featured sets based on user's target language
 function selectFeaturedSets(targetLanguage: string): WordSet[] {
-  console.log('🎯 Selecting featured sets for target language:', targetLanguage);
+  console.log(
+    '🎯 Selecting featured sets for target language:',
+    targetLanguage
+  );
 
   // Filter sets by target language
   const matchingSets = featuredSetsData.filter(
     (set: any) => set.targetLanguage === targetLanguage
   );
 
-  console.log(`✅ Found ${matchingSets.length} featured sets for ${targetLanguage}`);
+  console.log(
+    `✅ Found ${matchingSets.length} featured sets for ${targetLanguage}`
+  );
 
   // Return up to 3 sets for this language
   const selectedSets = matchingSets.slice(0, 3);
@@ -114,10 +150,12 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         console.log('☁️ Loading sets from Supabase...');
         const { data: setsData, error: setsError } = await supabase
           .from('word_sets')
-          .select(`
+          .select(
+            `
             *,
             word_pairs (*)
-          `)
+          `
+          )
           .eq('user_id', user.id)
           .order('created_at', { ascending: false });
 
@@ -159,7 +197,9 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         console.log('🎯 User has no sets, adding featured sets...');
         const featured = selectFeaturedSets(preferences.targetLanguage);
         setSets(featured);
-        console.log(`✅ Added ${featured.length} featured sets for ${preferences.targetLanguage}`);
+        console.log(
+          `✅ Added ${featured.length} featured sets for ${preferences.targetLanguage}`
+        );
       } else {
         setSets(userSets);
       }
@@ -170,20 +210,39 @@ export function SetsProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const createSet = async (name: string, words: WordPair[], targetLanguage: string, nativeLanguage: string): Promise<WordSet | null> => {
+  const createSet = async (
+    name: string,
+    words: WordPair[],
+    targetLanguage: string,
+    nativeLanguage: string
+  ): Promise<WordSet | null> => {
     if (!user) {
       console.error('No user found when creating set');
       console.error('User state:', { user, hasUser: !!user });
-      throw new Error('You must be signed in to create a set. Please sign in or continue as a guest.');
+      throw new Error(
+        'You must be signed in to create a set. Please sign in or continue as a guest.'
+      );
     }
 
     try {
-      console.log('Creating set:', { name, wordCount: words.length, userId: user.id, isGuest: user.isGuest, targetLanguage, nativeLanguage });
+      console.log('Creating set:', {
+        name,
+        wordCount: words.length,
+        userId: user.id,
+        isGuest: user.isGuest,
+        targetLanguage,
+        nativeLanguage,
+      });
 
       // If guest user, save to local storage
       if (isGuestUser()) {
         console.log('📱 Creating guest set in local storage...');
-        const newSet = await guestStorage.createGuestSet(name, words, targetLanguage, nativeLanguage);
+        const newSet = await guestStorage.createGuestSet(
+          name,
+          words,
+          targetLanguage,
+          nativeLanguage
+        );
 
         // For guest users, keep featured sets and add new set at the top
         setSets(prev => {
@@ -214,14 +273,19 @@ export function SetsProvider({ children }: { children: ReactNode }) {
           .single();
 
         if (setError) {
-          console.error('Error creating word set:', JSON.stringify(setError, null, 2));
+          console.error(
+            'Error creating word set:',
+            JSON.stringify(setError, null, 2)
+          );
           console.error('Error details:', {
             message: setError.message,
             code: setError.code,
             details: setError.details,
             hint: setError.hint,
           });
-          throw new Error(`Failed to create word set: ${setError.message || 'Unknown error'}`);
+          throw new Error(
+            `Failed to create word set: ${setError.message || 'Unknown error'}`
+          );
         }
 
         return data;
@@ -246,14 +310,19 @@ export function SetsProvider({ children }: { children: ReactNode }) {
           .select();
 
         if (pairsError) {
-          console.error('Error creating word pairs:', JSON.stringify(pairsError, null, 2));
+          console.error(
+            'Error creating word pairs:',
+            JSON.stringify(pairsError, null, 2)
+          );
           console.error('Error details:', {
             message: pairsError.message,
             code: pairsError.code,
             details: pairsError.details,
             hint: pairsError.hint,
           });
-          throw new Error(`Failed to create word pairs: ${pairsError.message || 'Unknown error'}`);
+          throw new Error(
+            `Failed to create word pairs: ${pairsError.message || 'Unknown error'}`
+          );
         }
 
         return data;
@@ -281,7 +350,9 @@ export function SetsProvider({ children }: { children: ReactNode }) {
       setSets(prev => {
         const hasFeaturedSets = prev.some(set => set.isFeatured);
         if (hasFeaturedSets) {
-          console.log('🗑️ Removing featured sets as user created their first set');
+          console.log(
+            '🗑️ Removing featured sets as user created their first set'
+          );
           return [newSet];
         }
         return [newSet, ...prev];
@@ -290,7 +361,10 @@ export function SetsProvider({ children }: { children: ReactNode }) {
       return newSet;
     } catch (error: any) {
       console.error('Error creating set - Full error:', error);
-      console.error('Error creating set - Stringified:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+      console.error(
+        'Error creating set - Stringified:',
+        JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
+      );
       console.error('Error creating set - Details:', {
         message: error?.message || 'No message',
         name: error?.name || 'No name',
@@ -301,14 +375,21 @@ export function SetsProvider({ children }: { children: ReactNode }) {
       });
 
       // Show alert to user with error message
-      const errorMessage = error?.message || error?.toString() || 'Unknown error occurred';
+      const errorMessage =
+        error?.message || error?.toString() || 'Unknown error occurred';
       console.error('Final error message:', errorMessage);
 
       return null;
     }
   };
 
-  const updateSet = async (id: string, name: string, words: WordPair[], targetLanguage: string, nativeLanguage: string) => {
+  const updateSet = async (
+    id: string,
+    name: string,
+    words: WordPair[],
+    targetLanguage: string,
+    nativeLanguage: string
+  ) => {
     if (!user) {
       throw new Error('No user found when updating set');
     }
@@ -316,16 +397,30 @@ export function SetsProvider({ children }: { children: ReactNode }) {
     // Prevent editing featured sets
     const setToUpdate = sets.find(set => set.id === id);
     if (setToUpdate?.isFeatured) {
-      throw new Error('Featured sets cannot be edited. Please create your own set instead.');
+      throw new Error(
+        'Featured sets cannot be edited. Please create your own set instead.'
+      );
     }
 
     try {
-      console.log('Updating set:', { id, name, wordCount: words.length, targetLanguage, nativeLanguage });
+      console.log('Updating set:', {
+        id,
+        name,
+        wordCount: words.length,
+        targetLanguage,
+        nativeLanguage,
+      });
 
       // If guest user, update in local storage
       if (isGuestUser()) {
         console.log('📱 Updating guest set in local storage...');
-        await guestStorage.updateGuestSet(id, name, words, targetLanguage, nativeLanguage);
+        await guestStorage.updateGuestSet(
+          id,
+          name,
+          words,
+          targetLanguage,
+          nativeLanguage
+        );
         await loadSets(); // Reload to get updated data
         console.log('✅ Guest set updated successfully');
         return;
@@ -359,7 +454,9 @@ export function SetsProvider({ children }: { children: ReactNode }) {
 
         if (deleteError) {
           console.error('Error deleting word pairs:', deleteError);
-          throw new Error(`Failed to delete word pairs: ${deleteError.message}`);
+          throw new Error(
+            `Failed to delete word pairs: ${deleteError.message}`
+          );
         }
       });
 
@@ -378,7 +475,9 @@ export function SetsProvider({ children }: { children: ReactNode }) {
 
         if (insertError) {
           console.error('Error inserting word pairs:', insertError);
-          throw new Error(`Failed to insert word pairs: ${insertError.message}`);
+          throw new Error(
+            `Failed to insert word pairs: ${insertError.message}`
+          );
         }
       });
 
@@ -414,10 +513,7 @@ export function SetsProvider({ children }: { children: ReactNode }) {
 
       // Otherwise, delete from Supabase
       // Word pairs will be deleted automatically due to CASCADE
-      const { error } = await supabase
-        .from('word_sets')
-        .delete()
-        .eq('id', id);
+      const { error } = await supabase.from('word_sets').delete().eq('id', id);
 
       if (error) throw error;
 
@@ -530,7 +626,10 @@ export function SetsProvider({ children }: { children: ReactNode }) {
             .insert(wordPairsToInsert);
 
           if (pairsError) {
-            console.error(`Error migrating word pairs for ${guestSet.name}:`, pairsError);
+            console.error(
+              `Error migrating word pairs for ${guestSet.name}:`,
+              pairsError
+            );
           }
         }
 
@@ -550,7 +649,10 @@ export function SetsProvider({ children }: { children: ReactNode }) {
   };
 
   // Sharing methods
-  const shareSet = async (setId: string, options?: ShareOptions): Promise<ShareMetadata | null> => {
+  const shareSet = async (
+    setId: string,
+    options?: ShareOptions
+  ): Promise<ShareMetadata | null> => {
     if (!user) {
       console.error('User must be authenticated to share sets');
       return null;
@@ -558,14 +660,18 @@ export function SetsProvider({ children }: { children: ReactNode }) {
 
     // Guest users cannot share sets (only stored locally)
     if (isGuestUser()) {
-      console.error('Guest users cannot share sets. Please sign up to share sets.');
+      console.error(
+        'Guest users cannot share sets. Please sign up to share sets.'
+      );
       throw new Error('Please create an account to share sets with others.');
     }
 
     // Prevent sharing featured sets
     const setToShare = sets.find(set => set.id === setId);
     if (setToShare?.isFeatured) {
-      throw new Error('Featured sets cannot be shared. Please create your own set instead.');
+      throw new Error(
+        'Featured sets cannot be shared. Please create your own set instead.'
+      );
     }
 
     try {
@@ -573,7 +679,13 @@ export function SetsProvider({ children }: { children: ReactNode }) {
 
       // Add timeout to prevent infinite loading
       const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Share link generation timed out after 30 seconds')), 30000);
+        setTimeout(
+          () =>
+            reject(
+              new Error('Share link generation timed out after 30 seconds')
+            ),
+          30000
+        );
       });
 
       const invokePromise = supabase.functions.invoke('generate-share-link', {
@@ -584,7 +696,10 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         },
       });
 
-      const { data, error } = await Promise.race([invokePromise, timeoutPromise]) as any;
+      const { data, error } = (await Promise.race([
+        invokePromise,
+        timeoutPromise,
+      ])) as any;
 
       if (error) {
         console.error('Error generating share link:', error);
@@ -602,13 +717,18 @@ export function SetsProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const getSharedSet = async (shareCode: string): Promise<SharedSetDetails | null> => {
+  const getSharedSet = async (
+    shareCode: string
+  ): Promise<SharedSetDetails | null> => {
     try {
       console.log('Fetching shared set:', shareCode);
 
-      const { data, error } = await supabase.functions.invoke('get-shared-set', {
-        body: { shareCode },
-      });
+      const { data, error } = await supabase.functions.invoke(
+        'get-shared-set',
+        {
+          body: { shareCode },
+        }
+      );
 
       if (error) {
         console.error('Error fetching shared set:', error);
@@ -626,7 +746,10 @@ export function SetsProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const copySharedSet = async (shareCode: string, customName?: string): Promise<WordSet | null> => {
+  const copySharedSet = async (
+    shareCode: string,
+    customName?: string
+  ): Promise<WordSet | null> => {
     if (!user) {
       console.error('User must be authenticated to copy sets');
       return null;
@@ -634,19 +757,24 @@ export function SetsProvider({ children }: { children: ReactNode }) {
 
     // Guest users cannot copy shared sets (would need to save to Supabase)
     if (isGuestUser()) {
-      console.error('Guest users cannot copy shared sets. Please sign up to copy sets.');
+      console.error(
+        'Guest users cannot copy shared sets. Please sign up to copy sets.'
+      );
       throw new Error('Please create an account to copy shared sets.');
     }
 
     try {
       console.log('Copying shared set:', { shareCode, customName });
 
-      const { data, error } = await supabase.functions.invoke('copy-shared-set', {
-        body: {
-          shareCode,
-          customName,
-        },
-      });
+      const { data, error } = await supabase.functions.invoke(
+        'copy-shared-set',
+        {
+          body: {
+            shareCode,
+            customName,
+          },
+        }
+      );
 
       if (error) {
         console.error('Error copying shared set:', error);
@@ -660,10 +788,12 @@ export function SetsProvider({ children }: { children: ReactNode }) {
       // Fetch the newly created set with its word pairs directly from database
       const { data: newSetData, error: fetchError } = await supabase
         .from('word_sets')
-        .select(`
+        .select(
+          `
           *,
           word_pairs (*)
-        `)
+        `
+        )
         .eq('id', response.setId)
         .single();
 

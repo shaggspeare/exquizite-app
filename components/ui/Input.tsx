@@ -1,4 +1,10 @@
-import { TextInput, StyleSheet, View, Text, TextInputProps } from 'react-native';
+import {
+  TextInput,
+  StyleSheet,
+  View,
+  Text,
+  TextInputProps,
+} from 'react-native';
 import { Spacing, BorderRadius, Typography } from '@/lib/constants';
 import { useTheme } from '@/contexts/ThemeContext';
 
@@ -12,7 +18,9 @@ export function Input({ label, error, style, ...props }: InputProps) {
 
   return (
     <View style={styles.container}>
-      {label && <Text style={[styles.label, { color: colors.text }]}>{label}</Text>}
+      {label && (
+        <Text style={[styles.label, { color: colors.text }]}>{label}</Text>
+      )}
       <TextInput
         style={[
           styles.input,
@@ -21,12 +29,14 @@ export function Input({ label, error, style, ...props }: InputProps) {
             color: colors.text,
             backgroundColor: colors.card,
           },
-          style
+          style,
         ]}
         placeholderTextColor={colors.textSecondary}
         {...props}
       />
-      {error && <Text style={[styles.error, { color: colors.error }]}>{error}</Text>}
+      {error && (
+        <Text style={[styles.error, { color: colors.error }]}>{error}</Text>
+      )}
     </View>
   );
 }

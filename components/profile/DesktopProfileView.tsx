@@ -1,5 +1,11 @@
 // Desktop profile view
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSets } from '@/contexts/SetsContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -20,7 +26,8 @@ export function DesktopProfileView() {
 
   const totalWords = sets.reduce((sum, set) => sum + set.words.length, 0);
   const practicedSets = sets.filter(s => s.lastPracticed).length;
-  const accuracy = sets.length > 0 ? Math.round((practicedSets / sets.length) * 100) : 0;
+  const accuracy =
+    sets.length > 0 ? Math.round((practicedSets / sets.length) * 100) : 0;
 
   const handleSignOut = () => {
     showAlert('Sign Out', 'Are you sure you want to sign out?', [
@@ -48,47 +55,90 @@ export function DesktopProfileView() {
   };
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: colors.background }]} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      style={[styles.container, { backgroundColor: colors.background }]}
+      contentContainerStyle={styles.scrollContent}
+      showsVerticalScrollIndicator={false}
+    >
       <DesktopContainer>
         {/* Page Header */}
         <View style={styles.pageHeader}>
-          <Text style={[styles.pageTitle, { color: colors.text }]}>Profile</Text>
+          <Text style={[styles.pageTitle, { color: colors.text }]}>
+            Profile
+          </Text>
         </View>
 
         <View style={styles.bentoLayout}>
           {/* Left Column */}
           <View style={styles.leftColumn}>
             {/* Profile Card */}
-            <LinearGradient colors={['#5B9EFF', '#E066FF']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.profileCard}>
+            <LinearGradient
+              colors={['#5B9EFF', '#E066FF']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.profileCard}
+            >
               <View style={styles.avatarContainer}>
                 <Ionicons name="person" size={64} color="#FFFFFF" />
               </View>
               <Text style={styles.userName}>{user?.name || 'Guest'}</Text>
-              {user?.email && <Text style={styles.userEmail}>{user.email}</Text>}
+              {user?.email && (
+                <Text style={styles.userEmail}>{user.email}</Text>
+              )}
               <View style={styles.accountBadge}>
-                <Ionicons name={user?.isGuest ? 'person-outline' : 'shield-checkmark'} size={14} color="#FFFFFF" />
-                <Text style={styles.accountBadgeText}>{user?.isGuest ? 'Guest Account' : 'Full Account'}</Text>
+                <Ionicons
+                  name={user?.isGuest ? 'person-outline' : 'shield-checkmark'}
+                  size={14}
+                  color="#FFFFFF"
+                />
+                <Text style={styles.accountBadgeText}>
+                  {user?.isGuest ? 'Guest Account' : 'Full Account'}
+                </Text>
               </View>
             </LinearGradient>
 
             {/* Upgrade Banner for Guests */}
             {user?.isGuest && (
-              <Card style={[styles.upgradeCard, { borderColor: colors.primary }]}>
-                <View style={[styles.upgradeIconContainer, { backgroundColor: `${colors.primary}20` }]}>
+              <Card
+                style={[styles.upgradeCard, { borderColor: colors.primary }]}
+              >
+                <View
+                  style={[
+                    styles.upgradeIconContainer,
+                    { backgroundColor: `${colors.primary}20` },
+                  ]}
+                >
                   <Ionicons name="rocket" size={40} color={colors.primary} />
                 </View>
-                <Text style={[styles.upgradeTitle, { color: colors.text }]}>Upgrade Your Account</Text>
-                <Text style={[styles.upgradeDescription, { color: colors.textSecondary }]}>
-                  Create a full account to sync your data across devices and never lose your progress
+                <Text style={[styles.upgradeTitle, { color: colors.text }]}>
+                  Upgrade Your Account
                 </Text>
-                <Button title="Create Account" onPress={() => router.push('/(auth)/login?mode=signup')} style={styles.upgradeButton} />
+                <Text
+                  style={[
+                    styles.upgradeDescription,
+                    { color: colors.textSecondary },
+                  ]}
+                >
+                  Create a full account to sync your data across devices and
+                  never lose your progress
+                </Text>
+                <Button
+                  title="Create Account"
+                  onPress={() => router.push('/(auth)/login?mode=signup')}
+                  style={styles.upgradeButton}
+                />
               </Card>
             )}
 
             {/* Stats Grid */}
             <View style={styles.statsGrid}>
               <Card style={styles.statCard}>
-                <LinearGradient colors={['#4A90E2', '#5B9EFF']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.statGradient}>
+                <LinearGradient
+                  colors={['#4A90E2', '#5B9EFF']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.statGradient}
+                >
                   <Ionicons name="library" size={40} color="#FFFFFF" />
                   <Text style={styles.statValue}>{sets.length}</Text>
                   <Text style={styles.statLabel}>Total Sets</Text>
@@ -96,7 +146,12 @@ export function DesktopProfileView() {
               </Card>
 
               <Card style={styles.statCard}>
-                <LinearGradient colors={['#00D4FF', '#00E5A0']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.statGradient}>
+                <LinearGradient
+                  colors={['#00D4FF', '#00E5A0']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.statGradient}
+                >
                   <Ionicons name="book" size={40} color="#FFFFFF" />
                   <Text style={styles.statValue}>{totalWords}</Text>
                   <Text style={styles.statLabel}>Total Words</Text>
@@ -106,7 +161,12 @@ export function DesktopProfileView() {
 
             <View style={styles.statsGrid}>
               <Card style={styles.statCard}>
-                <LinearGradient colors={['#B537F2', '#E066FF']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.statGradient}>
+                <LinearGradient
+                  colors={['#B537F2', '#E066FF']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.statGradient}
+                >
                   <Ionicons name="flame" size={40} color="#FFFFFF" />
                   <Text style={styles.statValue}>{practicedSets}</Text>
                   <Text style={styles.statLabel}>Practiced</Text>
@@ -114,7 +174,12 @@ export function DesktopProfileView() {
               </Card>
 
               <Card style={styles.statCard}>
-                <LinearGradient colors={['#FF6B35', '#FFBB00']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.statGradient}>
+                <LinearGradient
+                  colors={['#FF6B35', '#FFBB00']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.statGradient}
+                >
                   <Ionicons name="trophy" size={40} color="#FFFFFF" />
                   <Text style={styles.statValue}>{accuracy}%</Text>
                   <Text style={styles.statLabel}>Progress</Text>
@@ -127,39 +192,91 @@ export function DesktopProfileView() {
           <View style={styles.rightColumn}>
             {/* Settings */}
             <View style={styles.section}>
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>Settings</Text>
-              <TouchableOpacity style={[styles.settingsCard, { backgroundColor: colors.card, borderColor: colors.border }]} onPress={() => router.push('/settings')} activeOpacity={0.7}>
-                <View style={[styles.settingsIconContainer, { backgroundColor: `${colors.primary}20` }]}>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>
+                Settings
+              </Text>
+              <TouchableOpacity
+                style={[
+                  styles.settingsCard,
+                  { backgroundColor: colors.card, borderColor: colors.border },
+                ]}
+                onPress={() => router.push('/settings')}
+                activeOpacity={0.7}
+              >
+                <View
+                  style={[
+                    styles.settingsIconContainer,
+                    { backgroundColor: `${colors.primary}20` },
+                  ]}
+                >
                   <Ionicons name="settings" size={28} color={colors.primary} />
                 </View>
                 <View style={styles.settingsInfo}>
-                  <Text style={[styles.settingsLabel, { color: colors.text }]}>App Settings</Text>
-                  <Text style={[styles.settingsDescription, { color: colors.textSecondary }]}>Theme, languages, and preferences</Text>
+                  <Text style={[styles.settingsLabel, { color: colors.text }]}>
+                    App Settings
+                  </Text>
+                  <Text
+                    style={[
+                      styles.settingsDescription,
+                      { color: colors.textSecondary },
+                    ]}
+                  >
+                    Theme, languages, and preferences
+                  </Text>
                 </View>
-                <Ionicons name="chevron-forward" size={24} color={colors.textSecondary} />
+                <Ionicons
+                  name="chevron-forward"
+                  size={24}
+                  color={colors.textSecondary}
+                />
               </TouchableOpacity>
             </View>
 
             {/* Your Sets */}
             <View style={styles.section}>
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>Your Sets</Text>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>
+                Your Sets
+              </Text>
               {sets.length === 0 ? (
                 <Card style={styles.emptyCard}>
-                  <Ionicons name="folder-open-outline" size={48} color={colors.textSecondary} />
-                  <Text style={[styles.emptyText, { color: colors.textSecondary }]}>No sets created yet</Text>
+                  <Ionicons
+                    name="folder-open-outline"
+                    size={48}
+                    color={colors.textSecondary}
+                  />
+                  <Text
+                    style={[styles.emptyText, { color: colors.textSecondary }]}
+                  >
+                    No sets created yet
+                  </Text>
                 </Card>
               ) : (
                 <View style={styles.setsList}>
                   {sets.map(set => (
                     <Card key={set.id} style={styles.setCard}>
                       <View style={styles.setInfo}>
-                        <Text style={[styles.setName, { color: colors.text }]}>{set.name}</Text>
-                        <Text style={[styles.setMeta, { color: colors.textSecondary }]}>
-                          {set.words.length} {set.words.length === 1 ? 'word' : 'words'}
+                        <Text style={[styles.setName, { color: colors.text }]}>
+                          {set.name}
+                        </Text>
+                        <Text
+                          style={[
+                            styles.setMeta,
+                            { color: colors.textSecondary },
+                          ]}
+                        >
+                          {set.words.length}{' '}
+                          {set.words.length === 1 ? 'word' : 'words'}
                         </Text>
                       </View>
-                      <TouchableOpacity onPress={() => handleDeleteSet(set.id, set.name)} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-                        <Ionicons name="trash-outline" size={24} color={colors.error} />
+                      <TouchableOpacity
+                        onPress={() => handleDeleteSet(set.id, set.name)}
+                        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                      >
+                        <Ionicons
+                          name="trash-outline"
+                          size={24}
+                          color={colors.error}
+                        />
                       </TouchableOpacity>
                     </Card>
                   ))}
@@ -168,7 +285,11 @@ export function DesktopProfileView() {
             </View>
 
             {/* Sign Out */}
-            <Button title="Sign Out" onPress={handleSignOut} variant="outline" />
+            <Button
+              title="Sign Out"
+              onPress={handleSignOut}
+              variant="outline"
+            />
           </View>
         </View>
       </DesktopContainer>

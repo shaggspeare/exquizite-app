@@ -45,8 +45,10 @@ export function LanguageDropdown({
       return languages;
     }
     const query = searchQuery.toLowerCase();
-    return languages.filter(lang =>
-      lang.name.toLowerCase().includes(query) || lang.code.toLowerCase().includes(query)
+    return languages.filter(
+      lang =>
+        lang.name.toLowerCase().includes(query) ||
+        lang.code.toLowerCase().includes(query)
     );
   }, [languages, searchQuery]);
 
@@ -95,16 +97,14 @@ export function LanguageDropdown({
               </Text>
             </>
           ) : (
-            <Text style={[styles.placeholderText, { color: colors.textSecondary }]}>
+            <Text
+              style={[styles.placeholderText, { color: colors.textSecondary }]}
+            >
               {placeholder}
             </Text>
           )}
         </View>
-        <Ionicons
-          name="chevron-down"
-          size={20}
-          color={colors.textSecondary}
-        />
+        <Ionicons name="chevron-down" size={20} color={colors.textSecondary} />
       </TouchableOpacity>
 
       <Modal
@@ -113,7 +113,12 @@ export function LanguageDropdown({
         presentationStyle="pageSheet"
         onRequestClose={handleClose}
       >
-        <View style={[styles.modalContainer, { backgroundColor: colors.background }]}>
+        <View
+          style={[
+            styles.modalContainer,
+            { backgroundColor: colors.background },
+          ]}
+        >
           <View
             style={[
               styles.modalHeader,
@@ -153,7 +158,11 @@ export function LanguageDropdown({
               />
               {searchQuery.length > 0 && (
                 <TouchableOpacity onPress={() => setSearchQuery('')}>
-                  <Ionicons name="close-circle" size={20} color={colors.textSecondary} />
+                  <Ionicons
+                    name="close-circle"
+                    size={20}
+                    color={colors.textSecondary}
+                  />
                 </TouchableOpacity>
               )}
             </View>
@@ -175,7 +184,9 @@ export function LanguageDropdown({
               >
                 {Platform.OS === 'web' ? (
                   <View style={styles.countryCodeBadge}>
-                    <Text style={[styles.countryCode, { color: colors.primary }]}>
+                    <Text
+                      style={[styles.countryCode, { color: colors.primary }]}
+                    >
                       {item.code.toUpperCase()}
                     </Text>
                   </View>
@@ -201,7 +212,9 @@ export function LanguageDropdown({
                   size={48}
                   color={colors.textSecondary}
                 />
-                <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
+                <Text
+                  style={[styles.emptyText, { color: colors.textSecondary }]}
+                >
                   No languages found
                 </Text>
               </View>
@@ -253,7 +266,8 @@ const styles = StyleSheet.create({
     fontSize: 28,
     ...Platform.select({
       web: {
-        fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Segoe UI Emoji", "Segoe UI Symbol", "Apple Color Emoji", "Twemoji Mozilla", "Noto Color Emoji", "Android Emoji"',
+        fontFamily:
+          'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Segoe UI Emoji", "Segoe UI Symbol", "Apple Color Emoji", "Twemoji Mozilla", "Noto Color Emoji", "Android Emoji"',
       },
     }),
   },
@@ -311,7 +325,8 @@ const styles = StyleSheet.create({
     fontSize: 32,
     ...Platform.select({
       web: {
-        fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Segoe UI Emoji", "Segoe UI Symbol", "Apple Color Emoji", "Twemoji Mozilla", "Noto Color Emoji", "Android Emoji"',
+        fontFamily:
+          'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Segoe UI Emoji", "Segoe UI Symbol", "Apple Color Emoji", "Twemoji Mozilla", "Noto Color Emoji", "Android Emoji"',
       },
     }),
   },

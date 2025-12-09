@@ -1,4 +1,10 @@
-import { Pressable, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
+import {
+  Pressable,
+  Text,
+  StyleSheet,
+  ViewStyle,
+  TextStyle,
+} from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -85,13 +91,7 @@ export function Button({
         style,
       ]}
     >
-      <Text
-        style={[
-          styles.buttonText,
-          { color: getTextColor() },
-          textStyle,
-        ]}
-      >
+      <Text style={[styles.buttonText, { color: getTextColor() }, textStyle]}>
         {title}
       </Text>
     </AnimatedPressable>

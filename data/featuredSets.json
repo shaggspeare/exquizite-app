@@ -8,8 +8,16 @@
     "words": [
       { "id": "es-1-1", "word": "Hola", "translation": "Hello" },
       { "id": "es-1-2", "word": "Buenos días", "translation": "Good morning" },
-      { "id": "es-1-3", "word": "Buenas tardes", "translation": "Good afternoon" },
-      { "id": "es-1-4", "word": "Buenas noches", "translation": "Good evening" },
+      {
+        "id": "es-1-3",
+        "word": "Buenas tardes",
+        "translation": "Good afternoon"
+      },
+      {
+        "id": "es-1-4",
+        "word": "Buenas noches",
+        "translation": "Good evening"
+      },
       { "id": "es-1-5", "word": "Adiós", "translation": "Goodbye" },
       { "id": "es-1-6", "word": "Por favor", "translation": "Please" },
       { "id": "es-1-7", "word": "Gracias", "translation": "Thank you" },
@@ -300,7 +308,11 @@
       { "id": "ja-1-7", "word": "はい", "translation": "Yes" },
       { "id": "ja-1-8", "word": "いいえ", "translation": "No" },
       { "id": "ja-1-9", "word": "ごめんなさい", "translation": "Sorry" },
-      { "id": "ja-1-10", "word": "どういたしまして", "translation": "You're welcome" }
+      {
+        "id": "ja-1-10",
+        "word": "どういたしまして",
+        "translation": "You're welcome"
+      }
     ]
   },
   {

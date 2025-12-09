@@ -26,7 +26,8 @@ export function isDesktopWeb(): boolean {
     navigator.msMaxTouchPoints > 0;
 
   // Check user agent for mobile devices
-  const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+  const mobileRegex =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
   const isMobileUA = mobileRegex.test(navigator.userAgent);
 
   // Desktop if: not mobile width AND (not touch device OR not mobile UA)

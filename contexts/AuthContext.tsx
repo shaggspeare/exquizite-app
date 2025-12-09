@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from 'react';
 import { AppState, AppStateStatus } from 'react-native';
 import { supabase } from '@/lib/supabase';
 import { User } from '@/lib/types';
@@ -8,7 +14,11 @@ interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   signInWithEmail: (email: string, password: string) => Promise<void>;
-  signUpWithEmail: (email: string, password: string, name: string) => Promise<void>;
+  signUpWithEmail: (
+    email: string,
+    password: string,
+    name: string
+  ) => Promise<void>;
   signInAsGuest: (name: string) => Promise<void>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
@@ -45,12 +55,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     );
 
     // Listen for app state changes (foreground/background)
-    const appStateSubscription = AppState.addEventListener('change', (nextAppState: AppStateStatus) => {
-      if (nextAppState === 'active') {
-        console.log('App became active, refreshing session...');
-        checkSession(false); // Don't show loading state when resuming from background
+    const appStateSubscription = AppState.addEventListener(
+      'change',
+      (nextAppState: AppStateStatus) => {
+        if (nextAppState === 'active') {
+          console.log('App became active, refreshing session...');
+          checkSession(false); // Don't show loading state when resuming from background
+        }
       }
-    });
+    );
 
     return () => {
       authListener?.subscription.unsubscribe();
@@ -61,7 +74,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const checkSession = async (shouldSetLoading: boolean = true) => {
     try {
       // First check for Supabase auth session
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (session?.user) {
         await loadUserProfile(session.user.id);
       } else {
@@ -92,7 +107,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (error) {
         // If profile doesn't exist yet and we have retries left, wait and retry
         if (error.code === 'PGRST116' && retries > 0) {
-          console.log(`Profile not found, retrying... (${retries} attempts left)`);
+          console.log(
+            `Profile not found, retrying... (${retries} attempts left)`
+          );
           await new Promise(resolve => setTimeout(resolve, 500));
           return loadUserProfile(userId, retries - 1);
         }
@@ -129,7 +146,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const signUpWithEmail = async (email: string, password: string, name: string) => {
+  const signUpWithEmail = async (
+    email: string,
+    password: string,
+    name: string
+  ) => {
     try {
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -166,7 +187,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.log('✅ Guest user created:', {
         id: guestUser.id,
         email: guestUser.email,
-        isGuest: guestUser.isGuest
+        isGuest: guestUser.isGuest,
       });
 
       setUser(guestUser);
@@ -227,7 +248,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      console.log(`📦 Migrating ${guestSets.length} guest sets to user account...`);
+      console.log(
+        `📦 Migrating ${guestSets.length} guest sets to user account...`
+      );
 
       // Import the sets context to create sets in Supabase
       // Note: This will be handled in the SetsContext

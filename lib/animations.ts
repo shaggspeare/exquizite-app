@@ -113,12 +113,7 @@ export const createProgressAnimation = (progress: number) => {
 // Shimmer animation for loading states
 export const createShimmerAnimation = (value: number) => {
   'worklet';
-  return interpolate(
-    value,
-    [0, 1],
-    [-1, 1],
-    Extrapolation.CLAMP
-  );
+  return interpolate(value, [0, 1], [-1, 1], Extrapolation.CLAMP);
 };
 
 // Card flip animation with 3D perspective

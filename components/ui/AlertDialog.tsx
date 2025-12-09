@@ -1,4 +1,12 @@
-import { Modal, View, Text, StyleSheet, TouchableOpacity, Platform, Dimensions } from 'react-native';
+import {
+  Modal,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Platform,
+  Dimensions,
+} from 'react-native';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -21,7 +29,13 @@ export interface AlertDialogProps {
   onClose: () => void;
 }
 
-export function AlertDialog({ visible, title, message, buttons = [], onClose }: AlertDialogProps) {
+export function AlertDialog({
+  visible,
+  title,
+  message,
+  buttons = [],
+  onClose,
+}: AlertDialogProps) {
   const { colors } = useTheme();
   const isDesktop = Platform.OS === 'web' && isDesktopWeb();
   const isMobile = SCREEN_WIDTH < 768;
@@ -31,7 +45,7 @@ export function AlertDialog({ visible, title, message, buttons = [], onClose }: 
       try {
         const result = button.onPress();
         if (result instanceof Promise) {
-          result.catch((error) => {
+          result.catch(error => {
             console.error('Error in alert button handler:', error);
           });
         }
@@ -49,7 +63,13 @@ export function AlertDialog({ visible, title, message, buttons = [], onClose }: 
     if (hasDestructive) {
       return <Ionicons name="warning" size={iconSize} color={colors.error} />;
     }
-    return <Ionicons name="information-circle" size={iconSize} color={colors.primary} />;
+    return (
+      <Ionicons
+        name="information-circle"
+        size={iconSize}
+        color={colors.primary}
+      />
+    );
   };
 
   // Sort buttons: cancel buttons first, then default, then destructive
@@ -71,36 +91,52 @@ export function AlertDialog({ visible, title, message, buttons = [], onClose }: 
         {Platform.OS === 'ios' ? (
           <BlurView intensity={40} style={StyleSheet.absoluteFill} />
         ) : (
-          <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.6)' }]} />
+          <View
+            style={[
+              StyleSheet.absoluteFill,
+              { backgroundColor: 'rgba(0,0,0,0.6)' },
+            ]}
+          />
         )}
 
         <View style={styles.dialogContainer}>
-          <View style={[
-            styles.dialog,
-            { backgroundColor: colors.card },
-            isMobile && styles.dialogMobile,
-          ]}>
+          <View
+            style={[
+              styles.dialog,
+              { backgroundColor: colors.card },
+              isMobile && styles.dialogMobile,
+            ]}
+          >
             {/* Icon */}
-            <View style={[styles.iconContainer, isMobile && styles.iconContainerMobile]}>
+            <View
+              style={[
+                styles.iconContainer,
+                isMobile && styles.iconContainerMobile,
+              ]}
+            >
               {getIcon()}
             </View>
 
             {/* Title */}
-            <Text style={[
-              styles.title,
-              { color: colors.text },
-              isMobile && styles.titleMobile,
-            ]}>
+            <Text
+              style={[
+                styles.title,
+                { color: colors.text },
+                isMobile && styles.titleMobile,
+              ]}
+            >
               {title}
             </Text>
 
             {/* Message */}
             {message && (
-              <Text style={[
-                styles.message,
-                { color: colors.textSecondary },
-                isMobile && styles.messageMobile,
-              ]}>
+              <Text
+                style={[
+                  styles.message,
+                  { color: colors.textSecondary },
+                  isMobile && styles.messageMobile,
+                ]}
+              >
                 {message}
               </Text>
             )}
@@ -117,7 +153,10 @@ export function AlertDialog({ visible, title, message, buttons = [], onClose }: 
                   onPress={onClose}
                   activeOpacity={0.8}
                 >
-                  <Text style={[styles.buttonText, { color: '#FFFFFF' }]} numberOfLines={1}>
+                  <Text
+                    style={[styles.buttonText, { color: '#FFFFFF' }]}
+                    numberOfLines={1}
+                  >
                     OK
                   </Text>
                 </TouchableOpacity>
@@ -129,14 +168,17 @@ export function AlertDialog({ visible, title, message, buttons = [], onClose }: 
                       backgroundColor:
                         sortedButtons[0].style === 'destructive'
                           ? colors.error
-                          : colors.primary
+                          : colors.primary,
                     },
                     isMobile && styles.buttonMobile,
                   ]}
                   onPress={() => handleButtonPress(sortedButtons[0])}
                   activeOpacity={0.8}
                 >
-                  <Text style={[styles.buttonText, { color: '#FFFFFF' }]} numberOfLines={1}>
+                  <Text
+                    style={[styles.buttonText, { color: '#FFFFFF' }]}
+                    numberOfLines={1}
+                  >
                     {sortedButtons[0].text}
                   </Text>
                 </TouchableOpacity>
@@ -147,9 +189,17 @@ export function AlertDialog({ visible, title, message, buttons = [], onClose }: 
                     style={[
                       styles.button,
                       button.style === 'cancel' && styles.cancelButton,
-                      button.style === 'destructive' && { backgroundColor: colors.error },
-                      button.style === 'default' && { backgroundColor: colors.primary },
-                      button.style === 'cancel' && { backgroundColor: 'transparent', borderWidth: 1, borderColor: colors.border },
+                      button.style === 'destructive' && {
+                        backgroundColor: colors.error,
+                      },
+                      button.style === 'default' && {
+                        backgroundColor: colors.primary,
+                      },
+                      button.style === 'cancel' && {
+                        backgroundColor: 'transparent',
+                        borderWidth: 1,
+                        borderColor: colors.border,
+                      },
                       isMobile && styles.buttonMobile,
                     ]}
                     onPress={() => handleButtonPress(button)}
@@ -160,7 +210,7 @@ export function AlertDialog({ visible, title, message, buttons = [], onClose }: 
                         styles.buttonText,
                         button.style === 'cancel'
                           ? { color: colors.text }
-                          : { color: '#FFFFFF' }
+                          : { color: '#FFFFFF' },
                       ]}
                       numberOfLines={1}
                     >

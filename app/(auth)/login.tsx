@@ -1,7 +1,15 @@
-import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import { useLocalSearchParams } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card } from '@/components/ui/Card';
@@ -15,6 +23,7 @@ import { DesktopLayout } from '@/components/layout/DesktopLayout';
 import { DesktopContainer } from '@/components/layout/DesktopContainer';
 
 export default function LoginScreen() {
+  const { t } = useTranslation('auth');
   const { signInWithEmail, signUpWithEmail, signInAsGuest } = useAuth();
   const { colors } = useTheme();
   const { isDesktop } = useResponsive();
@@ -30,21 +39,21 @@ export default function LoginScreen() {
 
   const handleEmailAuth = async () => {
     if (!email.trim() || !password.trim()) {
-      showAlert('Error', 'Please fill in all fields');
+      showAlert(t('common:status.error'), t('errors.fillAllFields'));
       return;
     }
 
     if (isSignUp) {
       if (!name.trim()) {
-        showAlert('Error', 'Please enter your name');
+        showAlert(t('common:status.error'), t('errors.enterName'));
         return;
       }
       if (password !== confirmPassword) {
-        showAlert('Error', 'Passwords do not match');
+        showAlert(t('common:status.error'), t('errors.passwordMismatch'));
         return;
       }
       if (password.length < 6) {
-        showAlert('Error', 'Password must be at least 6 characters');
+        showAlert(t('common:status.error'), t('errors.passwordTooShort'));
         return;
       }
     }
@@ -60,7 +69,10 @@ export default function LoginScreen() {
         await signInWithEmail(email.trim(), password);
       }
     } catch (error: any) {
-      showAlert('Error', error.message || 'Authentication failed');
+      showAlert(
+        t('common:status.error'),
+        error.message || t('errors.fillAllFields')
+      );
     } finally {
       setIsLoading(false);
     }
@@ -71,7 +83,10 @@ export default function LoginScreen() {
     try {
       await signInAsGuest('Guest User');
     } catch (error: any) {
-      showAlert('Error', error.message || 'Failed to continue as guest');
+      showAlert(
+        t('common:status.error'),
+        error.message || t('errors.fillAllFields')
+      );
     } finally {
       setIsLoading(false);
     }
@@ -86,7 +101,12 @@ export default function LoginScreen() {
   if (isDesktop) {
     return (
       <DesktopLayout hideSidebar={true}>
-        <View style={[styles.desktopContainer, { backgroundColor: colors.background }]}>
+        <View
+          style={[
+            styles.desktopContainer,
+            { backgroundColor: colors.background },
+          ]}
+        >
           <ScrollView
             style={styles.desktopContent}
             contentContainerStyle={styles.desktopScrollContent}
@@ -95,79 +115,111 @@ export default function LoginScreen() {
             <DesktopContainer>
               <View style={styles.desktopCenteredContent}>
                 <View style={styles.desktopHeader}>
-                  <Text style={[styles.desktopLogo, { color: colors.primary }]}>Exquizite</Text>
-                  <Text style={[styles.desktopSubtitle, { color: colors.textSecondary }]}>
-                    Learn vocabulary with AI-powered games
+                  <Text style={[styles.desktopLogo, { color: colors.primary }]}>
+                    {t('appName')}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.desktopSubtitle,
+                      { color: colors.textSecondary },
+                    ]}
+                  >
+                    {t('tagline')}
                   </Text>
                 </View>
 
                 <Card style={styles.desktopFormCard}>
-                  <Text style={[styles.desktopFormTitle, { color: colors.text }]}>
-                    {isSignUp ? 'Create Account' : 'Welcome Back'}
+                  <Text
+                    style={[styles.desktopFormTitle, { color: colors.text }]}
+                  >
+                    {isSignUp ? t('signup.title') : t('login.title')}
                   </Text>
 
                   {isSignUp && (
                     <Input
-                      label="Name"
+                      label={t('signup.name')}
                       value={name}
                       onChangeText={setName}
-                      placeholder="Your name"
+                      placeholder={t('signup.namePlaceholder')}
                       autoCapitalize="words"
                     />
                   )}
 
                   <Input
-                    label="Email"
+                    label={t('signup.email')}
                     value={email}
                     onChangeText={setEmail}
-                    placeholder="your@email.com"
+                    placeholder={t('signup.emailPlaceholder')}
                     keyboardType="email-address"
                     autoCapitalize="none"
                     autoCorrect={false}
                   />
 
                   <Input
-                    label="Password"
+                    label={t('signup.password')}
                     value={password}
                     onChangeText={setPassword}
-                    placeholder={isSignUp ? 'Min 6 characters' : 'Enter password'}
+                    placeholder={
+                      isSignUp
+                        ? t('signup.passwordPlaceholder')
+                        : t('login.passwordPlaceholder')
+                    }
                     secureTextEntry
                     autoCapitalize="none"
                   />
 
                   {isSignUp && (
                     <Input
-                      label="Confirm Password"
+                      label={t('signup.confirmPassword')}
                       value={confirmPassword}
                       onChangeText={setConfirmPassword}
-                      placeholder="Re-enter password"
+                      placeholder={t('signup.confirmPasswordPlaceholder')}
                       secureTextEntry
                       autoCapitalize="none"
                     />
                   )}
 
                   <Button
-                    title={isSignUp ? 'Sign Up' : 'Sign In'}
+                    title={isSignUp ? t('signup.signUp') : t('login.signIn')}
                     onPress={handleEmailAuth}
                     disabled={isLoading}
                     style={styles.desktopPrimaryButton}
                   />
 
                   <Button
-                    title={isSignUp ? 'Already have an account? Sign In' : 'Don\'t have an account? Sign Up'}
+                    title={
+                      isSignUp ? t('signup.hasAccount') : t('login.noAccount')
+                    }
                     onPress={toggleMode}
                     variant="text"
                     disabled={isLoading}
                   />
 
                   <View style={styles.desktopDivider}>
-                    <View style={[styles.desktopDividerLine, { backgroundColor: colors.border }]} />
-                    <Text style={[styles.desktopDividerText, { color: colors.textSecondary }]}>or</Text>
-                    <View style={[styles.desktopDividerLine, { backgroundColor: colors.border }]} />
+                    <View
+                      style={[
+                        styles.desktopDividerLine,
+                        { backgroundColor: colors.border },
+                      ]}
+                    />
+                    <Text
+                      style={[
+                        styles.desktopDividerText,
+                        { color: colors.textSecondary },
+                      ]}
+                    >
+                      {t('login.or')}
+                    </Text>
+                    <View
+                      style={[
+                        styles.desktopDividerLine,
+                        { backgroundColor: colors.border },
+                      ]}
+                    />
                   </View>
 
                   <Button
-                    title="Continue as Guest"
+                    title={t('login.continueAsGuest')}
                     onPress={handleGuestSignIn}
                     variant="outline"
                     disabled={isLoading}
@@ -176,8 +228,13 @@ export default function LoginScreen() {
 
                 <View style={styles.desktopFooter}>
                   <Ionicons name="sparkles" size={20} color={colors.ai} />
-                  <Text style={[styles.desktopFooterText, { color: colors.textSecondary }]}>
-                    AI-enhanced learning experience
+                  <Text
+                    style={[
+                      styles.desktopFooterText,
+                      { color: colors.textSecondary },
+                    ]}
+                  >
+                    {t('login.aiEnhanced')}
                   </Text>
                 </View>
               </View>
@@ -189,7 +246,9 @@ export default function LoginScreen() {
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardView}
@@ -200,79 +259,93 @@ export default function LoginScreen() {
           keyboardShouldPersistTaps="handled"
         >
           <View style={styles.header}>
-            <Text style={[styles.logo, { color: colors.primary }]}>Exquizite</Text>
+            <Text style={[styles.logo, { color: colors.primary }]}>
+              {t('appName')}
+            </Text>
             <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-              Learn vocabulary with AI-powered games
+              {t('tagline')}
             </Text>
           </View>
 
           <View style={styles.formContainer}>
             <Text style={[styles.formTitle, { color: colors.text }]}>
-              {isSignUp ? 'Create Account' : 'Welcome Back'}
+              {isSignUp ? t('signup.title') : t('login.title')}
             </Text>
 
             {isSignUp && (
               <Input
-                label="Name"
+                label={t('signup.name')}
                 value={name}
                 onChangeText={setName}
-                placeholder="Your name"
+                placeholder={t('signup.namePlaceholder')}
                 autoCapitalize="words"
               />
             )}
 
             <Input
-              label="Email"
+              label={t('signup.email')}
               value={email}
               onChangeText={setEmail}
-              placeholder="your@email.com"
+              placeholder={t('signup.emailPlaceholder')}
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
             />
 
             <Input
-              label="Password"
+              label={t('signup.password')}
               value={password}
               onChangeText={setPassword}
-              placeholder={isSignUp ? 'Min 6 characters' : 'Enter password'}
+              placeholder={
+                isSignUp
+                  ? t('signup.passwordPlaceholder')
+                  : t('login.passwordPlaceholder')
+              }
               secureTextEntry
               autoCapitalize="none"
             />
 
             {isSignUp && (
               <Input
-                label="Confirm Password"
+                label={t('signup.confirmPassword')}
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
-                placeholder="Re-enter password"
+                placeholder={t('signup.confirmPasswordPlaceholder')}
                 secureTextEntry
                 autoCapitalize="none"
               />
             )}
 
             <Button
-              title={isSignUp ? 'Sign Up' : 'Sign In'}
+              title={isSignUp ? t('signup.signUp') : t('login.signIn')}
               onPress={handleEmailAuth}
               disabled={isLoading}
               style={styles.primaryButton}
             />
 
             <Button
-              title={isSignUp ? 'Already have an account? Sign In' : 'Don\'t have an account? Sign Up'}
+              title={isSignUp ? t('signup.hasAccount') : t('login.noAccount')}
               onPress={toggleMode}
               variant="text"
               disabled={isLoading}
             />
 
             <View style={styles.divider}>
-              <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
-              <Text style={[styles.dividerText, { color: colors.textSecondary }]}>or</Text>
-              <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
+              <View
+                style={[styles.dividerLine, { backgroundColor: colors.border }]}
+              />
+              <Text
+                style={[styles.dividerText, { color: colors.textSecondary }]}
+              >
+                {t('login.or')}
+              </Text>
+              <View
+                style={[styles.dividerLine, { backgroundColor: colors.border }]}
+              />
             </View>
 
             <Button
-              title="Continue as Guest"
+              title={t('login.continueAsGuest')}
               onPress={handleGuestSignIn}
               variant="outline"
               disabled={isLoading}
@@ -282,7 +355,7 @@ export default function LoginScreen() {
           <View style={styles.footer}>
             <Ionicons name="sparkles" size={20} color={colors.ai} />
             <Text style={[styles.footerText, { color: colors.textSecondary }]}>
-              AI-enhanced learning experience
+              {t('login.aiEnhanced')}
             </Text>
           </View>
         </ScrollView>

@@ -1,0 +1,96 @@
+{
+  "buttons": {
+    "add": "Hinzufügen",
+    "done": "Fertig",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "share": "Teilen",
+    "play": "Spielen",
+    "next": "Weiter",
+    "previous": "Zurück",
+    "skip": "Überspringen",
+    "check": "Antwort prüfen",
+    "save": "Speichern",
+    "saving": "Speichern...",
+    "finish": "Beenden",
+    "tryAgain": "Erneut versuchen",
+    "playAgain": "Nochmal spielen",
+    "showHint": "Hinweis anzeigen",
+    "generate": "Generieren",
+    "generating": "Generieren..."
+  },
+  "status": {
+    "loading": "Laden...",
+    "saving": "Speichern...",
+    "generating": "Generieren...",
+    "noWords": "Keine Wörter in diesem Set",
+    "success": "Erfolg",
+    "error": "Fehler"
+  },
+  "time": {
+    "never": "Nie",
+    "today": "Heute",
+    "yesterday": "Gestern",
+    "daysAgo": "vor {{count}} Tagen",
+    "lastPracticed": "Zuletzt geübt {{date}}"
+  },
+  "counts": {
+    "word": "Wort",
+    "words": "Wörter",
+    "set": "Set",
+    "sets": "Sets",
+    "wordCount": "{{count}} Wort",
+    "wordCount_other": "{{count}} Wörter",
+    "setCount": "{{count}} Set",
+    "setCount_other": "{{count}} Sets",
+    "progress": "{{current}}/{{total}}"
+  },
+  "dialogs": {
+    "areYouSure": "Bist du sicher?",
+    "cannotUndo": "Diese Aktion kann nicht rückgängig gemacht werden."
+  },
+  "sharing": {
+    "shareSet": "Set teilen",
+    "shareCode": "Freigabecode",
+    "shareLink": "Freigabe-Link",
+    "copyLink": "Link kopieren",
+    "copied": "Kopiert!",
+    "copy": "Kopieren",
+    "views": "Ansichten",
+    "copies": "Kopien",
+    "generatingLink": "Freigabe-Link wird erstellt...",
+    "linkInfo": "Jeder mit diesem Link kann dein Set ansehen und kopieren",
+    "deactivateLink": "Freigabe-Link deaktivieren",
+    "deactivateConfirm": "Bist du sicher, dass du diesen Freigabe-Link deaktivieren möchtest? Niemand wird mehr mit dem Link auf dieses Set zugreifen können.",
+    "deactivate": "Deaktivieren",
+    "linkDeactivated": "Freigabe-Link wurde deaktiviert",
+    "shareError": "Fehler beim Erstellen des Freigabe-Links. Bitte versuche es erneut.",
+    "copyError": "Fehler beim Kopieren des Links in die Zwischenablage",
+    "linkCopied": "Link kopiert",
+    "linkCopiedToClipboard": "Freigabe-Link in Zwischenablage kopiert"
+  },
+  "tour": {
+    "skip": "Überspringen",
+    "next": "Weiter",
+    "back": "Zurück",
+    "getStarted": "Los geht's",
+    "slides": {
+      "vocabulary": {
+        "title": "Erweitere deinen Wortschatz",
+        "description": "Füge Wörter manuell hinzu oder nutze KI, um thematische Vokabelsets zu erstellen. Erstelle bis zu 20 Wörter pro Set."
+      },
+      "organize": {
+        "title": "Organisiere dein Lernen",
+        "description": "Gruppiere Wörter in thematischen Sets wie \"Spanisches Essen\" oder \"Deutsche Reisen\". Benenne deine Sets für einfachen Zugriff."
+      },
+      "learn": {
+        "title": "Lerne auf deine Weise",
+        "description": "Übe mit 4 Spielmodi: Karteikarten, Paare zuordnen, Multiple-Choice-Quiz und Lückentext ausfüllen."
+      },
+      "share": {
+        "title": "Teile dein Wissen",
+        "description": "Erstelle Freigabe-Links für deine Sets. Andere können sie ansehen und in ihre Bibliothek kopieren."
+      }
+    }
+  }
+}

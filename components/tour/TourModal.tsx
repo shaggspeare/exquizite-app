@@ -11,6 +11,7 @@ import {
 import { useState, useRef, useEffect } from 'react';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -28,40 +29,41 @@ const SLIDE_WIDTH = Dimensions.get('window').width;
 const SWIPE_THRESHOLD = 50;
 
 interface SlideContent {
-  title: string;
-  description: string;
+  titleKey: string;
+  descriptionKey: string;
   icon: keyof typeof Ionicons.glyphMap;
   iconColor: string;
 }
 
 const SLIDES: SlideContent[] = [
   {
-    title: 'Build Your Vocabulary',
-    description: 'Add words manually or use AI to generate themed vocabulary sets. Create up to 20 words per set.',
+    titleKey: 'common:tour.slides.vocabulary.title',
+    descriptionKey: 'common:tour.slides.vocabulary.description',
     icon: 'create-outline',
     iconColor: '#5B67E5',
   },
   {
-    title: 'Organize Your Learning',
-    description: 'Group words into themed sets like "Spanish Food" or "German Travel". Name your sets for easy access.',
+    titleKey: 'common:tour.slides.organize.title',
+    descriptionKey: 'common:tour.slides.organize.description',
     icon: 'library-outline',
     iconColor: '#10B981',
   },
   {
-    title: 'Learn Your Way',
-    description: 'Practice with 4 game modes: Flashcards, Match Pairs, Multiple Choice Quiz, and Fill in the Blank.',
+    titleKey: 'common:tour.slides.learn.title',
+    descriptionKey: 'common:tour.slides.learn.description',
     icon: 'game-controller-outline',
     iconColor: '#8B5CF6',
   },
   {
-    title: 'Share Your Knowledge',
-    description: 'Generate share links for your sets. Others can view and copy them to their library.',
+    titleKey: 'common:tour.slides.share.title',
+    descriptionKey: 'common:tour.slides.share.description',
     icon: 'share-social-outline',
     iconColor: '#E066FF',
   },
 ];
 
 export function TourModal() {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const { isTourVisible, completeTour, skipTour } = useTour();
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -111,8 +113,11 @@ export function TourModal() {
         translateX.value = gestureState.dx;
       },
       onPanResponderRelease: (_, gestureState) => {
-        const shouldGoNext = gestureState.dx < -SWIPE_THRESHOLD && currentSlide < SLIDES.length - 1;
-        const shouldGoPrev = gestureState.dx > SWIPE_THRESHOLD && currentSlide > 0;
+        const shouldGoNext =
+          gestureState.dx < -SWIPE_THRESHOLD &&
+          currentSlide < SLIDES.length - 1;
+        const shouldGoPrev =
+          gestureState.dx > SWIPE_THRESHOLD && currentSlide > 0;
 
         if (shouldGoNext) {
           goToNextSlide();
@@ -127,7 +132,7 @@ export function TourModal() {
 
   const animatedSlideStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],
-  }));
+  }), []);
 
   const goToNextSlide = () => {
     if (currentSlide < SLIDES.length - 1) {
@@ -178,11 +183,21 @@ export function TourModal() {
         {Platform.OS === 'ios' ? (
           <BlurView intensity={40} style={StyleSheet.absoluteFill} />
         ) : (
-          <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.7)' }]} />
+          <View
+            style={[
+              StyleSheet.absoluteFill,
+              { backgroundColor: 'rgba(0,0,0,0.7)' },
+            ]}
+          />
         )}
 
         {/* Modal Container */}
-        <View style={[styles.modalContainer, isDesktop && styles.modalContainerDesktop]}>
+        <View
+          style={[
+            styles.modalContainer,
+            isDesktop && styles.modalContainerDesktop,
+          ]}
+        >
           <View style={[styles.modal, { backgroundColor: colors.card }]}>
             {/* Skip Button */}
             <TouchableOpacity
@@ -191,7 +206,7 @@ export function TourModal() {
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
               <Text style={[styles.skipText, { color: colors.textSecondary }]}>
-                Skip
+                {t('common:tour.skip')}
               </Text>
             </TouchableOpacity>
 
@@ -201,8 +216,8 @@ export function TourModal() {
               {...panResponder.panHandlers}
             >
               <TourSlide
-                title={SLIDES[currentSlide].title}
-                description={SLIDES[currentSlide].description}
+                title={t(SLIDES[currentSlide].titleKey)}
+                description={t(SLIDES[currentSlide].descriptionKey)}
                 icon={SLIDES[currentSlide].icon}
                 iconColor={SLIDES[currentSlide].iconColor}
               />
@@ -220,13 +235,20 @@ export function TourModal() {
             <View style={styles.buttonContainer}>
               {!isFirstSlide && (
                 <TouchableOpacity
-                  style={[styles.button, styles.backButton, { borderColor: colors.border }]}
+                  style={[
+                    styles.button,
+                    styles.backButton,
+                    { borderColor: colors.border },
+                  ]}
                   onPress={handleBack}
                   activeOpacity={0.8}
                 >
                   <Ionicons name="arrow-back" size={20} color={colors.text} />
-                  <Text style={[styles.buttonText, { color: colors.text }]} numberOfLines={1}>
-                    Back
+                  <Text
+                    style={[styles.buttonText, { color: colors.text }]}
+                    numberOfLines={1}
+                  >
+                    {t('common:tour.back')}
                   </Text>
                 </TouchableOpacity>
               )}
@@ -237,13 +259,18 @@ export function TourModal() {
                     styles.button,
                     styles.primaryButton,
                     { backgroundColor: colors.primary },
-                    isFirstSlide ? styles.buttonFullWidth : styles.primaryButtonWithBack,
+                    isFirstSlide
+                      ? styles.buttonFullWidth
+                      : styles.primaryButtonWithBack,
                   ]}
                   onPress={handleGetStarted}
                   activeOpacity={0.8}
                 >
-                  <Text style={[styles.buttonText, { color: '#FFFFFF' }]} numberOfLines={1}>
-                    Get Started
+                  <Text
+                    style={[styles.buttonText, { color: '#FFFFFF' }]}
+                    numberOfLines={1}
+                  >
+                    {t('common:tour.getStarted')}
                   </Text>
                   <Ionicons name="checkmark-circle" size={20} color="#FFFFFF" />
                 </TouchableOpacity>
@@ -253,13 +280,18 @@ export function TourModal() {
                     styles.button,
                     styles.primaryButton,
                     { backgroundColor: colors.primary },
-                    isFirstSlide ? styles.buttonFullWidth : styles.primaryButtonWithBack,
+                    isFirstSlide
+                      ? styles.buttonFullWidth
+                      : styles.primaryButtonWithBack,
                   ]}
                   onPress={handleNext}
                   activeOpacity={0.8}
                 >
-                  <Text style={[styles.buttonText, { color: '#FFFFFF' }]} numberOfLines={1}>
-                    Next
+                  <Text
+                    style={[styles.buttonText, { color: '#FFFFFF' }]}
+                    numberOfLines={1}
+                  >
+                    {t('common:tour.next')}
                   </Text>
                   <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
                 </TouchableOpacity>

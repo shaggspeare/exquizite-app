@@ -58,9 +58,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   // Determine the actual color scheme to use
   const colorScheme: ColorScheme =
-    theme === 'auto'
-      ? (systemColorScheme ?? 'light')
-      : theme;
+    theme === 'auto' ? (systemColorScheme ?? 'light') : theme;
 
   const isDark = colorScheme === 'dark';
   const colors = isDark ? DarkColors : LightColors;

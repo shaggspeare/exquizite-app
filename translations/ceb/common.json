@@ -1,0 +1,53 @@
+{
+  "_note": "This is a placeholder file. Please replace with ceb translations.",
+  "buttons": {
+    "add": "Add",
+    "done": "Done",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "share": "Share",
+    "play": "Play",
+    "next": "Next",
+    "previous": "Previous",
+    "skip": "Skip",
+    "check": "Check Answer",
+    "save": "Save",
+    "saving": "Saving...",
+    "finish": "Finish",
+    "tryAgain": "Try Again",
+    "playAgain": "Play Again",
+    "showHint": "Show Hint",
+    "generate": "Generate",
+    "generating": "Generating..."
+  },
+  "status": {
+    "loading": "Loading...",
+    "saving": "Saving...",
+    "generating": "Generating...",
+    "noWords": "No words in this set",
+    "success": "Success",
+    "error": "Error"
+  },
+  "time": {
+    "never": "Never",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "daysAgo": "{{count}} days ago",
+    "lastPracticed": "Last practiced {{date}}"
+  },
+  "counts": {
+    "word": "word",
+    "words": "words",
+    "set": "set",
+    "sets": "sets",
+    "wordCount": "{{count}} word",
+    "wordCount_other": "{{count}} words",
+    "setCount": "{{count}} set",
+    "setCount_other": "{{count}} sets",
+    "progress": "{{current}}/{{total}}"
+  },
+  "dialogs": {
+    "areYouSure": "Are you sure?",
+    "cannotUndo": "This action cannot be undone."
+  }
+}

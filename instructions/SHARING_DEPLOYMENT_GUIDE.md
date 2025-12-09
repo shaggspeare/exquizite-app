@@ -3,9 +3,11 @@
 ## What Was Created
 
 ### 1. Database Migration Script
+
 **File:** `supabase/migrations/20250123_add_sharing_feature.sql`
 
 This SQL script includes:
+
 - **New Tables:**
   - `shared_sets` - Stores share codes and metadata for shared sets
   - `set_copies` - Tracks when users copy shared sets
@@ -28,26 +30,32 @@ This SQL script includes:
   - `shared_sets_with_details` - Combines share and set metadata
 
 ### 2. Supabase Edge Functions
+
 Three serverless functions for handling sharing operations:
 
 **a. `generate-share-link`** (`supabase/functions/generate-share-link/index.ts`)
+
 - Generates unique share codes
 - Creates shareable links
 - Returns share metadata
 
 **b. `get-shared-set`** (`supabase/functions/get-shared-set/index.ts`)
+
 - Retrieves shared sets by code
 - Increments view count
 - Returns set details with word pairs
 - Works for anonymous users (no auth required)
 
 **c. `copy-shared-set`** (`supabase/functions/copy-shared-set/index.ts`)
+
 - Creates a copy of shared set for authenticated user
 - Increments copy count
 - Records copy in `set_copies` table
 
 ### 3. TypeScript Type Definitions
+
 **Files Updated:**
+
 - `lib/types.ts` - Added sharing-related interfaces
 - `lib/supabase.ts` - Updated database type definitions
 
@@ -64,6 +72,7 @@ Three serverless functions for handling sharing operations:
 7. Verify success - you should see "Success. No rows returned" or similar
 
 **Verify Migration:**
+
 ```sql
 -- Run these queries in SQL Editor to verify tables were created
 SELECT * FROM shared_sets LIMIT 1;
@@ -83,22 +92,27 @@ You have two options for deploying edge functions:
 #### Option A: Using Supabase CLI (Recommended)
 
 1. **Install Supabase CLI** (if not already installed):
+
 ```bash
 npm install -g supabase
 ```
 
 2. **Login to Supabase:**
+
 ```bash
 supabase login
 ```
 
 3. **Link your project:**
+
 ```bash
 supabase link --project-ref YOUR_PROJECT_REF
 ```
-*Find your project ref in your Supabase dashboard URL: `https://supabase.com/dashboard/project/YOUR_PROJECT_REF`*
+
+_Find your project ref in your Supabase dashboard URL: `https://supabase.com/dashboard/project/YOUR_PROJECT_REF`_
 
 4. **Deploy all functions:**
+
 ```bash
 supabase functions deploy generate-share-link
 supabase functions deploy get-shared-set
@@ -106,6 +120,7 @@ supabase functions deploy copy-shared-set
 ```
 
 5. **Verify deployment:**
+
 ```bash
 supabase functions list
 ```
@@ -122,6 +137,7 @@ supabase functions list
 ### Step 3: Test the Functions
 
 #### Test 1: Generate Share Link
+
 ```bash
 curl -X POST \
   'https://YOUR_PROJECT_REF.supabase.co/functions/v1/generate-share-link' \
@@ -131,6 +147,7 @@ curl -X POST \
 ```
 
 Expected response:
+
 ```json
 {
   "shareId": "uuid...",
@@ -145,6 +162,7 @@ Expected response:
 ```
 
 #### Test 2: Get Shared Set
+
 ```bash
 curl -X GET \
   'https://YOUR_PROJECT_REF.supabase.co/functions/v1/get-shared-set?shareCode=AbC123XyZ789' \
@@ -152,6 +170,7 @@ curl -X GET \
 ```
 
 #### Test 3: Copy Shared Set
+
 ```bash
 curl -X POST \
   'https://YOUR_PROJECT_REF.supabase.co/functions/v1/copy-shared-set' \
@@ -171,9 +190,11 @@ If you need to configure custom URLs or settings:
 ## Important Notes
 
 ### Note 1: Missing Language Columns
+
 The current `word_sets` table in your database doesn't have `target_language` and `native_language` columns (they exist in the app's WordSet type but not in the database schema).
 
 **You need to add these columns:**
+
 ```sql
 ALTER TABLE word_sets
   ADD COLUMN IF NOT EXISTS target_language VARCHAR(10) DEFAULT 'uk',
@@ -206,15 +227,19 @@ LEFT JOIN profiles p ON ss.created_by = p.id;
 Run this SQL in your Supabase SQL Editor **after** running the main migration.
 
 ### Note 2: RLS Policy Conflict
+
 If you get an error about an existing policy named `"Users can read own sets"`, it means you already have this policy. The migration script handles this with `DROP POLICY IF EXISTS`.
 
 If it still fails, manually drop the old policy:
+
 ```sql
 DROP POLICY IF EXISTS "Users can read own sets" ON word_sets;
 ```
+
 Then re-run the migration.
 
 ### Note 3: Function Invocation from App
+
 Once deployed, you'll call these functions from your app like this:
 
 ```typescript
@@ -222,17 +247,17 @@ import { supabase } from '@/lib/supabase';
 
 // Generate share link
 const { data, error } = await supabase.functions.invoke('generate-share-link', {
-  body: { setId: 'set-uuid-here' }
+  body: { setId: 'set-uuid-here' },
 });
 
 // Get shared set
 const { data, error } = await supabase.functions.invoke('get-shared-set', {
-  body: { shareCode: 'AbC123XyZ789' }
+  body: { shareCode: 'AbC123XyZ789' },
 });
 
 // Copy shared set
 const { data, error } = await supabase.functions.invoke('copy-shared-set', {
-  body: { shareCode: 'AbC123XyZ789' }
+  body: { shareCode: 'AbC123XyZ789' },
 });
 ```
 
@@ -250,19 +275,23 @@ const { data, error } = await supabase.functions.invoke('copy-shared-set', {
 ## Troubleshooting
 
 ### Error: "User does not own this set"
+
 - Make sure you're passing a valid `setId` that belongs to the authenticated user
 - Check that the user is properly authenticated (valid JWT token)
 
 ### Error: "Share not found or inactive"
+
 - Verify the share code is correct
 - Check if share has expired (run: `SELECT * FROM shared_sets WHERE share_code = 'CODE';`)
 - Ensure `is_active = true`
 
 ### Error: "Failed to fetch word pairs"
+
 - Check that word_pairs exist for the set: `SELECT * FROM word_pairs WHERE set_id = 'SET_UUID';`
 - Verify RLS policies allow reading word_pairs
 
 ### Edge Function Not Found
+
 - Run `supabase functions list` to see deployed functions
 - Redeploy: `supabase functions deploy FUNCTION_NAME`
 - Check function logs: `supabase functions logs FUNCTION_NAME`
@@ -270,6 +299,7 @@ const { data, error } = await supabase.functions.invoke('copy-shared-set', {
 ## Next Steps
 
 After successful deployment, you can proceed with:
+
 1. Creating the SetsContext methods for sharing
 2. Building UI components (ShareModal, shared set preview)
 3. Implementing deep linking
@@ -280,6 +310,7 @@ See `SHARING_FEATURE_PLAN.md` for the full frontend implementation roadmap.
 ## Support
 
 If you encounter issues:
+
 - Check Supabase logs in Dashboard > Database > Logs
 - Check Edge Function logs in Dashboard > Edge Functions > Logs
 - Review RLS policies in Dashboard > Authentication > Policies

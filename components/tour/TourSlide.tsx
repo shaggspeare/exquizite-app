@@ -10,20 +10,25 @@ interface TourSlideProps {
   iconColor: string;
 }
 
-export function TourSlide({ title, description, icon, iconColor }: TourSlideProps) {
+export function TourSlide({
+  title,
+  description,
+  icon,
+  iconColor,
+}: TourSlideProps) {
   const { colors } = useTheme();
 
   return (
     <View style={styles.container}>
       {/* Icon Container */}
-      <View style={[styles.iconContainer, { backgroundColor: `${iconColor}20` }]}>
+      <View
+        style={[styles.iconContainer, { backgroundColor: `${iconColor}20` }]}
+      >
         <Ionicons name={icon} size={64} color={iconColor} />
       </View>
 
       {/* Title */}
-      <Text style={[styles.title, { color: colors.text }]}>
-        {title}
-      </Text>
+      <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
 
       {/* Description */}
       <Text style={[styles.description, { color: colors.textSecondary }]}>

@@ -94,15 +94,19 @@ Only return valid JSON, no additional text.`;
     }
 
     // Add IDs to each word pair and limit to requested count
-    const result = words
-      .slice(0, count)
-      .map((word: any, index: number) => ({
-        id: `${Date.now()}_${index}`,
-        word: word.word || '',
-        translation: word.translation || '',
-      }));
+    const result = words.slice(0, count).map((word: any, index: number) => ({
+      id: `${Date.now()}_${index}`,
+      word: word.word || '',
+      translation: word.translation || '',
+    }));
 
-    console.log('[OpenAI] Successfully generated', result.length, 'words (requested:', count, ')');
+    console.log(
+      '[OpenAI] Successfully generated',
+      result.length,
+      'words (requested:',
+      count,
+      ')'
+    );
     return result;
   } catch (error: any) {
     console.error('[OpenAI] Error generating word suggestions:', {
@@ -183,13 +187,11 @@ Only return valid JSON, no additional text.`;
     }
 
     // Add IDs to each word pair and limit to requested count
-    const result = words
-      .slice(0, count)
-      .map((word: any, index: number) => ({
-        id: `${Date.now()}_${index}`,
-        word: word.word || '',
-        translation: word.translation || '',
-      }));
+    const result = words.slice(0, count).map((word: any, index: number) => ({
+      id: `${Date.now()}_${index}`,
+      word: word.word || '',
+      translation: word.translation || '',
+    }));
 
     console.log(
       '[OpenAI] Successfully generated',

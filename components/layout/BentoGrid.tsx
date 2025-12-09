@@ -11,7 +11,11 @@ interface BentoGridProps {
   gap?: number;
 }
 
-export function BentoGrid({ children, columns = 2, gap = Spacing.lg }: BentoGridProps) {
+export function BentoGrid({
+  children,
+  columns = 2,
+  gap = Spacing.lg,
+}: BentoGridProps) {
   const { isDesktop } = useResponsive();
 
   // On mobile, show single column
@@ -19,11 +23,7 @@ export function BentoGrid({ children, columns = 2, gap = Spacing.lg }: BentoGrid
     return <View style={styles.mobileContainer}>{children}</View>;
   }
 
-  return (
-    <View style={[styles.grid, { gap }]}>
-      {children}
-    </View>
-  );
+  return <View style={[styles.grid, { gap }]}>{children}</View>;
 }
 
 interface BentoCardProps {
@@ -33,7 +33,12 @@ interface BentoCardProps {
   noPadding?: boolean;
 }
 
-export function BentoCard({ children, span = 1, aspectRatio, noPadding = false }: BentoCardProps) {
+export function BentoCard({
+  children,
+  span = 1,
+  aspectRatio,
+  noPadding = false,
+}: BentoCardProps) {
   const { colors } = useTheme();
   const { isDesktop } = useResponsive();
 

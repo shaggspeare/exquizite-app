@@ -44,7 +44,7 @@ export const getScreenType = (): 'mobile' | 'tablet' | 'desktop' => {
 };
 
 // Responsive value selector
-export const responsive = <T,>(values: {
+export const responsive = <T>(values: {
   mobile: T;
   tablet?: T;
   desktop?: T;

@@ -1,0 +1,92 @@
+{
+  "chooseActivity": "Aktivität wählen",
+  "setNotFound": "Set nicht gefunden",
+  "wordsInSet": "Wörter in diesem Set",
+  "startPractice": "Übung starten",
+  "quickPractice": "Schnellübung",
+  "templates": {
+    "flashcard": {
+      "name": "Karteikarten",
+      "description": "Umdrehen, um Übersetzungen zu sehen"
+    },
+    "match": {
+      "name": "Zuordnen",
+      "description": "Ziehen und Paare verbinden"
+    },
+    "quiz": {
+      "name": "Quiz",
+      "description": "Multiple-Choice-Fragen"
+    },
+    "fillBlank": {
+      "name": "Lückentext",
+      "description": "Vervollständige Sätze mit dem richtigen Wort",
+      "aiHints": "KI-Hinweise verfügbar"
+    }
+  },
+  "flashcard": {
+    "title": "Karteikarten: {{setName}}",
+    "tapToFlip": "Tippen zum Umdrehen",
+    "clickToFlip": "Klicken zum Umdrehen",
+    "complete": "Abgeschlossen"
+  },
+  "quiz": {
+    "title": "Quiz: {{setName}}",
+    "question": "Frage {{current}} / {{total}}",
+    "translate": "Übersetze:",
+    "nextQuestion": "Nächste Frage",
+    "loadingQuiz": "Quiz wird geladen...",
+    "complete": {
+      "title": "Quiz abgeschlossen!",
+      "score": "Du hast {{score}}/{{total}} erreicht ({{percentage}}%)"
+    }
+  },
+  "match": {
+    "title": "Zuordnen: {{setName}}",
+    "words": "Wörter",
+    "translations": "Übersetzungen",
+    "complete": {
+      "title": "Glückwunsch!",
+      "message": "Du hast das Zuordnungsspiel in {{time}} abgeschlossen!"
+    }
+  },
+  "fillBlank": {
+    "title": "Lückentext: {{setName}}",
+    "question": "Frage {{current}} / {{total}}",
+    "translation": "Übersetzung:",
+    "fillPrompt": "Fülle die Lücke aus:",
+    "choosePrompt": "Wähle das richtige Wort:",
+    "loadingNext": "Nächste Frage wird geladen...",
+    "generatingSentences": "Sätze werden generiert...",
+    "correctAnswer": "Richtige Antwort:",
+    "complete": {
+      "title": "Übung abgeschlossen!",
+      "score": "Du hast {{score}}/{{total}} erreicht ({{percentage}}%)"
+    }
+  },
+  "home": {
+    "title": "Startseite",
+    "greeting": "Hallo, {{name}}!",
+    "readyToLearn": "Bereit zum Lernen heute?",
+    "noSets": "Noch keine Sets",
+    "createFirstSet": "Erstelle dein erstes Wortset, um loszulegen!",
+    "createSet": "Set erstellen",
+    "featuredSets": "Empfohlene Sets",
+    "tryThem": "Probiere sie aus!",
+    "demoDescription": "Übe mit diesen Demo-Sets, um loszulegen"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "lastPracticed": "Zuletzt geübt"
+  },
+  "mySets": {
+    "title": "Meine Sets",
+    "noSets": "Noch keine Sets",
+    "createFirstSet": "Erstelle dein erstes Wortset, um loszulegen!",
+    "createSet": "Set erstellen"
+  },
+  "setCard": {
+    "featured": "Empfohlen",
+    "complete": "{{percent}}% abgeschlossen",
+    "demoInfo": "Dies ist ein Demo-Set. Erstelle dein eigenes Set, um loszulegen!"
+  }
+}

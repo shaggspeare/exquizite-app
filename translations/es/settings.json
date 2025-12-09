@@ -1,0 +1,24 @@
+{
+  "title": "Configuración",
+  "languages": {
+    "title": "Idiomas",
+    "description": "Elige qué idiomas quieres aprender y traducir.",
+    "targetLanguage": "Idioma a aprender",
+    "targetPlaceholder": "Selecciona idioma a aprender",
+    "nativeLanguage": "Traducir a",
+    "nativePlaceholder": "Selecciona tu idioma nativo"
+  },
+  "appearance": {
+    "title": "Apariencia",
+    "description": "Elige cómo se ve la aplicación. Auto coincidirá con el tema de tu dispositivo.",
+    "light": "Claro",
+    "dark": "Oscuro",
+    "auto": "Auto",
+    "info": "Los cambios de tema se aplican inmediatamente a todas las pantallas"
+  },
+  "mySets": {
+    "title": "Mis conjuntos",
+    "manage": "Administra tus conjuntos de palabras. Haz clic para expandir y ver las palabras.",
+    "noSets": "Aún no hay conjuntos creados"
+  }
+}

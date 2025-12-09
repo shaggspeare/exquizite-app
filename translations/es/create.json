@@ -1,0 +1,32 @@
+{
+  "title": "Crear conjunto",
+  "editTitle": "Editar conjunto",
+  "setName": "Nombre del conjunto",
+  "setNamePlaceholder": "ej., Vocabulario español",
+  "words": "Palabras",
+  "addWord": "Añadir palabra",
+  "aiSuggestions": "Sugerencias de IA",
+  "limitReached": "Límite alcanzado",
+  "limitMessage": "Máximo {{max}} palabras por conjunto",
+  "errors": {
+    "fillAllFields": "Por favor completa todos los campos",
+    "atLeastOneWord": "Por favor añade al menos un par de palabras",
+    "createFailed": "No se pudo crear el conjunto. Por favor intenta de nuevo.",
+    "networkError": "Error de red. Por favor verifica tu conexión e intenta de nuevo."
+  },
+  "success": {
+    "created": "¡Conjunto creado exitosamente!",
+    "updated": "¡Conjunto actualizado exitosamente!"
+  },
+  "ai": {
+    "modalTitle": "Sugerencias de palabras con IA",
+    "themePlaceholder": "Tema (ej., animales, comida)",
+    "countPlaceholder": "#",
+    "countHint": "Genera hasta {{max}} palabras (5 por defecto)",
+    "generatingWithContext": "Generando sugerencias basadas en tus {{count}} {{word}} existentes...",
+    "generatingGeneric": "Generando sugerencias con IA...",
+    "selectPrompt": "Selecciona palabras para añadir ({{count}} seleccionadas)",
+    "noSuggestions": "Aún no hay sugerencias. ¡Haz clic en Generar para obtener sugerencias de palabras con IA!",
+    "addSelected": "Añadir {{count}} {{word}}"
+  }
+}

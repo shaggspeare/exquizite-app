@@ -1,0 +1,88 @@
+{
+  "_note": "This is a placeholder file. Please replace with no translations.",
+  "chooseActivity": "Choose Activity",
+  "setNotFound": "Set not found",
+  "wordsInSet": "Words in this set",
+  "startPractice": "Start Practice",
+  "quickPractice": "Quick Practice",
+  "templates": {
+    "flashcard": {
+      "name": "Flashcard",
+      "description": "Flip to reveal translations"
+    },
+    "match": {
+      "name": "Match",
+      "description": "Drag and connect pairs"
+    },
+    "quiz": {
+      "name": "Quiz",
+      "description": "Multiple choice questions"
+    },
+    "fillBlank": {
+      "name": "Fill in the Blank",
+      "description": "Complete sentences with the right word",
+      "aiHints": "AI hints available"
+    }
+  },
+  "flashcard": {
+    "title": "Flashcards: {{setName}}",
+    "tapToFlip": "Tap to flip",
+    "clickToFlip": "Click to flip",
+    "complete": "Complete"
+  },
+  "quiz": {
+    "title": "Quiz: {{setName}}",
+    "question": "Question {{current}} / {{total}}",
+    "translate": "Translate:",
+    "nextQuestion": "Next Question",
+    "loadingQuiz": "Loading quiz...",
+    "complete": {
+      "title": "Quiz Complete!",
+      "score": "You scored {{score}}/{{total}} ({{percentage}}%)"
+    }
+  },
+  "match": {
+    "title": "Match: {{setName}}",
+    "words": "Words",
+    "translations": "Translations",
+    "complete": {
+      "title": "Congratulations!",
+      "message": "You completed the match game in {{time}}!"
+    }
+  },
+  "fillBlank": {
+    "title": "Fill in the Blank: {{setName}}",
+    "question": "Question {{current}} / {{total}}",
+    "translation": "Translation:",
+    "fillPrompt": "Fill in the blank:",
+    "choosePrompt": "Choose the correct word:",
+    "loadingNext": "Loading next question...",
+    "generatingSentences": "Generating sentences...",
+    "correctAnswer": "Correct answer:",
+    "complete": {
+      "title": "Exercise Complete!",
+      "score": "You scored {{score}}/{{total}} ({{percentage}}%)"
+    }
+  },
+  "home": {
+    "greeting": "Hello, {{name}}!",
+    "readyToLearn": "Ready to learn today?",
+    "noSets": "No sets yet",
+    "createFirstSet": "Create your first word set to get started!",
+    "createSet": "Create Set",
+    "featuredSets": "Featured Sets",
+    "tryThem": "Try them!",
+    "demoDescription": "Practice with these demo sets to get started"
+  },
+  "mySets": {
+    "title": "My Sets",
+    "noSets": "No sets yet",
+    "createFirstSet": "Create your first word set to get started!",
+    "createSet": "Create Set"
+  },
+  "setCard": {
+    "featured": "Featured",
+    "complete": "{{count}}/{{total}}% complete",
+    "demoInfo": "This is a demo set. Create your own set to get started!"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "title": "Profil",
+  "guest": "Gast",
+  "guestAccount": "Gastkonto",
+  "appAccount": "App-Konto",
+  "stats": {
+    "sets": "Sets",
+    "words": "Wörter",
+    "practiced": "Geübt"
+  },
+  "progress": "Fortschritt",
+  "settings": {
+    "title": "Einstellungen",
+    "subtitle": "App-Einstellungen",
+    "description": "Design, Sprachen und Einstellungen"
+  },
+  "yourSets": "Deine Sets",
+  "noSetsYet": "Noch keine Sets erstellt",
+  "deleteSet": {
+    "title": "Set löschen",
+    "message": "Bist du sicher, dass du \"{{setName}}\" löschen möchtest?",
+    "confirm": "Löschen"
+  }
+}

@@ -1,6 +1,7 @@
 # Exquizite - Frontend Development Guide
 
 ## Tech Stack
+
 - **Framework:** React Native with Expo SDK 50+
 - **Navigation:** Expo Router (File-based routing)
 - **Authentication:** Expo Auth Session (Google OAuth)
@@ -13,6 +14,7 @@
 - **Audio:** Expo AV (for pronunciation sounds)
 
 ## Project Structure
+
 ```
 app/
 ├── (auth)/
@@ -75,6 +77,7 @@ contexts/
 ## Routes & Navigation
 
 ### Authentication Flow
+
 ```typescript
 // app/_layout.tsx
 export default function RootLayout() {
@@ -85,11 +88,13 @@ export default function RootLayout() {
 ```
 
 **Routes:**
+
 - `/(auth)/login` - Google Sign-in & Guest option
 - `/(auth)/guest-setup` - Optional guest name setup
 - Main app routes (protected)
 
 ### Main App Routes
+
 ```typescript
 // Tab Routes
 /(tabs)/
@@ -97,7 +102,7 @@ export default function RootLayout() {
   - create (Quick Create)
   - profile (Profile & Settings)
 
-// Set Management Routes  
+// Set Management Routes
 /sets/new - Create new set
 /sets/[id] - View set details
 /sets/[id]/edit - Edit existing set
@@ -110,6 +115,7 @@ export default function RootLayout() {
 ## Screen Implementations
 
 ### 1. Authentication Screen
+
 ```typescript
 // app/(auth)/login.tsx
 import * as Google from 'expo-auth-session/providers/google';
@@ -131,12 +137,13 @@ export default function LoginScreen() {
 ```
 
 ### 2. Home Dashboard
+
 ```typescript
 // app/(tabs)/index.tsx
 export default function HomeScreen() {
   // Local state for sets (will be replaced with Supabase later)
   const [sets, setSets] = useState([]);
-  
+
   // Components:
   // - Header with welcome message
   // - FlatList with SetCard components
@@ -146,12 +153,13 @@ export default function HomeScreen() {
 ```
 
 ### 3. Create/Edit Set Screen
+
 ```typescript
 // app/sets/new.tsx
 export default function CreateSetScreen() {
   const [setName, setSetName] = useState('');
   const [wordPairs, setWordPairs] = useState([
-    { id: '1', word: '', translation: '' }
+    { id: '1', word: '', translation: '' },
   ]);
 
   // Features:
@@ -161,7 +169,7 @@ export default function CreateSetScreen() {
   // - Drag to reorder (using Reanimated)
   // - AI suggestions modal
   // - Validation (max 20 words)
-  
+
   // Save to local state for now
   const saveSet = () => {
     // Validate
@@ -174,6 +182,7 @@ export default function CreateSetScreen() {
 ### 4. Game Screens
 
 #### Flashcard Implementation
+
 ```typescript
 // app/sets/[id]/play/flashcard.tsx
 import Animated, {
@@ -194,11 +203,7 @@ export default function FlashcardScreen() {
   };
 
   const frontAnimatedStyle = useAnimatedStyle(() => {
-    const rotateY = interpolate(
-      rotation.value,
-      [0, 180],
-      [0, 180]
-    );
+    const rotateY = interpolate(rotation.value, [0, 180], [0, 180]);
     return {
       transform: [{ rotateY: `${rotateY}deg` }],
       backfaceVisibility: 'hidden',
@@ -213,6 +218,7 @@ export default function FlashcardScreen() {
 ```
 
 #### Match Game Implementation
+
 ```typescript
 // app/sets/[id]/play/match.tsx
 import { PanGestureHandler } from 'react-native-gesture-handler';
@@ -236,6 +242,7 @@ export default function MatchScreen() {
 ```
 
 #### Quiz Implementation
+
 ```typescript
 // app/sets/[id]/play/quiz.tsx
 export default function QuizScreen() {
@@ -253,13 +260,14 @@ export default function QuizScreen() {
 ## Core Components
 
 ### Button Component
+
 ```typescript
 // components/ui/Button.tsx
 import { Pressable, Text, StyleSheet } from 'react-native';
-import Animated, { 
-  useAnimatedStyle, 
-  useSharedValue, 
-  withSpring 
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring
 } from 'react-native-reanimated';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -286,6 +294,7 @@ export function Button({ title, onPress, variant = 'primary', ...props }) {
 ```
 
 ### Card Component
+
 ```typescript
 // components/ui/Card.tsx
 export function Card({ children, style, ...props }) {
@@ -311,6 +320,7 @@ const styles = StyleSheet.create({
 ```
 
 ### FlashCard Component
+
 ```typescript
 // components/game/FlashCard.tsx
 export function FlashCard({ word, translation, isFlipped, onFlip }) {
@@ -324,6 +334,7 @@ export function FlashCard({ word, translation, isFlipped, onFlip }) {
 ## State Management
 
 ### Auth Context
+
 ```typescript
 // contexts/AuthContext.tsx
 const AuthContext = createContext();
@@ -346,6 +357,7 @@ export function AuthProvider({ children }) {
 ```
 
 ### Sets Context (Local Storage)
+
 ```typescript
 // contexts/SetsContext.tsx
 const SetsContext = createContext();
@@ -355,7 +367,7 @@ export function SetsProvider({ children }) {
 
   // CRUD operations for sets
   // Will be replaced with Supabase later
-  
+
   const createSet = (newSet) => {
     const set = {
       id: Date.now().toString(),
@@ -377,53 +389,59 @@ export function SetsProvider({ children }) {
 ## Animations Library
 
 ### Common Animations
+
 ```typescript
 // lib/animations.ts
 import { withSpring, withTiming, Easing } from 'react-native-reanimated';
 
 export const animations = {
   // Card flip
-  flip: (value) => withSpring(value, {
-    damping: 15,
-    stiffness: 100,
-  }),
+  flip: value =>
+    withSpring(value, {
+      damping: 15,
+      stiffness: 100,
+    }),
 
   // Fade in
-  fadeIn: (value) => withTiming(value, {
-    duration: 300,
-    easing: Easing.out(Easing.ease),
-  }),
+  fadeIn: value =>
+    withTiming(value, {
+      duration: 300,
+      easing: Easing.out(Easing.ease),
+    }),
 
   // Slide up
-  slideUp: (value) => withSpring(value, {
-    damping: 20,
-    stiffness: 90,
-  }),
+  slideUp: value =>
+    withSpring(value, {
+      damping: 20,
+      stiffness: 90,
+    }),
 
   // Scale bounce
-  bounce: (value) => withSpring(value, {
-    damping: 10,
-    stiffness: 200,
-  }),
+  bounce: value =>
+    withSpring(value, {
+      damping: 10,
+      stiffness: 200,
+    }),
 };
 ```
 
 ## AI Features (Mock Implementation)
 
 ### AI Suggestions
+
 ```typescript
 // lib/ai-helpers.ts
 export function generateWordSuggestions(theme: string): WordPair[] {
   // Mock AI suggestions for now
   // Will integrate with real AI service later
   const suggestions = {
-    'animals': [
+    animals: [
       { word: 'cat', translation: 'кіт' },
       { word: 'dog', translation: 'собака' },
     ],
     // ... more themes
   };
-  
+
   return suggestions[theme] || [];
 }
 
@@ -442,6 +460,7 @@ export function generateQuizOptions(correct: string, all: string[]): string[] {
 ## Styling System
 
 ### Theme Constants
+
 ```typescript
 // lib/constants.ts
 export const Colors = {
@@ -486,6 +505,7 @@ export const Typography = {
 ```
 
 ### Common Styles
+
 ```typescript
 // lib/commonStyles.ts
 export const commonStyles = StyleSheet.create({
@@ -529,6 +549,7 @@ export const commonStyles = StyleSheet.create({
 ## Performance Optimizations
 
 ### List Optimization
+
 ```typescript
 // Use FlatList with proper props
 <FlatList
@@ -548,13 +569,17 @@ export const commonStyles = StyleSheet.create({
 ```
 
 ### Memo Components
+
 ```typescript
 // Memoize expensive components
-export const SetCard = memo(({ set, onPress }) => {
-  // Component implementation
-}, (prevProps, nextProps) => {
-  return prevProps.set.id === nextProps.set.id;
-});
+export const SetCard = memo(
+  ({ set, onPress }) => {
+    // Component implementation
+  },
+  (prevProps, nextProps) => {
+    return prevProps.set.id === nextProps.set.id;
+  }
+);
 ```
 
 ## Dependencies
@@ -581,6 +606,7 @@ export const SetCard = memo(({ set, onPress }) => {
 ## Next Steps
 
 1. **Setup Expo project:**
+
    ```bash
    npx create-expo-app exquizite --template blank-typescript
    cd exquizite
@@ -588,22 +614,22 @@ export const SetCard = memo(({ set, onPress }) => {
    ```
 
 2. **Configure Expo Router:**
-    - Update app.json for expo-router
-    - Create file-based routing structure
+   - Update app.json for expo-router
+   - Create file-based routing structure
 
 3. **Implement core screens:**
-    - Start with auth flow
-    - Build dashboard and create screens
-    - Add game screens one by one
+   - Start with auth flow
+   - Build dashboard and create screens
+   - Add game screens one by one
 
 4. **Add animations:**
-    - Integrate Reanimated 3
-    - Implement card flip, slide, and scale animations
+   - Integrate Reanimated 3
+   - Implement card flip, slide, and scale animations
 
 5. **Polish UI:**
-    - Refine styles to match design spec
-    - Add loading states and error handling
-    - Implement haptic feedback
+   - Refine styles to match design spec
+   - Add loading states and error handling
+   - Implement haptic feedback
 
 ## Notes
 

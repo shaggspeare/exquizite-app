@@ -1,0 +1,33 @@
+{
+  "_note": "This is a placeholder file. Please replace with tl translations.",
+  "title": "Create Set",
+  "editTitle": "Edit Set",
+  "setName": "Set Name",
+  "setNamePlaceholder": "e.g., Spanish Vocabulary",
+  "words": "Words",
+  "addWord": "Add Word",
+  "aiSuggestions": "AI Suggestions",
+  "limitReached": "Limit Reached",
+  "limitMessage": "Maximum {{max}} words per set",
+  "errors": {
+    "fillAllFields": "Please fill in all fields",
+    "atLeastOneWord": "Please add at least one word pair",
+    "createFailed": "Failed to create set. Please try again.",
+    "networkError": "Network error. Please check your connection and try again."
+  },
+  "success": {
+    "created": "Set created successfully!",
+    "updated": "Set updated successfully!"
+  },
+  "ai": {
+    "modalTitle": "AI Word Suggestions",
+    "themePlaceholder": "Theme (e.g., animals, food)",
+    "countPlaceholder": "#",
+    "countHint": "Generate up to {{max}} words (5 by default)",
+    "generatingWithContext": "Generating suggestions based on your {{count}} existing {{word}}...",
+    "generatingGeneric": "Generating suggestions with AI...",
+    "selectPrompt": "Select words to add ({{count}} selected)",
+    "noSuggestions": "No suggestions yet. Click Generate to get AI-powered word suggestions!",
+    "addSelected": "Add {{count}} {{word}}"
+  }
+}

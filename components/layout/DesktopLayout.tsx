@@ -10,7 +10,10 @@ interface DesktopLayoutProps {
   hideSidebar?: boolean;
 }
 
-export function DesktopLayout({ children, hideSidebar = false }: DesktopLayoutProps) {
+export function DesktopLayout({
+  children,
+  hideSidebar = false,
+}: DesktopLayoutProps) {
   const { isDesktop } = useResponsive();
   const { colors } = useTheme();
 

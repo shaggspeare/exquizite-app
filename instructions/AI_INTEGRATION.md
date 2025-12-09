@@ -80,6 +80,7 @@ npx expo build:android
 ## API Usage
 
 The app uses:
+
 - Model: `gpt-3.5-turbo`
 - Max tokens per request: ~500
 - Features fallback to mock data if API fails
@@ -87,6 +88,7 @@ The app uses:
 ## Cost Estimation
 
 Typical usage per session:
+
 - Word suggestions: ~$0.001 per request (5 words)
 - Hints: ~$0.0005 per hint
 - Quiz options: ~$0.001 per question
@@ -96,11 +98,13 @@ Expected monthly cost: $5-20 depending on usage
 ## Error Handling
 
 All AI features have fallback mechanisms:
+
 - Word suggestions → Mock data by theme
 - Hints → Simple memory tips
 - Quiz options → Use existing translations
 
 The app will continue to work even if:
+
 - API key is invalid
 - Rate limits are exceeded
 - Network is unavailable

@@ -31,6 +31,7 @@ npm start
 ```
 
 **Sign Up Flow:**
+
 1. Launch the app
 2. Click "Don't have an account? Sign Up"
 3. Enter name, email, password
@@ -38,17 +39,20 @@ npm start
 5. You're automatically signed in!
 
 **Sign In Flow:**
+
 1. Launch the app
 2. Enter email and password
 3. Click "Sign In"
 
 **Guest Mode:**
+
 1. Click "Continue as Guest"
 2. No email required!
 
 ## UI Features
 
 ### Sign In Screen
+
 - Email input
 - Password input (masked)
 - "Sign In" button
@@ -56,6 +60,7 @@ npm start
 - Guest mode option
 
 ### Sign Up Screen
+
 - Name input
 - Email input
 - Password input (min 6 characters)
@@ -64,6 +69,7 @@ npm start
 - Auto-switch to sign in after success
 
 ### Keyboard Handling
+
 - KeyboardAvoidingView for iOS
 - ScrollView for longer forms
 - Auto-dismiss keyboard on tap
@@ -152,15 +158,19 @@ To add password reset functionality:
 ## Troubleshooting
 
 ### Issue: "Invalid login credentials"
+
 **Solution:** Check email/password are correct, user exists
 
 ### Issue: "Please check your email to confirm your account"
+
 **Solution:** Email confirmation is enabled. Check your email or disable in Supabase settings
 
 ### Issue: "User already registered"
+
 **Solution:** Email already exists, use sign in instead
 
 ### Issue: Guest data lost
+
 **Solution:** Guest users are anonymous. If they sign out, they can't recover data. Prompt to create account to save data permanently.
 
 ## Converting Guest to Full Account
@@ -198,14 +208,14 @@ const convertGuestToAccount = async (email: string, password: string) => {
 
 ## Comparison: Email vs Google OAuth
 
-| Feature | Email Auth | Google OAuth |
-|---------|-----------|--------------|
-| Setup complexity | ✅ Simple | ⚠️ Complex (Google Cloud) |
-| User experience | ✅ Familiar | ✅ One-click |
-| Password management | ⚠️ Users manage | ✅ Google manages |
-| Email verification | ✅ Built-in | ✅ Google verified |
-| Privacy | ✅ Self-hosted | ⚠️ Shares with Google |
-| Offline signup | ❌ Needs internet | ❌ Needs internet |
+| Feature             | Email Auth        | Google OAuth              |
+| ------------------- | ----------------- | ------------------------- |
+| Setup complexity    | ✅ Simple         | ⚠️ Complex (Google Cloud) |
+| User experience     | ✅ Familiar       | ✅ One-click              |
+| Password management | ⚠️ Users manage   | ✅ Google manages         |
+| Email verification  | ✅ Built-in       | ✅ Google verified        |
+| Privacy             | ✅ Self-hosted    | ⚠️ Shares with Google     |
+| Offline signup      | ❌ Needs internet | ❌ Needs internet         |
 
 ## Next Steps
 

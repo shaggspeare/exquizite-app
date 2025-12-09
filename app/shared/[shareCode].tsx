@@ -1,4 +1,13 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Platform, Dimensions } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  ActivityIndicator,
+  Platform,
+  Dimensions,
+} from 'react-native';
 import { useState, useEffect } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -79,22 +88,28 @@ export default function SharedSetScreen() {
           router.replace('/');
         }, 1000);
       } else {
-        console.error('copySharedSet returned null - check console for details');
+        console.error(
+          'copySharedSet returned null - check console for details'
+        );
         showAlert('Error', 'Failed to copy set. Please try again.');
       }
     } catch (err: any) {
       console.error('Error in handleCopySet:', err);
-      showAlert('Error', err.message || 'Failed to copy set. Please try again.');
+      showAlert(
+        'Error',
+        err.message || 'Failed to copy set. Please try again.'
+      );
     } finally {
       setIsCopying(false);
     }
   };
 
-
   // Generate gradient colors based on set ID
   const getGradientColors = () => {
     if (!setData) return ['#4A90E2', '#5B9EFF'];
-    const hash = setData.setId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const hash = setData.setId
+      .split('')
+      .reduce((acc, char) => acc + char.charCodeAt(0), 0);
     const gradients = [
       ['#4A90E2', '#5B9EFF'],
       ['#B537F2', '#E066FF'],
@@ -111,7 +126,9 @@ export default function SharedSetScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+      <SafeAreaView
+        style={[styles.container, { backgroundColor: colors.background }]}
+      >
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={colors.primary} />
           <Text style={[styles.loadingText, { color: colors.textSecondary }]}>
@@ -124,7 +141,9 @@ export default function SharedSetScreen() {
 
   if (error || !setData) {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+      <SafeAreaView
+        style={[styles.container, { backgroundColor: colors.background }]}
+      >
         <View style={styles.errorContainer}>
           <Ionicons name="alert-circle" size={64} color={colors.error} />
           <Text style={[styles.errorTitle, { color: colors.text }]}>
@@ -148,7 +167,9 @@ export default function SharedSetScreen() {
   const gradientColors = getGradientColors();
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
@@ -162,7 +183,9 @@ export default function SharedSetScreen() {
           >
             <Ionicons name="home" size={24} color={colors.text} />
           </TouchableOpacity>
-          <Text style={[styles.headerTitle, { color: colors.text }]}>Shared Set</Text>
+          <Text style={[styles.headerTitle, { color: colors.text }]}>
+            Shared Set
+          </Text>
           <View style={styles.headerButton} />
         </View>
 
@@ -191,7 +214,11 @@ export default function SharedSetScreen() {
                 {setData.targetLanguage.toUpperCase()}
               </Text>
             </View>
-            <Ionicons name="arrow-forward" size={16} color="rgba(255,255,255,0.8)" />
+            <Ionicons
+              name="arrow-forward"
+              size={16}
+              color="rgba(255,255,255,0.8)"
+            />
             <View style={styles.languageBadge}>
               <Text style={styles.languageText}>
                 {setData.nativeLanguage.toUpperCase()}
@@ -200,8 +227,14 @@ export default function SharedSetScreen() {
           </View>
 
           <View style={styles.authorInfo}>
-            <Ionicons name="person-circle-outline" size={20} color="rgba(255,255,255,0.9)" />
-            <Text style={styles.authorText}>Created by {setData.author.name}</Text>
+            <Ionicons
+              name="person-circle-outline"
+              size={20}
+              color="rgba(255,255,255,0.9)"
+            />
+            <Text style={styles.authorText}>
+              Created by {setData.author.name}
+            </Text>
           </View>
         </LinearGradient>
 
@@ -212,15 +245,21 @@ export default function SharedSetScreen() {
             <Text style={[styles.statValue, { color: colors.text }]}>
               {setData.shareInfo.viewCount}
             </Text>
-            <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Views</Text>
+            <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
+              Views
+            </Text>
           </View>
-          <View style={[styles.statDivider, { backgroundColor: colors.border }]} />
+          <View
+            style={[styles.statDivider, { backgroundColor: colors.border }]}
+          />
           <View style={styles.stat}>
             <Ionicons name="copy-outline" size={24} color={colors.success} />
             <Text style={[styles.statValue, { color: colors.text }]}>
               {setData.shareInfo.copyCount}
             </Text>
-            <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Copies</Text>
+            <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
+              Copies
+            </Text>
           </View>
         </View>
 
@@ -230,7 +269,9 @@ export default function SharedSetScreen() {
             <Text style={[styles.previewTitle, { color: colors.text }]}>
               Word Preview
             </Text>
-            <Text style={[styles.previewCount, { color: colors.textSecondary }]}>
+            <Text
+              style={[styles.previewCount, { color: colors.textSecondary }]}
+            >
               {Math.min(5, setData.words.length)} of {setData.wordCount}
             </Text>
           </View>
@@ -241,18 +282,28 @@ export default function SharedSetScreen() {
               style={[
                 styles.wordItem,
                 { borderBottomColor: colors.border },
-                index === Math.min(4, setData.words.length - 1) && styles.wordItemLast,
+                index === Math.min(4, setData.words.length - 1) &&
+                  styles.wordItemLast,
               ]}
             >
               <View style={styles.wordContent}>
                 <Text style={[styles.wordText, { color: colors.text }]}>
                   {word.word}
                 </Text>
-                <Text style={[styles.translationText, { color: colors.textSecondary }]}>
+                <Text
+                  style={[
+                    styles.translationText,
+                    { color: colors.textSecondary },
+                  ]}
+                >
                   {word.translation}
                 </Text>
               </View>
-              <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
+              <Ionicons
+                name="chevron-forward"
+                size={20}
+                color={colors.textSecondary}
+              />
             </View>
           ))}
 
@@ -265,7 +316,12 @@ export default function SharedSetScreen() {
       </ScrollView>
 
       {/* Action Button */}
-      <View style={[styles.actionBar, { backgroundColor: colors.card, borderTopColor: colors.border }]}>
+      <View
+        style={[
+          styles.actionBar,
+          { backgroundColor: colors.card, borderTopColor: colors.border },
+        ]}
+      >
         <TouchableOpacity
           style={[styles.actionButton, { backgroundColor: colors.success }]}
           onPress={handleCopySet}

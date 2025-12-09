@@ -6,7 +6,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type',
 };
 
 interface RequestBody {
@@ -26,7 +27,7 @@ interface ShareResponse {
   expiresAt?: string;
 }
 
-serve(async (req) => {
+serve(async req => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
@@ -75,16 +76,17 @@ serve(async (req) => {
     }
 
     // Parse request body
-    const { setId, isPublic = true, expiresInDays }: RequestBody = await req.json();
+    const {
+      setId,
+      isPublic = true,
+      expiresInDays,
+    }: RequestBody = await req.json();
 
     if (!setId) {
-      return new Response(
-        JSON.stringify({ error: 'setId is required' }),
-        {
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        }
-      );
+      return new Response(JSON.stringify({ error: 'setId is required' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     // Call the database function to get or create share
@@ -128,13 +130,10 @@ serve(async (req) => {
     const shareData = data[0];
 
     if (!shareData) {
-      return new Response(
-        JSON.stringify({ error: 'Failed to create share' }),
-        {
-          status: 500,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        }
-      );
+      return new Response(JSON.stringify({ error: 'Failed to create share' }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     // Fetch full share details
@@ -171,12 +170,9 @@ serve(async (req) => {
     });
   } catch (error) {
     console.error('Unexpected error:', error);
-    return new Response(
-      JSON.stringify({ error: 'Internal server error' }),
-      {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      }
-    );
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
 });

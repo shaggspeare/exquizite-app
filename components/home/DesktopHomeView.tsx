@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSets } from '@/contexts/SetsContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -20,6 +21,7 @@ import { Card } from '@/components/ui/Card';
 import { DesktopContainer } from '@/components/layout/DesktopContainer';
 
 export function DesktopHomeView() {
+  const { t } = useTranslation('games');
   const { user } = useAuth();
   const { sets, refreshSets } = useSets();
   const { colors } = useTheme();
@@ -33,6 +35,16 @@ export function DesktopHomeView() {
   const totalWords = userSets.reduce((sum, set) => sum + set.words.length, 0);
   const recentSets = userSets.slice(0, 3);
   const streak = userSets.filter(s => s.lastPracticed).length;
+
+  // Get last 3 practiced sets (for logged users' dashboard)
+  const practicedSets = userSets
+    .filter(s => s.lastPracticed)
+    .sort((a, b) => {
+      const dateA = a.lastPracticed ? new Date(a.lastPracticed).getTime() : 0;
+      const dateB = b.lastPracticed ? new Date(b.lastPracticed).getTime() : 0;
+      return dateB - dateA;
+    })
+    .slice(0, 3);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -219,6 +231,20 @@ export function DesktopHomeView() {
                       </LinearGradient>
                     </TouchableOpacity>
                   )}
+
+                  {/* Last Practiced Sets - Show for logged users with practiced sets */}
+                  {practicedSets.length > 0 && (
+                    <View style={styles.lastPracticedSection}>
+                      <Text style={[styles.lastPracticedTitle, { color: colors.text }]}>
+                        {t('dashboard.lastPracticed')}
+                      </Text>
+                      <View style={styles.lastPracticedList}>
+                        {practicedSets.map(set => (
+                          <DesktopSetCard key={set.id} set={set} compact />
+                        ))}
+                      </View>
+                    </View>
+                  )}
                 </View>
               )}
 
@@ -229,14 +255,26 @@ export function DesktopHomeView() {
                     <Text style={[styles.setsTitle, { color: colors.text }]}>
                       Featured Sets
                     </Text>
-                    <View style={[styles.featuredBadge, { backgroundColor: colors.ai + '20' }]}>
+                    <View
+                      style={[
+                        styles.featuredBadge,
+                        { backgroundColor: colors.ai + '20' },
+                      ]}
+                    >
                       <Ionicons name="star" size={16} color={colors.ai} />
-                      <Text style={[styles.featuredBadgeText, { color: colors.ai }]}>
+                      <Text
+                        style={[styles.featuredBadgeText, { color: colors.ai }]}
+                      >
                         Try them!
                       </Text>
                     </View>
                   </View>
-                  <Text style={[styles.setsSubtitle, { color: colors.textSecondary }]}>
+                  <Text
+                    style={[
+                      styles.setsSubtitle,
+                      { color: colors.textSecondary },
+                    ]}
+                  >
                     Practice with these demo sets to get started
                   </Text>
 
@@ -252,7 +290,9 @@ export function DesktopHomeView() {
         )}
 
         {/* Empty state - only show if no user sets and no featured sets */}
-        {userSets.length === 0 && featuredSets.length === 0 && renderEmptyState()}
+        {userSets.length === 0 &&
+          featuredSets.length === 0 &&
+          renderEmptyState()}
       </DesktopContainer>
     </ScrollView>
   );
@@ -445,5 +485,16 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontWeight: '600',
     fontSize: 16,
+  },
+  lastPracticedSection: {
+    gap: Spacing.md,
+  },
+  lastPracticedTitle: {
+    ...Typography.h3,
+    fontSize: 20,
+    fontWeight: '700',
+  },
+  lastPracticedList: {
+    gap: Spacing.sm,
   },
 });

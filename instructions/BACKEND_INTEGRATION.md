@@ -28,6 +28,7 @@ npm start
 ```
 
 Then:
+
 1. Sign in as a guest
 2. Create a word set
 3. Check Supabase dashboard **Table Editor** to see your data!
@@ -35,6 +36,7 @@ Then:
 ## What Changed
 
 ### Authentication (AuthContext)
+
 - **Before**: Mock users stored in SecureStore
 - **Now**: Real Supabase authentication
   - Guest users via `signInAnonymously()`
@@ -42,6 +44,7 @@ Then:
   - Automatic profile creation via database trigger
 
 ### Data Storage (SetsContext)
+
 - **Before**: Local state (lost on app restart)
 - **Now**: Supabase PostgreSQL database
   - Real-time sync with database
@@ -52,11 +55,13 @@ Then:
 ### Database Structure
 
 **Tables:**
+
 - `profiles` - User information
 - `word_sets` - Word sets created by users
 - `word_pairs` - Individual words in each set
 
 **Security:**
+
 - Row Level Security (RLS) enabled
 - Users can only see/modify their own data
 - Cascading deletes (deleting a set deletes all its words)
@@ -64,6 +69,7 @@ Then:
 ## Features
 
 ### Working Now ✅
+
 - Guest authentication
 - Create word sets → Saved to database
 - Edit word sets → Updates database
@@ -73,6 +79,7 @@ Then:
 - Offline support (data cached locally)
 
 ### Ready to Enable 🔧
+
 - Google Sign-in (requires Google OAuth setup)
 - Email/Password authentication
 - Profile picture upload
@@ -131,22 +138,29 @@ const { data } = await supabase
 ## Troubleshooting
 
 ### Issue: "Tables not found"
+
 **Solution:** Run the SQL schema in Supabase SQL Editor
 
 ### Issue: "Can't insert data"
+
 **Solution:** Check that RLS policies are created (part of schema)
 
 ### Issue: "Not authenticated"
+
 **Solution:** Make sure you're signed in (check auth state)
 
 ### Issue: Data not syncing
+
 **Solution:**
+
 - Check internet connection
 - Check Supabase dashboard for errors
 - Look at app console logs
 
 ### Issue: Google OAuth not working
+
 **Solution:**
+
 - Verify Client IDs in AuthContext
 - Check redirect URLs match exactly
 - Enable Google+ API in Google Cloud
@@ -169,12 +183,14 @@ Before deploying to production:
 ## Cost Estimation
 
 Supabase Free Tier includes:
+
 - 500 MB database storage
 - 1 GB file storage
 - 2 GB bandwidth
 - 50,000 monthly active users
 
 Expected usage:
+
 - Average user: ~5 word sets × 20 words = 100 rows
 - 1000 users = ~100,000 rows (well within free tier)
 - Database size: ~10 MB for 1000 active users
@@ -190,6 +206,7 @@ Expected usage:
 ## Support
 
 For issues:
+
 - Check Supabase Dashboard logs
 - Review database policies
 - Check app console for errors

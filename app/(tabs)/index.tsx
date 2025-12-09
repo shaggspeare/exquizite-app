@@ -1,7 +1,15 @@
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  RefreshControl,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSets } from '@/contexts/SetsContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -17,6 +25,7 @@ import { DesktopLayout } from '@/components/layout/DesktopLayout';
 import { DesktopHomeView } from '@/components/home/DesktopHomeView';
 
 export default function HomeScreen() {
+  const { t } = useTranslation('games');
   const { user, isLoading: authLoading } = useAuth();
   const { sets, isLoading: setsLoading, refreshSets } = useSets();
   const { preferences, isLoading: langLoading } = useLanguage();
@@ -34,7 +43,11 @@ export default function HomeScreen() {
     }
 
     // Show tour to new users: configured languages but no sets and haven't completed tour
-    const isNewUser = user && preferences.isConfigured && sets.length === 0 && !hasCompletedTour;
+    const isNewUser =
+      user &&
+      preferences.isConfigured &&
+      sets.length === 0 &&
+      !hasCompletedTour;
 
     if (isNewUser) {
       // Small delay to allow UI to settle after navigation
@@ -77,6 +90,16 @@ export default function HomeScreen() {
   // Calculate streak (mock for now)
   const streak = userSets.filter(s => s.lastPracticed).length;
 
+  // Get last 3 practiced sets (for logged users' dashboard)
+  const practicedSets = userSets
+    .filter(s => s.lastPracticed)
+    .sort((a, b) => {
+      const dateA = a.lastPracticed ? new Date(a.lastPracticed).getTime() : 0;
+      const dateB = b.lastPracticed ? new Date(b.lastPracticed).getTime() : 0;
+      return dateB - dateA;
+    })
+    .slice(0, 3);
+
   const onRefresh = async () => {
     setRefreshing(true);
     try {
@@ -89,9 +112,11 @@ export default function HomeScreen() {
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
       <Ionicons name="book-outline" size={64} color={colors.textSecondary} />
-      <Text style={[styles.emptyTitle, { color: colors.text }]}>No sets yet</Text>
+      <Text style={[styles.emptyTitle, { color: colors.text }]}>
+        {t('home.noSets')}
+      </Text>
       <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
-        Create your first word set to get started!
+        {t('home.createFirstSet')}
       </Text>
       <TouchableOpacity
         style={[styles.emptyButton, { backgroundColor: colors.primary }]}
@@ -99,13 +124,16 @@ export default function HomeScreen() {
         activeOpacity={0.7}
       >
         <Ionicons name="add" size={20} color="#FFFFFF" />
-        <Text style={styles.emptyButtonText}>Create Set</Text>
+        <Text style={styles.emptyButtonText}>{t('home.createSet')}</Text>
       </TouchableOpacity>
     </View>
   );
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+      edges={['top']}
+    >
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
@@ -128,9 +156,9 @@ export default function HomeScreen() {
         >
           <View style={styles.welcomeContent}>
             <Text style={styles.welcomeTitle}>
-              Hello, {user?.name || 'there'}!
+              {t('home.greeting', { name: user?.name || 'there' })}
             </Text>
-            <Text style={styles.welcomeSubtitle}>Ready to learn today?</Text>
+            <Text style={styles.welcomeSubtitle}>{t('home.readyToLearn')}</Text>
           </View>
           <TouchableOpacity
             style={styles.createFab}
@@ -146,27 +174,60 @@ export default function HomeScreen() {
           <>
             <View style={styles.statsGrid}>
               <Card style={styles.statCard}>
-                <View style={[styles.statIconContainer, { backgroundColor: `${colors.primary}20` }]}>
+                <View
+                  style={[
+                    styles.statIconContainer,
+                    { backgroundColor: `${colors.primary}20` },
+                  ]}
+                >
                   <Ionicons name="library" size={32} color={colors.primary} />
                 </View>
-                <Text style={[styles.statValue, { color: colors.text }]}>{userSets.length}</Text>
-                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Sets</Text>
+                <Text style={[styles.statValue, { color: colors.text }]}>
+                  {userSets.length}
+                </Text>
+                <Text
+                  style={[styles.statLabel, { color: colors.textSecondary }]}
+                >
+                  {t('common:counts.sets')}
+                </Text>
               </Card>
 
               <Card style={styles.statCard}>
-                <View style={[styles.statIconContainer, { backgroundColor: `${colors.success}20` }]}>
+                <View
+                  style={[
+                    styles.statIconContainer,
+                    { backgroundColor: `${colors.success}20` },
+                  ]}
+                >
                   <Ionicons name="book" size={32} color={colors.success} />
                 </View>
-                <Text style={[styles.statValue, { color: colors.text }]}>{totalWords}</Text>
-                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Words</Text>
+                <Text style={[styles.statValue, { color: colors.text }]}>
+                  {totalWords}
+                </Text>
+                <Text
+                  style={[styles.statLabel, { color: colors.textSecondary }]}
+                >
+                  {t('common:counts.words')}
+                </Text>
               </Card>
 
               <Card style={styles.statCard}>
-                <View style={[styles.statIconContainer, { backgroundColor: `${colors.ai}20` }]}>
+                <View
+                  style={[
+                    styles.statIconContainer,
+                    { backgroundColor: `${colors.ai}20` },
+                  ]}
+                >
                   <Ionicons name="flame" size={32} color={colors.ai} />
                 </View>
-                <Text style={[styles.statValue, { color: colors.text }]}>{streak}</Text>
-                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Streak</Text>
+                <Text style={[styles.statValue, { color: colors.text }]}>
+                  {streak}
+                </Text>
+                <Text
+                  style={[styles.statLabel, { color: colors.textSecondary }]}
+                >
+                  {t('profile:stats.practiced')}
+                </Text>
               </Card>
             </View>
 
@@ -183,8 +244,12 @@ export default function HomeScreen() {
                   style={styles.quickPracticeWidget}
                 >
                   <View>
-                    <Text style={styles.quickPracticeTitle}>Quick Practice</Text>
-                    <Text style={styles.quickPracticeSubtitle}>{recentSets[0].name}</Text>
+                    <Text style={styles.quickPracticeTitle}>
+                      {t('quickPractice')}
+                    </Text>
+                    <Text style={styles.quickPracticeSubtitle}>
+                      {recentSets[0].name}
+                    </Text>
                   </View>
                   <View style={styles.playIconContainer}>
                     <Ionicons name="play" size={28} color="#FFFFFF" />
@@ -192,21 +257,33 @@ export default function HomeScreen() {
                 </LinearGradient>
               </TouchableOpacity>
             )}
+
+            {/* Last Practiced Sets - Show for logged users with practiced sets */}
+            {practicedSets.length > 0 && (
+              <View style={styles.setsSection}>
+                <Text style={[styles.sectionTitle, { color: colors.text }]}>
+                  {t('dashboard.lastPracticed')}
+                </Text>
+                <View style={styles.lastPracticedContainer}>
+                  {practicedSets.map(set => (
+                    <SetCard key={set.id} set={set} />
+                  ))}
+                </View>
+              </View>
+            )}
           </>
         )}
 
         {/* Featured Sets Section - Show for all users */}
         {featuredSets.length > 0 && (
           <View style={styles.setsSection}>
-            <View style={styles.sectionHeader}>
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>Featured Sets</Text>
-              <View style={[styles.featuredBadge, { backgroundColor: colors.ai + '20' }]}>
-                <Ionicons name="star" size={16} color={colors.ai} />
-                <Text style={[styles.featuredBadgeText, { color: colors.ai }]}>Try them!</Text>
-              </View>
-            </View>
-            <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>
-              Practice with these demo sets to get started
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>
+              {t('home.featuredSets')}
+            </Text>
+            <Text
+              style={[styles.sectionSubtitle, { color: colors.textSecondary }]}
+            >
+              {t('home.demoDescription')}
             </Text>
 
             {featuredSets.map(set => (
@@ -216,7 +293,9 @@ export default function HomeScreen() {
         )}
 
         {/* Empty state - only show if no user sets and no featured sets */}
-        {userSets.length === 0 && featuredSets.length === 0 && renderEmptyState()}
+        {userSets.length === 0 &&
+          featuredSets.length === 0 &&
+          renderEmptyState()}
       </ScrollView>
     </SafeAreaView>
   );
@@ -328,35 +407,17 @@ const styles = StyleSheet.create({
   setsSection: {
     marginTop: Spacing.md,
   },
-  sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: Spacing.lg,
-  },
   sectionTitle: {
     ...Typography.h2,
     fontSize: 24,
     fontWeight: '700',
+    marginBottom: Spacing.lg,
   },
   sectionSubtitle: {
     ...Typography.body,
     fontSize: 14,
     marginBottom: Spacing.md,
     marginTop: -Spacing.sm,
-  },
-  featuredBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.xs,
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: Spacing.xs,
-    borderRadius: BorderRadius.round,
-  },
-  featuredBadgeText: {
-    ...Typography.caption,
-    fontSize: 12,
-    fontWeight: '600',
   },
   emptyState: {
     alignItems: 'center',
@@ -385,5 +446,9 @@ const styles = StyleSheet.create({
     ...Typography.body,
     color: '#FFFFFF',
     fontWeight: '600',
+  },
+  lastPracticedContainer: {
+    marginTop: Spacing.md,
+    gap: Spacing.sm,
   },
 });

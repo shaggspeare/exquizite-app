@@ -15,9 +15,14 @@ import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 import { showAlert } from '@/lib/alert';
 import { LinearGradient } from 'expo-linear-gradient';
-import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+} from 'react-native-reanimated';
 import { DesktopLayout } from '@/components/layout/DesktopLayout';
 import { DesktopContainer } from '@/components/layout/DesktopContainer';
+import { useTranslation } from 'react-i18next';
 
 // Utility function to shuffle array
 function shuffleArray<T>(array: T[]): T[] {
@@ -52,6 +57,7 @@ export default function MatchScreen() {
   );
   const [score, setScore] = useState(0);
   const [timer, setTimer] = useState(0);
+  const { t } = useTranslation('games');
 
   useEffect(() => {
     if (set) {
@@ -146,11 +152,11 @@ export default function MatchScreen() {
   const handleComplete = () => {
     updateLastPracticed(id!);
     showAlert(
-      'Congratulations!',
-      `You completed the match game in ${formatTime(timer)}!`,
+      t('match.complete.title'),
+      t('match.complete.message', { time: formatTime(timer) }),
       [
-        { text: 'Play Again', onPress: initializeGame },
-        { text: 'Done', onPress: () => router.back() },
+        { text: t('common:buttons.playAgain'), onPress: initializeGame },
+        { text: t('common:buttons.done'), onPress: () => router.back() },
       ]
     );
   };
@@ -164,7 +170,7 @@ export default function MatchScreen() {
   if (!set || set.words.length === 0) {
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.errorText}>No words in this set</Text>
+        <Text style={styles.errorText}>{t('common:status.noWords')}</Text>
       </SafeAreaView>
     );
   }
@@ -172,9 +178,22 @@ export default function MatchScreen() {
   if (isDesktop) {
     return (
       <DesktopLayout>
-        <View style={[styles.desktopContainer, { backgroundColor: colors.background }]}>
+        <View
+          style={[
+            styles.desktopContainer,
+            { backgroundColor: colors.background },
+          ]}
+        >
           {/* Header */}
-          <View style={[styles.desktopHeader, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
+          <View
+            style={[
+              styles.desktopHeader,
+              {
+                backgroundColor: colors.card,
+                borderBottomColor: colors.border,
+              },
+            ]}
+          >
             <DesktopContainer>
               <View style={styles.desktopHeaderContent}>
                 <TouchableOpacity
@@ -184,16 +203,34 @@ export default function MatchScreen() {
                   <Ionicons name="close" size={28} color={colors.text} />
                 </TouchableOpacity>
                 <Text style={[styles.desktopTitle, { color: colors.text }]}>
-                  Match: {set.name}
+                  {t('match.title', { setName: set.name })}
                 </Text>
                 <View style={styles.stats}>
-                  <View style={[styles.statBadge, { backgroundColor: `${colors.ai}20` }]}>
+                  <View
+                    style={[
+                      styles.statBadge,
+                      { backgroundColor: `${colors.ai}20` },
+                    ]}
+                  >
                     <Ionicons name="timer" size={18} color={colors.ai} />
-                    <Text style={[styles.statText, { color: colors.ai }]}>{formatTime(timer)}</Text>
+                    <Text style={[styles.statText, { color: colors.ai }]}>
+                      {formatTime(timer)}
+                    </Text>
                   </View>
-                  <View style={[styles.statBadge, { backgroundColor: `${colors.success}20` }]}>
-                    <Ionicons name="checkmark-circle" size={18} color={colors.success} />
-                    <Text style={[styles.statText, { color: colors.success }]}>{score}/{set.words.length}</Text>
+                  <View
+                    style={[
+                      styles.statBadge,
+                      { backgroundColor: `${colors.success}20` },
+                    ]}
+                  >
+                    <Ionicons
+                      name="checkmark-circle"
+                      size={18}
+                      color={colors.success}
+                    />
+                    <Text style={[styles.statText, { color: colors.success }]}>
+                      {score}/{set.words.length}
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -212,7 +249,7 @@ export default function MatchScreen() {
                     style={styles.columnHeader}
                   >
                     <Ionicons name="language" size={24} color="#FFFFFF" />
-                    <Text style={styles.columnTitle}>Words</Text>
+                    <Text style={styles.columnTitle}>{t('match.words')}</Text>
                   </LinearGradient>
                   <ScrollView
                     style={styles.scrollView}
@@ -240,7 +277,7 @@ export default function MatchScreen() {
                     style={styles.columnHeader}
                   >
                     <Ionicons name="text" size={24} color="#FFFFFF" />
-                    <Text style={styles.columnTitle}>Translations</Text>
+                    <Text style={styles.columnTitle}>{t('match.translations')}</Text>
                   </LinearGradient>
                   <ScrollView
                     style={styles.scrollView}
@@ -268,7 +305,10 @@ export default function MatchScreen() {
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+      edges={['top']}
+    >
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => router.back()}
@@ -277,13 +317,28 @@ export default function MatchScreen() {
           <Ionicons name="close" size={28} color={colors.text} />
         </TouchableOpacity>
         <View style={styles.stats}>
-          <View style={[styles.statBadge, { backgroundColor: `${colors.ai}20` }]}>
+          <View
+            style={[styles.statBadge, { backgroundColor: `${colors.ai}20` }]}
+          >
             <Ionicons name="timer" size={18} color={colors.ai} />
-            <Text style={[styles.statText, { color: colors.ai }]}>{formatTime(timer)}</Text>
+            <Text style={[styles.statText, { color: colors.ai }]}>
+              {formatTime(timer)}
+            </Text>
           </View>
-          <View style={[styles.statBadge, { backgroundColor: `${colors.success}20` }]}>
-            <Ionicons name="checkmark-circle" size={18} color={colors.success} />
-            <Text style={[styles.statText, { color: colors.success }]}>{score}/{set.words.length}</Text>
+          <View
+            style={[
+              styles.statBadge,
+              { backgroundColor: `${colors.success}20` },
+            ]}
+          >
+            <Ionicons
+              name="checkmark-circle"
+              size={18}
+              color={colors.success}
+            />
+            <Text style={[styles.statText, { color: colors.success }]}>
+              {score}/{set.words.length}
+            </Text>
           </View>
         </View>
         <View style={styles.headerPlaceholder} />
@@ -299,7 +354,7 @@ export default function MatchScreen() {
               style={styles.columnHeader}
             >
               <Ionicons name="language" size={20} color="#FFFFFF" />
-              <Text style={styles.columnTitle}>Words</Text>
+              <Text style={styles.columnTitle}>{t('match.words')}</Text>
             </LinearGradient>
             <ScrollView
               style={styles.scrollView}
@@ -327,7 +382,7 @@ export default function MatchScreen() {
               style={styles.columnHeader}
             >
               <Ionicons name="text" size={20} color="#FFFFFF" />
-              <Text style={styles.columnTitle}>Translations</Text>
+              <Text style={styles.columnTitle}>{t('match.translations')}</Text>
             </LinearGradient>
             <ScrollView
               style={styles.scrollView}
@@ -360,7 +415,13 @@ interface MatchCardProps {
   accentColor: string;
 }
 
-function MatchCard({ item, isSelected, onPress, colors, accentColor }: MatchCardProps) {
+function MatchCard({
+  item,
+  isSelected,
+  onPress,
+  colors,
+  accentColor,
+}: MatchCardProps) {
   const scale = useSharedValue(1);
 
   const animatedStyle = useAnimatedStyle(() => {

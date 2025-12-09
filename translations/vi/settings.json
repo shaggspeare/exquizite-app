@@ -1,0 +1,25 @@
+{
+  "_note": "This is a placeholder file. Please replace with vi translations.",
+  "title": "Settings",
+  "languages": {
+    "title": "Languages",
+    "description": "Choose which languages you want to learn and translate to.",
+    "targetLanguage": "Language to Learn",
+    "targetPlaceholder": "Select language to learn",
+    "nativeLanguage": "Translate To",
+    "nativePlaceholder": "Select your native language"
+  },
+  "appearance": {
+    "title": "Appearance",
+    "description": "Choose how the app looks. Auto will match your device's theme.",
+    "light": "Light",
+    "dark": "Dark",
+    "auto": "Auto",
+    "info": "Theme changes apply immediately to all screens"
+  },
+  "mySets": {
+    "title": "My Sets",
+    "manage": "Manage your word sets. Click to expand and view words.",
+    "noSets": "No sets created yet"
+  }
+}

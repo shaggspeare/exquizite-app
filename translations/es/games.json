@@ -1,0 +1,92 @@
+{
+  "chooseActivity": "Elegir actividad",
+  "setNotFound": "Conjunto no encontrado",
+  "wordsInSet": "Palabras en este conjunto",
+  "startPractice": "Comenzar práctica",
+  "quickPractice": "Práctica rápida",
+  "templates": {
+    "flashcard": {
+      "name": "Tarjetas",
+      "description": "Voltea para revelar traducciones"
+    },
+    "match": {
+      "name": "Emparejar",
+      "description": "Arrastra y conecta pares"
+    },
+    "quiz": {
+      "name": "Prueba",
+      "description": "Preguntas de opción múltiple"
+    },
+    "fillBlank": {
+      "name": "Completar espacios",
+      "description": "Completa oraciones con la palabra correcta",
+      "aiHints": "Pistas de IA disponibles"
+    }
+  },
+  "flashcard": {
+    "title": "Tarjetas: {{setName}}",
+    "tapToFlip": "Toca para voltear",
+    "clickToFlip": "Haz clic para voltear",
+    "complete": "Completado"
+  },
+  "quiz": {
+    "title": "Prueba: {{setName}}",
+    "question": "Pregunta {{current}} / {{total}}",
+    "translate": "Traducir:",
+    "nextQuestion": "Siguiente pregunta",
+    "loadingQuiz": "Cargando prueba...",
+    "complete": {
+      "title": "¡Prueba completada!",
+      "score": "Obtuviste {{score}}/{{total}} ({{percentage}}%)"
+    }
+  },
+  "match": {
+    "title": "Emparejar: {{setName}}",
+    "words": "Palabras",
+    "translations": "Traducciones",
+    "complete": {
+      "title": "¡Felicitaciones!",
+      "message": "¡Completaste el juego de emparejar en {{time}}!"
+    }
+  },
+  "fillBlank": {
+    "title": "Completar espacios: {{setName}}",
+    "question": "Pregunta {{current}} / {{total}}",
+    "translation": "Traducción:",
+    "fillPrompt": "Completa el espacio:",
+    "choosePrompt": "Elige la palabra correcta:",
+    "loadingNext": "Cargando siguiente pregunta...",
+    "generatingSentences": "Generando oraciones...",
+    "correctAnswer": "Respuesta correcta:",
+    "complete": {
+      "title": "¡Ejercicio completado!",
+      "score": "Obtuviste {{score}}/{{total}} ({{percentage}}%)"
+    }
+  },
+  "home": {
+    "title": "Inicio",
+    "greeting": "¡Hola, {{name}}!",
+    "readyToLearn": "¿Listo para aprender hoy?",
+    "noSets": "Aún no hay conjuntos",
+    "createFirstSet": "¡Crea tu primer conjunto de palabras para comenzar!",
+    "createSet": "Crear conjunto",
+    "featuredSets": "Conjuntos destacados",
+    "tryThem": "¡Pruébalos!",
+    "demoDescription": "Practica con estos conjuntos de demostración para comenzar"
+  },
+  "dashboard": {
+    "title": "Panel",
+    "lastPracticed": "Últimas prácticas"
+  },
+  "mySets": {
+    "title": "Mis conjuntos",
+    "noSets": "Aún no hay conjuntos",
+    "createFirstSet": "¡Crea tu primer conjunto de palabras para comenzar!",
+    "createSet": "Crear conjunto"
+  },
+  "setCard": {
+    "featured": "Destacado",
+    "complete": "{{percent}}% completado",
+    "demoInfo": "Este es un conjunto de demostración. ¡Crea tu propio conjunto para comenzar!"
+  }
+}

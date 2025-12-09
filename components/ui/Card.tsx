@@ -13,12 +13,14 @@ export function Card({ children, style, noPadding = false }: CardProps) {
   const { colors } = useTheme();
 
   return (
-    <View style={[
-      styles.card,
-      { backgroundColor: colors.card },
-      noPadding && styles.noPadding,
-      style
-    ]}>
+    <View
+      style={[
+        styles.card,
+        { backgroundColor: colors.card },
+        noPadding && styles.noPadding,
+        style,
+      ]}
+    >
       {children}
     </View>
   );

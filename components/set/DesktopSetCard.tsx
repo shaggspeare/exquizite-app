@@ -2,6 +2,7 @@
 import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useSets } from '@/contexts/SetsContext';
 import { WordSet } from '@/lib/types';
@@ -16,13 +17,16 @@ interface DesktopSetCardProps {
 }
 
 export function DesktopSetCard({ set }: DesktopSetCardProps) {
+  const { t } = useTranslation('games');
   const { colors } = useTheme();
   const { deleteSet } = useSets();
   const router = useRouter();
   const [showShareModal, setShowShareModal] = useState(false);
 
   const getGradientColors = () => {
-    const hash = set.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const hash = set.id
+      .split('')
+      .reduce((acc, char) => acc + char.charCodeAt(0), 0);
     const gradients = [
       ['#4A90E2', '#5B9EFF'],
       ['#B537F2', '#E066FF'],
@@ -38,26 +42,26 @@ export function DesktopSetCard({ set }: DesktopSetCardProps) {
   };
 
   const formatDate = (dateString?: string) => {
-    if (!dateString) return 'Never';
+    if (!dateString) return t('common:time.never');
     const date = new Date(dateString);
     const now = new Date();
     const diffTime = Math.abs(now.getTime() - date.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    if (diffDays === 0) return 'Today';
-    if (diffDays === 1) return 'Yesterday';
-    if (diffDays < 7) return `${diffDays} days ago`;
+    if (diffDays === 0) return t('common:time.today');
+    if (diffDays === 1) return t('common:time.yesterday');
+    if (diffDays < 7) return t('common:time.daysAgo', { count: diffDays });
     return date.toLocaleDateString();
   };
 
   const handleDeletePress = () => {
     showAlert(
-      'Delete Set',
-      `Are you sure you want to delete "${set.name}"? This action cannot be undone.`,
+      t('setCard.deleteSet'),
+      t('setCard.deleteConfirm', { setName: set.name }),
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('common:buttons.cancel'), style: 'cancel' },
         {
-          text: 'Delete',
+          text: t('common:buttons.delete'),
           style: 'destructive',
           onPress: () => deleteSet(set.id),
         },
@@ -78,7 +82,7 @@ export function DesktopSetCard({ set }: DesktopSetCardProps) {
         {set.isFeatured && (
           <View style={styles.featuredBadge}>
             <Ionicons name="star" size={10} color="#000" />
-            <Text style={styles.featuredBadgeText}>Featured</Text>
+            <Text style={styles.featuredBadgeText}>{t('setCard.featured')}</Text>
           </View>
         )}
 
@@ -112,13 +116,17 @@ export function DesktopSetCard({ set }: DesktopSetCardProps) {
                 />
               </View>
               <Text style={styles.progressText}>
-                {Math.round((set.words.length / 20) * 100)}% complete
+                {t('setCard.complete', { percent: Math.round((set.words.length / 20) * 100) })}
               </Text>
             </View>
 
             {set.lastPracticed && (
               <View style={styles.metaRow}>
-                <Ionicons name="time-outline" size={12} color="rgba(255,255,255,0.8)" />
+                <Ionicons
+                  name="time-outline"
+                  size={12}
+                  color="rgba(255,255,255,0.8)"
+                />
                 <Text style={styles.metaText}>
                   {formatDate(set.lastPracticed)}
                 </Text>
@@ -135,7 +143,7 @@ export function DesktopSetCard({ set }: DesktopSetCardProps) {
           onPress={() => router.push(`/sets/${set.id}/play/template`)}
         >
           <Ionicons name="play" size={18} color="#FFFFFF" />
-          <Text style={styles.playButtonText}>Play</Text>
+          <Text style={styles.playButtonText}>{t('common:buttons.play')}</Text>
         </TouchableOpacity>
 
         {!set.isFeatured && (
@@ -144,7 +152,11 @@ export function DesktopSetCard({ set }: DesktopSetCardProps) {
               style={[styles.smallIconButton, { backgroundColor: colors.card }]}
               onPress={() => setShowShareModal(true)}
             >
-              <Ionicons name="share-social-outline" size={18} color={colors.primary} />
+              <Ionicons
+                name="share-social-outline"
+                size={18}
+                color={colors.primary}
+              />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -203,7 +215,7 @@ const styles = StyleSheet.create({
   },
   featuredBadge: {
     position: 'absolute',
-    top: 0,
+    top: -Spacing.xs,
     left: Spacing.lg,
     flexDirection: 'row',
     alignItems: 'center',

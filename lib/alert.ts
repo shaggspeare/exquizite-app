@@ -2,15 +2,17 @@ import { Alert, Platform } from 'react-native';
 import { isDesktopWeb } from './platform-utils';
 
 // Global reference to the custom alert function (set by AlertProvider)
-let customAlertFn: ((config: {
-  title: string;
-  message?: string;
-  buttons?: Array<{
-    text: string;
-    onPress?: () => void;
-    style?: 'default' | 'cancel' | 'destructive';
-  }>;
-}) => void) | null = null;
+let customAlertFn:
+  | ((config: {
+      title: string;
+      message?: string;
+      buttons?: Array<{
+        text: string;
+        onPress?: () => void;
+        style?: 'default' | 'cancel' | 'destructive';
+      }>;
+    }) => void)
+  | null = null;
 
 /**
  * Sets the custom alert function (called by AlertProvider)
@@ -49,7 +51,7 @@ export function showAlert(
  * Returns true if user confirmed, false otherwise
  */
 export async function confirm(message: string): Promise<boolean> {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     showAlert('Confirm', message, [
       { text: 'Cancel', onPress: () => resolve(false), style: 'cancel' },
       { text: 'OK', onPress: () => resolve(true) },

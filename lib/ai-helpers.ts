@@ -12,7 +12,12 @@ export async function generateWordSuggestions(
   count: number = 5
 ): Promise<WordPair[]> {
   try {
-    console.log('[AI Helper] Requesting word suggestions:', { theme, targetLanguage, nativeLanguage, count });
+    console.log('[AI Helper] Requesting word suggestions:', {
+      theme,
+      targetLanguage,
+      nativeLanguage,
+      count,
+    });
 
     const suggestions = await OpenAIService.generateWordSuggestions(
       theme,
@@ -26,7 +31,11 @@ export async function generateWordSuggestions(
       throw new Error('No suggestions generated');
     }
 
-    console.log('[AI Helper] Successfully received', suggestions.length, 'suggestions');
+    console.log(
+      '[AI Helper] Successfully received',
+      suggestions.length,
+      'suggestions'
+    );
     return suggestions;
   } catch (error) {
     console.error('[AI Helper] Error generating word suggestions:', error);
@@ -45,7 +54,10 @@ export async function generateSentenceWithGap(
   nativeLanguage: string = 'English'
 ): Promise<{ sentence: string; correctAnswer: string }> {
   try {
-    console.log('[AI Helper] Requesting sentence with gap:', { word, translation });
+    console.log('[AI Helper] Requesting sentence with gap:', {
+      word,
+      translation,
+    });
 
     const result = await OpenAIService.generateSentenceWithGap(
       word,
@@ -73,9 +85,13 @@ export async function generateMultipleSentencesWithGaps(
   words: Array<{ word: string; translation: string }>,
   targetLanguage: string = 'Ukrainian',
   nativeLanguage: string = 'English'
-): Promise<Array<{ sentence: string; correctAnswer: string; options: string[] }>> {
+): Promise<
+  Array<{ sentence: string; correctAnswer: string; options: string[] }>
+> {
   try {
-    console.log('[AI Helper] Requesting multiple sentences with gaps:', { count: words.length });
+    console.log('[AI Helper] Requesting multiple sentences with gaps:', {
+      count: words.length,
+    });
 
     const results = await OpenAIService.generateMultipleSentencesWithGaps(
       words,
@@ -83,14 +99,23 @@ export async function generateMultipleSentencesWithGaps(
       nativeLanguage
     );
 
-    console.log('[AI Helper] Successfully generated', results.length, 'sentences with gaps');
+    console.log(
+      '[AI Helper] Successfully generated',
+      results.length,
+      'sentences with gaps'
+    );
     return results;
   } catch (error) {
-    console.error('[AI Helper] Error generating multiple sentences with gaps:', error);
+    console.error(
+      '[AI Helper] Error generating multiple sentences with gaps:',
+      error
+    );
     // Fallback to simple sentences with basic options
     return words.map((w, index) => {
       // Create simple distractors from other words in the list
-      const otherWords = words.filter((_, i) => i !== index).map(word => word.word);
+      const otherWords = words
+        .filter((_, i) => i !== index)
+        .map(word => word.word);
       const distractors = otherWords.slice(0, 3);
 
       // If not enough words, use placeholder distractors

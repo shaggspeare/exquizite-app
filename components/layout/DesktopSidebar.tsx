@@ -1,6 +1,14 @@
 // Desktop sidebar navigation
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+} from 'react-native';
 import { useRouter, usePathname } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -8,29 +16,59 @@ import { Typography, Spacing, BorderRadius } from '@/lib/constants';
 import { showAlert } from '@/lib/alert';
 
 interface NavItem {
-  label: string;
+  labelKey: string;
   icon: keyof typeof Ionicons.glyphMap;
   route: string;
 }
 
-const navItems: NavItem[] = [
-  { label: 'Home', icon: 'home', route: '/(tabs)' },
-  { label: 'My Sets', icon: 'library', route: '/(tabs)/my-sets' },
-  { label: 'Create Set', icon: 'add-circle', route: '/(tabs)/create' },
-  { label: 'Profile', icon: 'person', route: '/(tabs)/profile' },
-];
+// Base navigation items - will be filtered based on user type
+const getNavItems = (isGuest: boolean): NavItem[] => {
+  const items: NavItem[] = [];
+
+  // For guests: show Home. For logged users: show Dashboard
+  if (isGuest) {
+    items.push({ labelKey: 'home', icon: 'home', route: '/(tabs)' });
+  } else {
+    items.push({ labelKey: 'dashboard', icon: 'stats-chart', route: '/(tabs)' });
+  }
+
+  // My Sets for all users
+  items.push({ labelKey: 'mySets', icon: 'library', route: '/(tabs)/my-sets' });
+
+  // Create Set and Profile
+  items.push(
+    { labelKey: 'createSet', icon: 'add-circle', route: '/(tabs)/create' },
+    { labelKey: 'profile', icon: 'person', route: '/(tabs)/profile' }
+  );
+
+  return items;
+};
 
 export function DesktopSidebar() {
+  const { t } = useTranslation(['games', 'profile', 'create', 'auth']);
   const { colors } = useTheme();
   const { user, signOut } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
+  const navItems = getNavItems(user?.isGuest ?? true);
+
+  const getNavLabel = (key: string) => {
+    const labels: Record<string, string> = {
+      home: t('games:home.title'),
+      dashboard: t('games:dashboard.title'),
+      mySets: t('games:mySets.title'),
+      createSet: t('create:title'),
+      profile: t('profile:title'),
+    };
+    return labels[key] || key;
+  };
+
   const handleSignOut = () => {
-    showAlert('Sign Out', 'Are you sure you want to sign out?', [
-      { text: 'Cancel', style: 'cancel' },
+    showAlert(t('auth:signOut.title'), t('auth:signOut.message'), [
+      { text: t('common:buttons.cancel'), style: 'cancel' },
       {
-        text: 'Sign Out',
+        text: t('auth:signOut.confirm'),
         style: 'destructive',
         onPress: async () => {
           await signOut();
@@ -40,7 +78,12 @@ export function DesktopSidebar() {
   };
 
   return (
-    <View style={[styles.sidebar, { backgroundColor: colors.card, borderRightColor: colors.border }]}>
+    <View
+      style={[
+        styles.sidebar,
+        { backgroundColor: colors.card, borderRightColor: colors.border },
+      ]}
+    >
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Logo/Brand */}
         <View style={styles.header}>
@@ -54,17 +97,24 @@ export function DesktopSidebar() {
 
         {/* User Info */}
         {user && (
-          <View style={[styles.userCard, { backgroundColor: colors.background }]}>
+          <View
+            style={[styles.userCard, { backgroundColor: colors.background }]}
+          >
             <View style={styles.avatar}>
               <Ionicons name="person" size={20} color={colors.primary} />
             </View>
             <View style={styles.userInfo}>
-              <Text style={[styles.userName, { color: colors.text }]} numberOfLines={1}>
+              <Text
+                style={[styles.userName, { color: colors.text }]}
+                numberOfLines={1}
+              >
                 {user.name}
               </Text>
               {user.isGuest && (
-                <Text style={[styles.guestBadge, { color: colors.textSecondary }]}>
-                  Guest
+                <Text
+                  style={[styles.guestBadge, { color: colors.textSecondary }]}
+                >
+                  {t('profile:guest')}
                 </Text>
               )}
             </View>
@@ -73,8 +123,9 @@ export function DesktopSidebar() {
 
         {/* Navigation */}
         <View style={styles.nav}>
-          {navItems.map((item) => {
-            const isActive = pathname === item.route || pathname.startsWith(item.route);
+          {navItems.map(item => {
+            const isActive =
+              pathname === item.route || pathname.startsWith(item.route);
             return (
               <TouchableOpacity
                 key={item.route}
@@ -95,7 +146,7 @@ export function DesktopSidebar() {
                     { color: isActive ? colors.primary : colors.text },
                   ]}
                 >
-                  {item.label}
+                  {getNavLabel(item.labelKey)}
                 </Text>
               </TouchableOpacity>
             );
@@ -110,7 +161,9 @@ export function DesktopSidebar() {
           onPress={handleSignOut}
         >
           <Ionicons name="log-out-outline" size={24} color={colors.error} />
-          <Text style={[styles.signOutText, { color: colors.error }]}>Sign Out</Text>
+          <Text style={[styles.signOutText, { color: colors.error }]}>
+            {t('auth:signOut.title')}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>

@@ -5,7 +5,9 @@ import { getScreenType } from '@/lib/responsive';
 
 export function useResponsive() {
   const [dimensions, setDimensions] = useState(() => Dimensions.get('window'));
-  const [screenType, setScreenType] = useState<'mobile' | 'tablet' | 'desktop'>(() => getScreenType());
+  const [screenType, setScreenType] = useState<'mobile' | 'tablet' | 'desktop'>(
+    () => getScreenType()
+  );
 
   useEffect(() => {
     const subscription = Dimensions.addEventListener('change', ({ window }) => {

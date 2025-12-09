@@ -15,7 +15,7 @@ export function generateGuestEmail(): string {
 
 // Generate a simple UUID v4
 function generateUUID(): string {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
     const r = (Math.random() * 16) | 0;
     const v = c === 'x' ? r : (r & 0x3) | 0x8;
     return v.toString(16);
@@ -106,7 +106,7 @@ export async function updateGuestSet(
   nativeLanguage: string
 ): Promise<void> {
   const sets = await getGuestSets();
-  const setIndex = sets.findIndex((s) => s.id === id);
+  const setIndex = sets.findIndex(s => s.id === id);
 
   if (setIndex === -1) {
     throw new Error('Set not found');
@@ -126,13 +126,13 @@ export async function updateGuestSet(
 
 export async function deleteGuestSet(id: string): Promise<void> {
   const sets = await getGuestSets();
-  const filteredSets = sets.filter((s) => s.id !== id);
+  const filteredSets = sets.filter(s => s.id !== id);
   await storage.setItem(GUEST_SETS_KEY, JSON.stringify(filteredSets));
 }
 
 export async function updateGuestSetLastPracticed(id: string): Promise<void> {
   const sets = await getGuestSets();
-  const setIndex = sets.findIndex((s) => s.id === id);
+  const setIndex = sets.findIndex(s => s.id === id);
 
   if (setIndex === -1) {
     throw new Error('Set not found');
@@ -148,7 +148,7 @@ export async function updateGuestSetLastPracticed(id: string): Promise<void> {
 
 export async function getGuestSetById(id: string): Promise<WordSet | null> {
   const sets = await getGuestSets();
-  return sets.find((s) => s.id === id) || null;
+  return sets.find(s => s.id === id) || null;
 }
 
 // Clear all guest data

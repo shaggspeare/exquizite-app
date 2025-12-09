@@ -1,0 +1,96 @@
+{
+  "buttons": {
+    "add": "Add",
+    "done": "Done",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "share": "Share",
+    "play": "Play",
+    "next": "Next",
+    "previous": "Previous",
+    "skip": "Skip",
+    "check": "Check Answer",
+    "save": "Save",
+    "saving": "Saving...",
+    "finish": "Finish",
+    "tryAgain": "Try Again",
+    "playAgain": "Play Again",
+    "showHint": "Show Hint",
+    "generate": "Generate",
+    "generating": "Generating..."
+  },
+  "status": {
+    "loading": "Loading...",
+    "saving": "Saving...",
+    "generating": "Generating...",
+    "noWords": "No words in this set",
+    "success": "Success",
+    "error": "Error"
+  },
+  "time": {
+    "never": "Never",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "daysAgo": "{{count}} days ago",
+    "lastPracticed": "Last practiced {{date}}"
+  },
+  "counts": {
+    "word": "word",
+    "words": "words",
+    "set": "set",
+    "sets": "sets",
+    "wordCount": "{{count}} word",
+    "wordCount_other": "{{count}} words",
+    "setCount": "{{count}} set",
+    "setCount_other": "{{count}} sets",
+    "progress": "{{current}}/{{total}}"
+  },
+  "dialogs": {
+    "areYouSure": "Are you sure?",
+    "cannotUndo": "This action cannot be undone."
+  },
+  "sharing": {
+    "shareSet": "Share Set",
+    "shareCode": "Share Code",
+    "shareLink": "Share Link",
+    "copyLink": "Copy Link",
+    "copied": "Copied!",
+    "copy": "Copy",
+    "views": "Views",
+    "copies": "Copies",
+    "generatingLink": "Generating share link...",
+    "linkInfo": "Anyone with this link can view and copy your set",
+    "deactivateLink": "Deactivate Share Link",
+    "deactivateConfirm": "Are you sure you want to deactivate this share link? Anyone with the link will no longer be able to access this set.",
+    "deactivate": "Deactivate",
+    "linkDeactivated": "Share link has been deactivated",
+    "shareError": "Failed to generate share link. Please try again.",
+    "copyError": "Failed to copy link to clipboard",
+    "linkCopied": "Link Copied",
+    "linkCopiedToClipboard": "Share link copied to clipboard"
+  },
+  "tour": {
+    "skip": "Skip",
+    "next": "Next",
+    "back": "Back",
+    "getStarted": "Get Started",
+    "slides": {
+      "vocabulary": {
+        "title": "Build Your Vocabulary",
+        "description": "Add words manually or use AI to generate themed vocabulary sets. Create up to 20 words per set."
+      },
+      "organize": {
+        "title": "Organize Your Learning",
+        "description": "Group words into themed sets like \"Spanish Food\" or \"German Travel\". Name your sets for easy access."
+      },
+      "learn": {
+        "title": "Learn Your Way",
+        "description": "Practice with 4 game modes: Flashcards, Match Pairs, Multiple Choice Quiz, and Fill in the Blank."
+      },
+      "share": {
+        "title": "Share Your Knowledge",
+        "description": "Generate share links for your sets. Others can view and copy them to their library."
+      }
+    }
+  }
+}

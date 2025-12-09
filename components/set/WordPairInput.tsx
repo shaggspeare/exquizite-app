@@ -1,4 +1,10 @@
-import { View, TextInput, StyleSheet, TouchableOpacity, Platform } from 'react-native';
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Platform,
+} from 'react-native';
 import { useTheme } from '@/contexts/ThemeContext';
 import { WordPair } from '@/lib/types';
 import { Spacing, Typography, BorderRadius } from '@/lib/constants';

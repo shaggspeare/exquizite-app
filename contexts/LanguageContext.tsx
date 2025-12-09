@@ -9,6 +9,7 @@ import * as Localization from 'expo-localization';
 import { useAuth } from './AuthContext';
 import { supabase } from '@/lib/supabase';
 import { storage } from '@/lib/storage';
+import i18n from '@/lib/i18n';
 
 export interface LanguagePreferences {
   targetLanguage: string; // Language user wants to learn
@@ -18,11 +19,16 @@ export interface LanguagePreferences {
 
 interface LanguageContextType {
   preferences: LanguagePreferences;
-  setLanguages: (targetLanguage: string, nativeLanguage: string) => Promise<void>;
+  setLanguages: (
+    targetLanguage: string,
+    nativeLanguage: string
+  ) => Promise<void>;
   isLoading: boolean;
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const LanguageContext = createContext<LanguageContextType | undefined>(
+  undefined
+);
 
 const LANGUAGE_STORAGE_KEY = 'app_language_preferences';
 
@@ -58,7 +64,9 @@ const getDeviceLanguage = (): string => {
     const languageCode = primaryLocale.languageCode || 'en';
 
     // Check if we support this language
-    const supported = AVAILABLE_LANGUAGES.find(lang => lang.code === languageCode);
+    const supported = AVAILABLE_LANGUAGES.find(
+      lang => lang.code === languageCode
+    );
     if (supported) {
       return languageCode;
     }
@@ -106,7 +114,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
       if (!user.isGuest) {
         try {
-          console.log('📚 Checking Supabase for existing sets for user:', user.id);
+          console.log(
+            '📚 Checking Supabase for existing sets for user:',
+            user.id
+          );
           const { data: sets, error } = await supabase
             .from('word_sets')
             .select('id, target_language, native_language')
@@ -133,23 +144,46 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
       if (stored) {
         const parsed = JSON.parse(stored);
-        console.log('📚 Language preferences loaded from storage for user', user.name, ':', parsed);
+        console.log(
+          '📚 Language preferences loaded from storage for user',
+          user.name,
+          ':',
+          parsed
+        );
 
         // If user has sets but preferences say not configured, update to configured
         if (hasExistingSets && !parsed.isConfigured) {
-          console.log('📚 User has sets but preferences not marked as configured. Updating...');
+          console.log(
+            '📚 User has sets but preferences not marked as configured. Updating...'
+          );
           parsed.isConfigured = true;
           await storage.setItem(userStorageKey, JSON.stringify(parsed));
         }
 
         // Also update target/native language if missing but user has sets
-        if (hasExistingSets && firstSet && (!parsed.targetLanguage || !parsed.nativeLanguage)) {
-          console.log('📚 Updating missing language info from existing sets...');
+        if (
+          hasExistingSets &&
+          firstSet &&
+          (!parsed.targetLanguage || !parsed.nativeLanguage)
+        ) {
+          console.log(
+            '📚 Updating missing language info from existing sets...'
+          );
           const deviceLang = getDeviceLanguage();
-          parsed.targetLanguage = parsed.targetLanguage || firstSet.target_language || 'uk';
-          parsed.nativeLanguage = parsed.nativeLanguage || firstSet.native_language || deviceLang;
+          parsed.targetLanguage =
+            parsed.targetLanguage || firstSet.target_language || 'uk';
+          parsed.nativeLanguage =
+            parsed.nativeLanguage || firstSet.native_language || deviceLang;
           parsed.isConfigured = true;
           await storage.setItem(userStorageKey, JSON.stringify(parsed));
+        }
+
+        // Sync UI language with native language if configured
+        if (parsed.nativeLanguage && parsed.isConfigured) {
+          console.log('🌍 Syncing UI language to:', parsed.nativeLanguage);
+          if (i18n.language !== parsed.nativeLanguage) {
+            await i18n.changeLanguage(parsed.nativeLanguage);
+          }
         }
 
         setPreferences(parsed);
@@ -159,7 +193,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         const targetLang = firstSet.target_language || 'uk';
         const nativeLang = firstSet.native_language || deviceLang;
 
-        console.log('📚 User has sets but no stored preferences. Auto-configuring:', { targetLang, nativeLang });
+        console.log(
+          '📚 User has sets but no stored preferences. Auto-configuring:',
+          { targetLang, nativeLang }
+        );
 
         const autoConfiguredPrefs = {
           targetLanguage: targetLang,
@@ -177,7 +214,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       } else {
         // New user - prompt for language selection
         const deviceLang = getDeviceLanguage();
-        console.log('📚 New user detected (no sets, no stored preferences). Device language:', deviceLang);
+        console.log(
+          '📚 New user detected (no sets, no stored preferences). Device language:',
+          deviceLang
+        );
         setPreferences({
           targetLanguage: '',
           nativeLanguage: deviceLang,
@@ -198,7 +238,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const setLanguages = async (targetLanguage: string, nativeLanguage: string) => {
+  const setLanguages = async (
+    targetLanguage: string,
+    nativeLanguage: string
+  ) => {
     try {
       if (!user) {
         throw new Error('No user logged in');
@@ -211,12 +254,14 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       };
 
       const userStorageKey = `${LANGUAGE_STORAGE_KEY}_${user.id}`;
-      await storage.setItem(
-        userStorageKey,
-        JSON.stringify(newPreferences)
-      );
+      await storage.setItem(userStorageKey, JSON.stringify(newPreferences));
 
-      console.log('📚 Language preferences saved for user', user.name, ':', newPreferences);
+      console.log(
+        '📚 Language preferences saved for user',
+        user.name,
+        ':',
+        newPreferences
+      );
       setPreferences(newPreferences);
     } catch (error) {
       console.error('Error saving language preferences:', error);

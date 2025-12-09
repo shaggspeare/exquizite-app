@@ -41,13 +41,16 @@ export async function retryOperation<T>(
       return await operation();
     } catch (error: any) {
       lastError = error;
-      const isNetworkError = error?.message?.includes('Network request failed') ||
-                            error?.message?.includes('Failed to fetch') ||
-                            error?.code === 'NETWORK_ERROR';
+      const isNetworkError =
+        error?.message?.includes('Network request failed') ||
+        error?.message?.includes('Failed to fetch') ||
+        error?.code === 'NETWORK_ERROR';
 
       // Only retry on network errors
       if (isNetworkError && attempt < maxRetries) {
-        console.log(`Network error on attempt ${attempt + 1}, retrying in ${delayMs}ms...`);
+        console.log(
+          `Network error on attempt ${attempt + 1}, retrying in ${delayMs}ms...`
+        );
         await new Promise(resolve => setTimeout(resolve, delayMs));
         continue;
       }

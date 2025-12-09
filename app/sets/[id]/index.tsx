@@ -16,6 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useResponsive } from '@/hooks/useResponsive';
 import { DesktopLayout } from '@/components/layout/DesktopLayout';
 import { DesktopSetDetailView } from '@/components/sets/DesktopSetDetailView';
+import { useTranslation } from 'react-i18next';
 
 export default function SetDetailScreen() {
   const router = useRouter();
@@ -23,6 +24,7 @@ export default function SetDetailScreen() {
   const { getSetById } = useSets();
   const { colors } = useTheme();
   const { isDesktop } = useResponsive();
+  const { t } = useTranslation('games');
 
   const set = getSetById(id!);
 
@@ -39,22 +41,37 @@ export default function SetDetailScreen() {
 
   if (!set) {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-        <Text style={[styles.errorText, { color: colors.error }]}>Set not found</Text>
+      <SafeAreaView
+        style={[styles.container, { backgroundColor: colors.background }]}
+      >
+        <Text style={[styles.errorText, { color: colors.error }]}>
+          {t('setNotFound')}
+        </Text>
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
-      <View style={[styles.header, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+      edges={['top']}
+    >
+      <View
+        style={[
+          styles.header,
+          { backgroundColor: colors.card, borderBottomColor: colors.border },
+        ]}
+      >
         <TouchableOpacity
           onPress={() => router.back()}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <Ionicons name="arrow-back" size={28} color={colors.text} />
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, { color: colors.text }]} numberOfLines={1}>
+        <Text
+          style={[styles.headerTitle, { color: colors.text }]}
+          numberOfLines={1}
+        >
           {set.name}
         </Text>
         <TouchableOpacity
@@ -73,29 +90,50 @@ export default function SetDetailScreen() {
           <View style={styles.statRow}>
             <View style={styles.stat}>
               <Ionicons name="book" size={32} color={colors.primary} />
-              <Text style={[styles.statValue, { color: colors.text }]}>{set.words.length}</Text>
-              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Words</Text>
+              <Text style={[styles.statValue, { color: colors.text }]}>
+                {set.words.length}
+              </Text>
+              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
+                {t('wordsInSet')}
+              </Text>
             </View>
           </View>
         </Card>
 
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>Words in this set</Text>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          {t('wordsInSet')}
+        </Text>
         {set.words.map((pair, index) => (
           <Card key={pair.id} style={styles.wordCard}>
             <View style={styles.wordCardContent}>
-              <Text style={[styles.wordNumber, { color: colors.textSecondary }]}>{index + 1}</Text>
+              <Text
+                style={[styles.wordNumber, { color: colors.textSecondary }]}
+              >
+                {index + 1}
+              </Text>
               <View style={styles.wordPair}>
-                <Text style={[styles.word, { color: colors.text }]}>{pair.word}</Text>
-                <Text style={[styles.translation, { color: colors.textSecondary }]}>{pair.translation}</Text>
+                <Text style={[styles.word, { color: colors.text }]}>
+                  {pair.word}
+                </Text>
+                <Text
+                  style={[styles.translation, { color: colors.textSecondary }]}
+                >
+                  {pair.translation}
+                </Text>
               </View>
             </View>
           </Card>
         ))}
       </ScrollView>
 
-      <View style={[styles.footer, { backgroundColor: colors.card, borderTopColor: colors.border }]}>
+      <View
+        style={[
+          styles.footer,
+          { backgroundColor: colors.card, borderTopColor: colors.border },
+        ]}
+      >
         <Button
-          title="Start Practice"
+          title={t('startPractice')}
           onPress={() => router.push(`/sets/${id}/play/template`)}
         />
       </View>
