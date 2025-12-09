@@ -31,11 +31,11 @@ export function SetCard({ set, onPress }: SetCardProps) {
   const scale = useSharedValue(1);
 
   // Generate a consistent gradient based on set ID
-  const getGradientColors = () => {
+  const getGradientColors = (): [string, string] => {
     const hash = set.id
       .split('')
       .reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    const gradients = [
+    const gradients: [string, string][] = [
       ['#4A90E2', '#5B9EFF'], // Blue
       ['#B537F2', '#E066FF'], // Purple
       ['#00D4FF', '#06593f'], // Teal/Dark
@@ -186,31 +186,16 @@ export function SetCard({ set, onPress }: SetCardProps) {
             <Text style={styles.wordBadgeText}>{set.words.length}</Text>
           </View>
 
-          {/* Always visible practice button */}
-          <TouchableOpacity
-            style={styles.practiceButton}
-            onPress={e => {
-              e.stopPropagation();
-              handlePlayPress();
-            }}
-            activeOpacity={0.8}
-          >
-            <Ionicons name="play-circle" size={28} color="#FFFFFF" />
-          </TouchableOpacity>
-        </LinearGradient>
-
-        {isExpanded && (
-          <View
-            style={[styles.expandedContent, { backgroundColor: colors.card }]}
-          >
+          {isExpanded && (
+            <View style={styles.expandedContent}>
             <View
               style={[
                 styles.wordListContainer,
-                { backgroundColor: colors.background },
+                { backgroundColor: 'rgba(255,255,255,0.2)' },
               ]}
             >
               <Text
-                style={[styles.wordListText, { color: colors.textSecondary }]}
+                style={[styles.wordListText, { color: '#FFFFFF' }]}
               >
                 {wordPairsList || t('common:status.noWords')}
               </Text>
@@ -220,18 +205,18 @@ export function SetCard({ set, onPress }: SetCardProps) {
               <View
                 style={[
                   styles.featuredInfo,
-                  { backgroundColor: colors.backgroundSecondary },
+                  { backgroundColor: 'rgba(255,255,255,0.2)' },
                 ]}
               >
                 <Ionicons
                   name="information-circle"
                   size={20}
-                  color={colors.textSecondary}
+                  color="#FFFFFF"
                 />
                 <Text
                   style={[
                     styles.featuredInfoText,
-                    { color: colors.textSecondary },
+                    { color: '#FFFFFF' },
                   ]}
                 >
                   {t('setCard.demoInfo')}
@@ -241,14 +226,25 @@ export function SetCard({ set, onPress }: SetCardProps) {
               <View style={styles.actions}>
                 <TouchableOpacity
                   style={[
+                    styles.playButton,
+                    { backgroundColor: colors.primary },
+                  ]}
+                  onPress={handlePlayPress}
+                  activeOpacity={0.7}
+                >
+                  <Ionicons name="play-circle" size={24} color="#FFFFFF" />
+                  <Text style={styles.playButtonText}>{t('common:buttons.play')}</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[
                     styles.actionButton,
                     { backgroundColor: colors.success },
                   ]}
                   onPress={handleSharePress}
                   activeOpacity={0.7}
                 >
-                  <Ionicons name="share-social" size={20} color="#FFFFFF" />
-                  <Text style={styles.actionButtonText}>{t('common:buttons.share')}</Text>
+                  <Ionicons name="share-social" size={24} color="#FFFFFF" />
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -259,13 +255,13 @@ export function SetCard({ set, onPress }: SetCardProps) {
                   onPress={handleDeletePress}
                   activeOpacity={0.7}
                 >
-                  <Ionicons name="trash" size={20} color="#FFFFFF" />
-                  <Text style={styles.actionButtonText}>{t('common:buttons.delete')}</Text>
+                  <Ionicons name="trash" size={24} color="#FFFFFF" />
                 </TouchableOpacity>
               </View>
             )}
           </View>
         )}
+        </LinearGradient>
       </TouchableOpacity>
 
       <ShareModal
@@ -389,11 +385,7 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.8)',
   },
   expandedContent: {
-    borderBottomLeftRadius: BorderRadius.cardLarge,
-    borderBottomRightRadius: BorderRadius.cardLarge,
-    padding: Spacing.md,
-    paddingTop: Spacing.lg,
-    marginTop: -BorderRadius.card,
+    marginTop: Spacing.sm,
   },
   wordListContainer: {
     padding: Spacing.md,
@@ -409,33 +401,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: Spacing.md,
   },
+  playButton: {
+    flex: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.button,
+    gap: Spacing.xs,
+    ...Shadow.button,
+  },
+  playButtonText: {
+    ...Typography.body,
+    color: '#FFFFFF',
+    fontWeight: '600',
+    fontSize: 16,
+  },
   actionButton: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.lg,
     borderRadius: BorderRadius.button,
-    gap: Spacing.xs,
-    ...Shadow.button,
-  },
-  actionButtonText: {
-    ...Typography.body,
-    color: '#FFFFFF',
-    fontWeight: '600',
-    fontSize: 16,
-  },
-  practiceButton: {
-    position: 'absolute',
-    bottom: Spacing.lg,
-    right: Spacing.lg,
-    width: 48,
-    height: 48,
-    borderRadius: BorderRadius.round,
-    backgroundColor: 'rgba(255,255,255,0.25)',
-    alignItems: 'center',
-    justifyContent: 'center',
     ...Shadow.button,
   },
 });
