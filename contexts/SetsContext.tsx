@@ -6,7 +6,7 @@ import {
   useRef,
   ReactNode,
 } from 'react';
-import { supabase, retryOperation } from '@/lib/supabase';
+import { supabase, retryOperation, ensureValidSession } from '@/lib/supabase';
 import { useAuth } from './AuthContext';
 import { useLanguage } from './LanguageContext';
 import {
@@ -148,6 +148,16 @@ export function SetsProvider({ children }: { children: ReactNode }) {
       } else {
         // Load from Supabase for authenticated users
         console.log('☁️ Loading sets from Supabase...');
+
+        // Ensure session is valid before making the request
+        const sessionValid = await ensureValidSession();
+        if (!sessionValid) {
+          console.error('🔴 Session validation failed, signing out...');
+          await supabase.auth.signOut();
+          setSets([]);
+          return;
+        }
+
         const { data: setsData, error: setsError } = await supabase
           .from('word_sets')
           .select(
@@ -159,7 +169,24 @@ export function SetsProvider({ children }: { children: ReactNode }) {
           .eq('user_id', user.id)
           .order('created_at', { ascending: false });
 
-        if (setsError) throw setsError;
+        if (setsError) {
+          // Check if it's an authentication error
+          const isAuthError =
+            setsError.message?.includes('JWT') ||
+            setsError.message?.includes('expired') ||
+            setsError.message?.includes('invalid') ||
+            setsError.code === 'PGRST301';
+
+          if (isAuthError) {
+            console.error('🔴 Authentication error detected, session is invalid');
+            console.error('Error details:', setsError);
+            // Sign out the user to force re-login
+            await supabase.auth.signOut();
+            throw new Error('Your session has expired. Please sign in again.');
+          }
+
+          throw setsError;
+        }
 
         // Transform database format to app format
         userSets = (setsData || []).map(set => ({

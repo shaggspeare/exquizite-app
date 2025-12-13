@@ -28,6 +28,61 @@ export const supabase = createClient(
   }
 );
 
+// Helper function to validate and refresh session if needed
+export async function ensureValidSession(): Promise<boolean> {
+  try {
+    const {
+      data: { session },
+      error,
+    } = await supabase.auth.getSession();
+
+    // If there's an error or no session, try to refresh
+    if (error || !session) {
+      console.log('No valid session, attempting refresh...');
+      const {
+        data: { session: refreshedSession },
+        error: refreshError,
+      } = await supabase.auth.refreshSession();
+
+      if (refreshError || !refreshedSession) {
+        console.error('Session refresh failed:', refreshError?.message);
+        return false;
+      }
+
+      console.log('✅ Session refreshed successfully');
+      return true;
+    }
+
+    // Check if token is close to expiration (within 5 minutes)
+    if (session.expires_at) {
+      const expiresAt = session.expires_at * 1000; // Convert to milliseconds
+      const now = Date.now();
+      const fiveMinutes = 5 * 60 * 1000;
+
+      if (expiresAt - now < fiveMinutes) {
+        console.log('Token expiring soon, refreshing...');
+        const {
+          data: { session: refreshedSession },
+          error: refreshError,
+        } = await supabase.auth.refreshSession();
+
+        if (refreshError || !refreshedSession) {
+          console.error('Proactive refresh failed:', refreshError?.message);
+          return false;
+        }
+
+        console.log('✅ Session proactively refreshed');
+        return true;
+      }
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Error validating session:', error);
+    return false;
+  }
+}
+
 // Helper function to retry operations on network failure
 export async function retryOperation<T>(
   operation: () => Promise<T>,

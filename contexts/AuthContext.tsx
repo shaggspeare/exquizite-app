@@ -38,7 +38,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Listen for auth state changes
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log('Auth state changed:', event);
+        console.log('Auth state changed:', event, session?.user?.id);
+
+        // Handle token refresh
+        if (event === 'TOKEN_REFRESHED') {
+          console.log('✅ Token refreshed successfully');
+        }
+
+        if (event === 'SIGNED_OUT') {
+          console.log('🔴 User signed out');
+          // Check for guest user in local storage
+          const guestUser = await guestStorage.getGuestUser();
+          if (guestUser) {
+            console.log('✅ Guest user loaded from storage:', guestUser.name);
+            setUser(guestUser);
+          } else {
+            setUser(null);
+          }
+          return;
+        }
+
         if (session?.user) {
           await loadUserProfile(session.user.id);
         } else {
@@ -76,7 +95,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // First check for Supabase auth session
       const {
         data: { session },
+        error: sessionError,
       } = await supabase.auth.getSession();
+
+      // If there's an error getting the session, try to refresh it
+      if (sessionError) {
+        console.warn('Session error, attempting refresh:', sessionError.message);
+        const { data: { session: refreshedSession }, error: refreshError } =
+          await supabase.auth.refreshSession();
+
+        if (refreshError || !refreshedSession) {
+          console.error('Failed to refresh session:', refreshError?.message);
+          // Clear invalid session and check for guest user
+          await supabase.auth.signOut();
+          const guestUser = await guestStorage.getGuestUser();
+          if (guestUser) {
+            console.log('✅ Guest user loaded from storage:', guestUser.name);
+            setUser(guestUser);
+          } else {
+            setUser(null);
+          }
+          return;
+        }
+
+        // Use refreshed session
+        if (refreshedSession?.user) {
+          await loadUserProfile(refreshedSession.user.id);
+        }
+        return;
+      }
+
       if (session?.user) {
         await loadUserProfile(session.user.id);
       } else {
@@ -85,10 +133,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (guestUser) {
           console.log('✅ Guest user loaded from storage:', guestUser.name);
           setUser(guestUser);
+        } else {
+          setUser(null);
         }
       }
     } catch (error) {
       console.error('Error checking session:', error);
+      // On any error, clear session and check for guest user
+      const guestUser = await guestStorage.getGuestUser();
+      if (guestUser) {
+        console.log('✅ Guest user loaded from storage after error:', guestUser.name);
+        setUser(guestUser);
+      } else {
+        setUser(null);
+      }
     } finally {
       if (shouldSetLoading) {
         setIsLoading(false);
