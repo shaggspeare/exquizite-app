@@ -1,12 +1,13 @@
 {
   "title": "Configuración",
   "languages": {
-    "title": "Idiomas",
-    "description": "Elige qué idiomas quieres aprender y traducir.",
-    "targetLanguage": "Idioma a aprender",
+    "title": "Configuración de idioma",
+    "description": "Cambia tu idioma de aprendizaje y de interfaz. Los nuevos conjuntos usarán estos idiomas.",
+    "targetLanguage": "Aprendizaje",
     "targetPlaceholder": "Selecciona idioma a aprender",
-    "nativeLanguage": "Traducir a",
-    "nativePlaceholder": "Selecciona tu idioma nativo"
+    "nativeLanguage": "Interfaz y traducciones",
+    "nativePlaceholder": "Selecciona tu idioma",
+    "changeNote": "Cambiar esta configuración afectará los nuevos conjuntos de palabras. Tus conjuntos existentes mantendrán sus idiomas originales."
   },
   "appearance": {
     "title": "Apariencia",

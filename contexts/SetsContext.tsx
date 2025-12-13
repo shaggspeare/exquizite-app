@@ -224,6 +224,11 @@ export function SetsProvider({ children }: { children: ReactNode }) {
       }
     } catch (error) {
       console.error('Error loading sets:', error);
+      // On any error during load, if user is authenticated (not guest), sign them out
+      if (!isGuestUser()) {
+        console.error('🔴 Error loading data for authenticated user, forcing sign-out');
+        await supabase.auth.signOut();
+      }
     } finally {
       setIsLoading(false);
     }

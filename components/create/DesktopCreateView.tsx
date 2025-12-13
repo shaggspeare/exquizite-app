@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/ui/Input';
 import { WordPairInput } from '@/components/set/WordPairInput';
 import { AISuggestionModal } from '@/components/ai/AISuggestionModal';
+import { LanguageBadge } from '@/components/ui/LanguageBadge';
 import { useSets } from '@/contexts/SetsContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -219,9 +220,19 @@ export function DesktopCreateView() {
               >
                 <Ionicons name="arrow-back" size={28} color={colors.text} />
               </TouchableOpacity>
-              <Text style={[styles.headerTitle, { color: colors.text }]}>
-                {isEditing ? t('editTitle') : t('title')}
-              </Text>
+              <View style={styles.headerTitleSection}>
+                <Text style={[styles.headerTitle, { color: colors.text }]}>
+                  {isEditing ? t('editTitle') : t('title')}
+                </Text>
+                {preferences.targetLanguage && preferences.nativeLanguage && (
+                  <LanguageBadge
+                    targetLanguage={preferences.targetLanguage}
+                    nativeLanguage={preferences.nativeLanguage}
+                    size="small"
+                    compact={true}
+                  />
+                )}
+              </View>
             </View>
             <TouchableOpacity
               onPress={handleSave}
@@ -463,6 +474,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
+  },
+  headerTitleSection: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.md,

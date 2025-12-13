@@ -17,6 +17,7 @@ import { useResponsive } from '@/hooks/useResponsive';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { LanguageDropdown } from '@/components/ui/LanguageDropdown';
+import { LanguageBadge } from '@/components/ui/LanguageBadge';
 import { SetCard } from '@/components/set/SetCard';
 import { DesktopSetCard } from '@/components/set/DesktopSetCard';
 import { Spacing, Typography, BorderRadius } from '@/lib/constants';
@@ -192,6 +193,34 @@ export default function SettingsScreen() {
                         />
                       </View>
                     </View>
+
+                    {preferences.targetLanguage && preferences.nativeLanguage && (
+                      <View style={styles.languagePreview}>
+                        <LanguageBadge
+                          targetLanguage={preferences.targetLanguage}
+                          nativeLanguage={preferences.nativeLanguage}
+                          size="small"
+                        />
+                      </View>
+                    )}
+
+                    {sets.length > 0 && (
+                      <View style={[styles.infoRow, { marginTop: Spacing.md }]}>
+                        <Ionicons
+                          name="information-circle-outline"
+                          size={20}
+                          color={colors.textSecondary}
+                        />
+                        <Text
+                          style={[
+                            styles.infoText,
+                            { color: colors.textSecondary },
+                          ]}
+                        >
+                          {t('languages.changeNote')}
+                        </Text>
+                      </View>
+                    )}
                   </Card>
 
                   {/* Theme */}
@@ -430,6 +459,29 @@ export default function SettingsScreen() {
               label={t('languages.nativeLanguage')}
             />
           </View>
+
+          {preferences.targetLanguage && preferences.nativeLanguage && (
+            <View style={styles.languagePreview}>
+              <LanguageBadge
+                targetLanguage={preferences.targetLanguage}
+                nativeLanguage={preferences.nativeLanguage}
+                size="small"
+              />
+            </View>
+          )}
+
+          {sets.length > 0 && (
+            <View style={styles.infoRow}>
+              <Ionicons
+                name="information-circle-outline"
+                size={20}
+                color={colors.textSecondary}
+              />
+              <Text style={[styles.infoText, { color: colors.textSecondary }]}>
+                {t('languages.changeNote')}
+              </Text>
+            </View>
+          )}
         </Card>
 
         <Card style={styles.section}>
@@ -605,6 +657,11 @@ const styles = StyleSheet.create({
   },
   languageDropdowns: {
     gap: Spacing.lg,
+  },
+  languagePreview: {
+    alignItems: 'center',
+    paddingTop: Spacing.md,
+    marginTop: Spacing.sm,
   },
   setsSection: {
     marginBottom: Spacing.md,

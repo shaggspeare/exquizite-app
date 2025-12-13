@@ -1,12 +1,13 @@
 {
   "title": "Einstellungen",
   "languages": {
-    "title": "Sprachen",
-    "description": "Wähle, welche Sprachen du lernen und übersetzen möchtest.",
-    "targetLanguage": "Sprache zum Lernen",
+    "title": "Spracheinstellungen",
+    "description": "Ändere deine Lern- und Oberflächensprache. Neue Sets verwenden diese Sprachen.",
+    "targetLanguage": "Lernen",
     "targetPlaceholder": "Sprache zum Lernen wählen",
-    "nativeLanguage": "Übersetzen nach",
-    "nativePlaceholder": "Deine Muttersprache wählen"
+    "nativeLanguage": "Oberfläche & Übersetzungen",
+    "nativePlaceholder": "Deine Sprache wählen",
+    "changeNote": "Das Ändern dieser Einstellungen wirkt sich auf neue Wortsets aus. Deine vorhandenen Sets behalten ihre ursprünglichen Sprachen."
   },
   "appearance": {
     "title": "Erscheinungsbild",

@@ -1,8 +1,9 @@
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
+import * as Localization from 'expo-localization';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage, AVAILABLE_LANGUAGES } from '@/contexts/LanguageContext';
 import { useI18n } from '@/contexts/I18nContext';
@@ -10,11 +11,28 @@ import { useResponsive } from '@/hooks/useResponsive';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { LanguageDropdown } from '@/components/ui/LanguageDropdown';
+import { LanguageBadge } from '@/components/ui/LanguageBadge';
 import { Spacing, Typography } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 import { DesktopLayout } from '@/components/layout/DesktopLayout';
 import { DesktopContainer } from '@/components/layout/DesktopContainer';
 import { FULLY_TRANSLATED_LANGUAGES } from '@/lib/i18n/languages';
+
+// Helper to detect device language
+const getDeviceLanguage = (): string => {
+  const locales = Localization.getLocales();
+  if (locales && locales.length > 0) {
+    const primaryLocale = locales[0];
+    const languageCode = primaryLocale.languageCode || 'en';
+
+    // Check if we support this language and it's fully translated
+    const isSupported = FULLY_TRANSLATED_LANGUAGES.includes(languageCode as any);
+    if (isSupported) {
+      return languageCode;
+    }
+  }
+  return 'en'; // Default to English
+};
 
 export default function LanguageSetupScreen() {
   const { t } = useTranslation('auth');
@@ -28,8 +46,18 @@ export default function LanguageSetupScreen() {
     preferences.targetLanguage || ''
   );
   const [nativeLanguage, setNativeLanguage] = useState(
-    preferences.nativeLanguage || 'en'
+    preferences.nativeLanguage || getDeviceLanguage()
   );
+
+  // Auto-detect device language on mount if not already set
+  useEffect(() => {
+    if (!preferences.nativeLanguage) {
+      const deviceLang = getDeviceLanguage();
+      setNativeLanguage(deviceLang);
+      // Also update UI language immediately
+      changeLanguage(deviceLang);
+    }
+  }, []);
 
   const handleComplete = async () => {
     if (!targetLanguage || !nativeLanguage) return;
@@ -193,16 +221,27 @@ export default function LanguageSetupScreen() {
           </View>
 
           {targetLanguage && nativeLanguage && (
-            <View style={styles.infoContainer}>
-              <Ionicons
-                name="information-circle"
-                size={20}
-                color={colors.primary}
-              />
-              <Text style={[styles.infoText, { color: colors.textSecondary }]}>
-                {t('languageSetup.info')}
-              </Text>
-            </View>
+            <>
+              <View style={styles.previewContainer}>
+                <View style={styles.previewBadge}>
+                  <LanguageBadge
+                    targetLanguage={targetLanguage}
+                    nativeLanguage={nativeLanguage}
+                    size="medium"
+                  />
+                </View>
+              </View>
+              <View style={styles.infoContainer}>
+                <Ionicons
+                  name="information-circle"
+                  size={20}
+                  color={colors.primary}
+                />
+                <Text style={[styles.infoText, { color: colors.textSecondary }]}>
+                  {t('languageSetup.info')}
+                </Text>
+              </View>
+            </>
           )}
         </Card>
       </ScrollView>
@@ -264,6 +303,14 @@ const styles = StyleSheet.create({
   },
   dropdownContainer: {
     marginBottom: Spacing.lg,
+  },
+  previewContainer: {
+    alignItems: 'center',
+    paddingVertical: Spacing.md,
+    marginTop: Spacing.sm,
+  },
+  previewBadge: {
+    transform: [{ scale: 1.1 }],
   },
   infoContainer: {
     flexDirection: 'row',

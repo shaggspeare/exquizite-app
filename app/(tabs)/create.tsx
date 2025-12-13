@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/ui/Input';
 import { WordPairInput } from '@/components/set/WordPairInput';
 import { AISuggestionModal } from '@/components/ai/AISuggestionModal';
+import { LanguageBadge } from '@/components/ui/LanguageBadge';
 import { useSets } from '@/contexts/SetsContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -252,9 +253,21 @@ export default function CreateSetScreen() {
         >
           <Ionicons name="close" size={28} color="#FFFFFF" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>
-          {isEditing ? t('editTitle') : t('title')}
-        </Text>
+        <View style={styles.headerCenter}>
+          <Text style={styles.headerTitle}>
+            {isEditing ? t('editTitle') : t('title')}
+          </Text>
+          {preferences.targetLanguage && preferences.nativeLanguage && (
+            <View style={styles.headerBadge}>
+              <LanguageBadge
+                targetLanguage={preferences.targetLanguage}
+                nativeLanguage={preferences.nativeLanguage}
+                size="small"
+                compact={true}
+              />
+            </View>
+          )}
+        </View>
         <TouchableOpacity
           onPress={handleSave}
           disabled={saving}
@@ -396,11 +409,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.lg,
   },
+  headerCenter: {
+    flex: 1,
+    alignItems: 'center',
+    gap: 4,
+  },
   headerTitle: {
     ...Typography.h2,
     fontSize: 24,
     fontWeight: '700',
     color: '#FFFFFF',
+  },
+  headerBadge: {
+    opacity: 0.9,
   },
   saveButton: {
     paddingVertical: Spacing.sm,

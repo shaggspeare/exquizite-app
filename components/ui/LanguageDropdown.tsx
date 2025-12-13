@@ -250,20 +250,20 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   countryCodeBadge: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     backgroundColor: 'rgba(91, 158, 255, 0.1)',
     alignItems: 'center',
     justifyContent: 'center',
   },
   countryCode: {
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: '700',
     letterSpacing: 0.5,
   },
   flag: {
-    fontSize: 28,
+    fontSize: 32,
     ...Platform.select({
       web: {
         fontFamily:
@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
   },
   languageItemFlag: {
-    fontSize: 32,
+    fontSize: 36,
     ...Platform.select({
       web: {
         fontFamily:

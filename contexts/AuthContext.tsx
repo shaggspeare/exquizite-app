@@ -163,6 +163,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .single();
 
       if (error) {
+        // Check if it's an authentication error
+        const isAuthError =
+          error.message?.includes('JWT') ||
+          error.message?.includes('expired') ||
+          error.message?.includes('invalid') ||
+          error.code === 'PGRST301';
+
+        if (isAuthError) {
+          console.error('🔴 Auth error loading profile, signing out...');
+          await supabase.auth.signOut();
+          setUser(null);
+          return;
+        }
+
         // If profile doesn't exist yet and we have retries left, wait and retry
         if (error.code === 'PGRST116' && retries > 0) {
           console.log(
@@ -171,7 +185,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           await new Promise(resolve => setTimeout(resolve, 500));
           return loadUserProfile(userId, retries - 1);
         }
-        throw error;
+
+        console.error('🔴 Failed to load profile after retries, signing out...');
+        await supabase.auth.signOut();
+        setUser(null);
+        return;
       }
 
       if (profile) {
@@ -183,9 +201,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           isGuest: profile.is_guest,
           avatar: profile.avatar_url || undefined,
         });
+      } else {
+        console.error('🔴 Profile is null, signing out...');
+        await supabase.auth.signOut();
+        setUser(null);
       }
     } catch (error) {
-      console.error('Error loading profile:', error);
+      console.error('🔴 Error loading profile, signing out:', error);
+      await supabase.auth.signOut();
+      setUser(null);
     }
   };
 

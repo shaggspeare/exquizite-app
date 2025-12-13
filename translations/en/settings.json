@@ -7,12 +7,13 @@
     "placeholder": "Select app language"
   },
   "languages": {
-    "title": "Learning Languages",
-    "description": "Choose which languages you want to learn and translate to.",
-    "targetLanguage": "Language to Learn",
+    "title": "Language Settings",
+    "description": "Change your learning and interface language. New sets will use these languages.",
+    "targetLanguage": "Learning",
     "targetPlaceholder": "Select language to learn",
-    "nativeLanguage": "Translate To",
-    "nativePlaceholder": "Select your native language"
+    "nativeLanguage": "Interface & Translations",
+    "nativePlaceholder": "Select your language",
+    "changeNote": "Changing these settings will affect new word sets. Your existing sets will keep their original languages."
   },
   "appearance": {
     "title": "Appearance",

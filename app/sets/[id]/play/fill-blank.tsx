@@ -1,7 +1,6 @@
 import { DesktopContainer } from '@/components/layout/DesktopContainer';
 import { DesktopLayout } from '@/components/layout/DesktopLayout';
 import { Button } from '@/components/ui/Button';
-import { useLanguage } from '@/contexts/LanguageContext';
 import { useSets } from '@/contexts/SetsContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useResponsive } from '@/hooks/useResponsive';
@@ -35,7 +34,6 @@ export default function FillBlankScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { getSetById, updateLastPracticed } = useSets();
-  const { preferences } = useLanguage();
   const { colors } = useTheme();
   const { isDesktop } = useResponsive();
 
@@ -102,8 +100,8 @@ export default function FillBlankScreen() {
       // Generate first 2 questions
       const initialSentences = await generateMultipleSentencesWithGaps(
         initialWords.map(w => ({ word: w.word, translation: w.translation })),
-        preferences.targetLanguage,
-        preferences.nativeLanguage
+        set.targetLanguage,
+        set.nativeLanguage
       );
 
       // Map the initial results to questions
@@ -131,8 +129,8 @@ export default function FillBlankScreen() {
             word: w.word,
             translation: w.translation,
           })),
-          preferences.targetLanguage,
-          preferences.nativeLanguage
+          set.targetLanguage,
+          set.nativeLanguage
         );
 
         const remainingQuestions: FillBlankQuestion[] = remainingWords.map(
