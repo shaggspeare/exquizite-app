@@ -15,7 +15,8 @@
       "Bash(cat:*)",
       "Bash(ls:*)",
       "Bash(grep:*)",
-      "Bash(xcodebuild -version:*)"
+      "Bash(xcodebuild -version:*)",
+      "Bash(npx tsc:*)"
     ],
     "deny": [],
     "ask": []

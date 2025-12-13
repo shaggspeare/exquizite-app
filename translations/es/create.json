@@ -28,5 +28,34 @@
     "selectPrompt": "Selecciona palabras para añadir ({{count}} seleccionadas)",
     "noSuggestions": "Aún no hay sugerencias. ¡Haz clic en Generar para obtener sugerencias de palabras con IA!",
     "addSelected": "Añadir {{count}} {{word}}"
+  },
+  "bulkImport": {
+    "button": "Importación masiva",
+    "title": "Importación masiva de palabras",
+    "howTo": "Cómo importar",
+    "instructions": "Pega tus pares de palabras a continuación, uno por línea. Separa cada palabra de su traducción con una tabulación, coma o guión.",
+    "example": "Ejemplo:",
+    "separator": "Separador",
+    "separators": {
+      "tab": "Tabulación",
+      "comma": "Coma (,)",
+      "dash": "Guión (-)"
+    },
+    "pasteWords": "Pega tus palabras",
+    "placeholder": "palabra1\ttraducción1\npalabra2\ttraducción2\npalabra3\ttraducción3",
+    "preview": "Vista previa",
+    "previewTitle": "Vista previa",
+    "import": "Importar {{count}} palabras"
+  },
+  "languageOverride": {
+    "title": "Configuración de idioma",
+    "custom": "Personalizado",
+    "description": "Anula los idiomas predeterminados solo para este conjunto. Déjalo como predeterminado para usar tu configuración de idioma global.",
+    "usingDefaults": "Usando idiomas predeterminados",
+    "selectTarget": "Selecciona idioma objetivo",
+    "selectNative": "Selecciona idioma nativo",
+    "targetLabel": "Aprendizaje",
+    "nativeLabel": "Traducciones",
+    "useDefaults": "Usar idiomas predeterminados"
   }
 }

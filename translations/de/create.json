@@ -28,5 +28,34 @@
     "selectPrompt": "Wähle Wörter zum Hinzufügen aus ({{count}} ausgewählt)",
     "noSuggestions": "Noch keine Vorschläge. Klicke auf Generieren, um KI-gestützte Wortvorschläge zu erhalten!",
     "addSelected": "{{count}} {{word}} hinzufügen"
+  },
+  "bulkImport": {
+    "button": "Massenimport",
+    "title": "Wörter massenweise importieren",
+    "howTo": "So importierst du",
+    "instructions": "Füge deine Wortpaare unten ein, eines pro Zeile. Trenne jedes Wort von seiner Übersetzung mit einem Tab, Komma oder Bindestrich.",
+    "example": "Beispiel:",
+    "separator": "Trennzeichen",
+    "separators": {
+      "tab": "Tab",
+      "comma": "Komma (,)",
+      "dash": "Bindestrich (-)"
+    },
+    "pasteWords": "Füge deine Wörter ein",
+    "placeholder": "wort1\tübersetzung1\nwort2\tübersetzung2\nwort3\tübersetzung3",
+    "preview": "Vorschau",
+    "previewTitle": "Vorschau",
+    "import": "{{count}} Wörter importieren"
+  },
+  "languageOverride": {
+    "title": "Spracheinstellungen",
+    "custom": "Benutzerdefiniert",
+    "description": "Überschreibe die Standardsprachen nur für dieses Set. Belasse es als Standard, um deine globalen Spracheinstellungen zu verwenden.",
+    "usingDefaults": "Verwende Standardsprachen",
+    "selectTarget": "Zielsprache wählen",
+    "selectNative": "Muttersprache wählen",
+    "targetLabel": "Lernen",
+    "nativeLabel": "Übersetzungen",
+    "useDefaults": "Standardsprachen verwenden"
   }
 }

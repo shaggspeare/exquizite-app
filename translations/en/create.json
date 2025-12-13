@@ -29,5 +29,34 @@
     "selectPrompt": "Select words to add ({{count}} selected)",
     "noSuggestions": "No suggestions yet. Click Generate to get AI-powered word suggestions!",
     "addSelected": "Add {{count}} {{word}}"
+  },
+  "bulkImport": {
+    "button": "Bulk Import",
+    "title": "Bulk Import Words",
+    "howTo": "How to Import",
+    "instructions": "Paste your word pairs below, one per line. Separate each word from its translation with a tab, comma, or dash.",
+    "example": "Example:",
+    "separator": "Separator",
+    "separators": {
+      "tab": "Tab",
+      "comma": "Comma (,)",
+      "dash": "Dash (-)"
+    },
+    "pasteWords": "Paste Your Words",
+    "placeholder": "word1\ttranslation1\nword2\ttranslation2\nword3\ttranslation3",
+    "preview": "Preview",
+    "previewTitle": "Preview",
+    "import": "Import {{count}} Words"
+  },
+  "languageOverride": {
+    "title": "Language Settings",
+    "custom": "Custom",
+    "description": "Override the default languages for this set only. Leave as default to use your global language settings.",
+    "usingDefaults": "Using default languages",
+    "selectTarget": "Select target language",
+    "selectNative": "Select native language",
+    "targetLabel": "Learning",
+    "nativeLabel": "Translations",
+    "useDefaults": "Use Default Languages"
   }
 }

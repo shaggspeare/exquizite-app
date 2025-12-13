@@ -256,9 +256,10 @@ export function AISuggestionModal({
                       { color: colors.textSecondary },
                     ]}
                   >
-                    Generating suggestions based on your{' '}
-                    {validExistingPairs.length} existing{' '}
-                    {validExistingPairs.length === 1 ? 'word' : 'words'}...
+                    {t('ai.generatingWithContext', {
+                      count: validExistingPairs.length,
+                      word: validExistingPairs.length === 1 ? t('common:counts.word') : t('common:counts.words')
+                    })}
                   </Text>
                 </View>
               )}
@@ -273,7 +274,7 @@ export function AISuggestionModal({
                         { color: colors.textSecondary },
                       ]}
                     >
-                      Generating suggestions with AI...
+                      {t('ai.generatingGeneric')}
                     </Text>
                   </View>
                   {Array.from({ length: countNum }).map((_, index) => (
@@ -285,7 +286,7 @@ export function AISuggestionModal({
               {!loading && suggestions.length > 0 && (
                 <>
                   <Text style={[styles.sectionTitle, { color: colors.text }]}>
-                    Select words to add ({selectedIds.size} selected)
+                    {t('ai.selectPrompt', { count: selectedIds.size })}
                   </Text>
                   {isDesktop ? (
                     // Desktop grid layout
@@ -398,8 +399,7 @@ export function AISuggestionModal({
                   <Text
                     style={[styles.emptyText, { color: colors.textSecondary }]}
                   >
-                    No suggestions yet. Click Generate to get AI-powered word
-                    suggestions!
+                    {t('ai.noSuggestions')}
                   </Text>
                 </View>
               )}
@@ -417,9 +417,10 @@ export function AISuggestionModal({
                 ]}
               >
                 <Button
-                  title={`Add ${selectedIds.size} ${
-                    selectedIds.size === 1 ? 'word' : 'words'
-                  }`}
+                  title={t('ai.addSelected', {
+                    count: selectedIds.size,
+                    word: selectedIds.size === 1 ? t('common:counts.word') : t('common:counts.words')
+                  })}
                   onPress={handleAdd}
                   disabled={selectedIds.size === 0}
                 />
@@ -456,7 +457,7 @@ export function AISuggestionModal({
                 <View style={styles.inputRow}>
                   <View style={styles.themeInputWrapper}>
                     <Input
-                      placeholder="Theme (e.g., animals, food)"
+                      placeholder={t('ai.themePlaceholder')}
                       value={theme}
                       onChangeText={setTheme}
                       editable={!loading}
@@ -464,7 +465,7 @@ export function AISuggestionModal({
                   </View>
                   <View style={styles.countInputWrapper}>
                     <Input
-                      placeholder="#"
+                      placeholder={t('ai.countPlaceholder')}
                       value={count}
                       onChangeText={setCount}
                       keyboardType="number-pad"
@@ -476,10 +477,10 @@ export function AISuggestionModal({
                 <Text
                   style={[styles.helperText, { color: colors.textSecondary }]}
                 >
-                  Generate up to {maxCount} words (5 by default)
+                  {t('ai.countHint', { max: maxCount })}
                 </Text>
                 <Button
-                  title={loading ? 'Generating...' : 'Generate'}
+                  title={loading ? t('common:buttons.generating') : t('common:buttons.generate')}
                   onPress={handleGenerate}
                   disabled={loading || !theme.trim()}
                 />
@@ -496,9 +497,10 @@ export function AISuggestionModal({
                 <Text
                   style={[styles.contextText, { color: colors.textSecondary }]}
                 >
-                  Generating suggestions based on your{' '}
-                  {validExistingPairs.length} existing{' '}
-                  {validExistingPairs.length === 1 ? 'word' : 'words'}...
+                  {t('ai.generatingWithContext', {
+                    count: validExistingPairs.length,
+                    word: validExistingPairs.length === 1 ? t('common:counts.word') : t('common:counts.words')
+                  })}
                 </Text>
               </View>
             )}
@@ -513,7 +515,7 @@ export function AISuggestionModal({
                       { color: colors.textSecondary },
                     ]}
                   >
-                    Generating suggestions with AI...
+                    {t('ai.generatingGeneric')}
                   </Text>
                 </View>
                 {Array.from({ length: countNum }).map((_, index) => (
@@ -525,7 +527,7 @@ export function AISuggestionModal({
             {!loading && suggestions.length > 0 && (
               <>
                 <Text style={[styles.sectionTitle, { color: colors.text }]}>
-                  Select words to add ({selectedIds.size} selected)
+                  {t('ai.selectPrompt', { count: selectedIds.size })}
                 </Text>
                 <FlatList
                   data={suggestions}
@@ -577,9 +579,10 @@ export function AISuggestionModal({
                   style={[styles.footer, { borderTopColor: colors.border }]}
                 >
                   <Button
-                    title={`Add ${selectedIds.size} ${
-                      selectedIds.size === 1 ? 'word' : 'words'
-                    }`}
+                    title={t('ai.addSelected', {
+                      count: selectedIds.size,
+                      word: selectedIds.size === 1 ? t('common:counts.word') : t('common:counts.words')
+                    })}
                     onPress={handleAdd}
                     disabled={selectedIds.size === 0}
                   />
@@ -597,8 +600,7 @@ export function AISuggestionModal({
                 <Text
                   style={[styles.emptyText, { color: colors.textSecondary }]}
                 >
-                  No suggestions yet. Click Generate to get AI-powered word
-                  suggestions!
+                  {t('ai.noSuggestions')}
                 </Text>
               </View>
             )}

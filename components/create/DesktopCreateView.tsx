@@ -12,6 +12,8 @@ import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/ui/Input';
 import { WordPairInput } from '@/components/set/WordPairInput';
 import { AISuggestionModal } from '@/components/ai/AISuggestionModal';
+import { BulkImportModal } from '@/components/create/BulkImportModal';
+import { LanguageOverrideSelector } from '@/components/create/LanguageOverrideSelector';
 import { LanguageBadge } from '@/components/ui/LanguageBadge';
 import { useSets } from '@/contexts/SetsContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -45,7 +47,10 @@ export function DesktopCreateView() {
     { id: '1', word: '', translation: '' },
   ]);
   const [showAIModal, setShowAIModal] = useState(false);
+  const [showBulkImportModal, setShowBulkImportModal] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [overrideTargetLanguage, setOverrideTargetLanguage] = useState<string | null>(null);
+  const [overrideNativeLanguage, setOverrideNativeLanguage] = useState<string | null>(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -58,15 +63,27 @@ export function DesktopCreateView() {
               ? setToEdit.words
               : [{ id: '1', word: '', translation: '' }]
           );
+          if (
+            setToEdit.targetLanguage !== preferences.targetLanguage ||
+            setToEdit.nativeLanguage !== preferences.nativeLanguage
+          ) {
+            setOverrideTargetLanguage(setToEdit.targetLanguage);
+            setOverrideNativeLanguage(setToEdit.nativeLanguage);
+          } else {
+            setOverrideTargetLanguage(null);
+            setOverrideNativeLanguage(null);
+          }
         }
         previousEditId.current = editingSetId;
       } else if (previousEditId.current) {
         setSetName('');
         setWordPairs([{ id: '1', word: '', translation: '' }]);
         setShowAIModal(false);
+        setOverrideTargetLanguage(null);
+        setOverrideNativeLanguage(null);
         previousEditId.current = undefined;
       }
-    }, [editingSetId, isEditing])
+    }, [editingSetId, isEditing, preferences.targetLanguage, preferences.nativeLanguage])
   );
 
   const addWordPair = () => {
@@ -119,9 +136,34 @@ export function DesktopCreateView() {
     setWordPairs([...nonEmptyPairs, ...wordsWithNewIds]);
   };
 
+  const handleBulkImport = (importedWords: WordPair[]) => {
+    const nonEmptyPairs = wordPairs.filter(
+      pair => pair.word.trim() || pair.translation.trim()
+    );
+
+    const availableSlots = MAX_WORDS_PER_SET - nonEmptyPairs.length;
+    const wordsToAdd = importedWords.slice(0, availableSlots);
+
+    if (wordsToAdd.length < importedWords.length) {
+      showAlert(
+        t('limitReached'),
+        t('limitMessage', { max: MAX_WORDS_PER_SET })
+      );
+    }
+
+    setWordPairs([...nonEmptyPairs, ...wordsToAdd]);
+  };
+
   const clearForm = () => {
     setSetName('');
     setWordPairs([{ id: '1', word: '', translation: '' }]);
+    setOverrideTargetLanguage(null);
+    setOverrideNativeLanguage(null);
+  };
+
+  const handleUseDefaultLanguages = () => {
+    setOverrideTargetLanguage(null);
+    setOverrideNativeLanguage(null);
   };
 
   const handleSave = async () => {
@@ -155,13 +197,16 @@ export function DesktopCreateView() {
 
     setSaving(true);
     try {
+      const finalTargetLanguage = overrideTargetLanguage || preferences.targetLanguage;
+      const finalNativeLanguage = overrideNativeLanguage || preferences.nativeLanguage;
+
       if (isEditing && editingSetId) {
         await updateSet(
           editingSetId,
           finalSetName,
           validPairs,
-          preferences.targetLanguage,
-          preferences.nativeLanguage
+          finalTargetLanguage,
+          finalNativeLanguage
         );
         showAlert(t('common:status.success'), t('success.updated'), [
           { text: 'OK', onPress: () => router.push(`/sets/${editingSetId}`) },
@@ -170,8 +215,8 @@ export function DesktopCreateView() {
         const newSet = await createSet(
           finalSetName,
           validPairs,
-          preferences.targetLanguage,
-          preferences.nativeLanguage
+          finalTargetLanguage,
+          finalNativeLanguage
         );
         if (newSet) {
           clearForm();
@@ -269,6 +314,14 @@ export function DesktopCreateView() {
                 placeholder={t('setNamePlaceholder')}
               />
 
+              <LanguageOverrideSelector
+                targetLanguage={overrideTargetLanguage || preferences.targetLanguage}
+                nativeLanguage={overrideNativeLanguage || preferences.nativeLanguage}
+                onTargetLanguageChange={setOverrideTargetLanguage}
+                onNativeLanguageChange={setOverrideNativeLanguage}
+                onUseDefaults={handleUseDefaultLanguages}
+              />
+
               <View style={styles.wordsSection}>
                 <View style={styles.wordsSectionHeader}>
                   <Text style={[styles.sectionTitle, { color: colors.text }]}>
@@ -323,40 +376,77 @@ export function DesktopCreateView() {
                   </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity
-                  style={[
-                    styles.aiButton,
-                    {
-                      backgroundColor: `${colors.ai}10`,
-                      borderColor: colors.ai,
-                    },
-                  ]}
-                  onPress={() => setShowAIModal(true)}
-                  disabled={wordPairs.length >= MAX_WORDS_PER_SET}
-                >
-                  <Ionicons
-                    name="sparkles"
-                    size={24}
-                    color={
-                      wordPairs.length >= MAX_WORDS_PER_SET
-                        ? colors.textSecondary
-                        : colors.ai
-                    }
-                  />
-                  <Text
+                <View style={styles.actionButtonsRow}>
+                  <TouchableOpacity
                     style={[
-                      styles.aiButtonText,
+                      styles.bulkImportButton,
                       {
-                        color:
-                          wordPairs.length >= MAX_WORDS_PER_SET
-                            ? colors.textSecondary
-                            : colors.ai,
+                        backgroundColor: `${colors.primary}10`,
+                        borderColor: colors.primary,
                       },
                     ]}
+                    onPress={() => setShowBulkImportModal(true)}
+                    disabled={wordPairs.length >= MAX_WORDS_PER_SET}
                   >
-                    {t('aiSuggestions')}
-                  </Text>
-                </TouchableOpacity>
+                    <Ionicons
+                      name="document-text-outline"
+                      size={20}
+                      color={
+                        wordPairs.length >= MAX_WORDS_PER_SET
+                          ? colors.textSecondary
+                          : colors.primary
+                      }
+                    />
+                    <Text
+                      style={[
+                        styles.bulkImportButtonText,
+                        {
+                          color:
+                            wordPairs.length >= MAX_WORDS_PER_SET
+                              ? colors.textSecondary
+                              : colors.primary,
+                        },
+                      ]}
+                    >
+                      {t('bulkImport.button')}
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={[
+                      styles.aiButton,
+                      {
+                        backgroundColor: `${colors.ai}10`,
+                        borderColor: colors.ai,
+                      },
+                    ]}
+                    onPress={() => setShowAIModal(true)}
+                    disabled={wordPairs.length >= MAX_WORDS_PER_SET}
+                  >
+                    <Ionicons
+                      name="sparkles"
+                      size={20}
+                      color={
+                        wordPairs.length >= MAX_WORDS_PER_SET
+                          ? colors.textSecondary
+                          : colors.ai
+                      }
+                    />
+                    <Text
+                      style={[
+                        styles.aiButtonText,
+                        {
+                          color:
+                            wordPairs.length >= MAX_WORDS_PER_SET
+                              ? colors.textSecondary
+                              : colors.ai,
+                        },
+                      ]}
+                    >
+                      {t('aiSuggestions')}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
 
@@ -456,6 +546,13 @@ export function DesktopCreateView() {
         onSelectWords={handleAIWordsSelected}
         existingPairs={wordPairs}
       />
+
+      <BulkImportModal
+        visible={showBulkImportModal}
+        onClose={() => setShowBulkImportModal(false)}
+        onImport={handleBulkImport}
+        maxWords={MAX_WORDS_PER_SET}
+      />
     </View>
   );
 }
@@ -552,18 +649,39 @@ const styles = StyleSheet.create({
     ...Typography.body,
     fontWeight: '600',
   },
-  aiButton: {
+  actionButtonsRow: {
+    flexDirection: 'row',
+    gap: Spacing.sm,
+    marginTop: Spacing.sm,
+  },
+  bulkImportButton: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: Spacing.sm,
+    gap: Spacing.xs,
     paddingVertical: Spacing.md,
-    marginTop: Spacing.sm,
+    borderRadius: BorderRadius.button,
+    borderWidth: 2,
+  },
+  bulkImportButtonText: {
+    ...Typography.body,
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  aiButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: Spacing.xs,
+    paddingVertical: Spacing.md,
     borderRadius: BorderRadius.button,
     borderWidth: 2,
   },
   aiButtonText: {
     ...Typography.body,
+    fontSize: 14,
     fontWeight: '600',
   },
   previewCard: {
