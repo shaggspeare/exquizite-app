@@ -77,7 +77,9 @@
       "reactCompiler": true
     },
     "extra": {
-      "router": {},
+      "router": {
+        "origin": false
+      },
       "eas": {
         "projectId": "0376ac0c-084a-4748-92b8-f6f25ab4ea21"
       }

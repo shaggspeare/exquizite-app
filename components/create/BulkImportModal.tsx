@@ -8,7 +8,7 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useResponsive } from '@/hooks/useResponsive';
@@ -37,6 +37,8 @@ export function BulkImportModal({
   const [inputText, setInputText] = useState('');
   const [separator, setSeparator] = useState('tab');
   const [previewWords, setPreviewWords] = useState<WordPair[]>([]);
+  const scrollViewRef = useRef<ScrollView>(null);
+  const previewRef = useRef<View>(null);
 
   const handlePreview = () => {
     if (!inputText.trim()) {
@@ -45,11 +47,38 @@ export function BulkImportModal({
     }
 
     const lines = inputText.split('\n').filter(line => line.trim());
-    const separatorChar = separator === 'tab' ? '\t' : separator === 'comma' ? ',' : '-';
 
     const parsedWords: WordPair[] = lines
       .map((line, index) => {
-        const parts = line.split(separatorChar).map(p => p.trim());
+        let parts: string[];
+
+        if (separator === 'tab') {
+          // Try tab first
+          if (line.includes('\t')) {
+            parts = line.split('\t').map(p => p.trim());
+          } else {
+            // Fallback strategies for iOS:
+            // 1. Try splitting on 2+ consecutive spaces
+            const multiSpaceParts = line.split(/\s{2,}/).map(p => p.trim()).filter(p => p);
+
+            // 2. If that doesn't work, try splitting on any whitespace and take first and last
+            if (multiSpaceParts.length < 2) {
+              const words = line.split(/\s+/).filter(p => p.trim());
+              if (words.length >= 2) {
+                // Take first word and rest as translation
+                parts = [words[0], words.slice(1).join(' ')];
+              } else {
+                parts = multiSpaceParts;
+              }
+            } else {
+              parts = multiSpaceParts;
+            }
+          }
+        } else {
+          const separatorChar = separator === 'comma' ? ',' : '-';
+          parts = line.split(separatorChar).map(p => p.trim());
+        }
+
         if (parts.length >= 2 && parts[0] && parts[1]) {
           return {
             id: `bulk-${Date.now()}-${index}`,
@@ -63,6 +92,22 @@ export function BulkImportModal({
       .slice(0, maxWords);
 
     setPreviewWords(parsedWords);
+
+    // Auto-scroll to preview section after a short delay to ensure rendering is complete
+    setTimeout(() => {
+      if (parsedWords.length > 0 && previewRef.current) {
+        previewRef.current.measureLayout(
+          scrollViewRef.current as any,
+          (_x, y) => {
+            scrollViewRef.current?.scrollTo({ y, animated: true });
+          },
+          () => {
+            // Fallback: scroll to end if measurement fails
+            scrollViewRef.current?.scrollToEnd({ animated: true });
+          }
+        );
+      }
+    }, 100);
   };
 
   const handleImport = () => {
@@ -119,6 +164,7 @@ export function BulkImportModal({
           </View>
 
         <ScrollView
+          ref={scrollViewRef}
           style={styles.content}
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
@@ -236,54 +282,56 @@ export function BulkImportModal({
 
           {/* Preview */}
           {previewWords.length > 0 && (
-            <Card style={styles.section}>
-              <View style={styles.previewHeader}>
-                <Text style={[styles.sectionTitle, { color: colors.text }]}>
-                  {t('bulkImport.previewTitle')}
-                </Text>
-                <View
-                  style={[
-                    styles.countBadge,
-                    { backgroundColor: `${colors.primary}20` },
-                  ]}
-                >
-                  <Text style={[styles.countText, { color: colors.primary }]}>
-                    {previewWords.length}
+            <View ref={previewRef}>
+              <Card style={styles.section}>
+                <View style={styles.previewHeader}>
+                  <Text style={[styles.sectionTitle, { color: colors.text }]}>
+                    {t('bulkImport.previewTitle')}
                   </Text>
-                </View>
-              </View>
-              <ScrollView
-                style={styles.previewList}
-                contentContainerStyle={styles.previewListContent}
-                nestedScrollEnabled
-              >
-                {previewWords.map((pair, index) => (
                   <View
-                    key={pair.id}
                     style={[
-                      styles.previewItem,
-                      { borderBottomColor: colors.border },
-                      index === previewWords.length - 1 && styles.previewItemLast,
+                      styles.countBadge,
+                      { backgroundColor: `${colors.primary}20` },
                     ]}
                   >
-                    <Text style={[styles.previewIndex, { color: colors.textSecondary }]}>
-                      {index + 1}.
-                    </Text>
-                    <Text style={[styles.previewWord, { color: colors.text }]}>
-                      {pair.word}
-                    </Text>
-                    <Ionicons
-                      name="arrow-forward"
-                      size={16}
-                      color={colors.textSecondary}
-                    />
-                    <Text style={[styles.previewTranslation, { color: colors.text }]}>
-                      {pair.translation}
+                    <Text style={[styles.countText, { color: colors.primary }]}>
+                      {previewWords.length}
                     </Text>
                   </View>
-                ))}
-              </ScrollView>
-            </Card>
+                </View>
+                <ScrollView
+                  style={styles.previewList}
+                  contentContainerStyle={styles.previewListContent}
+                  nestedScrollEnabled
+                >
+                  {previewWords.map((pair, index) => (
+                    <View
+                      key={pair.id}
+                      style={[
+                        styles.previewItem,
+                        { borderBottomColor: colors.border },
+                        index === previewWords.length - 1 && styles.previewItemLast,
+                      ]}
+                    >
+                      <Text style={[styles.previewIndex, { color: colors.textSecondary }]}>
+                        {index + 1}.
+                      </Text>
+                      <Text style={[styles.previewWord, { color: colors.text }]}>
+                        {pair.word}
+                      </Text>
+                      <Ionicons
+                        name="arrow-forward"
+                        size={16}
+                        color={colors.textSecondary}
+                      />
+                      <Text style={[styles.previewTranslation, { color: colors.text }]}>
+                        {pair.translation}
+                      </Text>
+                    </View>
+                  ))}
+                </ScrollView>
+              </Card>
+            </View>
           )}
         </ScrollView>
 

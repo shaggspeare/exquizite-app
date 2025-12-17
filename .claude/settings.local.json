@@ -16,7 +16,11 @@
       "Bash(ls:*)",
       "Bash(grep:*)",
       "Bash(xcodebuild -version:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(lsof:*)",
+      "Bash(xargs kill:*)",
+      "Bash(git -C /Users/slava/Projects/exquizite-app log --oneline --all)",
+      "Bash(git -C /Users/slava/Projects/exquizite-app show 69e6e22 --stat)"
     ],
     "deny": [],
     "ask": []
