@@ -200,7 +200,7 @@ export function DesktopHomeView() {
                   {/* Quick Practice - Larger */}
                   {recentSets.length > 0 && (
                     <TouchableOpacity
-                      onPress={() => router.push(`/sets/${recentSets[0].id}`)}
+                      onPress={() => router.push(`/(tabs)/sets/${recentSets[0].id}`)}
                       activeOpacity={0.8}
                       style={styles.bentoCard}
                     >

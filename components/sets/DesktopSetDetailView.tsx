@@ -158,7 +158,7 @@ export function DesktopSetDetailView() {
                 {practiceOptions.map(option => (
                   <TouchableOpacity
                     key={option.id}
-                    onPress={() => router.push(`/sets/${id}/play/${option.id}`)}
+                    onPress={() => router.push(`/(tabs)/sets/${id}/play/${option.id}`)}
                     activeOpacity={0.8}
                   >
                     <LinearGradient

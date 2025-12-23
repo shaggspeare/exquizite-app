@@ -1,53 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with pt translations.",
   "buttons": {
-    "add": "Add",
-    "done": "Done",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "share": "Share",
-    "play": "Play",
-    "next": "Next",
-    "previous": "Previous",
-    "skip": "Skip",
-    "check": "Check Answer",
-    "save": "Save",
-    "saving": "Saving...",
-    "finish": "Finish",
-    "tryAgain": "Try Again",
-    "playAgain": "Play Again",
-    "showHint": "Show Hint",
-    "generate": "Generate",
-    "generating": "Generating..."
+    "add": "Adicionar",
+    "done": "Concluído",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "share": "Compartilhar",
+    "play": "Jogar",
+    "next": "Próximo",
+    "previous": "Anterior",
+    "skip": "Pular",
+    "check": "Verificar resposta",
+    "save": "Salvar",
+    "saving": "Salvando...",
+    "finish": "Terminar",
+    "tryAgain": "Tentar novamente",
+    "playAgain": "Jogar novamente",
+    "showHint": "Mostrar dica",
+    "generate": "Gerar",
+    "generating": "Gerando..."
   },
   "status": {
-    "loading": "Loading...",
-    "saving": "Saving...",
-    "generating": "Generating...",
-    "noWords": "No words in this set",
-    "success": "Success",
-    "error": "Error"
+    "loading": "Carregando...",
+    "saving": "Salvando...",
+    "generating": "Gerando...",
+    "noWords": "Nenhuma palavra neste conjunto",
+    "success": "Sucesso",
+    "error": "Erro"
   },
   "time": {
-    "never": "Never",
-    "today": "Today",
-    "yesterday": "Yesterday",
-    "daysAgo": "{{count}} days ago",
-    "lastPracticed": "Last practiced {{date}}"
+    "never": "Nunca",
+    "today": "Hoje",
+    "yesterday": "Ontem",
+    "daysAgo": "{{count}} dias atrás",
+    "lastPracticed": "Última prática {{date}}"
   },
   "counts": {
-    "word": "word",
-    "words": "words",
-    "set": "set",
-    "sets": "sets",
-    "wordCount": "{{count}} word",
-    "wordCount_other": "{{count}} words",
-    "setCount": "{{count}} set",
-    "setCount_other": "{{count}} sets",
+    "word": "palavra",
+    "words": "palavras",
+    "set": "conjunto",
+    "sets": "conjuntos",
+    "wordCount": "{{count}} palavra",
+    "wordCount_other": "{{count}} palavras",
+    "setCount": "{{count}} conjunto",
+    "setCount_other": "{{count}} conjuntos",
     "progress": "{{current}}/{{total}}"
   },
   "dialogs": {
-    "areYouSure": "Are you sure?",
-    "cannotUndo": "This action cannot be undone."
+    "areYouSure": "Tem certeza?",
+    "cannotUndo": "Esta ação não pode ser desfeita."
+  },
+  "sharing": {
+    "shareSet": "Compartilhar conjunto",
+    "shareCode": "Código de compartilhamento",
+    "shareLink": "Link de compartilhamento",
+    "copyLink": "Copiar link",
+    "copied": "Copiado!",
+    "copy": "Copiar",
+    "views": "Visualizações",
+    "copies": "Cópias",
+    "generatingLink": "Gerando link de compartilhamento...",
+    "linkInfo": "Qualquer pessoa com este link pode visualizar e copiar seu conjunto",
+    "deactivateLink": "Desativar link de compartilhamento",
+    "deactivateConfirm": "Tem certeza de que deseja desativar este link de compartilhamento? Qualquer pessoa com o link não poderá mais acessar este conjunto.",
+    "deactivate": "Desativar",
+    "linkDeactivated": "O link de compartilhamento foi desativado",
+    "shareError": "Falha ao gerar link de compartilhamento. Tente novamente.",
+    "copyError": "Falha ao copiar link para a área de transferência",
+    "linkCopied": "Link copiado",
+    "linkCopiedToClipboard": "Link de compartilhamento copiado para a área de transferência"
+  },
+  "tour": {
+    "skip": "Pular",
+    "next": "Próximo",
+    "back": "Voltar",
+    "getStarted": "Começar",
+    "slides": {
+      "vocabulary": {
+        "title": "Construa seu vocabulário",
+        "description": "Adicione palavras manualmente ou use IA para gerar conjuntos de vocabulário temáticos. Crie até 20 palavras por conjunto."
+      },
+      "organize": {
+        "title": "Organize seu aprendizado",
+        "description": "Agrupe palavras em conjuntos temáticos como \"Comida espanhola\" ou \"Viagem alemã\". Nomeie seus conjuntos para fácil acesso."
+      },
+      "learn": {
+        "title": "Aprenda do seu jeito",
+        "description": "Pratique com 4 modos de jogo: Flashcards, Combine pares, Quiz de múltipla escolha e Preencha o espaço em branco."
+      },
+      "share": {
+        "title": "Compartilhe seu conhecimento",
+        "description": "Gere links de compartilhamento para seus conjuntos. Outros podem visualizá-los e copiá-los para sua biblioteca."
+      }
+    }
   }
 }

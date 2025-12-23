@@ -1,33 +1,62 @@
 {
-  "_note": "This is a placeholder file. Please replace with ko translations.",
-  "title": "Create Set",
-  "editTitle": "Edit Set",
-  "setName": "Set Name",
-  "setNamePlaceholder": "e.g., Spanish Vocabulary",
-  "words": "Words",
-  "addWord": "Add Word",
-  "aiSuggestions": "AI Suggestions",
-  "limitReached": "Limit Reached",
-  "limitMessage": "Maximum {{max}} words per set",
+  "title": "세트 만들기",
+  "editTitle": "세트 편집",
+  "setName": "세트 이름",
+  "setNamePlaceholder": "예: 업무 어휘",
+  "languagePair": "{{target}} → {{native}} 학습 중",
+  "words": "단어",
+  "addWord": "단어 추가",
+  "aiSuggestions": "AI 제안",
+  "limitReached": "한도 도달",
+  "limitMessage": "세트당 최대 {{max}}개 단어",
   "errors": {
-    "fillAllFields": "Please fill in all fields",
-    "atLeastOneWord": "Please add at least one word pair",
-    "createFailed": "Failed to create set. Please try again.",
-    "networkError": "Network error. Please check your connection and try again."
+    "fillAllFields": "모든 필드를 입력하세요",
+    "atLeastOneWord": "적어도 하나의 단어 쌍을 추가하세요",
+    "createFailed": "세트 생성에 실패했습니다. 다시 시도하세요.",
+    "networkError": "네트워크 오류. 연결을 확인하고 다시 시도하세요."
   },
   "success": {
-    "created": "Set created successfully!",
-    "updated": "Set updated successfully!"
+    "created": "세트가 성공적으로 생성되었습니다!",
+    "updated": "세트가 성공적으로 업데이트되었습니다!"
   },
   "ai": {
-    "modalTitle": "AI Word Suggestions",
-    "themePlaceholder": "Theme (e.g., animals, food)",
+    "modalTitle": "AI 단어 제안",
+    "themePlaceholder": "테마 (예: 동물, 음식)",
     "countPlaceholder": "#",
-    "countHint": "Generate up to {{max}} words (5 by default)",
-    "generatingWithContext": "Generating suggestions based on your {{count}} existing {{word}}...",
-    "generatingGeneric": "Generating suggestions with AI...",
-    "selectPrompt": "Select words to add ({{count}} selected)",
-    "noSuggestions": "No suggestions yet. Click Generate to get AI-powered word suggestions!",
-    "addSelected": "Add {{count}} {{word}}"
+    "countHint": "최대 {{max}}개 단어 생성 (기본값 5)",
+    "generatingWithContext": "기존 {{count}}개 {{word}}을(를) 기반으로 제안 생성 중...",
+    "generatingGeneric": "AI로 제안 생성 중...",
+    "selectPrompt": "추가할 단어 선택 ({{count}}개 선택됨)",
+    "noSuggestions": "아직 제안이 없습니다. 생성을 클릭하여 AI 기반 단어 제안을 받으세요!",
+    "addSelected": "{{count}}개 {{word}} 추가"
+  },
+  "bulkImport": {
+    "button": "일괄 가져오기",
+    "title": "단어 일괄 가져오기",
+    "howTo": "가져오기 방법",
+    "instructions": "단어 쌍을 한 줄에 하나씩 붙여넣으세요. 각 단어와 번역을 탭, 쉼표 또는 대시로 구분하세요.",
+    "example": "예:",
+    "separator": "구분 기호",
+    "separators": {
+      "tab": "탭",
+      "comma": "쉼표 (,)",
+      "dash": "대시 (-)"
+    },
+    "pasteWords": "단어 붙여넣기",
+    "placeholder": "word1\ttranslation1\nword2\ttranslation2\nword3\ttranslation3",
+    "preview": "미리보기",
+    "previewTitle": "미리보기",
+    "import": "{{count}}개 단어 가져오기"
+  },
+  "languageOverride": {
+    "title": "언어 설정",
+    "custom": "사용자 정의",
+    "description": "이 세트에 대해서만 기본 언어를 재정의합니다. 기본값으로 두면 전역 언어 설정을 사용합니다.",
+    "usingDefaults": "기본 언어 사용 중",
+    "selectTarget": "목표 언어 선택",
+    "selectNative": "모국어 선택",
+    "targetLabel": "학습",
+    "nativeLabel": "번역",
+    "useDefaults": "기본 언어 사용"
   }
 }

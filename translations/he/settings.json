@@ -1,25 +1,31 @@
 {
-  "_note": "This is a placeholder file. Please replace with he translations.",
-  "title": "Settings",
+  "title": "הגדרות",
+  "appLanguage": {
+    "title": "שפת האפליקציה",
+    "description": "בחר את שפת ממשק האפליקציה.",
+    "label": "שפת ממשק",
+    "placeholder": "בחר שפת אפליקציה"
+  },
   "languages": {
-    "title": "Languages",
-    "description": "Choose which languages you want to learn and translate to.",
-    "targetLanguage": "Language to Learn",
-    "targetPlaceholder": "Select language to learn",
-    "nativeLanguage": "Translate To",
-    "nativePlaceholder": "Select your native language"
+    "title": "הגדרות שפה",
+    "description": "שנה את שפת הלמידה ושפת הממשק. ערכות חדשות ישתמשו בשפות אלה.",
+    "targetLanguage": "למידה",
+    "targetPlaceholder": "בחר שפה ללימוד",
+    "nativeLanguage": "ממשק ותרגומים",
+    "nativePlaceholder": "בחר את השפה שלך",
+    "changeNote": "שינוי הגדרות אלה ישפיע על ערכות מילים חדשות. הערכות הקיימות שלך ישמרו את השפות המקוריות שלהן."
   },
   "appearance": {
-    "title": "Appearance",
-    "description": "Choose how the app looks. Auto will match your device's theme.",
-    "light": "Light",
-    "dark": "Dark",
-    "auto": "Auto",
-    "info": "Theme changes apply immediately to all screens"
+    "title": "מראה",
+    "description": "בחר כיצד האפליקציה נראית. אוטומטי יתאים לנושא המכשיר שלך.",
+    "light": "בהיר",
+    "dark": "כהה",
+    "auto": "אוטומטי",
+    "info": "שינויי נושא חלים מיד על כל המסכים"
   },
   "mySets": {
-    "title": "My Sets",
-    "manage": "Manage your word sets. Click to expand and view words.",
-    "noSets": "No sets created yet"
+    "title": "הערכות שלי",
+    "manage": "נהל את ערכות המילים שלך. לחץ להרחבה ולצפייה במילים.",
+    "noSets": "טרם נוצרו ערכות"
   }
 }

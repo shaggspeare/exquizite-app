@@ -1,53 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with tr translations.",
   "buttons": {
-    "add": "Add",
-    "done": "Done",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "share": "Share",
-    "play": "Play",
-    "next": "Next",
-    "previous": "Previous",
-    "skip": "Skip",
-    "check": "Check Answer",
-    "save": "Save",
-    "saving": "Saving...",
-    "finish": "Finish",
-    "tryAgain": "Try Again",
-    "playAgain": "Play Again",
-    "showHint": "Show Hint",
-    "generate": "Generate",
-    "generating": "Generating..."
+    "add": "Ekle",
+    "done": "Tamamlandı",
+    "cancel": "İptal",
+    "delete": "Sil",
+    "share": "Paylaş",
+    "play": "Oyna",
+    "next": "Sonraki",
+    "previous": "Önceki",
+    "skip": "Atla",
+    "check": "Cevabı Kontrol Et",
+    "save": "Kaydet",
+    "saving": "Kaydediliyor...",
+    "finish": "Bitir",
+    "tryAgain": "Tekrar Dene",
+    "playAgain": "Tekrar Oyna",
+    "showHint": "İpucu Göster",
+    "generate": "Oluştur",
+    "generating": "Oluşturuluyor..."
   },
   "status": {
-    "loading": "Loading...",
-    "saving": "Saving...",
-    "generating": "Generating...",
-    "noWords": "No words in this set",
-    "success": "Success",
-    "error": "Error"
+    "loading": "Yükleniyor...",
+    "saving": "Kaydediliyor...",
+    "generating": "Oluşturuluyor...",
+    "noWords": "Bu sette kelime yok",
+    "success": "Başarılı",
+    "error": "Hata"
   },
   "time": {
-    "never": "Never",
-    "today": "Today",
-    "yesterday": "Yesterday",
-    "daysAgo": "{{count}} days ago",
-    "lastPracticed": "Last practiced {{date}}"
+    "never": "Asla",
+    "today": "Bugün",
+    "yesterday": "Dün",
+    "daysAgo": "{{count}} gün önce",
+    "lastPracticed": "Son pratik {{date}}"
   },
   "counts": {
-    "word": "word",
-    "words": "words",
+    "word": "kelime",
+    "words": "kelimeler",
     "set": "set",
-    "sets": "sets",
-    "wordCount": "{{count}} word",
-    "wordCount_other": "{{count}} words",
+    "sets": "setler",
+    "wordCount": "{{count}} kelime",
+    "wordCount_other": "{{count}} kelime",
     "setCount": "{{count}} set",
-    "setCount_other": "{{count}} sets",
+    "setCount_other": "{{count}} set",
     "progress": "{{current}}/{{total}}"
   },
   "dialogs": {
-    "areYouSure": "Are you sure?",
-    "cannotUndo": "This action cannot be undone."
+    "areYouSure": "Emin misiniz?",
+    "cannotUndo": "Bu işlem geri alınamaz."
+  },
+  "sharing": {
+    "shareSet": "Seti Paylaş",
+    "shareCode": "Paylaşım Kodu",
+    "shareLink": "Paylaşım Bağlantısı",
+    "copyLink": "Bağlantıyı Kopyala",
+    "copied": "Kopyalandı!",
+    "copy": "Kopyala",
+    "views": "Görüntülemeler",
+    "copies": "Kopyalar",
+    "generatingLink": "Paylaşım bağlantısı oluşturuluyor...",
+    "linkInfo": "Bu bağlantıya sahip herkes setinizi görüntüleyebilir ve kopyalayabilir",
+    "deactivateLink": "Paylaşım Bağlantısını Devre Dışı Bırak",
+    "deactivateConfirm": "Bu paylaşım bağlantısını devre dışı bırakmak istediğinizden emin misiniz? Bağlantıya sahip hiç kimse artık bu sete erişemeyecek.",
+    "deactivate": "Devre Dışı Bırak",
+    "linkDeactivated": "Paylaşım bağlantısı devre dışı bırakıldı",
+    "shareError": "Paylaşım bağlantısı oluşturulamadı. Lütfen tekrar deneyin.",
+    "copyError": "Bağlantı panoya kopyalanamadı",
+    "linkCopied": "Bağlantı Kopyalandı",
+    "linkCopiedToClipboard": "Paylaşım bağlantısı panoya kopyalandı"
+  },
+  "tour": {
+    "skip": "Atla",
+    "next": "Sonraki",
+    "back": "Geri",
+    "getStarted": "Başlayın",
+    "slides": {
+      "vocabulary": {
+        "title": "Kelime Dağarcığınızı Oluşturun",
+        "description": "Kelimeleri manuel olarak ekleyin veya temalarla ilgili kelime setleri oluşturmak için yapay zekayı kullanın. Set başına 20'ye kadar kelime oluşturun."
+      },
+      "organize": {
+        "title": "Öğreniminizi Düzenleyin",
+        "description": "Kelimeleri \"İspanyol Yemekleri\" veya \"Alman Seyahati\" gibi tematik setlerde gruplandırın. Kolay erişim için setlerinizi adlandırın."
+      },
+      "learn": {
+        "title": "Kendi Tarzınızda Öğrenin",
+        "description": "4 oyun moduyla pratik yapın: Flashcardlar, Eşleşme, Çoktan Seçmeli Sınav ve Boşluk Doldurma."
+      },
+      "share": {
+        "title": "Bilginizi Paylaşın",
+        "description": "Setleriniz için paylaşım bağlantıları oluşturun. Diğerleri bunları görüntüleyebilir ve kendi kütüphanelerine kopyalayabilir."
+      }
+    }
   }
 }

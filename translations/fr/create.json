@@ -1,33 +1,62 @@
 {
-  "_note": "This is a placeholder file. Please replace with fr translations.",
-  "title": "Create Set",
-  "editTitle": "Edit Set",
-  "setName": "Set Name",
-  "setNamePlaceholder": "e.g., Spanish Vocabulary",
-  "words": "Words",
-  "addWord": "Add Word",
-  "aiSuggestions": "AI Suggestions",
-  "limitReached": "Limit Reached",
-  "limitMessage": "Maximum {{max}} words per set",
+  "title": "Créer un ensemble",
+  "editTitle": "Modifier l'ensemble",
+  "setName": "Nom de l'ensemble",
+  "setNamePlaceholder": "p. ex., Vocabulaire professionnel",
+  "languagePair": "Apprendre {{target}} → {{native}}",
+  "words": "Mots",
+  "addWord": "Ajouter un mot",
+  "aiSuggestions": "Suggestions IA",
+  "limitReached": "Limite atteinte",
+  "limitMessage": "Maximum {{max}} mots par ensemble",
   "errors": {
-    "fillAllFields": "Please fill in all fields",
-    "atLeastOneWord": "Please add at least one word pair",
-    "createFailed": "Failed to create set. Please try again.",
-    "networkError": "Network error. Please check your connection and try again."
+    "fillAllFields": "Veuillez remplir tous les champs",
+    "atLeastOneWord": "Veuillez ajouter au moins une paire de mots",
+    "createFailed": "Échec de la création de l'ensemble. Veuillez réessayer.",
+    "networkError": "Erreur réseau. Veuillez vérifier votre connexion et réessayer."
   },
   "success": {
-    "created": "Set created successfully!",
-    "updated": "Set updated successfully!"
+    "created": "Ensemble créé avec succès !",
+    "updated": "Ensemble mis à jour avec succès !"
   },
   "ai": {
-    "modalTitle": "AI Word Suggestions",
-    "themePlaceholder": "Theme (e.g., animals, food)",
+    "modalTitle": "Suggestions de mots IA",
+    "themePlaceholder": "Thème (p. ex., animaux, nourriture)",
     "countPlaceholder": "#",
-    "countHint": "Generate up to {{max}} words (5 by default)",
-    "generatingWithContext": "Generating suggestions based on your {{count}} existing {{word}}...",
-    "generatingGeneric": "Generating suggestions with AI...",
-    "selectPrompt": "Select words to add ({{count}} selected)",
-    "noSuggestions": "No suggestions yet. Click Generate to get AI-powered word suggestions!",
-    "addSelected": "Add {{count}} {{word}}"
+    "countHint": "Générez jusqu'à {{max}} mots (5 par défaut)",
+    "generatingWithContext": "Génération de suggestions basées sur vos {{count}} {{word}} existants...",
+    "generatingGeneric": "Génération de suggestions avec l'IA...",
+    "selectPrompt": "Sélectionnez les mots à ajouter ({{count}} sélectionnés)",
+    "noSuggestions": "Aucune suggestion pour le moment. Cliquez sur Générer pour obtenir des suggestions de mots alimentées par l'IA !",
+    "addSelected": "Ajouter {{count}} {{word}}"
+  },
+  "bulkImport": {
+    "button": "Importation en masse",
+    "title": "Importation en masse de mots",
+    "howTo": "Comment importer",
+    "instructions": "Collez vos paires de mots ci-dessous, une par ligne. Séparez chaque mot de sa traduction par une tabulation, une virgule ou un tiret.",
+    "example": "Exemple :",
+    "separator": "Séparateur",
+    "separators": {
+      "tab": "Tabulation",
+      "comma": "Virgule (,)",
+      "dash": "Tiret (-)"
+    },
+    "pasteWords": "Collez vos mots",
+    "placeholder": "mot1\ttraduction1\nmot2\ttraduction2\nmot3\ttraduction3",
+    "preview": "Aperçu",
+    "previewTitle": "Aperçu",
+    "import": "Importer {{count}} mots"
+  },
+  "languageOverride": {
+    "title": "Paramètres de langue",
+    "custom": "Personnalisé",
+    "description": "Remplacez les langues par défaut pour cet ensemble uniquement. Laissez par défaut pour utiliser vos paramètres de langue globaux.",
+    "usingDefaults": "Utilisation des langues par défaut",
+    "selectTarget": "Sélectionner la langue cible",
+    "selectNative": "Sélectionner la langue maternelle",
+    "targetLabel": "Apprentissage",
+    "nativeLabel": "Traductions",
+    "useDefaults": "Utiliser les langues par défaut"
   }
 }

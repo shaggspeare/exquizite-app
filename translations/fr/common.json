@@ -1,53 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with fr translations.",
   "buttons": {
-    "add": "Add",
-    "done": "Done",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "share": "Share",
-    "play": "Play",
-    "next": "Next",
-    "previous": "Previous",
-    "skip": "Skip",
-    "check": "Check Answer",
-    "save": "Save",
-    "saving": "Saving...",
-    "finish": "Finish",
-    "tryAgain": "Try Again",
-    "playAgain": "Play Again",
-    "showHint": "Show Hint",
-    "generate": "Generate",
-    "generating": "Generating..."
+    "add": "Ajouter",
+    "done": "Terminé",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "share": "Partager",
+    "play": "Jouer",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "skip": "Passer",
+    "check": "Vérifier la réponse",
+    "save": "Enregistrer",
+    "saving": "Enregistrement...",
+    "finish": "Terminer",
+    "tryAgain": "Réessayer",
+    "playAgain": "Rejouer",
+    "showHint": "Afficher l'indice",
+    "generate": "Générer",
+    "generating": "Génération..."
   },
   "status": {
-    "loading": "Loading...",
-    "saving": "Saving...",
-    "generating": "Generating...",
-    "noWords": "No words in this set",
-    "success": "Success",
-    "error": "Error"
+    "loading": "Chargement...",
+    "saving": "Enregistrement...",
+    "generating": "Génération...",
+    "noWords": "Aucun mot dans cet ensemble",
+    "success": "Succès",
+    "error": "Erreur"
   },
   "time": {
-    "never": "Never",
-    "today": "Today",
-    "yesterday": "Yesterday",
-    "daysAgo": "{{count}} days ago",
-    "lastPracticed": "Last practiced {{date}}"
+    "never": "Jamais",
+    "today": "Aujourd'hui",
+    "yesterday": "Hier",
+    "daysAgo": "Il y a {{count}} jours",
+    "lastPracticed": "Dernière pratique {{date}}"
   },
   "counts": {
-    "word": "word",
-    "words": "words",
-    "set": "set",
-    "sets": "sets",
-    "wordCount": "{{count}} word",
-    "wordCount_other": "{{count}} words",
-    "setCount": "{{count}} set",
-    "setCount_other": "{{count}} sets",
+    "word": "mot",
+    "words": "mots",
+    "set": "ensemble",
+    "sets": "ensembles",
+    "wordCount": "{{count}} mot",
+    "wordCount_other": "{{count}} mots",
+    "setCount": "{{count}} ensemble",
+    "setCount_other": "{{count}} ensembles",
     "progress": "{{current}}/{{total}}"
   },
   "dialogs": {
-    "areYouSure": "Are you sure?",
-    "cannotUndo": "This action cannot be undone."
+    "areYouSure": "Êtes-vous sûr ?",
+    "cannotUndo": "Cette action ne peut pas être annulée."
+  },
+  "sharing": {
+    "shareSet": "Partager l'ensemble",
+    "shareCode": "Code de partage",
+    "shareLink": "Lien de partage",
+    "copyLink": "Copier le lien",
+    "copied": "Copié !",
+    "copy": "Copier",
+    "views": "Vues",
+    "copies": "Copies",
+    "generatingLink": "Génération du lien de partage...",
+    "linkInfo": "Toute personne disposant de ce lien peut voir et copier votre ensemble",
+    "deactivateLink": "Désactiver le lien de partage",
+    "deactivateConfirm": "Êtes-vous sûr de vouloir désactiver ce lien de partage ? Toute personne disposant du lien ne pourra plus accéder à cet ensemble.",
+    "deactivate": "Désactiver",
+    "linkDeactivated": "Le lien de partage a été désactivé",
+    "shareError": "Échec de la génération du lien de partage. Veuillez réessayer.",
+    "copyError": "Échec de la copie du lien dans le presse-papiers",
+    "linkCopied": "Lien copié",
+    "linkCopiedToClipboard": "Lien de partage copié dans le presse-papiers"
+  },
+  "tour": {
+    "skip": "Passer",
+    "next": "Suivant",
+    "back": "Retour",
+    "getStarted": "Commencer",
+    "slides": {
+      "vocabulary": {
+        "title": "Construisez votre vocabulaire",
+        "description": "Ajoutez des mots manuellement ou utilisez l'IA pour générer des ensembles de vocabulaire thématiques. Créez jusqu'à 20 mots par ensemble."
+      },
+      "organize": {
+        "title": "Organisez votre apprentissage",
+        "description": "Regroupez les mots dans des ensembles thématiques comme \"Nourriture espagnole\" ou \"Voyage allemand\". Nommez vos ensembles pour un accès facile."
+      },
+      "learn": {
+        "title": "Apprenez à votre façon",
+        "description": "Pratiquez avec 4 modes de jeu : Flashcards, Associer les paires, Quiz à choix multiples et Remplir le blanc."
+      },
+      "share": {
+        "title": "Partagez vos connaissances",
+        "description": "Générez des liens de partage pour vos ensembles. Les autres peuvent les voir et les copier dans leur bibliothèque."
+      }
+    }
   }
 }

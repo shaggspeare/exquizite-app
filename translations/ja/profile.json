@@ -1,25 +1,24 @@
 {
-  "_note": "This is a placeholder file. Please replace with ja translations.",
-  "title": "Profile",
-  "guest": "Guest",
-  "guestAccount": "Guest Account",
-  "appAccount": "App Account",
+  "title": "プロフィール",
+  "guest": "ゲスト",
+  "guestAccount": "ゲストアカウント",
+  "appAccount": "アプリアカウント",
   "stats": {
-    "sets": "Sets",
-    "words": "Words",
-    "practiced": "Practiced"
+    "sets": "セット",
+    "words": "単語",
+    "practiced": "練習済み"
   },
-  "progress": "Progress",
+  "progress": "進捗",
   "settings": {
-    "title": "Settings",
-    "subtitle": "App Settings",
-    "description": "Theme, languages, and preferences"
+    "title": "設定",
+    "subtitle": "アプリ設定",
+    "description": "テーマ、言語、設定"
   },
-  "yourSets": "Your Sets",
-  "noSetsYet": "No sets created yet",
+  "yourSets": "あなたのセット",
+  "noSetsYet": "まだセットが作成されていません",
   "deleteSet": {
-    "title": "Delete Set",
-    "message": "Are you sure you want to delete \"{{setName}}\"?",
-    "confirm": "Delete"
+    "title": "セットを削除",
+    "message": "「{{setName}}」を削除してもよろしいですか？",
+    "confirm": "削除"
   }
 }

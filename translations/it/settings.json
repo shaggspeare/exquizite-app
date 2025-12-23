@@ -1,25 +1,31 @@
 {
-  "_note": "This is a placeholder file. Please replace with it translations.",
-  "title": "Settings",
+  "title": "Impostazioni",
+  "appLanguage": {
+    "title": "Lingua dell'app",
+    "description": "Scegli la lingua per l'interfaccia dell'app.",
+    "label": "Lingua dell'interfaccia",
+    "placeholder": "Seleziona lingua dell'app"
+  },
   "languages": {
-    "title": "Languages",
-    "description": "Choose which languages you want to learn and translate to.",
-    "targetLanguage": "Language to Learn",
-    "targetPlaceholder": "Select language to learn",
-    "nativeLanguage": "Translate To",
-    "nativePlaceholder": "Select your native language"
+    "title": "Impostazioni lingua",
+    "description": "Cambia la tua lingua di apprendimento e dell'interfaccia. I nuovi set useranno queste lingue.",
+    "targetLanguage": "Apprendimento",
+    "targetPlaceholder": "Seleziona lingua da imparare",
+    "nativeLanguage": "Interfaccia e traduzioni",
+    "nativePlaceholder": "Seleziona la tua lingua",
+    "changeNote": "La modifica di queste impostazioni influenzerà i nuovi set di parole. I tuoi set esistenti manterranno le loro lingue originali."
   },
   "appearance": {
-    "title": "Appearance",
-    "description": "Choose how the app looks. Auto will match your device's theme.",
-    "light": "Light",
-    "dark": "Dark",
+    "title": "Aspetto",
+    "description": "Scegli come appare l'app. Auto corrisponderà al tema del tuo dispositivo.",
+    "light": "Chiaro",
+    "dark": "Scuro",
     "auto": "Auto",
-    "info": "Theme changes apply immediately to all screens"
+    "info": "Le modifiche al tema si applicano immediatamente a tutte le schermate"
   },
   "mySets": {
-    "title": "My Sets",
-    "manage": "Manage your word sets. Click to expand and view words.",
-    "noSets": "No sets created yet"
+    "title": "I miei set",
+    "manage": "Gestisci i tuoi set di parole. Clicca per espandere e visualizzare le parole.",
+    "noSets": "Nessun set creato ancora"
   }
 }

@@ -1,25 +1,24 @@
 {
-  "_note": "This is a placeholder file. Please replace with ca translations.",
-  "title": "Profile",
-  "guest": "Guest",
-  "guestAccount": "Guest Account",
-  "appAccount": "App Account",
+  "title": "Perfil",
+  "guest": "Convidat",
+  "guestAccount": "Compte de convidat",
+  "appAccount": "Compte d'aplicació",
   "stats": {
-    "sets": "Sets",
-    "words": "Words",
-    "practiced": "Practiced"
+    "sets": "Conjunts",
+    "words": "Paraules",
+    "practiced": "Practicat"
   },
-  "progress": "Progress",
+  "progress": "Progrés",
   "settings": {
-    "title": "Settings",
-    "subtitle": "App Settings",
-    "description": "Theme, languages, and preferences"
+    "title": "Configuració",
+    "subtitle": "Configuració de l'aplicació",
+    "description": "Tema, idiomes i preferències"
   },
-  "yourSets": "Your Sets",
-  "noSetsYet": "No sets created yet",
+  "yourSets": "Els teus conjunts",
+  "noSetsYet": "Cap conjunt creat encara",
   "deleteSet": {
-    "title": "Delete Set",
-    "message": "Are you sure you want to delete \"{{setName}}\"?",
-    "confirm": "Delete"
+    "title": "Elimina conjunt",
+    "message": "Estàs segur que vols eliminar \"{{setName}}\"?",
+    "confirm": "Elimina"
   }
 }

@@ -1,25 +1,24 @@
 {
-  "_note": "This is a placeholder file. Please replace with th translations.",
-  "title": "Profile",
-  "guest": "Guest",
-  "guestAccount": "Guest Account",
-  "appAccount": "App Account",
+  "title": "โปรไฟล์",
+  "guest": "แขก",
+  "guestAccount": "บัญชีแขก",
+  "appAccount": "บัญชีแอป",
   "stats": {
-    "sets": "Sets",
-    "words": "Words",
-    "practiced": "Practiced"
+    "sets": "ชุด",
+    "words": "คำ",
+    "practiced": "ฝึกแล้ว"
   },
-  "progress": "Progress",
+  "progress": "ความคืบหน้า",
   "settings": {
-    "title": "Settings",
-    "subtitle": "App Settings",
-    "description": "Theme, languages, and preferences"
+    "title": "การตั้งค่า",
+    "subtitle": "การตั้งค่าแอป",
+    "description": "ธีม, ภาษา และค่ากำหนด"
   },
-  "yourSets": "Your Sets",
-  "noSetsYet": "No sets created yet",
+  "yourSets": "ชุดของคุณ",
+  "noSetsYet": "ยังไม่มีชุดที่สร้าง",
   "deleteSet": {
-    "title": "Delete Set",
-    "message": "Are you sure you want to delete \"{{setName}}\"?",
-    "confirm": "Delete"
+    "title": "ลบชุด",
+    "message": "คุณแน่ใจหรือไม่ที่จะลบ \"{{setName}}\"?",
+    "confirm": "ลบ"
   }
 }

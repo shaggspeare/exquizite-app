@@ -1,88 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with zh-Hant translations.",
-  "chooseActivity": "Choose Activity",
-  "setNotFound": "Set not found",
-  "wordsInSet": "Words in this set",
-  "startPractice": "Start Practice",
-  "quickPractice": "Quick Practice",
+  "chooseActivity": "選擇活動",
+  "setNotFound": "未找到集合",
+  "wordsInSet": "此集合中的單字",
+  "startPractice": "開始練習",
+  "quickPractice": "快速練習",
   "templates": {
     "flashcard": {
-      "name": "Flashcard",
-      "description": "Flip to reveal translations"
+      "name": "閃卡",
+      "description": "翻轉以顯示翻譯"
     },
     "match": {
-      "name": "Match",
-      "description": "Drag and connect pairs"
+      "name": "配對",
+      "description": "拖曳並連接配對"
     },
     "quiz": {
-      "name": "Quiz",
-      "description": "Multiple choice questions"
+      "name": "測驗",
+      "description": "選擇題"
     },
     "fillBlank": {
-      "name": "Fill in the Blank",
-      "description": "Complete sentences with the right word",
-      "aiHints": "AI hints available"
+      "name": "填空",
+      "description": "用正確的單字完成句子",
+      "aiHints": "可用AI提示"
     }
   },
   "flashcard": {
-    "title": "Flashcards: {{setName}}",
-    "tapToFlip": "Tap to flip",
-    "clickToFlip": "Click to flip",
-    "complete": "Complete"
+    "title": "閃卡: {{setName}}",
+    "tapToFlip": "點選翻轉",
+    "clickToFlip": "點選翻轉",
+    "complete": "完成"
   },
   "quiz": {
-    "title": "Quiz: {{setName}}",
-    "question": "Question {{current}} / {{total}}",
-    "translate": "Translate:",
-    "nextQuestion": "Next Question",
-    "loadingQuiz": "Loading quiz...",
+    "title": "測驗: {{setName}}",
+    "question": "問題 {{current}} / {{total}}",
+    "translate": "翻譯:",
+    "nextQuestion": "下一題",
+    "loadingQuiz": "載入測驗中...",
     "complete": {
-      "title": "Quiz Complete!",
-      "score": "You scored {{score}}/{{total}} ({{percentage}}%)"
+      "title": "測驗完成！",
+      "score": "您的得分: {{score}}/{{total}} ({{percentage}}%)"
     }
   },
   "match": {
-    "title": "Match: {{setName}}",
-    "words": "Words",
-    "translations": "Translations",
+    "title": "配對: {{setName}}",
+    "words": "單字",
+    "translations": "翻譯",
     "complete": {
-      "title": "Congratulations!",
-      "message": "You completed the match game in {{time}}!"
+      "title": "恭喜！",
+      "message": "您在{{time}}內完成了配對遊戲！"
     }
   },
   "fillBlank": {
-    "title": "Fill in the Blank: {{setName}}",
-    "question": "Question {{current}} / {{total}}",
-    "translation": "Translation:",
-    "fillPrompt": "Fill in the blank:",
-    "choosePrompt": "Choose the correct word:",
-    "loadingNext": "Loading next question...",
-    "generatingSentences": "Generating sentences...",
-    "correctAnswer": "Correct answer:",
+    "title": "填空: {{setName}}",
+    "question": "問題 {{current}} / {{total}}",
+    "translation": "翻譯:",
+    "fillPrompt": "填空:",
+    "choosePrompt": "選擇正確的單字:",
+    "loadingNext": "載入下一題中...",
+    "generatingSentences": "產生句子中...",
+    "correctAnswer": "正確答案:",
     "complete": {
-      "title": "Exercise Complete!",
-      "score": "You scored {{score}}/{{total}} ({{percentage}}%)"
+      "title": "練習完成！",
+      "score": "您的得分: {{score}}/{{total}} ({{percentage}}%)"
     }
   },
   "home": {
-    "greeting": "Hello, {{name}}!",
-    "readyToLearn": "Ready to learn today?",
-    "noSets": "No sets yet",
-    "createFirstSet": "Create your first word set to get started!",
-    "createSet": "Create Set",
-    "featuredSets": "Featured Sets",
-    "tryThem": "Try them!",
-    "demoDescription": "Practice with these demo sets to get started"
+    "title": "首頁",
+    "greeting": "你好，{{name}}！",
+    "readyToLearn": "準備好今天學習了嗎？",
+    "noSets": "暫無集合",
+    "createFirstSet": "建立您的第一個單字集合開始吧！",
+    "createSet": "建立集合",
+    "featuredSets": "精選集合",
+    "tryThem": "試試看！",
+    "demoDescription": "透過這些示範集合練習開始吧"
+  },
+  "dashboard": {
+    "title": "儀表板",
+    "lastPracticed": "上次練習",
+    "streak": "連續"
   },
   "mySets": {
-    "title": "My Sets",
-    "noSets": "No sets yet",
-    "createFirstSet": "Create your first word set to get started!",
-    "createSet": "Create Set"
+    "title": "我的集合",
+    "noSets": "暫無集合",
+    "createFirstSet": "建立您的第一個單字集合開始吧！",
+    "createSet": "建立集合"
   },
   "setCard": {
-    "featured": "Featured",
-    "complete": "{{count}}/{{total}}% complete",
-    "demoInfo": "This is a demo set. Create your own set to get started!"
+    "featured": "精選",
+    "complete": "{{percent}}% 完成",
+    "lastPracticed": "上次練習: {{date}}",
+    "deleteSet": "刪除集合",
+    "deleteConfirm": "確定要刪除\"{{setName}}\"嗎？此操作無法復原。",
+    "demoInfo": "這是一個示範集合。建立您自己的集合開始吧！"
   }
 }

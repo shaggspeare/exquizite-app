@@ -1,25 +1,31 @@
 {
-  "_note": "This is a placeholder file. Please replace with hi translations.",
-  "title": "Settings",
+  "title": "सेटिंग्स",
+  "appLanguage": {
+    "title": "ऐप भाषा",
+    "description": "ऐप इंटरफ़ेस के लिए भाषा चुनें।",
+    "label": "इंटरफ़ेस भाषा",
+    "placeholder": "ऐप भाषा चुनें"
+  },
   "languages": {
-    "title": "Languages",
-    "description": "Choose which languages you want to learn and translate to.",
-    "targetLanguage": "Language to Learn",
-    "targetPlaceholder": "Select language to learn",
-    "nativeLanguage": "Translate To",
-    "nativePlaceholder": "Select your native language"
+    "title": "भाषा सेटिंग्स",
+    "description": "अपनी सीखने और इंटरफ़ेस भाषा बदलें। नए सेट इन भाषाओं का उपयोग करेंगे।",
+    "targetLanguage": "सीखना",
+    "targetPlaceholder": "सीखने के लिए भाषा चुनें",
+    "nativeLanguage": "इंटरफ़ेस और अनुवाद",
+    "nativePlaceholder": "अपनी भाषा चुनें",
+    "changeNote": "इन सेटिंग्स को बदलने से नए शब्द सेट प्रभावित होंगे। आपके मौजूदा सेट अपनी मूल भाषाएं रखेंगे।"
   },
   "appearance": {
-    "title": "Appearance",
-    "description": "Choose how the app looks. Auto will match your device's theme.",
-    "light": "Light",
-    "dark": "Dark",
-    "auto": "Auto",
-    "info": "Theme changes apply immediately to all screens"
+    "title": "रूप",
+    "description": "चुनें कि ऐप कैसा दिखता है। ऑटो आपके डिवाइस की थीम से मेल खाएगा।",
+    "light": "हल्का",
+    "dark": "गहरा",
+    "auto": "ऑटो",
+    "info": "थीम परिवर्तन तुरंत सभी स्क्रीन पर लागू होते हैं"
   },
   "mySets": {
-    "title": "My Sets",
-    "manage": "Manage your word sets. Click to expand and view words.",
-    "noSets": "No sets created yet"
+    "title": "मेरे सेट",
+    "manage": "अपने शब्द सेट प्रबंधित करें। विस्तार और शब्दों को देखने के लिए क्लिक करें।",
+    "noSets": "अभी तक कोई सेट नहीं बनाया गया"
   }
 }

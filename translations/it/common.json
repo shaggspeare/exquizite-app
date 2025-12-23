@@ -1,53 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with it translations.",
   "buttons": {
-    "add": "Add",
-    "done": "Done",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "share": "Share",
-    "play": "Play",
-    "next": "Next",
-    "previous": "Previous",
-    "skip": "Skip",
-    "check": "Check Answer",
-    "save": "Save",
-    "saving": "Saving...",
-    "finish": "Finish",
-    "tryAgain": "Try Again",
-    "playAgain": "Play Again",
-    "showHint": "Show Hint",
-    "generate": "Generate",
-    "generating": "Generating..."
+    "add": "Aggiungi",
+    "done": "Fatto",
+    "cancel": "Annulla",
+    "delete": "Elimina",
+    "share": "Condividi",
+    "play": "Gioca",
+    "next": "Avanti",
+    "previous": "Precedente",
+    "skip": "Salta",
+    "check": "Verifica risposta",
+    "save": "Salva",
+    "saving": "Salvataggio...",
+    "finish": "Termina",
+    "tryAgain": "Riprova",
+    "playAgain": "Gioca di nuovo",
+    "showHint": "Mostra suggerimento",
+    "generate": "Genera",
+    "generating": "Generazione..."
   },
   "status": {
-    "loading": "Loading...",
-    "saving": "Saving...",
-    "generating": "Generating...",
-    "noWords": "No words in this set",
-    "success": "Success",
-    "error": "Error"
+    "loading": "Caricamento...",
+    "saving": "Salvataggio...",
+    "generating": "Generazione...",
+    "noWords": "Nessuna parola in questo set",
+    "success": "Successo",
+    "error": "Errore"
   },
   "time": {
-    "never": "Never",
-    "today": "Today",
-    "yesterday": "Yesterday",
-    "daysAgo": "{{count}} days ago",
-    "lastPracticed": "Last practiced {{date}}"
+    "never": "Mai",
+    "today": "Oggi",
+    "yesterday": "Ieri",
+    "daysAgo": "{{count}} giorni fa",
+    "lastPracticed": "Ultima pratica {{date}}"
   },
   "counts": {
-    "word": "word",
-    "words": "words",
+    "word": "parola",
+    "words": "parole",
     "set": "set",
-    "sets": "sets",
-    "wordCount": "{{count}} word",
-    "wordCount_other": "{{count}} words",
+    "sets": "set",
+    "wordCount": "{{count}} parola",
+    "wordCount_other": "{{count}} parole",
     "setCount": "{{count}} set",
-    "setCount_other": "{{count}} sets",
+    "setCount_other": "{{count}} set",
     "progress": "{{current}}/{{total}}"
   },
   "dialogs": {
-    "areYouSure": "Are you sure?",
-    "cannotUndo": "This action cannot be undone."
+    "areYouSure": "Sei sicuro?",
+    "cannotUndo": "Questa azione non può essere annullata."
+  },
+  "sharing": {
+    "shareSet": "Condividi set",
+    "shareCode": "Codice di condivisione",
+    "shareLink": "Link di condivisione",
+    "copyLink": "Copia link",
+    "copied": "Copiato!",
+    "copy": "Copia",
+    "views": "Visualizzazioni",
+    "copies": "Copie",
+    "generatingLink": "Generazione link di condivisione...",
+    "linkInfo": "Chiunque abbia questo link può visualizzare e copiare il tuo set",
+    "deactivateLink": "Disattiva link di condivisione",
+    "deactivateConfirm": "Sei sicuro di voler disattivare questo link di condivisione? Chiunque abbia il link non potrà più accedere a questo set.",
+    "deactivate": "Disattiva",
+    "linkDeactivated": "Il link di condivisione è stato disattivato",
+    "shareError": "Impossibile generare il link di condivisione. Riprova.",
+    "copyError": "Impossibile copiare il link negli appunti",
+    "linkCopied": "Link copiato",
+    "linkCopiedToClipboard": "Link di condivisione copiato negli appunti"
+  },
+  "tour": {
+    "skip": "Salta",
+    "next": "Avanti",
+    "back": "Indietro",
+    "getStarted": "Inizia",
+    "slides": {
+      "vocabulary": {
+        "title": "Costruisci il tuo vocabolario",
+        "description": "Aggiungi parole manualmente o usa l'IA per generare set di vocabolario tematici. Crea fino a 20 parole per set."
+      },
+      "organize": {
+        "title": "Organizza il tuo apprendimento",
+        "description": "Raggruppa le parole in set tematici come \"Cibo spagnolo\" o \"Viaggio tedesco\". Nomina i tuoi set per un facile accesso."
+      },
+      "learn": {
+        "title": "Impara a modo tuo",
+        "description": "Pratica con 4 modalità di gioco: Flashcard, Abbina coppie, Quiz a scelta multipla e Riempi lo spazio vuoto."
+      },
+      "share": {
+        "title": "Condividi la tua conoscenza",
+        "description": "Genera link di condivisione per i tuoi set. Altri possono visualizzarli e copiarli nella loro libreria."
+      }
+    }
   }
 }

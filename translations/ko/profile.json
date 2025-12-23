@@ -1,25 +1,24 @@
 {
-  "_note": "This is a placeholder file. Please replace with ko translations.",
-  "title": "Profile",
-  "guest": "Guest",
-  "guestAccount": "Guest Account",
-  "appAccount": "App Account",
+  "title": "프로필",
+  "guest": "게스트",
+  "guestAccount": "게스트 계정",
+  "appAccount": "앱 계정",
   "stats": {
-    "sets": "Sets",
-    "words": "Words",
-    "practiced": "Practiced"
+    "sets": "세트",
+    "words": "단어",
+    "practiced": "연습함"
   },
-  "progress": "Progress",
+  "progress": "진행률",
   "settings": {
-    "title": "Settings",
-    "subtitle": "App Settings",
-    "description": "Theme, languages, and preferences"
+    "title": "설정",
+    "subtitle": "앱 설정",
+    "description": "테마, 언어 및 환경설정"
   },
-  "yourSets": "Your Sets",
-  "noSetsYet": "No sets created yet",
+  "yourSets": "내 세트",
+  "noSetsYet": "아직 생성된 세트가 없습니다",
   "deleteSet": {
-    "title": "Delete Set",
-    "message": "Are you sure you want to delete \"{{setName}}\"?",
-    "confirm": "Delete"
+    "title": "세트 삭제",
+    "message": "\"{{setName}}\"을(를) 삭제하시겠습니까?",
+    "confirm": "삭제"
   }
 }

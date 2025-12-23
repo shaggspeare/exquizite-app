@@ -1,53 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with th translations.",
   "buttons": {
-    "add": "Add",
-    "done": "Done",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "share": "Share",
-    "play": "Play",
-    "next": "Next",
-    "previous": "Previous",
-    "skip": "Skip",
-    "check": "Check Answer",
-    "save": "Save",
-    "saving": "Saving...",
-    "finish": "Finish",
-    "tryAgain": "Try Again",
-    "playAgain": "Play Again",
-    "showHint": "Show Hint",
-    "generate": "Generate",
-    "generating": "Generating..."
+    "add": "เพิ่ม",
+    "done": "เสร็จสิ้น",
+    "cancel": "ยกเลิก",
+    "delete": "ลบ",
+    "share": "แชร์",
+    "play": "เล่น",
+    "next": "ถัดไป",
+    "previous": "ก่อนหน้า",
+    "skip": "ข้าม",
+    "check": "ตรวจคำตอบ",
+    "save": "บันทึก",
+    "saving": "กำลังบันทึก...",
+    "finish": "เสร็จสิ้น",
+    "tryAgain": "ลองอีกครั้ง",
+    "playAgain": "เล่นอีกครั้ง",
+    "showHint": "แสดงคำใบ้",
+    "generate": "สร้าง",
+    "generating": "กำลังสร้าง..."
   },
   "status": {
-    "loading": "Loading...",
-    "saving": "Saving...",
-    "generating": "Generating...",
-    "noWords": "No words in this set",
-    "success": "Success",
-    "error": "Error"
+    "loading": "กำลังโหลด...",
+    "saving": "กำลังบันทึก...",
+    "generating": "กำลังสร้าง...",
+    "noWords": "ไม่มีคำศัพท์ในชุดนี้",
+    "success": "สำเร็จ",
+    "error": "ข้อผิดพลาด"
   },
   "time": {
-    "never": "Never",
-    "today": "Today",
-    "yesterday": "Yesterday",
-    "daysAgo": "{{count}} days ago",
-    "lastPracticed": "Last practiced {{date}}"
+    "never": "ไม่เคย",
+    "today": "วันนี้",
+    "yesterday": "เมื่อวาน",
+    "daysAgo": "{{count}} วันที่แล้ว",
+    "lastPracticed": "ฝึกครั้งสุดท้าย {{date}}"
   },
   "counts": {
-    "word": "word",
-    "words": "words",
-    "set": "set",
-    "sets": "sets",
-    "wordCount": "{{count}} word",
-    "wordCount_other": "{{count}} words",
-    "setCount": "{{count}} set",
-    "setCount_other": "{{count}} sets",
+    "word": "คำ",
+    "words": "คำ",
+    "set": "ชุด",
+    "sets": "ชุด",
+    "wordCount": "{{count}} คำ",
+    "wordCount_other": "{{count}} คำ",
+    "setCount": "{{count}} ชุด",
+    "setCount_other": "{{count}} ชุด",
     "progress": "{{current}}/{{total}}"
   },
   "dialogs": {
-    "areYouSure": "Are you sure?",
-    "cannotUndo": "This action cannot be undone."
+    "areYouSure": "คุณแน่ใจหรือไม่?",
+    "cannotUndo": "ไม่สามารถยกเลิกการดำเนินการนี้ได้"
+  },
+  "sharing": {
+    "shareSet": "แชร์ชุด",
+    "shareCode": "รหัสแชร์",
+    "shareLink": "ลิงก์แชร์",
+    "copyLink": "คัดลอกลิงก์",
+    "copied": "คัดลอกแล้ว!",
+    "copy": "คัดลอก",
+    "views": "การดู",
+    "copies": "สำเนา",
+    "generatingLink": "กำลังสร้างลิงก์แชร์...",
+    "linkInfo": "ทุกคนที่มีลิงก์นี้สามารถดูและคัดลอกชุดของคุณได้",
+    "deactivateLink": "ปิดใช้งานลิงก์แชร์",
+    "deactivateConfirm": "คุณแน่ใจหรือไม่ที่จะปิดใช้งานลิงก์แชร์นี้? ผู้ที่มีลิงก์จะไม่สามารถเข้าถึงชุดนี้ได้อีกต่อไป",
+    "deactivate": "ปิดใช้งาน",
+    "linkDeactivated": "ปิดใช้งานลิงก์แชร์แล้ว",
+    "shareError": "สร้างลิงก์แชร์ไม่สำเร็จ โปรดลองอีกครั้ง",
+    "copyError": "คัดลอกลิงก์ไม่สำเร็จ",
+    "linkCopied": "คัดลอกลิงก์แล้ว",
+    "linkCopiedToClipboard": "คัดลอกลิงก์แชร์ไปยังคลิปบอร์ดแล้ว"
+  },
+  "tour": {
+    "skip": "ข้าม",
+    "next": "ถัดไป",
+    "back": "ย้อนกลับ",
+    "getStarted": "เริ่มใช้งาน",
+    "slides": {
+      "vocabulary": {
+        "title": "สร้างคำศัพท์ของคุณ",
+        "description": "เพิ่มคำด้วยตนเองหรือใช้ AI สร้างชุดคำศัพท์ตามหัวข้อ สร้างได้สูงสุด 20 คำต่อชุด"
+      },
+      "organize": {
+        "title": "จัดระเบียบการเรียนรู้ของคุณ",
+        "description": "จัดกลุ่มคำเป็นชุดตามหัวข้อ ตั้งชื่อชุดของคุณเพื่อการเข้าถึงที่ง่ายดาย"
+      },
+      "learn": {
+        "title": "เรียนรู้แบบของคุณ",
+        "description": "ฝึกฝนด้วย 4 โหมดเกม: บัตรคำ, จับคู่, ควิซแบบเลือกตอบ และเติมคำในช่องว่าง"
+      },
+      "share": {
+        "title": "แบ่งปันความรู้ของคุณ",
+        "description": "สร้างลิงก์แชร์สำหรับชุดของคุณ คนอื่นสามารถดูและคัดลอกไปยังคลังของตนได้"
+      }
+    }
   }
 }

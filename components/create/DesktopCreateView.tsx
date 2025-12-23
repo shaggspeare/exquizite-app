@@ -209,7 +209,7 @@ export function DesktopCreateView() {
           finalNativeLanguage
         );
         showAlert(t('common:status.success'), t('success.updated'), [
-          { text: 'OK', onPress: () => router.push(`/sets/${editingSetId}`) },
+          { text: 'OK', onPress: () => router.push(`/(tabs)/sets/${editingSetId}`) },
         ]);
       } else {
         const newSet = await createSet(
@@ -221,7 +221,7 @@ export function DesktopCreateView() {
         if (newSet) {
           clearForm();
           showAlert(t('common:status.success'), t('success.created'), [
-            { text: 'OK', onPress: () => router.push(`/sets/${newSet.id}`) },
+            { text: 'OK', onPress: () => router.push(`/(tabs)/sets/${newSet.id}`) },
           ]);
         } else {
           showAlert(t('common:status.error'), t('errors.createFailed'));

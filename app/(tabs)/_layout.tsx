@@ -64,6 +64,18 @@ export default function TabsLayout() {
           href: null, // Hide from tab bar
         }}
       />
+      <Tabs.Screen
+        name="sets"
+        options={{
+          href: null, // Hide from tab bar - accessed via navigation
+        }}
+      />
+      <Tabs.Screen
+        name="shared-[shareCode]"
+        options={{
+          href: null, // Hide from tab bar - accessed via share links
+        }}
+      />
     </Tabs>
   );
 }

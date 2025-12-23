@@ -1,53 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with he translations.",
   "buttons": {
-    "add": "Add",
-    "done": "Done",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "share": "Share",
-    "play": "Play",
-    "next": "Next",
-    "previous": "Previous",
-    "skip": "Skip",
-    "check": "Check Answer",
-    "save": "Save",
-    "saving": "Saving...",
-    "finish": "Finish",
-    "tryAgain": "Try Again",
-    "playAgain": "Play Again",
-    "showHint": "Show Hint",
-    "generate": "Generate",
-    "generating": "Generating..."
+    "add": "הוסף",
+    "done": "בוצע",
+    "cancel": "ביטול",
+    "delete": "מחק",
+    "share": "שתף",
+    "play": "הפעל",
+    "next": "הבא",
+    "previous": "הקודם",
+    "skip": "דלג",
+    "check": "בדוק תשובה",
+    "save": "שמור",
+    "saving": "שומר...",
+    "finish": "סיום",
+    "tryAgain": "נסה שוב",
+    "playAgain": "שחק שוב",
+    "showHint": "הצג רמז",
+    "generate": "צור",
+    "generating": "יוצר..."
   },
   "status": {
-    "loading": "Loading...",
-    "saving": "Saving...",
-    "generating": "Generating...",
-    "noWords": "No words in this set",
-    "success": "Success",
-    "error": "Error"
+    "loading": "טוען...",
+    "saving": "שומר...",
+    "generating": "יוצר...",
+    "noWords": "אין מילים בערכה זו",
+    "success": "הצלחה",
+    "error": "שגיאה"
   },
   "time": {
-    "never": "Never",
-    "today": "Today",
-    "yesterday": "Yesterday",
-    "daysAgo": "{{count}} days ago",
-    "lastPracticed": "Last practiced {{date}}"
+    "never": "אף פעם",
+    "today": "היום",
+    "yesterday": "אתמול",
+    "daysAgo": "לפני {{count}} ימים",
+    "lastPracticed": "תרגול אחרון {{date}}"
   },
   "counts": {
-    "word": "word",
-    "words": "words",
-    "set": "set",
-    "sets": "sets",
-    "wordCount": "{{count}} word",
-    "wordCount_other": "{{count}} words",
-    "setCount": "{{count}} set",
-    "setCount_other": "{{count}} sets",
+    "word": "מילה",
+    "words": "מילים",
+    "set": "ערכה",
+    "sets": "ערכות",
+    "wordCount": "{{count}} מילה",
+    "wordCount_other": "{{count}} מילים",
+    "setCount": "{{count}} ערכה",
+    "setCount_other": "{{count}} ערכות",
     "progress": "{{current}}/{{total}}"
   },
   "dialogs": {
-    "areYouSure": "Are you sure?",
-    "cannotUndo": "This action cannot be undone."
+    "areYouSure": "האם אתה בטוח?",
+    "cannotUndo": "לא ניתן לבטל פעולה זו."
+  },
+  "sharing": {
+    "shareSet": "שתף ערכה",
+    "shareCode": "קוד שיתוף",
+    "shareLink": "קישור שיתוף",
+    "copyLink": "העתק קישור",
+    "copied": "הועתק!",
+    "copy": "העתק",
+    "views": "צפיות",
+    "copies": "העתקות",
+    "generatingLink": "יוצר קישור שיתוף...",
+    "linkInfo": "כל מי שיש לו קישור זה יכול לצפות ולהעתיק את הערכה שלך",
+    "deactivateLink": "השבת קישור שיתוף",
+    "deactivateConfirm": "האם אתה בטוח שברצונך להשבית קישור שיתוף זה? אנשים עם הקישור לא יוכלו עוד לגשת לערכה זו.",
+    "deactivate": "השבת",
+    "linkDeactivated": "קישור השיתוף הושבת",
+    "shareError": "יצירת קישור השיתוף נכשלה. אנא נסה שוב.",
+    "copyError": "העתקת הקישור נכשלה",
+    "linkCopied": "קישור הועתק",
+    "linkCopiedToClipboard": "קישור השיתוף הועתק ללוח"
+  },
+  "tour": {
+    "skip": "דלג",
+    "next": "הבא",
+    "back": "חזור",
+    "getStarted": "התחל",
+    "slides": {
+      "vocabulary": {
+        "title": "בנה את אוצר המילים שלך",
+        "description": "הוסף מילים ידנית או השתמש ב-AI ליצירת ערכות מילים נושאיות. צור עד 20 מילים לכל ערכה."
+      },
+      "organize": {
+        "title": "ארגן את הלמידה שלך",
+        "description": "קבץ מילים לערכות נושאיות. תן שם לערכות שלך לגישה קלה."
+      },
+      "learn": {
+        "title": "למד בדרך שלך",
+        "description": "תרגל עם 4 מצבי משחק: כרטיסיות, התאמת זוגות, בחן רב ברירות, ומילוי חסר."
+      },
+      "share": {
+        "title": "שתף את הידע שלך",
+        "description": "צור קישורי שיתוף לערכות שלך. אחרים יכולים לצפות ולהעתיק אותן לספרייה שלהם."
+      }
+    }
   }
 }

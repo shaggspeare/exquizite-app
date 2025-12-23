@@ -1,88 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with ja translations.",
-  "chooseActivity": "Choose Activity",
-  "setNotFound": "Set not found",
-  "wordsInSet": "Words in this set",
-  "startPractice": "Start Practice",
-  "quickPractice": "Quick Practice",
+  "chooseActivity": "アクティビティを選択",
+  "setNotFound": "セットが見つかりません",
+  "wordsInSet": "このセットの単語",
+  "startPractice": "練習を開始",
+  "quickPractice": "クイック練習",
   "templates": {
     "flashcard": {
-      "name": "Flashcard",
-      "description": "Flip to reveal translations"
+      "name": "フラッシュカード",
+      "description": "めくって翻訳を表示"
     },
     "match": {
-      "name": "Match",
-      "description": "Drag and connect pairs"
+      "name": "マッチング",
+      "description": "ペアをドラッグして接続"
     },
     "quiz": {
-      "name": "Quiz",
-      "description": "Multiple choice questions"
+      "name": "クイズ",
+      "description": "多肢選択問題"
     },
     "fillBlank": {
-      "name": "Fill in the Blank",
-      "description": "Complete sentences with the right word",
-      "aiHints": "AI hints available"
+      "name": "穴埋め問題",
+      "description": "正しい単語で文を完成させる",
+      "aiHints": "AIヒント利用可能"
     }
   },
   "flashcard": {
-    "title": "Flashcards: {{setName}}",
-    "tapToFlip": "Tap to flip",
-    "clickToFlip": "Click to flip",
-    "complete": "Complete"
+    "title": "フラッシュカード: {{setName}}",
+    "tapToFlip": "タップしてめくる",
+    "clickToFlip": "クリックしてめくる",
+    "complete": "完了"
   },
   "quiz": {
-    "title": "Quiz: {{setName}}",
-    "question": "Question {{current}} / {{total}}",
-    "translate": "Translate:",
-    "nextQuestion": "Next Question",
-    "loadingQuiz": "Loading quiz...",
+    "title": "クイズ: {{setName}}",
+    "question": "問題 {{current}} / {{total}}",
+    "translate": "翻訳:",
+    "nextQuestion": "次の問題",
+    "loadingQuiz": "クイズを読み込み中...",
     "complete": {
-      "title": "Quiz Complete!",
-      "score": "You scored {{score}}/{{total}} ({{percentage}}%)"
+      "title": "クイズ完了！",
+      "score": "スコア: {{score}}/{{total}} ({{percentage}}%)"
     }
   },
   "match": {
-    "title": "Match: {{setName}}",
-    "words": "Words",
-    "translations": "Translations",
+    "title": "マッチング: {{setName}}",
+    "words": "単語",
+    "translations": "翻訳",
     "complete": {
-      "title": "Congratulations!",
-      "message": "You completed the match game in {{time}}!"
+      "title": "おめでとうございます！",
+      "message": "{{time}}でマッチングゲームを完了しました！"
     }
   },
   "fillBlank": {
-    "title": "Fill in the Blank: {{setName}}",
-    "question": "Question {{current}} / {{total}}",
-    "translation": "Translation:",
-    "fillPrompt": "Fill in the blank:",
-    "choosePrompt": "Choose the correct word:",
-    "loadingNext": "Loading next question...",
-    "generatingSentences": "Generating sentences...",
-    "correctAnswer": "Correct answer:",
+    "title": "穴埋め問題: {{setName}}",
+    "question": "問題 {{current}} / {{total}}",
+    "translation": "翻訳:",
+    "fillPrompt": "空欄を埋めてください:",
+    "choosePrompt": "正しい単語を選んでください:",
+    "loadingNext": "次の問題を読み込み中...",
+    "generatingSentences": "文章を生成中...",
+    "correctAnswer": "正解:",
     "complete": {
-      "title": "Exercise Complete!",
-      "score": "You scored {{score}}/{{total}} ({{percentage}}%)"
+      "title": "練習完了！",
+      "score": "スコア: {{score}}/{{total}} ({{percentage}}%)"
     }
   },
   "home": {
-    "greeting": "Hello, {{name}}!",
-    "readyToLearn": "Ready to learn today?",
-    "noSets": "No sets yet",
-    "createFirstSet": "Create your first word set to get started!",
-    "createSet": "Create Set",
-    "featuredSets": "Featured Sets",
-    "tryThem": "Try them!",
-    "demoDescription": "Practice with these demo sets to get started"
+    "title": "ホーム",
+    "greeting": "こんにちは、{{name}}さん！",
+    "readyToLearn": "今日も学習しましょう！",
+    "noSets": "セットがありません",
+    "createFirstSet": "最初の単語セットを作成して始めましょう！",
+    "createSet": "セットを作成",
+    "featuredSets": "おすすめセット",
+    "tryThem": "試してみよう！",
+    "demoDescription": "デモセットで練習して始めましょう"
+  },
+  "dashboard": {
+    "title": "ダッシュボード",
+    "lastPracticed": "最後の練習",
+    "streak": "連続日数"
   },
   "mySets": {
-    "title": "My Sets",
-    "noSets": "No sets yet",
-    "createFirstSet": "Create your first word set to get started!",
-    "createSet": "Create Set"
+    "title": "マイセット",
+    "noSets": "セットがありません",
+    "createFirstSet": "最初の単語セットを作成して始めましょう！",
+    "createSet": "セットを作成"
   },
   "setCard": {
-    "featured": "Featured",
-    "complete": "{{count}}/{{total}}% complete",
-    "demoInfo": "This is a demo set. Create your own set to get started!"
+    "featured": "おすすめ",
+    "complete": "{{percent}}% 完了",
+    "lastPracticed": "最後の練習: {{date}}",
+    "deleteSet": "セットを削除",
+    "deleteConfirm": "「{{setName}}」を削除してもよろしいですか？この操作は元に戻せません。",
+    "demoInfo": "これはデモセットです。自分のセットを作成して始めましょう！"
   }
 }

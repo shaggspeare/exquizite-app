@@ -85,7 +85,7 @@ export function SetCard({ set, onPress }: SetCardProps) {
   };
 
   const handlePlayPress = () => {
-    router.push(`/sets/${set.id}`);
+    router.push(`/(tabs)/sets/${set.id}`);
   };
 
   const handleDeletePress = () => {

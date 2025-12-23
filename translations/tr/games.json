@@ -1,88 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with tr translations.",
-  "chooseActivity": "Choose Activity",
-  "setNotFound": "Set not found",
-  "wordsInSet": "Words in this set",
-  "startPractice": "Start Practice",
-  "quickPractice": "Quick Practice",
+  "chooseActivity": "Etkinlik Seç",
+  "setNotFound": "Set bulunamadı",
+  "wordsInSet": "Bu setteki kelimeler",
+  "startPractice": "Pratiğe Başla",
+  "quickPractice": "Hızlı Pratik",
   "templates": {
     "flashcard": {
       "name": "Flashcard",
-      "description": "Flip to reveal translations"
+      "description": "Çevirileri görmek için çevirin"
     },
     "match": {
-      "name": "Match",
-      "description": "Drag and connect pairs"
+      "name": "Eşleştir",
+      "description": "Sürükleyin ve çiftleri bağlayın"
     },
     "quiz": {
-      "name": "Quiz",
-      "description": "Multiple choice questions"
+      "name": "Sınav",
+      "description": "Çoktan seçmeli sorular"
     },
     "fillBlank": {
-      "name": "Fill in the Blank",
-      "description": "Complete sentences with the right word",
-      "aiHints": "AI hints available"
+      "name": "Boşluk Doldur",
+      "description": "Doğru kelimeyle cümleleri tamamlayın",
+      "aiHints": "Yapay zeka ipuçları mevcut"
     }
   },
   "flashcard": {
-    "title": "Flashcards: {{setName}}",
-    "tapToFlip": "Tap to flip",
-    "clickToFlip": "Click to flip",
-    "complete": "Complete"
+    "title": "Flashcardlar: {{setName}}",
+    "tapToFlip": "Çevirmek için dokunun",
+    "clickToFlip": "Çevirmek için tıklayın",
+    "complete": "Tamamlandı"
   },
   "quiz": {
-    "title": "Quiz: {{setName}}",
-    "question": "Question {{current}} / {{total}}",
-    "translate": "Translate:",
-    "nextQuestion": "Next Question",
-    "loadingQuiz": "Loading quiz...",
+    "title": "Sınav: {{setName}}",
+    "question": "Soru {{current}} / {{total}}",
+    "translate": "Çevir:",
+    "nextQuestion": "Sonraki Soru",
+    "loadingQuiz": "Sınav yükleniyor...",
     "complete": {
-      "title": "Quiz Complete!",
-      "score": "You scored {{score}}/{{total}} ({{percentage}}%)"
+      "title": "Sınav Tamamlandı!",
+      "score": "{{score}}/{{total}} puan aldınız ({{percentage}}%)"
     }
   },
   "match": {
-    "title": "Match: {{setName}}",
-    "words": "Words",
-    "translations": "Translations",
+    "title": "Eşleştir: {{setName}}",
+    "words": "Kelimeler",
+    "translations": "Çeviriler",
     "complete": {
-      "title": "Congratulations!",
-      "message": "You completed the match game in {{time}}!"
+      "title": "Tebrikler!",
+      "message": "Eşleştirme oyununu {{time}} içinde tamamladınız!"
     }
   },
   "fillBlank": {
-    "title": "Fill in the Blank: {{setName}}",
-    "question": "Question {{current}} / {{total}}",
-    "translation": "Translation:",
-    "fillPrompt": "Fill in the blank:",
-    "choosePrompt": "Choose the correct word:",
-    "loadingNext": "Loading next question...",
-    "generatingSentences": "Generating sentences...",
-    "correctAnswer": "Correct answer:",
+    "title": "Boşluk Doldur: {{setName}}",
+    "question": "Soru {{current}} / {{total}}",
+    "translation": "Çeviri:",
+    "fillPrompt": "Boşluğu doldurun:",
+    "choosePrompt": "Doğru kelimeyi seçin:",
+    "loadingNext": "Sonraki soru yükleniyor...",
+    "generatingSentences": "Cümleler oluşturuluyor...",
+    "correctAnswer": "Doğru cevap:",
     "complete": {
-      "title": "Exercise Complete!",
-      "score": "You scored {{score}}/{{total}} ({{percentage}}%)"
+      "title": "Alıştırma Tamamlandı!",
+      "score": "{{score}}/{{total}} puan aldınız ({{percentage}}%)"
     }
   },
   "home": {
-    "greeting": "Hello, {{name}}!",
-    "readyToLearn": "Ready to learn today?",
-    "noSets": "No sets yet",
-    "createFirstSet": "Create your first word set to get started!",
-    "createSet": "Create Set",
-    "featuredSets": "Featured Sets",
-    "tryThem": "Try them!",
-    "demoDescription": "Practice with these demo sets to get started"
+    "title": "Ana Sayfa",
+    "greeting": "Merhaba, {{name}}!",
+    "readyToLearn": "Bugün öğrenmeye hazır mısınız?",
+    "noSets": "Henüz set yok",
+    "createFirstSet": "Başlamak için ilk kelime setinizi oluşturun!",
+    "createSet": "Set Oluştur",
+    "featuredSets": "Öne Çıkan Setler",
+    "tryThem": "Deneyin!",
+    "demoDescription": "Başlamak için bu demo setlerle pratik yapın"
+  },
+  "dashboard": {
+    "title": "Gösterge Paneli",
+    "lastPracticed": "Son Pratik",
+    "streak": "Seri"
   },
   "mySets": {
-    "title": "My Sets",
-    "noSets": "No sets yet",
-    "createFirstSet": "Create your first word set to get started!",
-    "createSet": "Create Set"
+    "title": "Setlerim",
+    "noSets": "Henüz set yok",
+    "createFirstSet": "Başlamak için ilk kelime setinizi oluşturun!",
+    "createSet": "Set Oluştur"
   },
   "setCard": {
-    "featured": "Featured",
-    "complete": "{{count}}/{{total}}% complete",
-    "demoInfo": "This is a demo set. Create your own set to get started!"
+    "featured": "Öne Çıkan",
+    "complete": "{{percent}}% tamamlandı",
+    "lastPracticed": "Son pratik {{date}}",
+    "deleteSet": "Seti Sil",
+    "deleteConfirm": "\"{{setName}}\" setini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+    "demoInfo": "Bu bir demo seti. Başlamak için kendi setinizi oluşturun!"
   }
 }

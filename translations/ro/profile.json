@@ -1,25 +1,24 @@
 {
-  "_note": "This is a placeholder file. Please replace with ro translations.",
-  "title": "Profile",
-  "guest": "Guest",
-  "guestAccount": "Guest Account",
-  "appAccount": "App Account",
+  "title": "Profil",
+  "guest": "Invitat",
+  "guestAccount": "Cont de invitat",
+  "appAccount": "Cont aplicație",
   "stats": {
-    "sets": "Sets",
-    "words": "Words",
-    "practiced": "Practiced"
+    "sets": "Seturi",
+    "words": "Cuvinte",
+    "practiced": "Practicat"
   },
-  "progress": "Progress",
+  "progress": "Progres",
   "settings": {
-    "title": "Settings",
-    "subtitle": "App Settings",
-    "description": "Theme, languages, and preferences"
+    "title": "Setări",
+    "subtitle": "Setări aplicație",
+    "description": "Temă, limbi și preferințe"
   },
-  "yourSets": "Your Sets",
-  "noSetsYet": "No sets created yet",
+  "yourSets": "Seturile tale",
+  "noSetsYet": "Niciun set creat încă",
   "deleteSet": {
-    "title": "Delete Set",
-    "message": "Are you sure you want to delete \"{{setName}}\"?",
-    "confirm": "Delete"
+    "title": "Șterge setul",
+    "message": "Ești sigur că vrei să ștergi \"{{setName}}\"?",
+    "confirm": "Șterge"
   }
 }

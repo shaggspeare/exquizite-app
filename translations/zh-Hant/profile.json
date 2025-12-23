@@ -1,25 +1,24 @@
 {
-  "_note": "This is a placeholder file. Please replace with zh-Hant translations.",
-  "title": "Profile",
-  "guest": "Guest",
-  "guestAccount": "Guest Account",
-  "appAccount": "App Account",
+  "title": "個人資料",
+  "guest": "訪客",
+  "guestAccount": "訪客帳戶",
+  "appAccount": "應用程式帳戶",
   "stats": {
-    "sets": "Sets",
-    "words": "Words",
-    "practiced": "Practiced"
+    "sets": "集合",
+    "words": "單字",
+    "practiced": "已練習"
   },
-  "progress": "Progress",
+  "progress": "進度",
   "settings": {
-    "title": "Settings",
-    "subtitle": "App Settings",
-    "description": "Theme, languages, and preferences"
+    "title": "設定",
+    "subtitle": "應用程式設定",
+    "description": "主題、語言和偏好設定"
   },
-  "yourSets": "Your Sets",
-  "noSetsYet": "No sets created yet",
+  "yourSets": "您的集合",
+  "noSetsYet": "尚未建立集合",
   "deleteSet": {
-    "title": "Delete Set",
-    "message": "Are you sure you want to delete \"{{setName}}\"?",
-    "confirm": "Delete"
+    "title": "刪除集合",
+    "message": "確定要刪除\"{{setName}}\"嗎？",
+    "confirm": "刪除"
   }
 }

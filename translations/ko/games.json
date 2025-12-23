@@ -1,88 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with ko translations.",
-  "chooseActivity": "Choose Activity",
-  "setNotFound": "Set not found",
-  "wordsInSet": "Words in this set",
-  "startPractice": "Start Practice",
-  "quickPractice": "Quick Practice",
+  "chooseActivity": "활동 선택",
+  "setNotFound": "세트를 찾을 수 없습니다",
+  "wordsInSet": "이 세트의 단어",
+  "startPractice": "연습 시작",
+  "quickPractice": "빠른 연습",
   "templates": {
     "flashcard": {
-      "name": "Flashcard",
-      "description": "Flip to reveal translations"
+      "name": "플래시카드",
+      "description": "뒤집어서 번역 확인"
     },
     "match": {
-      "name": "Match",
-      "description": "Drag and connect pairs"
+      "name": "매칭",
+      "description": "짝을 드래그하여 연결"
     },
     "quiz": {
-      "name": "Quiz",
-      "description": "Multiple choice questions"
+      "name": "퀴즈",
+      "description": "객관식 문제"
     },
     "fillBlank": {
-      "name": "Fill in the Blank",
-      "description": "Complete sentences with the right word",
-      "aiHints": "AI hints available"
+      "name": "빈칸 채우기",
+      "description": "올바른 단어로 문장 완성",
+      "aiHints": "AI 힌트 사용 가능"
     }
   },
   "flashcard": {
-    "title": "Flashcards: {{setName}}",
-    "tapToFlip": "Tap to flip",
-    "clickToFlip": "Click to flip",
-    "complete": "Complete"
+    "title": "플래시카드: {{setName}}",
+    "tapToFlip": "탭하여 뒤집기",
+    "clickToFlip": "클릭하여 뒤집기",
+    "complete": "완료"
   },
   "quiz": {
-    "title": "Quiz: {{setName}}",
-    "question": "Question {{current}} / {{total}}",
-    "translate": "Translate:",
-    "nextQuestion": "Next Question",
-    "loadingQuiz": "Loading quiz...",
+    "title": "퀴즈: {{setName}}",
+    "question": "문제 {{current}} / {{total}}",
+    "translate": "번역:",
+    "nextQuestion": "다음 문제",
+    "loadingQuiz": "퀴즈 로딩 중...",
     "complete": {
-      "title": "Quiz Complete!",
-      "score": "You scored {{score}}/{{total}} ({{percentage}}%)"
+      "title": "퀴즈 완료!",
+      "score": "점수: {{score}}/{{total}} ({{percentage}}%)"
     }
   },
   "match": {
-    "title": "Match: {{setName}}",
-    "words": "Words",
-    "translations": "Translations",
+    "title": "매칭: {{setName}}",
+    "words": "단어",
+    "translations": "번역",
     "complete": {
-      "title": "Congratulations!",
-      "message": "You completed the match game in {{time}}!"
+      "title": "축하합니다!",
+      "message": "{{time}}에 매칭 게임을 완료했습니다!"
     }
   },
   "fillBlank": {
-    "title": "Fill in the Blank: {{setName}}",
-    "question": "Question {{current}} / {{total}}",
-    "translation": "Translation:",
-    "fillPrompt": "Fill in the blank:",
-    "choosePrompt": "Choose the correct word:",
-    "loadingNext": "Loading next question...",
-    "generatingSentences": "Generating sentences...",
-    "correctAnswer": "Correct answer:",
+    "title": "빈칸 채우기: {{setName}}",
+    "question": "문제 {{current}} / {{total}}",
+    "translation": "번역:",
+    "fillPrompt": "빈칸을 채우세요:",
+    "choosePrompt": "올바른 단어를 선택하세요:",
+    "loadingNext": "다음 문제 로딩 중...",
+    "generatingSentences": "문장 생성 중...",
+    "correctAnswer": "정답:",
     "complete": {
-      "title": "Exercise Complete!",
-      "score": "You scored {{score}}/{{total}} ({{percentage}}%)"
+      "title": "연습 완료!",
+      "score": "점수: {{score}}/{{total}} ({{percentage}}%)"
     }
   },
   "home": {
-    "greeting": "Hello, {{name}}!",
-    "readyToLearn": "Ready to learn today?",
-    "noSets": "No sets yet",
-    "createFirstSet": "Create your first word set to get started!",
-    "createSet": "Create Set",
-    "featuredSets": "Featured Sets",
-    "tryThem": "Try them!",
-    "demoDescription": "Practice with these demo sets to get started"
+    "title": "홈",
+    "greeting": "안녕하세요, {{name}}님!",
+    "readyToLearn": "오늘 학습할 준비가 되셨나요?",
+    "noSets": "세트가 없습니다",
+    "createFirstSet": "첫 번째 단어 세트를 만들어 시작하세요!",
+    "createSet": "세트 만들기",
+    "featuredSets": "추천 세트",
+    "tryThem": "시도해보세요!",
+    "demoDescription": "데모 세트로 연습해보세요"
+  },
+  "dashboard": {
+    "title": "대시보드",
+    "lastPracticed": "마지막 연습",
+    "streak": "연속"
   },
   "mySets": {
-    "title": "My Sets",
-    "noSets": "No sets yet",
-    "createFirstSet": "Create your first word set to get started!",
-    "createSet": "Create Set"
+    "title": "내 세트",
+    "noSets": "세트가 없습니다",
+    "createFirstSet": "첫 번째 단어 세트를 만들어 시작하세요!",
+    "createSet": "세트 만들기"
   },
   "setCard": {
-    "featured": "Featured",
-    "complete": "{{count}}/{{total}}% complete",
-    "demoInfo": "This is a demo set. Create your own set to get started!"
+    "featured": "추천",
+    "complete": "{{percent}}% 완료",
+    "lastPracticed": "마지막 연습: {{date}}",
+    "deleteSet": "세트 삭제",
+    "deleteConfirm": "\"{{setName}}\"을(를) 삭제하시겠습니까? 이 작업은 취소할 수 없습니다.",
+    "demoInfo": "이것은 데모 세트입니다. 자신만의 세트를 만들어 시작하세요!"
   }
 }

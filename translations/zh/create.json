@@ -1,33 +1,62 @@
 {
-  "_note": "This is a placeholder file. Please replace with zh translations.",
-  "title": "Create Set",
-  "editTitle": "Edit Set",
-  "setName": "Set Name",
-  "setNamePlaceholder": "e.g., Spanish Vocabulary",
-  "words": "Words",
-  "addWord": "Add Word",
-  "aiSuggestions": "AI Suggestions",
-  "limitReached": "Limit Reached",
-  "limitMessage": "Maximum {{max}} words per set",
+  "title": "创建集合",
+  "editTitle": "编辑集合",
+  "setName": "集合名称",
+  "setNamePlaceholder": "例如: 工作词汇",
+  "languagePair": "学习 {{target}} → {{native}}",
+  "words": "单词",
+  "addWord": "添加单词",
+  "aiSuggestions": "AI建议",
+  "limitReached": "已达限制",
+  "limitMessage": "每个集合最多{{max}}个单词",
   "errors": {
-    "fillAllFields": "Please fill in all fields",
-    "atLeastOneWord": "Please add at least one word pair",
-    "createFailed": "Failed to create set. Please try again.",
-    "networkError": "Network error. Please check your connection and try again."
+    "fillAllFields": "请填写所有字段",
+    "atLeastOneWord": "请至少添加一对单词",
+    "createFailed": "创建集合失败。请重试。",
+    "networkError": "网络错误。请检查您的连接并重试。"
   },
   "success": {
-    "created": "Set created successfully!",
-    "updated": "Set updated successfully!"
+    "created": "集合创建成功！",
+    "updated": "集合更新成功！"
   },
   "ai": {
-    "modalTitle": "AI Word Suggestions",
-    "themePlaceholder": "Theme (e.g., animals, food)",
+    "modalTitle": "AI单词建议",
+    "themePlaceholder": "主题（例如: 动物、食物）",
     "countPlaceholder": "#",
-    "countHint": "Generate up to {{max}} words (5 by default)",
-    "generatingWithContext": "Generating suggestions based on your {{count}} existing {{word}}...",
-    "generatingGeneric": "Generating suggestions with AI...",
-    "selectPrompt": "Select words to add ({{count}} selected)",
-    "noSuggestions": "No suggestions yet. Click Generate to get AI-powered word suggestions!",
-    "addSelected": "Add {{count}} {{word}}"
+    "countHint": "生成最多{{max}}个单词（默认5个）",
+    "generatingWithContext": "根据您现有的{{count}}个{{word}}生成建议中...",
+    "generatingGeneric": "使用AI生成建议中...",
+    "selectPrompt": "选择要添加的单词（已选择{{count}}个）",
+    "noSuggestions": "还没有建议。点击生成以获取AI驱动的单词建议！",
+    "addSelected": "添加{{count}}个{{word}}"
+  },
+  "bulkImport": {
+    "button": "批量导入",
+    "title": "批量导入单词",
+    "howTo": "如何导入",
+    "instructions": "在下面粘贴您的单词对，每行一个。用制表符、逗号或破折号分隔每个单词和翻译。",
+    "example": "示例:",
+    "separator": "分隔符",
+    "separators": {
+      "tab": "制表符",
+      "comma": "逗号 (,)",
+      "dash": "破折号 (-)"
+    },
+    "pasteWords": "粘贴您的单词",
+    "placeholder": "word1\ttranslation1\nword2\ttranslation2\nword3\ttranslation3",
+    "preview": "预览",
+    "previewTitle": "预览",
+    "import": "导入{{count}}个单词"
+  },
+  "languageOverride": {
+    "title": "语言设置",
+    "custom": "自定义",
+    "description": "仅为此集合覆盖默认语言。保持默认以使用全局语言设置。",
+    "usingDefaults": "使用默认语言",
+    "selectTarget": "选择目标语言",
+    "selectNative": "选择母语",
+    "targetLabel": "学习",
+    "nativeLabel": "翻译",
+    "useDefaults": "使用默认语言"
   }
 }

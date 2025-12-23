@@ -1,25 +1,24 @@
 {
-  "_note": "This is a placeholder file. Please replace with hi translations.",
-  "title": "Profile",
-  "guest": "Guest",
-  "guestAccount": "Guest Account",
-  "appAccount": "App Account",
+  "title": "प्रोफ़ाइल",
+  "guest": "अतिथि",
+  "guestAccount": "अतिथि खाता",
+  "appAccount": "ऐप खाता",
   "stats": {
-    "sets": "Sets",
-    "words": "Words",
-    "practiced": "Practiced"
+    "sets": "सेट",
+    "words": "शब्द",
+    "practiced": "अभ्यास किया"
   },
-  "progress": "Progress",
+  "progress": "प्रगति",
   "settings": {
-    "title": "Settings",
-    "subtitle": "App Settings",
-    "description": "Theme, languages, and preferences"
+    "title": "सेटिंग्स",
+    "subtitle": "ऐप सेटिंग्स",
+    "description": "थीम, भाषाएं और प्राथमिकताएं"
   },
-  "yourSets": "Your Sets",
-  "noSetsYet": "No sets created yet",
+  "yourSets": "आपके सेट",
+  "noSetsYet": "अभी तक कोई सेट नहीं बनाया गया",
   "deleteSet": {
-    "title": "Delete Set",
-    "message": "Are you sure you want to delete \"{{setName}}\"?",
-    "confirm": "Delete"
+    "title": "सेट हटाएं",
+    "message": "क्या आप निश्चित रूप से \"{{setName}}\" को हटाना चाहते हैं?",
+    "confirm": "हटाएं"
   }
 }

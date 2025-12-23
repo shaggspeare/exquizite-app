@@ -1,53 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with ca translations.",
   "buttons": {
-    "add": "Add",
-    "done": "Done",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "share": "Share",
-    "play": "Play",
-    "next": "Next",
-    "previous": "Previous",
-    "skip": "Skip",
-    "check": "Check Answer",
-    "save": "Save",
-    "saving": "Saving...",
-    "finish": "Finish",
-    "tryAgain": "Try Again",
-    "playAgain": "Play Again",
-    "showHint": "Show Hint",
-    "generate": "Generate",
-    "generating": "Generating..."
+    "add": "Afegeix",
+    "done": "Fet",
+    "cancel": "Cancel·la",
+    "delete": "Elimina",
+    "share": "Comparteix",
+    "play": "Juga",
+    "next": "Següent",
+    "previous": "Anterior",
+    "skip": "Omet",
+    "check": "Comprova resposta",
+    "save": "Desa",
+    "saving": "Desant...",
+    "finish": "Acaba",
+    "tryAgain": "Torna-ho a provar",
+    "playAgain": "Torna a jugar",
+    "showHint": "Mostra pista",
+    "generate": "Genera",
+    "generating": "Generant..."
   },
   "status": {
-    "loading": "Loading...",
-    "saving": "Saving...",
-    "generating": "Generating...",
-    "noWords": "No words in this set",
-    "success": "Success",
+    "loading": "Carregant...",
+    "saving": "Desant...",
+    "generating": "Generant...",
+    "noWords": "Cap paraula en aquest conjunt",
+    "success": "Èxit",
     "error": "Error"
   },
   "time": {
-    "never": "Never",
-    "today": "Today",
-    "yesterday": "Yesterday",
-    "daysAgo": "{{count}} days ago",
-    "lastPracticed": "Last practiced {{date}}"
+    "never": "Mai",
+    "today": "Avui",
+    "yesterday": "Ahir",
+    "daysAgo": "Fa {{count}} dies",
+    "lastPracticed": "Última pràctica {{date}}"
   },
   "counts": {
-    "word": "word",
-    "words": "words",
-    "set": "set",
-    "sets": "sets",
-    "wordCount": "{{count}} word",
-    "wordCount_other": "{{count}} words",
-    "setCount": "{{count}} set",
-    "setCount_other": "{{count}} sets",
+    "word": "paraula",
+    "words": "paraules",
+    "set": "conjunt",
+    "sets": "conjunts",
+    "wordCount": "{{count}} paraula",
+    "wordCount_other": "{{count}} paraules",
+    "setCount": "{{count}} conjunt",
+    "setCount_other": "{{count}} conjunts",
     "progress": "{{current}}/{{total}}"
   },
   "dialogs": {
-    "areYouSure": "Are you sure?",
-    "cannotUndo": "This action cannot be undone."
+    "areYouSure": "Estàs segur?",
+    "cannotUndo": "Aquesta acció no es pot desfer."
+  },
+  "sharing": {
+    "shareSet": "Comparteix conjunt",
+    "shareCode": "Codi de compartició",
+    "shareLink": "Enllaç de compartició",
+    "copyLink": "Copia l'enllaç",
+    "copied": "Copiat!",
+    "copy": "Copia",
+    "views": "Visualitzacions",
+    "copies": "Còpies",
+    "generatingLink": "Generant enllaç de compartició...",
+    "linkInfo": "Qualsevol amb aquest enllaç pot veure i copiar el teu conjunt",
+    "deactivateLink": "Desactiva l'enllaç de compartició",
+    "deactivateConfirm": "Estàs segur que vols desactivar aquest enllaç de compartició? Qualsevol amb l'enllaç ja no podrà accedir a aquest conjunt.",
+    "deactivate": "Desactiva",
+    "linkDeactivated": "L'enllaç de compartició s'ha desactivat",
+    "shareError": "No s'ha pogut generar l'enllaç de compartició. Torna-ho a provar.",
+    "copyError": "No s'ha pogut copiar l'enllaç al porta-retalls",
+    "linkCopied": "Enllaç copiat",
+    "linkCopiedToClipboard": "Enllaç de compartició copiat al porta-retalls"
+  },
+  "tour": {
+    "skip": "Omet",
+    "next": "Següent",
+    "back": "Enrere",
+    "getStarted": "Comença",
+    "slides": {
+      "vocabulary": {
+        "title": "Construeix el teu vocabulari",
+        "description": "Afegeix paraules manualment o utilitza IA per generar conjunts de vocabulari temàtics. Crea fins a 20 paraules per conjunt."
+      },
+      "organize": {
+        "title": "Organitza el teu aprenentatge",
+        "description": "Agrupa paraules en conjunts temàtics com \"Menjar espanyol\" o \"Viatge alemany\". Anomena els teus conjunts per a un accés fàcil."
+      },
+      "learn": {
+        "title": "Aprèn a la teva manera",
+        "description": "Practica amb 4 modes de joc: Flashcards, Emparejar, Qüestionari de tria múltiple i Omple els espais."
+      },
+      "share": {
+        "title": "Comparteix els teus coneixements",
+        "description": "Genera enllaços de compartició pels teus conjunts. Altres poden veure'ls i copiar-los a la seva biblioteca."
+      }
+    }
   }
 }

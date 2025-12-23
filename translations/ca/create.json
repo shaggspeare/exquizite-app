@@ -1,33 +1,62 @@
 {
-  "_note": "This is a placeholder file. Please replace with ca translations.",
-  "title": "Create Set",
-  "editTitle": "Edit Set",
-  "setName": "Set Name",
-  "setNamePlaceholder": "e.g., Spanish Vocabulary",
-  "words": "Words",
-  "addWord": "Add Word",
-  "aiSuggestions": "AI Suggestions",
-  "limitReached": "Limit Reached",
-  "limitMessage": "Maximum {{max}} words per set",
+  "title": "Crea conjunt",
+  "editTitle": "Edita conjunt",
+  "setName": "Nom del conjunt",
+  "setNamePlaceholder": "p. ex. Vocabulari de treball",
+  "languagePair": "Aprenent {{target}} → {{native}}",
+  "words": "Paraules",
+  "addWord": "Afegeix paraula",
+  "aiSuggestions": "Suggeriments IA",
+  "limitReached": "Límit assolit",
+  "limitMessage": "Màxim {{max}} paraules per conjunt",
   "errors": {
-    "fillAllFields": "Please fill in all fields",
-    "atLeastOneWord": "Please add at least one word pair",
-    "createFailed": "Failed to create set. Please try again.",
-    "networkError": "Network error. Please check your connection and try again."
+    "fillAllFields": "Omple tots els camps",
+    "atLeastOneWord": "Afegeix almenys una parella de paraules",
+    "createFailed": "No s'ha pogut crear el conjunt. Torna-ho a provar.",
+    "networkError": "Error de xarxa. Comprova la teva connexió i torna-ho a provar."
   },
   "success": {
-    "created": "Set created successfully!",
-    "updated": "Set updated successfully!"
+    "created": "Conjunt creat amb èxit!",
+    "updated": "Conjunt actualitzat amb èxit!"
   },
   "ai": {
-    "modalTitle": "AI Word Suggestions",
-    "themePlaceholder": "Theme (e.g., animals, food)",
+    "modalTitle": "Suggeriments de paraules IA",
+    "themePlaceholder": "Tema (p. ex. animals, menjar)",
     "countPlaceholder": "#",
-    "countHint": "Generate up to {{max}} words (5 by default)",
-    "generatingWithContext": "Generating suggestions based on your {{count}} existing {{word}}...",
-    "generatingGeneric": "Generating suggestions with AI...",
-    "selectPrompt": "Select words to add ({{count}} selected)",
-    "noSuggestions": "No suggestions yet. Click Generate to get AI-powered word suggestions!",
-    "addSelected": "Add {{count}} {{word}}"
+    "countHint": "Genera fins a {{max}} paraules (5 per defecte)",
+    "generatingWithContext": "Generant suggeriments basats en les teves {{count}} {{word}} existents...",
+    "generatingGeneric": "Generant suggeriments amb IA...",
+    "selectPrompt": "Selecciona paraules per afegir ({{count}} seleccionades)",
+    "noSuggestions": "Cap suggeriment encara. Fes clic a Genera per obtenir suggeriments de paraules generats per IA!",
+    "addSelected": "Afegeix {{count}} {{word}}"
+  },
+  "bulkImport": {
+    "button": "Importació massiva",
+    "title": "Importació massiva de paraules",
+    "howTo": "Com importar",
+    "instructions": "Enganxa les teves parelles de paraules a continuació, una per línia. Separa cada paraula de la seva traducció amb una tabulació, coma o guió.",
+    "example": "Exemple:",
+    "separator": "Separador",
+    "separators": {
+      "tab": "Tabulació",
+      "comma": "Coma (,)",
+      "dash": "Guió (-)"
+    },
+    "pasteWords": "Enganxa les teves paraules",
+    "placeholder": "paraula1\ttraducció1\nparaula2\ttraducció2\nparaula3\ttraducció3",
+    "preview": "Vista prèvia",
+    "previewTitle": "Vista prèvia",
+    "import": "Importa {{count}} paraules"
+  },
+  "languageOverride": {
+    "title": "Configuració d'idioma",
+    "custom": "Personalitzat",
+    "description": "Sobreescriu els idiomes predeterminats només per aquest conjunt. Deixa predeterminat per utilitzar la configuració d'idioma global.",
+    "usingDefaults": "Utilitzant idiomes predeterminats",
+    "selectTarget": "Selecciona idioma objectiu",
+    "selectNative": "Selecciona idioma nadiu",
+    "targetLabel": "Aprenentatge",
+    "nativeLabel": "Traduccions",
+    "useDefaults": "Utilitza idiomes predeterminats"
   }
 }

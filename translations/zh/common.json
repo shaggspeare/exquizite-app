@@ -1,53 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with zh translations.",
   "buttons": {
-    "add": "Add",
-    "done": "Done",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "share": "Share",
-    "play": "Play",
-    "next": "Next",
-    "previous": "Previous",
-    "skip": "Skip",
-    "check": "Check Answer",
-    "save": "Save",
-    "saving": "Saving...",
-    "finish": "Finish",
-    "tryAgain": "Try Again",
-    "playAgain": "Play Again",
-    "showHint": "Show Hint",
-    "generate": "Generate",
-    "generating": "Generating..."
+    "add": "添加",
+    "done": "完成",
+    "cancel": "取消",
+    "delete": "删除",
+    "share": "分享",
+    "play": "播放",
+    "next": "下一个",
+    "previous": "上一个",
+    "skip": "跳过",
+    "check": "检查答案",
+    "save": "保存",
+    "saving": "保存中...",
+    "finish": "完成",
+    "tryAgain": "再试一次",
+    "playAgain": "再玩一次",
+    "showHint": "显示提示",
+    "generate": "生成",
+    "generating": "生成中..."
   },
   "status": {
-    "loading": "Loading...",
-    "saving": "Saving...",
-    "generating": "Generating...",
-    "noWords": "No words in this set",
-    "success": "Success",
-    "error": "Error"
+    "loading": "加载中...",
+    "saving": "保存中...",
+    "generating": "生成中...",
+    "noWords": "此集合中没有单词",
+    "success": "成功",
+    "error": "错误"
   },
   "time": {
-    "never": "Never",
-    "today": "Today",
-    "yesterday": "Yesterday",
-    "daysAgo": "{{count}} days ago",
-    "lastPracticed": "Last practiced {{date}}"
+    "never": "从未",
+    "today": "今天",
+    "yesterday": "昨天",
+    "daysAgo": "{{count}}天前",
+    "lastPracticed": "上次练习: {{date}}"
   },
   "counts": {
-    "word": "word",
-    "words": "words",
-    "set": "set",
-    "sets": "sets",
-    "wordCount": "{{count}} word",
-    "wordCount_other": "{{count}} words",
-    "setCount": "{{count}} set",
-    "setCount_other": "{{count}} sets",
+    "word": "单词",
+    "words": "单词",
+    "set": "集合",
+    "sets": "集合",
+    "wordCount": "{{count}}个单词",
+    "wordCount_other": "{{count}}个单词",
+    "setCount": "{{count}}个集合",
+    "setCount_other": "{{count}}个集合",
     "progress": "{{current}}/{{total}}"
   },
   "dialogs": {
-    "areYouSure": "Are you sure?",
-    "cannotUndo": "This action cannot be undone."
+    "areYouSure": "确定吗？",
+    "cannotUndo": "此操作无法撤销。"
+  },
+  "sharing": {
+    "shareSet": "分享集合",
+    "shareCode": "分享码",
+    "shareLink": "分享链接",
+    "copyLink": "复制链接",
+    "copied": "已复制！",
+    "copy": "复制",
+    "views": "浏览量",
+    "copies": "复制数",
+    "generatingLink": "正在生成分享链接...",
+    "linkInfo": "拥有此链接的任何人都可以查看和复制您的集合",
+    "deactivateLink": "停用分享链接",
+    "deactivateConfirm": "确定要停用此分享链接吗？拥有链接的人将无法再访问此集合。",
+    "deactivate": "停用",
+    "linkDeactivated": "分享链接已停用",
+    "shareError": "生成分享链接失败。请重试。",
+    "copyError": "复制链接失败",
+    "linkCopied": "链接已复制",
+    "linkCopiedToClipboard": "分享链接已复制到剪贴板"
+  },
+  "tour": {
+    "skip": "跳过",
+    "next": "下一个",
+    "back": "返回",
+    "getStarted": "开始",
+    "slides": {
+      "vocabulary": {
+        "title": "构建您的词汇",
+        "description": "手动添加单词或使用AI生成主题词汇集。每个集合最多可创建20个单词。"
+      },
+      "organize": {
+        "title": "整理您的学习",
+        "description": "将单词分组为主题集合。为集合命名以便快速访问。"
+      },
+      "learn": {
+        "title": "按您的方式学习",
+        "description": "通过4种游戏模式练习：闪卡、配对、选择题测验和填空。"
+      },
+      "share": {
+        "title": "分享您的知识",
+        "description": "为您的集合生成分享链接。其他人可以查看并将其复制到自己的库中。"
+      }
+    }
   }
 }

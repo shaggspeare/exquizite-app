@@ -1,33 +1,62 @@
 {
-  "_note": "This is a placeholder file. Please replace with th translations.",
-  "title": "Create Set",
-  "editTitle": "Edit Set",
-  "setName": "Set Name",
-  "setNamePlaceholder": "e.g., Spanish Vocabulary",
-  "words": "Words",
-  "addWord": "Add Word",
-  "aiSuggestions": "AI Suggestions",
-  "limitReached": "Limit Reached",
-  "limitMessage": "Maximum {{max}} words per set",
+  "title": "สร้างชุด",
+  "editTitle": "แก้ไขชุด",
+  "setName": "ชื่อชุด",
+  "setNamePlaceholder": "เช่น: คำศัพท์งาน",
+  "languagePair": "กำลังเรียน {{target}} → {{native}}",
+  "words": "คำ",
+  "addWord": "เพิ่มคำ",
+  "aiSuggestions": "คำแนะนำ AI",
+  "limitReached": "ถึงขีดจำกัด",
+  "limitMessage": "สูงสุด {{max}} คำต่อชุด",
   "errors": {
-    "fillAllFields": "Please fill in all fields",
-    "atLeastOneWord": "Please add at least one word pair",
-    "createFailed": "Failed to create set. Please try again.",
-    "networkError": "Network error. Please check your connection and try again."
+    "fillAllFields": "โปรดกรอกทุกช่อง",
+    "atLeastOneWord": "โปรดเพิ่มอย่างน้อยหนึ่งคู่คำ",
+    "createFailed": "สร้างชุดไม่สำเร็จ โปรดลองอีกครั้ง",
+    "networkError": "ข้อผิดพลาดเครือข่าย โปรดตรวจสอบการเชื่อมต่อและลองอีกครั้ง"
   },
   "success": {
-    "created": "Set created successfully!",
-    "updated": "Set updated successfully!"
+    "created": "สร้างชุดสำเร็จ!",
+    "updated": "อัปเดตชุดสำเร็จ!"
   },
   "ai": {
-    "modalTitle": "AI Word Suggestions",
-    "themePlaceholder": "Theme (e.g., animals, food)",
+    "modalTitle": "คำแนะนำคำ AI",
+    "themePlaceholder": "หัวข้อ (เช่น: สัตว์, อาหาร)",
     "countPlaceholder": "#",
-    "countHint": "Generate up to {{max}} words (5 by default)",
-    "generatingWithContext": "Generating suggestions based on your {{count}} existing {{word}}...",
-    "generatingGeneric": "Generating suggestions with AI...",
-    "selectPrompt": "Select words to add ({{count}} selected)",
-    "noSuggestions": "No suggestions yet. Click Generate to get AI-powered word suggestions!",
-    "addSelected": "Add {{count}} {{word}}"
+    "countHint": "สร้างได้สูงสุด {{max}} คำ (ค่าเริ่มต้น 5)",
+    "generatingWithContext": "กำลังสร้างคำแนะนำตาม {{count}} {{word}} ที่มีอยู่ของคุณ...",
+    "generatingGeneric": "กำลังสร้างคำแนะนำด้วย AI...",
+    "selectPrompt": "เลือกคำที่จะเพิ่ม (เลือก {{count}} คำ)",
+    "noSuggestions": "ยังไม่มีคำแนะนำ คลิกสร้างเพื่อรับคำแนะนำคำที่ขับเคลื่อนด้วย AI!",
+    "addSelected": "เพิ่ม {{count}} {{word}}"
+  },
+  "bulkImport": {
+    "button": "นำเข้าจำนวนมาก",
+    "title": "นำเข้าคำจำนวนมาก",
+    "howTo": "วิธีการนำเข้า",
+    "instructions": "วางคู่คำของคุณด้านล่าง หนึ่งคู่ต่อบรรทัด แยกแต่ละคำจากคำแปลด้วยแท็บ, จุลภาค หรือเครื่องหมายขีด",
+    "example": "ตัวอย่าง:",
+    "separator": "ตัวแยก",
+    "separators": {
+      "tab": "แท็บ",
+      "comma": "จุลภาค (,)",
+      "dash": "เครื่องหมายขีด (-)"
+    },
+    "pasteWords": "วางคำของคุณ",
+    "placeholder": "word1\ttranslation1\nword2\ttranslation2\nword3\ttranslation3",
+    "preview": "ดูตัวอย่าง",
+    "previewTitle": "ดูตัวอย่าง",
+    "import": "นำเข้า {{count}} คำ"
+  },
+  "languageOverride": {
+    "title": "การตั้งค่าภาษา",
+    "custom": "กำหนดเอง",
+    "description": "แทนที่ภาษาเริ่มต้นสำหรับชุดนี้เท่านั้น เว้นว่างไว้เป็นค่าเริ่มต้นเพื่อใช้การตั้งค่าภาษาทั่วโลกของคุณ",
+    "usingDefaults": "ใช้ภาษาเริ่มต้น",
+    "selectTarget": "เลือกภาษาเป้าหมาย",
+    "selectNative": "เลือกภาษาแม่",
+    "targetLabel": "การเรียนรู้",
+    "nativeLabel": "คำแปล",
+    "useDefaults": "ใช้ภาษาเริ่มต้น"
   }
 }

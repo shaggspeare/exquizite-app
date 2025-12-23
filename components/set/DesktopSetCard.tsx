@@ -76,7 +76,7 @@ export function DesktopSetCard({ set, compact = false }: DesktopSetCardProps) {
     <View style={[styles.horizontalContainer, compact && styles.compactContainer]}>
       <TouchableOpacity
         style={styles.cardWrapper}
-        onPress={() => router.push(`/sets/${set.id}`)}
+        onPress={() => router.push(`/(tabs)/sets/${set.id}`)}
         activeOpacity={0.9}
       >
         {/* Featured badge - absolutely positioned outside gradient */}
@@ -142,7 +142,7 @@ export function DesktopSetCard({ set, compact = false }: DesktopSetCardProps) {
         <View style={styles.actionsColumn}>
           <TouchableOpacity
             style={[styles.playButton, { backgroundColor: colors.primary }]}
-            onPress={() => router.push(`/sets/${set.id}/play/template`)}
+            onPress={() => router.push(`/(tabs)/sets/${set.id}/play/template`)}
           >
             <Ionicons name="play" size={18} color="#FFFFFF" />
             <Text style={styles.playButtonText}>{t('common:buttons.play')}</Text>

@@ -1,88 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with ca translations.",
-  "chooseActivity": "Choose Activity",
-  "setNotFound": "Set not found",
-  "wordsInSet": "Words in this set",
-  "startPractice": "Start Practice",
-  "quickPractice": "Quick Practice",
+  "chooseActivity": "Tria activitat",
+  "setNotFound": "Conjunt no trobat",
+  "wordsInSet": "Paraules en aquest conjunt",
+  "startPractice": "Comença pràctica",
+  "quickPractice": "Pràctica ràpida",
   "templates": {
     "flashcard": {
       "name": "Flashcard",
-      "description": "Flip to reveal translations"
+      "description": "Gira per revelar traduccions"
     },
     "match": {
-      "name": "Match",
-      "description": "Drag and connect pairs"
+      "name": "Emparejar",
+      "description": "Arrossega i connecta parelles"
     },
     "quiz": {
-      "name": "Quiz",
-      "description": "Multiple choice questions"
+      "name": "Qüestionari",
+      "description": "Preguntes de tria múltiple"
     },
     "fillBlank": {
-      "name": "Fill in the Blank",
-      "description": "Complete sentences with the right word",
-      "aiHints": "AI hints available"
+      "name": "Omple els espais",
+      "description": "Completa frases amb la paraula correcta",
+      "aiHints": "Pistes IA disponibles"
     }
   },
   "flashcard": {
     "title": "Flashcards: {{setName}}",
-    "tapToFlip": "Tap to flip",
-    "clickToFlip": "Click to flip",
-    "complete": "Complete"
+    "tapToFlip": "Toca per girar",
+    "clickToFlip": "Fes clic per girar",
+    "complete": "Completat"
   },
   "quiz": {
-    "title": "Quiz: {{setName}}",
-    "question": "Question {{current}} / {{total}}",
-    "translate": "Translate:",
-    "nextQuestion": "Next Question",
-    "loadingQuiz": "Loading quiz...",
+    "title": "Qüestionari: {{setName}}",
+    "question": "Pregunta {{current}} / {{total}}",
+    "translate": "Tradueix:",
+    "nextQuestion": "Següent pregunta",
+    "loadingQuiz": "Carregant qüestionari...",
     "complete": {
-      "title": "Quiz Complete!",
-      "score": "You scored {{score}}/{{total}} ({{percentage}}%)"
+      "title": "Qüestionari completat!",
+      "score": "Has obtingut {{score}}/{{total}} ({{percentage}}%)"
     }
   },
   "match": {
-    "title": "Match: {{setName}}",
-    "words": "Words",
-    "translations": "Translations",
+    "title": "Emparejar: {{setName}}",
+    "words": "Paraules",
+    "translations": "Traduccions",
     "complete": {
-      "title": "Congratulations!",
-      "message": "You completed the match game in {{time}}!"
+      "title": "Felicitats!",
+      "message": "Has completat el joc d'emparejar en {{time}}!"
     }
   },
   "fillBlank": {
-    "title": "Fill in the Blank: {{setName}}",
-    "question": "Question {{current}} / {{total}}",
-    "translation": "Translation:",
-    "fillPrompt": "Fill in the blank:",
-    "choosePrompt": "Choose the correct word:",
-    "loadingNext": "Loading next question...",
-    "generatingSentences": "Generating sentences...",
-    "correctAnswer": "Correct answer:",
+    "title": "Omple els espais: {{setName}}",
+    "question": "Pregunta {{current}} / {{total}}",
+    "translation": "Traducció:",
+    "fillPrompt": "Omple l'espai:",
+    "choosePrompt": "Tria la paraula correcta:",
+    "loadingNext": "Carregant següent pregunta...",
+    "generatingSentences": "Generant frases...",
+    "correctAnswer": "Resposta correcta:",
     "complete": {
-      "title": "Exercise Complete!",
-      "score": "You scored {{score}}/{{total}} ({{percentage}}%)"
+      "title": "Exercici completat!",
+      "score": "Has obtingut {{score}}/{{total}} ({{percentage}}%)"
     }
   },
   "home": {
-    "greeting": "Hello, {{name}}!",
-    "readyToLearn": "Ready to learn today?",
-    "noSets": "No sets yet",
-    "createFirstSet": "Create your first word set to get started!",
-    "createSet": "Create Set",
-    "featuredSets": "Featured Sets",
-    "tryThem": "Try them!",
-    "demoDescription": "Practice with these demo sets to get started"
+    "title": "Inici",
+    "greeting": "Hola, {{name}}!",
+    "readyToLearn": "Preparat per aprendre avui?",
+    "noSets": "Cap conjunt encara",
+    "createFirstSet": "Crea el teu primer conjunt de paraules per començar!",
+    "createSet": "Crea conjunt",
+    "featuredSets": "Conjunts destacats",
+    "tryThem": "Prova'ls!",
+    "demoDescription": "Practica amb aquests conjunts de demostració per començar"
+  },
+  "dashboard": {
+    "title": "Tauler",
+    "lastPracticed": "Última pràctica",
+    "streak": "Ratxa"
   },
   "mySets": {
-    "title": "My Sets",
-    "noSets": "No sets yet",
-    "createFirstSet": "Create your first word set to get started!",
-    "createSet": "Create Set"
+    "title": "Els meus conjunts",
+    "noSets": "Cap conjunt encara",
+    "createFirstSet": "Crea el teu primer conjunt de paraules per començar!",
+    "createSet": "Crea conjunt"
   },
   "setCard": {
-    "featured": "Featured",
-    "complete": "{{count}}/{{total}}% complete",
-    "demoInfo": "This is a demo set. Create your own set to get started!"
+    "featured": "Destacat",
+    "complete": "{{percent}}% completat",
+    "lastPracticed": "Última pràctica {{date}}",
+    "deleteSet": "Elimina conjunt",
+    "deleteConfirm": "Estàs segur que vols eliminar \"{{setName}}\"? Aquesta acció no es pot desfer.",
+    "demoInfo": "Aquest és un conjunt de demostració. Crea el teu propi conjunt per començar!"
   }
 }

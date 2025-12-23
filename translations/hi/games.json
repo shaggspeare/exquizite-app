@@ -1,88 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with hi translations.",
-  "chooseActivity": "Choose Activity",
-  "setNotFound": "Set not found",
-  "wordsInSet": "Words in this set",
-  "startPractice": "Start Practice",
-  "quickPractice": "Quick Practice",
+  "chooseActivity": "गतिविधि चुनें",
+  "setNotFound": "सेट नहीं मिला",
+  "wordsInSet": "इस सेट में शब्द",
+  "startPractice": "अभ्यास शुरू करें",
+  "quickPractice": "त्वरित अभ्यास",
   "templates": {
     "flashcard": {
-      "name": "Flashcard",
-      "description": "Flip to reveal translations"
+      "name": "फ्लैशकार्ड",
+      "description": "अनुवाद प्रकट करने के लिए पलटें"
     },
     "match": {
-      "name": "Match",
-      "description": "Drag and connect pairs"
+      "name": "मिलान",
+      "description": "जोड़ियों को खींचें और कनेक्ट करें"
     },
     "quiz": {
-      "name": "Quiz",
-      "description": "Multiple choice questions"
+      "name": "प्रश्नोत्तरी",
+      "description": "बहुविकल्पीय प्रश्न"
     },
     "fillBlank": {
-      "name": "Fill in the Blank",
-      "description": "Complete sentences with the right word",
-      "aiHints": "AI hints available"
+      "name": "रिक्त स्थान भरें",
+      "description": "सही शब्द से वाक्य पूरे करें",
+      "aiHints": "AI संकेत उपलब्ध"
     }
   },
   "flashcard": {
-    "title": "Flashcards: {{setName}}",
-    "tapToFlip": "Tap to flip",
-    "clickToFlip": "Click to flip",
-    "complete": "Complete"
+    "title": "फ्लैशकार्ड: {{setName}}",
+    "tapToFlip": "पलटने के लिए टैप करें",
+    "clickToFlip": "पलटने के लिए क्लिक करें",
+    "complete": "पूर्ण"
   },
   "quiz": {
-    "title": "Quiz: {{setName}}",
-    "question": "Question {{current}} / {{total}}",
-    "translate": "Translate:",
-    "nextQuestion": "Next Question",
-    "loadingQuiz": "Loading quiz...",
+    "title": "प्रश्नोत्तरी: {{setName}}",
+    "question": "प्रश्न {{current}} / {{total}}",
+    "translate": "अनुवाद करें:",
+    "nextQuestion": "अगला प्रश्न",
+    "loadingQuiz": "प्रश्नोत्तरी लोड हो रही है...",
     "complete": {
-      "title": "Quiz Complete!",
-      "score": "You scored {{score}}/{{total}} ({{percentage}}%)"
+      "title": "प्रश्नोत्तरी पूर्ण!",
+      "score": "आपने स्कोर किया {{score}}/{{total}} ({{percentage}}%)"
     }
   },
   "match": {
-    "title": "Match: {{setName}}",
-    "words": "Words",
-    "translations": "Translations",
+    "title": "मिलान: {{setName}}",
+    "words": "शब्द",
+    "translations": "अनुवाद",
     "complete": {
-      "title": "Congratulations!",
-      "message": "You completed the match game in {{time}}!"
+      "title": "बधाई हो!",
+      "message": "आपने {{time}} में मैचिंग गेम पूरा किया!"
     }
   },
   "fillBlank": {
-    "title": "Fill in the Blank: {{setName}}",
-    "question": "Question {{current}} / {{total}}",
-    "translation": "Translation:",
-    "fillPrompt": "Fill in the blank:",
-    "choosePrompt": "Choose the correct word:",
-    "loadingNext": "Loading next question...",
-    "generatingSentences": "Generating sentences...",
-    "correctAnswer": "Correct answer:",
+    "title": "रिक्त स्थान भरें: {{setName}}",
+    "question": "प्रश्न {{current}} / {{total}}",
+    "translation": "अनुवाद:",
+    "fillPrompt": "रिक्त स्थान भरें:",
+    "choosePrompt": "सही शब्द चुनें:",
+    "loadingNext": "अगला प्रश्न लोड हो रहा है...",
+    "generatingSentences": "वाक्य उत्पन्न हो रहे हैं...",
+    "correctAnswer": "सही उत्तर:",
     "complete": {
-      "title": "Exercise Complete!",
-      "score": "You scored {{score}}/{{total}} ({{percentage}}%)"
+      "title": "अभ्यास पूर्ण!",
+      "score": "आपने स्कोर किया {{score}}/{{total}} ({{percentage}}%)"
     }
   },
   "home": {
-    "greeting": "Hello, {{name}}!",
-    "readyToLearn": "Ready to learn today?",
-    "noSets": "No sets yet",
-    "createFirstSet": "Create your first word set to get started!",
-    "createSet": "Create Set",
-    "featuredSets": "Featured Sets",
-    "tryThem": "Try them!",
-    "demoDescription": "Practice with these demo sets to get started"
+    "title": "होम",
+    "greeting": "नमस्ते, {{name}}!",
+    "readyToLearn": "आज सीखने के लिए तैयार हैं?",
+    "noSets": "अभी तक कोई सेट नहीं",
+    "createFirstSet": "शुरू करने के लिए अपना पहला शब्द सेट बनाएं!",
+    "createSet": "सेट बनाएं",
+    "featuredSets": "विशेष सेट",
+    "tryThem": "उन्हें आज़माएं!",
+    "demoDescription": "शुरू करने के लिए इन डेमो सेटों के साथ अभ्यास करें"
+  },
+  "dashboard": {
+    "title": "डैशबोर्ड",
+    "lastPracticed": "अंतिम अभ्यास",
+    "streak": "लकीर"
   },
   "mySets": {
-    "title": "My Sets",
-    "noSets": "No sets yet",
-    "createFirstSet": "Create your first word set to get started!",
-    "createSet": "Create Set"
+    "title": "मेरे सेट",
+    "noSets": "अभी तक कोई सेट नहीं",
+    "createFirstSet": "शुरू करने के लिए अपना पहला शब्द सेट बनाएं!",
+    "createSet": "सेट बनाएं"
   },
   "setCard": {
-    "featured": "Featured",
-    "complete": "{{count}}/{{total}}% complete",
-    "demoInfo": "This is a demo set. Create your own set to get started!"
+    "featured": "विशेष",
+    "complete": "{{percent}}% पूर्ण",
+    "lastPracticed": "अंतिम अभ्यास {{date}}",
+    "deleteSet": "सेट हटाएं",
+    "deleteConfirm": "क्या आप निश्चित रूप से \"{{setName}}\" को हटाना चाहते हैं? इस क्रिया को पूर्ववत नहीं किया जा सकता।",
+    "demoInfo": "यह एक डेमो सेट है। शुरू करने के लिए अपना खुद का सेट बनाएं!"
   }
 }

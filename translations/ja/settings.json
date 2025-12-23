@@ -1,25 +1,31 @@
 {
-  "_note": "This is a placeholder file. Please replace with ja translations.",
-  "title": "Settings",
+  "title": "設定",
+  "appLanguage": {
+    "title": "アプリの言語",
+    "description": "アプリのインターフェース言語を選択してください。",
+    "label": "インターフェース言語",
+    "placeholder": "アプリの言語を選択"
+  },
   "languages": {
-    "title": "Languages",
-    "description": "Choose which languages you want to learn and translate to.",
-    "targetLanguage": "Language to Learn",
-    "targetPlaceholder": "Select language to learn",
-    "nativeLanguage": "Translate To",
-    "nativePlaceholder": "Select your native language"
+    "title": "言語設定",
+    "description": "学習言語とインターフェース言語を変更します。新しいセットはこれらの言語を使用します。",
+    "targetLanguage": "学習",
+    "targetPlaceholder": "学習する言語を選択",
+    "nativeLanguage": "インターフェースと翻訳",
+    "nativePlaceholder": "あなたの言語を選択",
+    "changeNote": "この設定を変更すると、新しい単語セットに影響します。既存のセットは元の言語を保持します。"
   },
   "appearance": {
-    "title": "Appearance",
-    "description": "Choose how the app looks. Auto will match your device's theme.",
-    "light": "Light",
-    "dark": "Dark",
-    "auto": "Auto",
-    "info": "Theme changes apply immediately to all screens"
+    "title": "外観",
+    "description": "アプリの外観を選択します。自動はデバイスのテーマに合わせます。",
+    "light": "ライト",
+    "dark": "ダーク",
+    "auto": "自動",
+    "info": "テーマの変更はすべての画面に即座に適用されます"
   },
   "mySets": {
-    "title": "My Sets",
-    "manage": "Manage your word sets. Click to expand and view words.",
-    "noSets": "No sets created yet"
+    "title": "マイセット",
+    "manage": "単語セットを管理します。クリックして展開し、単語を表示します。",
+    "noSets": "まだセットが作成されていません"
   }
 }

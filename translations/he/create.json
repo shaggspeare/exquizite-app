@@ -1,33 +1,62 @@
 {
-  "_note": "This is a placeholder file. Please replace with he translations.",
-  "title": "Create Set",
-  "editTitle": "Edit Set",
-  "setName": "Set Name",
-  "setNamePlaceholder": "e.g., Spanish Vocabulary",
-  "words": "Words",
-  "addWord": "Add Word",
-  "aiSuggestions": "AI Suggestions",
-  "limitReached": "Limit Reached",
-  "limitMessage": "Maximum {{max}} words per set",
+  "title": "צור ערכה",
+  "editTitle": "ערוך ערכה",
+  "setName": "שם ערכה",
+  "setNamePlaceholder": "לדוגמה: אוצר מילים לעבודה",
+  "languagePair": "לומד {{target}} → {{native}}",
+  "words": "מילים",
+  "addWord": "הוסף מילה",
+  "aiSuggestions": "הצעות AI",
+  "limitReached": "הגעת למגבלה",
+  "limitMessage": "מקסימום {{max}} מילים לכל ערכה",
   "errors": {
-    "fillAllFields": "Please fill in all fields",
-    "atLeastOneWord": "Please add at least one word pair",
-    "createFailed": "Failed to create set. Please try again.",
-    "networkError": "Network error. Please check your connection and try again."
+    "fillAllFields": "אנא מלא את כל השדות",
+    "atLeastOneWord": "אנא הוסף לפחות זוג מילים אחד",
+    "createFailed": "יצירת הערכה נכשלה. אנא נסה שוב.",
+    "networkError": "שגיאת רשת. אנא בדוק את החיבור שלך ונסה שוב."
   },
   "success": {
-    "created": "Set created successfully!",
-    "updated": "Set updated successfully!"
+    "created": "הערכה נוצרה בהצלחה!",
+    "updated": "הערכה עודכנה בהצלחה!"
   },
   "ai": {
-    "modalTitle": "AI Word Suggestions",
-    "themePlaceholder": "Theme (e.g., animals, food)",
+    "modalTitle": "הצעות מילים מ-AI",
+    "themePlaceholder": "נושא (לדוגמה: בעלי חיים, אוכל)",
     "countPlaceholder": "#",
-    "countHint": "Generate up to {{max}} words (5 by default)",
-    "generatingWithContext": "Generating suggestions based on your {{count}} existing {{word}}...",
-    "generatingGeneric": "Generating suggestions with AI...",
-    "selectPrompt": "Select words to add ({{count}} selected)",
-    "noSuggestions": "No suggestions yet. Click Generate to get AI-powered word suggestions!",
-    "addSelected": "Add {{count}} {{word}}"
+    "countHint": "צור עד {{max}} מילים (5 כברירת מחדל)",
+    "generatingWithContext": "יוצר הצעות על סמך {{count}} {{word}} הקיימים שלך...",
+    "generatingGeneric": "יוצר הצעות עם AI...",
+    "selectPrompt": "בחר מילים להוספה ({{count}} נבחרו)",
+    "noSuggestions": "אין הצעות עדיין. לחץ על צור כדי לקבל הצעות מילים מונעות AI!",
+    "addSelected": "הוסף {{count}} {{word}}"
+  },
+  "bulkImport": {
+    "button": "ייבוא המוני",
+    "title": "ייבוא מילים המוני",
+    "howTo": "כיצד לייבא",
+    "instructions": "הדבק את זוגות המילים שלך למטה, אחד בכל שורה. הפרד כל מילה מהתרגום שלה באמצעות טאב, פסיק או מקף.",
+    "example": "דוגמה:",
+    "separator": "מפריד",
+    "separators": {
+      "tab": "טאב",
+      "comma": "פסיק (,)",
+      "dash": "מקף (-)"
+    },
+    "pasteWords": "הדבק את המילים שלך",
+    "placeholder": "word1\ttranslation1\nword2\ttranslation2\nword3\ttranslation3",
+    "preview": "תצוגה מקדימה",
+    "previewTitle": "תצוגה מקדימה",
+    "import": "ייבא {{count}} מילים"
+  },
+  "languageOverride": {
+    "title": "הגדרות שפה",
+    "custom": "מותאם אישית",
+    "description": "עקוף את שפות ברירת המחדל עבור ערכה זו בלבד. השאר כברירת מחדל כדי להשתמש בהגדרות השפה הגלובליות שלך.",
+    "usingDefaults": "משתמש בשפות ברירת מחדל",
+    "selectTarget": "בחר שפת יעד",
+    "selectNative": "בחר שפת אם",
+    "targetLabel": "למידה",
+    "nativeLabel": "תרגומים",
+    "useDefaults": "השתמש בשפות ברירת מחדל"
   }
 }

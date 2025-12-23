@@ -3,9 +3,8 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
   interpolate,
-} from 'react-native-reanimated';
+ useSharedValue } from 'react-native-reanimated';
 import { useEffect } from 'react';
-import { useSharedValue } from 'react-native-reanimated';
 import { Spacing } from '@/lib/constants';
 
 interface TourProgressDotsProps {

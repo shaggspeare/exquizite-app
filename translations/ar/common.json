@@ -1,53 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with ar translations.",
   "buttons": {
-    "add": "Add",
-    "done": "Done",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "share": "Share",
-    "play": "Play",
-    "next": "Next",
-    "previous": "Previous",
-    "skip": "Skip",
-    "check": "Check Answer",
-    "save": "Save",
-    "saving": "Saving...",
-    "finish": "Finish",
-    "tryAgain": "Try Again",
-    "playAgain": "Play Again",
-    "showHint": "Show Hint",
-    "generate": "Generate",
-    "generating": "Generating..."
+    "add": "إضافة",
+    "done": "تم",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "share": "مشاركة",
+    "play": "تشغيل",
+    "next": "التالي",
+    "previous": "السابق",
+    "skip": "تخطي",
+    "check": "تحقق من الإجابة",
+    "save": "حفظ",
+    "saving": "جارٍ الحفظ...",
+    "finish": "إنهاء",
+    "tryAgain": "حاول مرة أخرى",
+    "playAgain": "العب مرة أخرى",
+    "showHint": "إظهار تلميح",
+    "generate": "إنشاء",
+    "generating": "جارٍ الإنشاء..."
   },
   "status": {
-    "loading": "Loading...",
-    "saving": "Saving...",
-    "generating": "Generating...",
-    "noWords": "No words in this set",
-    "success": "Success",
-    "error": "Error"
+    "loading": "جارٍ التحميل...",
+    "saving": "جارٍ الحفظ...",
+    "generating": "جارٍ الإنشاء...",
+    "noWords": "لا توجد كلمات في هذه المجموعة",
+    "success": "نجح",
+    "error": "خطأ"
   },
   "time": {
-    "never": "Never",
-    "today": "Today",
-    "yesterday": "Yesterday",
-    "daysAgo": "{{count}} days ago",
-    "lastPracticed": "Last practiced {{date}}"
+    "never": "أبدًا",
+    "today": "اليوم",
+    "yesterday": "أمس",
+    "daysAgo": "منذ {{count}} يوم",
+    "lastPracticed": "آخر ممارسة {{date}}"
   },
   "counts": {
-    "word": "word",
-    "words": "words",
-    "set": "set",
-    "sets": "sets",
-    "wordCount": "{{count}} word",
-    "wordCount_other": "{{count}} words",
-    "setCount": "{{count}} set",
-    "setCount_other": "{{count}} sets",
+    "word": "كلمة",
+    "words": "كلمات",
+    "set": "مجموعة",
+    "sets": "مجموعات",
+    "wordCount": "{{count}} كلمة",
+    "wordCount_other": "{{count}} كلمة",
+    "setCount": "{{count}} مجموعة",
+    "setCount_other": "{{count}} مجموعة",
     "progress": "{{current}}/{{total}}"
   },
   "dialogs": {
-    "areYouSure": "Are you sure?",
-    "cannotUndo": "This action cannot be undone."
+    "areYouSure": "هل أنت متأكد؟",
+    "cannotUndo": "لا يمكن التراجع عن هذا الإجراء."
+  },
+  "sharing": {
+    "shareSet": "مشاركة المجموعة",
+    "shareCode": "رمز المشاركة",
+    "shareLink": "رابط المشاركة",
+    "copyLink": "نسخ الرابط",
+    "copied": "تم النسخ!",
+    "copy": "نسخ",
+    "views": "المشاهدات",
+    "copies": "النسخ",
+    "generatingLink": "جارٍ إنشاء رابط المشاركة...",
+    "linkInfo": "يمكن لأي شخص لديه هذا الرابط عرض مجموعتك ونسخها",
+    "deactivateLink": "إلغاء تنشيط رابط المشاركة",
+    "deactivateConfirm": "هل أنت متأكد من إلغاء تنشيط رابط المشاركة هذا؟ لن يتمكن الأشخاص الذين لديهم الرابط من الوصول إلى هذه المجموعة بعد الآن.",
+    "deactivate": "إلغاء التنشيط",
+    "linkDeactivated": "تم إلغاء تنشيط رابط المشاركة",
+    "shareError": "فشل إنشاء رابط المشاركة. يرجى المحاولة مرة أخرى.",
+    "copyError": "فشل نسخ الرابط",
+    "linkCopied": "تم نسخ الرابط",
+    "linkCopiedToClipboard": "تم نسخ رابط المشاركة إلى الحافظة"
+  },
+  "tour": {
+    "skip": "تخطي",
+    "next": "التالي",
+    "back": "رجوع",
+    "getStarted": "البدء",
+    "slides": {
+      "vocabulary": {
+        "title": "بناء مفرداتك",
+        "description": "أضف الكلمات يدويًا أو استخدم الذكاء الاصطناعي لإنشاء مجموعات مفردات موضوعية. إنشاء ما يصل إلى 20 كلمة لكل مجموعة."
+      },
+      "organize": {
+        "title": "نظم تعلمك",
+        "description": "قم بتجميع الكلمات في مجموعات موضوعية. قم بتسمية مجموعاتك لسهولة الوصول."
+      },
+      "learn": {
+        "title": "تعلم بطريقتك",
+        "description": "تدرب مع 4 أوضاع لعبة: البطاقات التعليمية، مطابقة الأزواج، اختبار متعدد الخيارات، وملء الفراغ."
+      },
+      "share": {
+        "title": "شارك معرفتك",
+        "description": "قم بإنشاء روابط مشاركة لمجموعاتك. يمكن للآخرين عرضها ونسخها إلى مكتبتهم."
+      }
+    }
   }
 }

@@ -1,53 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with hi translations.",
   "buttons": {
-    "add": "Add",
-    "done": "Done",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "share": "Share",
-    "play": "Play",
-    "next": "Next",
-    "previous": "Previous",
-    "skip": "Skip",
-    "check": "Check Answer",
-    "save": "Save",
-    "saving": "Saving...",
-    "finish": "Finish",
-    "tryAgain": "Try Again",
-    "playAgain": "Play Again",
-    "showHint": "Show Hint",
-    "generate": "Generate",
-    "generating": "Generating..."
+    "add": "जोड़ें",
+    "done": "पूर्ण",
+    "cancel": "रद्द करें",
+    "delete": "हटाएं",
+    "share": "साझा करें",
+    "play": "चलाएं",
+    "next": "अगला",
+    "previous": "पिछला",
+    "skip": "छोड़ें",
+    "check": "उत्तर जांचें",
+    "save": "सहेजें",
+    "saving": "सहेज रहे हैं...",
+    "finish": "समाप्त",
+    "tryAgain": "पुनः प्रयास करें",
+    "playAgain": "फिर से खेलें",
+    "showHint": "संकेत दिखाएं",
+    "generate": "उत्पन्न करें",
+    "generating": "उत्पन्न हो रहा है..."
   },
   "status": {
-    "loading": "Loading...",
-    "saving": "Saving...",
-    "generating": "Generating...",
-    "noWords": "No words in this set",
-    "success": "Success",
-    "error": "Error"
+    "loading": "लोड हो रहा है...",
+    "saving": "सहेज रहे हैं...",
+    "generating": "उत्पन्न हो रहा है...",
+    "noWords": "इस सेट में कोई शब्द नहीं",
+    "success": "सफलता",
+    "error": "त्रुटि"
   },
   "time": {
-    "never": "Never",
-    "today": "Today",
-    "yesterday": "Yesterday",
-    "daysAgo": "{{count}} days ago",
-    "lastPracticed": "Last practiced {{date}}"
+    "never": "कभी नहीं",
+    "today": "आज",
+    "yesterday": "कल",
+    "daysAgo": "{{count}} दिन पहले",
+    "lastPracticed": "अंतिम अभ्यास {{date}}"
   },
   "counts": {
-    "word": "word",
-    "words": "words",
-    "set": "set",
-    "sets": "sets",
-    "wordCount": "{{count}} word",
-    "wordCount_other": "{{count}} words",
-    "setCount": "{{count}} set",
-    "setCount_other": "{{count}} sets",
+    "word": "शब्द",
+    "words": "शब्द",
+    "set": "सेट",
+    "sets": "सेट",
+    "wordCount": "{{count}} शब्द",
+    "wordCount_other": "{{count}} शब्द",
+    "setCount": "{{count}} सेट",
+    "setCount_other": "{{count}} सेट",
     "progress": "{{current}}/{{total}}"
   },
   "dialogs": {
-    "areYouSure": "Are you sure?",
-    "cannotUndo": "This action cannot be undone."
+    "areYouSure": "क्या आप निश्चित हैं?",
+    "cannotUndo": "इस क्रिया को पूर्ववत नहीं किया जा सकता।"
+  },
+  "sharing": {
+    "shareSet": "सेट साझा करें",
+    "shareCode": "साझा कोड",
+    "shareLink": "साझा लिंक",
+    "copyLink": "लिंक कॉपी करें",
+    "copied": "कॉपी किया गया!",
+    "copy": "कॉपी करें",
+    "views": "दृश्य",
+    "copies": "प्रतियां",
+    "generatingLink": "साझा लिंक उत्पन्न हो रहा है...",
+    "linkInfo": "इस लिंक वाला कोई भी व्यक्ति आपके सेट को देख और कॉपी कर सकता है",
+    "deactivateLink": "साझा लिंक निष्क्रिय करें",
+    "deactivateConfirm": "क्या आप निश्चित रूप से इस साझा लिंक को निष्क्रिय करना चाहते हैं? लिंक वाले लोग अब इस सेट तक नहीं पहुंच पाएंगे।",
+    "deactivate": "निष्क्रिय करें",
+    "linkDeactivated": "साझा लिंक निष्क्रिय कर दिया गया",
+    "shareError": "साझा लिंक उत्पन्न करने में विफल। कृपया पुनः प्रयास करें।",
+    "copyError": "लिंक कॉपी करने में विफल",
+    "linkCopied": "लिंक कॉपी किया गया",
+    "linkCopiedToClipboard": "साझा लिंक क्लिपबोर्ड पर कॉपी किया गया"
+  },
+  "tour": {
+    "skip": "छोड़ें",
+    "next": "अगला",
+    "back": "पीछे",
+    "getStarted": "शुरू करें",
+    "slides": {
+      "vocabulary": {
+        "title": "अपनी शब्दावली बनाएं",
+        "description": "मैन्युअल रूप से शब्द जोड़ें या विषय-आधारित शब्दावली सेट उत्पन्न करने के लिए AI का उपयोग करें। प्रति सेट 20 शब्दों तक बनाएं।"
+      },
+      "organize": {
+        "title": "अपने सीखने को व्यवस्थित करें",
+        "description": "शब्दों को विषय-आधारित सेटों में समूहित करें। आसान पहुंच के लिए अपने सेटों का नाम रखें।"
+      },
+      "learn": {
+        "title": "अपने तरीके से सीखें",
+        "description": "4 गेम मोड के साथ अभ्यास करें: फ्लैशकार्ड, जोड़ी मिलाएं, बहुविकल्पीय प्रश्नोत्तरी, और रिक्त स्थान भरें।"
+      },
+      "share": {
+        "title": "अपना ज्ञान साझा करें",
+        "description": "अपने सेटों के लिए साझा लिंक उत्पन्न करें। अन्य लोग उन्हें देख सकते हैं और अपनी लाइब्रेरी में कॉपी कर सकते हैं।"
+      }
+    }
   }
 }

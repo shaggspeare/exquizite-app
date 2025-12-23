@@ -1,25 +1,31 @@
 {
-  "_note": "This is a placeholder file. Please replace with tr translations.",
-  "title": "Settings",
+  "title": "Ayarlar",
+  "appLanguage": {
+    "title": "Uygulama Dili",
+    "description": "Uygulama arayüzü için dili seçin.",
+    "label": "Arayüz Dili",
+    "placeholder": "Uygulama dilini seçin"
+  },
   "languages": {
-    "title": "Languages",
-    "description": "Choose which languages you want to learn and translate to.",
-    "targetLanguage": "Language to Learn",
-    "targetPlaceholder": "Select language to learn",
-    "nativeLanguage": "Translate To",
-    "nativePlaceholder": "Select your native language"
+    "title": "Dil Ayarları",
+    "description": "Öğrenme ve arayüz dilinizi değiştirin. Yeni setler bu dilleri kullanacaktır.",
+    "targetLanguage": "Öğrenme",
+    "targetPlaceholder": "Öğrenilecek dili seçin",
+    "nativeLanguage": "Arayüz ve Çeviriler",
+    "nativePlaceholder": "Dilinizi seçin",
+    "changeNote": "Bu ayarların değiştirilmesi yeni kelime setlerini etkileyecektir. Mevcut setleriniz orijinal dillerini koruyacaktır."
   },
   "appearance": {
-    "title": "Appearance",
-    "description": "Choose how the app looks. Auto will match your device's theme.",
-    "light": "Light",
-    "dark": "Dark",
-    "auto": "Auto",
-    "info": "Theme changes apply immediately to all screens"
+    "title": "Görünüm",
+    "description": "Uygulamanın nasıl göründüğünü seçin. Otomatik, cihazınızın temasıyla eşleşecektir.",
+    "light": "Açık",
+    "dark": "Koyu",
+    "auto": "Otomatik",
+    "info": "Tema değişiklikleri tüm ekranlara anında uygulanır"
   },
   "mySets": {
-    "title": "My Sets",
-    "manage": "Manage your word sets. Click to expand and view words.",
-    "noSets": "No sets created yet"
+    "title": "Setlerim",
+    "manage": "Kelime setlerinizi yönetin. Kelimeleri genişletmek ve görmek için tıklayın.",
+    "noSets": "Henüz set oluşturulmadı"
   }
 }

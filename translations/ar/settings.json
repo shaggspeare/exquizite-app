@@ -1,25 +1,31 @@
 {
-  "_note": "This is a placeholder file. Please replace with ar translations.",
-  "title": "Settings",
+  "title": "الإعدادات",
+  "appLanguage": {
+    "title": "لغة التطبيق",
+    "description": "اختر لغة واجهة التطبيق.",
+    "label": "لغة الواجهة",
+    "placeholder": "حدد لغة التطبيق"
+  },
   "languages": {
-    "title": "Languages",
-    "description": "Choose which languages you want to learn and translate to.",
-    "targetLanguage": "Language to Learn",
-    "targetPlaceholder": "Select language to learn",
-    "nativeLanguage": "Translate To",
-    "nativePlaceholder": "Select your native language"
+    "title": "إعدادات اللغة",
+    "description": "غيّر لغة التعلم ولغة الواجهة. ستستخدم المجموعات الجديدة هذه اللغات.",
+    "targetLanguage": "التعلم",
+    "targetPlaceholder": "حدد اللغة المراد تعلمها",
+    "nativeLanguage": "الواجهة والترجمات",
+    "nativePlaceholder": "حدد لغتك",
+    "changeNote": "سيؤثر تغيير هذه الإعدادات على مجموعات الكلمات الجديدة. ستحتفظ مجموعاتك الحالية بلغاتها الأصلية."
   },
   "appearance": {
-    "title": "Appearance",
-    "description": "Choose how the app looks. Auto will match your device's theme.",
-    "light": "Light",
-    "dark": "Dark",
-    "auto": "Auto",
-    "info": "Theme changes apply immediately to all screens"
+    "title": "المظهر",
+    "description": "اختر شكل التطبيق. سيتطابق الوضع التلقائي مع سمة جهازك.",
+    "light": "فاتح",
+    "dark": "داكن",
+    "auto": "تلقائي",
+    "info": "يتم تطبيق تغييرات السمة على الفور على جميع الشاشات"
   },
   "mySets": {
-    "title": "My Sets",
-    "manage": "Manage your word sets. Click to expand and view words.",
-    "noSets": "No sets created yet"
+    "title": "مجموعاتي",
+    "manage": "إدارة مجموعات الكلمات الخاصة بك. انقر للتوسيع وعرض الكلمات.",
+    "noSets": "لم يتم إنشاء مجموعات بعد"
   }
 }

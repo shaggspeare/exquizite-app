@@ -134,7 +134,7 @@ export default function SetDetailScreen() {
       >
         <Button
           title={t('startPractice')}
-          onPress={() => router.push(`/sets/${id}/play/template`)}
+          onPress={() => router.push(`/(tabs)/sets/${id}/play/template`)}
         />
       </View>
     </SafeAreaView>

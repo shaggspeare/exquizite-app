@@ -1,25 +1,31 @@
 {
-  "_note": "This is a placeholder file. Please replace with zh-Hant translations.",
-  "title": "Settings",
+  "title": "設定",
+  "appLanguage": {
+    "title": "應用程式語言",
+    "description": "選擇應用程式介面語言。",
+    "label": "介面語言",
+    "placeholder": "選擇應用程式語言"
+  },
   "languages": {
-    "title": "Languages",
-    "description": "Choose which languages you want to learn and translate to.",
-    "targetLanguage": "Language to Learn",
-    "targetPlaceholder": "Select language to learn",
-    "nativeLanguage": "Translate To",
-    "nativePlaceholder": "Select your native language"
+    "title": "語言設定",
+    "description": "變更學習語言和介面語言。新集合將使用這些語言。",
+    "targetLanguage": "學習",
+    "targetPlaceholder": "選擇要學習的語言",
+    "nativeLanguage": "介面與翻譯",
+    "nativePlaceholder": "選擇您的語言",
+    "changeNote": "變更這些設定將影響新的單字集合。現有集合將保持其原始語言。"
   },
   "appearance": {
-    "title": "Appearance",
-    "description": "Choose how the app looks. Auto will match your device's theme.",
-    "light": "Light",
-    "dark": "Dark",
-    "auto": "Auto",
-    "info": "Theme changes apply immediately to all screens"
+    "title": "外觀",
+    "description": "選擇應用程式外觀。自動將符合您的裝置主題。",
+    "light": "淺色",
+    "dark": "深色",
+    "auto": "自動",
+    "info": "主題變更立即套用於所有畫面"
   },
   "mySets": {
-    "title": "My Sets",
-    "manage": "Manage your word sets. Click to expand and view words.",
-    "noSets": "No sets created yet"
+    "title": "我的集合",
+    "manage": "管理您的單字集合。點選展開並檢視單字。",
+    "noSets": "尚未建立集合"
   }
 }

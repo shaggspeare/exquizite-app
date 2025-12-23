@@ -137,7 +137,7 @@ export default function TemplateSelectionScreen() {
   const templates = getTemplates(t);
 
   const handleSelectTemplate = (template: GameTemplate) => {
-    router.push(`/sets/${id}/play/${template.route}`);
+    router.push(`/(tabs)/sets/${id}/play/${template.route}`);
   };
 
   if (isDesktop) {

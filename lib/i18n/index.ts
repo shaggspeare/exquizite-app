@@ -39,6 +39,104 @@ import ruProfile from '@/translations/ru/profile.json';
 import ruCreate from '@/translations/ru/create.json';
 import ruAuth from '@/translations/ru/auth.json';
 
+import frCommon from '@/translations/fr/common.json';
+import frSettings from '@/translations/fr/settings.json';
+import frGames from '@/translations/fr/games.json';
+import frProfile from '@/translations/fr/profile.json';
+import frCreate from '@/translations/fr/create.json';
+import frAuth from '@/translations/fr/auth.json';
+
+import itCommon from '@/translations/it/common.json';
+import itSettings from '@/translations/it/settings.json';
+import itGames from '@/translations/it/games.json';
+import itProfile from '@/translations/it/profile.json';
+import itCreate from '@/translations/it/create.json';
+import itAuth from '@/translations/it/auth.json';
+
+import ptCommon from '@/translations/pt/common.json';
+import ptSettings from '@/translations/pt/settings.json';
+import ptGames from '@/translations/pt/games.json';
+import ptProfile from '@/translations/pt/profile.json';
+import ptCreate from '@/translations/pt/create.json';
+import ptAuth from '@/translations/pt/auth.json';
+
+import trCommon from '@/translations/tr/common.json';
+import trSettings from '@/translations/tr/settings.json';
+import trGames from '@/translations/tr/games.json';
+import trProfile from '@/translations/tr/profile.json';
+import trCreate from '@/translations/tr/create.json';
+import trAuth from '@/translations/tr/auth.json';
+
+import jaCommon from '@/translations/ja/common.json';
+import jaSettings from '@/translations/ja/settings.json';
+import jaGames from '@/translations/ja/games.json';
+import jaProfile from '@/translations/ja/profile.json';
+import jaCreate from '@/translations/ja/create.json';
+import jaAuth from '@/translations/ja/auth.json';
+
+import koCommon from '@/translations/ko/common.json';
+import koSettings from '@/translations/ko/settings.json';
+import koGames from '@/translations/ko/games.json';
+import koProfile from '@/translations/ko/profile.json';
+import koCreate from '@/translations/ko/create.json';
+import koAuth from '@/translations/ko/auth.json';
+
+import zhCommon from '@/translations/zh/common.json';
+import zhSettings from '@/translations/zh/settings.json';
+import zhGames from '@/translations/zh/games.json';
+import zhProfile from '@/translations/zh/profile.json';
+import zhCreate from '@/translations/zh/create.json';
+import zhAuth from '@/translations/zh/auth.json';
+
+import zhHantCommon from '@/translations/zh-Hant/common.json';
+import zhHantSettings from '@/translations/zh-Hant/settings.json';
+import zhHantGames from '@/translations/zh-Hant/games.json';
+import zhHantProfile from '@/translations/zh-Hant/profile.json';
+import zhHantCreate from '@/translations/zh-Hant/create.json';
+import zhHantAuth from '@/translations/zh-Hant/auth.json';
+
+import arCommon from '@/translations/ar/common.json';
+import arSettings from '@/translations/ar/settings.json';
+import arGames from '@/translations/ar/games.json';
+import arProfile from '@/translations/ar/profile.json';
+import arCreate from '@/translations/ar/create.json';
+import arAuth from '@/translations/ar/auth.json';
+
+import heCommon from '@/translations/he/common.json';
+import heSettings from '@/translations/he/settings.json';
+import heGames from '@/translations/he/games.json';
+import heProfile from '@/translations/he/profile.json';
+import heCreate from '@/translations/he/create.json';
+import heAuth from '@/translations/he/auth.json';
+
+import hiCommon from '@/translations/hi/common.json';
+import hiSettings from '@/translations/hi/settings.json';
+import hiGames from '@/translations/hi/games.json';
+import hiProfile from '@/translations/hi/profile.json';
+import hiCreate from '@/translations/hi/create.json';
+import hiAuth from '@/translations/hi/auth.json';
+
+import thCommon from '@/translations/th/common.json';
+import thSettings from '@/translations/th/settings.json';
+import thGames from '@/translations/th/games.json';
+import thProfile from '@/translations/th/profile.json';
+import thCreate from '@/translations/th/create.json';
+import thAuth from '@/translations/th/auth.json';
+
+import roCommon from '@/translations/ro/common.json';
+import roSettings from '@/translations/ro/settings.json';
+import roGames from '@/translations/ro/games.json';
+import roProfile from '@/translations/ro/profile.json';
+import roCreate from '@/translations/ro/create.json';
+import roAuth from '@/translations/ro/auth.json';
+
+import caCommon from '@/translations/ca/common.json';
+import caSettings from '@/translations/ca/settings.json';
+import caGames from '@/translations/ca/games.json';
+import caProfile from '@/translations/ca/profile.json';
+import caCreate from '@/translations/ca/create.json';
+import caAuth from '@/translations/ca/auth.json';
+
 // Translation resources
 const resources = {
   en: {
@@ -80,6 +178,118 @@ const resources = {
     profile: ruProfile,
     create: ruCreate,
     auth: ruAuth,
+  },
+  fr: {
+    common: frCommon,
+    settings: frSettings,
+    games: frGames,
+    profile: frProfile,
+    create: frCreate,
+    auth: frAuth,
+  },
+  it: {
+    common: itCommon,
+    settings: itSettings,
+    games: itGames,
+    profile: itProfile,
+    create: itCreate,
+    auth: itAuth,
+  },
+  pt: {
+    common: ptCommon,
+    settings: ptSettings,
+    games: ptGames,
+    profile: ptProfile,
+    create: ptCreate,
+    auth: ptAuth,
+  },
+  tr: {
+    common: trCommon,
+    settings: trSettings,
+    games: trGames,
+    profile: trProfile,
+    create: trCreate,
+    auth: trAuth,
+  },
+  ja: {
+    common: jaCommon,
+    settings: jaSettings,
+    games: jaGames,
+    profile: jaProfile,
+    create: jaCreate,
+    auth: jaAuth,
+  },
+  ko: {
+    common: koCommon,
+    settings: koSettings,
+    games: koGames,
+    profile: koProfile,
+    create: koCreate,
+    auth: koAuth,
+  },
+  zh: {
+    common: zhCommon,
+    settings: zhSettings,
+    games: zhGames,
+    profile: zhProfile,
+    create: zhCreate,
+    auth: zhAuth,
+  },
+  'zh-Hant': {
+    common: zhHantCommon,
+    settings: zhHantSettings,
+    games: zhHantGames,
+    profile: zhHantProfile,
+    create: zhHantCreate,
+    auth: zhHantAuth,
+  },
+  ar: {
+    common: arCommon,
+    settings: arSettings,
+    games: arGames,
+    profile: arProfile,
+    create: arCreate,
+    auth: arAuth,
+  },
+  he: {
+    common: heCommon,
+    settings: heSettings,
+    games: heGames,
+    profile: heProfile,
+    create: heCreate,
+    auth: heAuth,
+  },
+  hi: {
+    common: hiCommon,
+    settings: hiSettings,
+    games: hiGames,
+    profile: hiProfile,
+    create: hiCreate,
+    auth: hiAuth,
+  },
+  th: {
+    common: thCommon,
+    settings: thSettings,
+    games: thGames,
+    profile: thProfile,
+    create: thCreate,
+    auth: thAuth,
+  },
+  ro: {
+    common: roCommon,
+    settings: roSettings,
+    games: roGames,
+    profile: roProfile,
+    create: roCreate,
+    auth: roAuth,
+  },
+  ca: {
+    common: caCommon,
+    settings: caSettings,
+    games: caGames,
+    profile: caProfile,
+    create: caCreate,
+    auth: caAuth,
   },
 };
 

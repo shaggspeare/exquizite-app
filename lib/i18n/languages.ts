@@ -68,10 +68,24 @@ export const DEFAULT_UI_LANGUAGE = 'en';
 // Languages with complete translations (all 6 namespaces: common, settings, games, profile, create, auth)
 export const FULLY_TRANSLATED_LANGUAGES = [
   'en', // English - base language
-  'es', // Spanish - fully translated
-  'de', // German - fully translated
-  'uk', // Ukrainian - fully translated
-  'ru', // Russian - fully translated
+  'es', // Spanish
+  'de', // German
+  'uk', // Ukrainian
+  'ru', // Russian
+  'fr', // French
+  'it', // Italian
+  'pt', // Portuguese
+  'tr', // Turkish
+  'ja', // Japanese
+  'ko', // Korean
+  'zh', // Chinese (Simplified)
+  'zh-Hant', // Chinese (Traditional)
+  'ar', // Arabic
+  'he', // Hebrew
+  'hi', // Hindi
+  'th', // Thai
+  'ro', // Romanian
+  'ca', // Catalan
 ] as const;
 
 export const RTL_LANGUAGES = SUPPORTED_UI_LANGUAGES.filter(

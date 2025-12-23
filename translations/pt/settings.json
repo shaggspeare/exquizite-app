@@ -1,25 +1,31 @@
 {
-  "_note": "This is a placeholder file. Please replace with pt translations.",
-  "title": "Settings",
+  "title": "Configurações",
+  "appLanguage": {
+    "title": "Idioma do aplicativo",
+    "description": "Escolha o idioma para a interface do aplicativo.",
+    "label": "Idioma da interface",
+    "placeholder": "Selecionar idioma do aplicativo"
+  },
   "languages": {
-    "title": "Languages",
-    "description": "Choose which languages you want to learn and translate to.",
-    "targetLanguage": "Language to Learn",
-    "targetPlaceholder": "Select language to learn",
-    "nativeLanguage": "Translate To",
-    "nativePlaceholder": "Select your native language"
+    "title": "Configurações de idioma",
+    "description": "Altere seu idioma de aprendizado e interface. Novos conjuntos usarão esses idiomas.",
+    "targetLanguage": "Aprendizagem",
+    "targetPlaceholder": "Selecionar idioma para aprender",
+    "nativeLanguage": "Interface e traduções",
+    "nativePlaceholder": "Selecionar seu idioma",
+    "changeNote": "A alteração dessas configurações afetará novos conjuntos de palavras. Seus conjuntos existentes manterão seus idiomas originais."
   },
   "appearance": {
-    "title": "Appearance",
-    "description": "Choose how the app looks. Auto will match your device's theme.",
-    "light": "Light",
-    "dark": "Dark",
+    "title": "Aparência",
+    "description": "Escolha como o aplicativo se parece. Auto corresponderá ao tema do seu dispositivo.",
+    "light": "Claro",
+    "dark": "Escuro",
     "auto": "Auto",
-    "info": "Theme changes apply immediately to all screens"
+    "info": "As alterações de tema se aplicam imediatamente a todas as telas"
   },
   "mySets": {
-    "title": "My Sets",
-    "manage": "Manage your word sets. Click to expand and view words.",
-    "noSets": "No sets created yet"
+    "title": "Meus conjuntos",
+    "manage": "Gerencie seus conjuntos de palavras. Clique para expandir e visualizar palavras.",
+    "noSets": "Nenhum conjunto criado ainda"
   }
 }

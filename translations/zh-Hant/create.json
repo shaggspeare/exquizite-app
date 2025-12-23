@@ -1,33 +1,62 @@
 {
-  "_note": "This is a placeholder file. Please replace with zh-Hant translations.",
-  "title": "Create Set",
-  "editTitle": "Edit Set",
-  "setName": "Set Name",
-  "setNamePlaceholder": "e.g., Spanish Vocabulary",
-  "words": "Words",
-  "addWord": "Add Word",
-  "aiSuggestions": "AI Suggestions",
-  "limitReached": "Limit Reached",
-  "limitMessage": "Maximum {{max}} words per set",
+  "title": "建立集合",
+  "editTitle": "編輯集合",
+  "setName": "集合名稱",
+  "setNamePlaceholder": "例如: 工作詞彙",
+  "languagePair": "學習 {{target}} → {{native}}",
+  "words": "單字",
+  "addWord": "新增單字",
+  "aiSuggestions": "AI建議",
+  "limitReached": "已達限制",
+  "limitMessage": "每個集合最多{{max}}個單字",
   "errors": {
-    "fillAllFields": "Please fill in all fields",
-    "atLeastOneWord": "Please add at least one word pair",
-    "createFailed": "Failed to create set. Please try again.",
-    "networkError": "Network error. Please check your connection and try again."
+    "fillAllFields": "請填寫所有欄位",
+    "atLeastOneWord": "請至少新增一對單字",
+    "createFailed": "建立集合失敗。請重試。",
+    "networkError": "網路錯誤。請檢查您的連線並重試。"
   },
   "success": {
-    "created": "Set created successfully!",
-    "updated": "Set updated successfully!"
+    "created": "集合建立成功！",
+    "updated": "集合更新成功！"
   },
   "ai": {
-    "modalTitle": "AI Word Suggestions",
-    "themePlaceholder": "Theme (e.g., animals, food)",
+    "modalTitle": "AI單字建議",
+    "themePlaceholder": "主題（例如: 動物、食物）",
     "countPlaceholder": "#",
-    "countHint": "Generate up to {{max}} words (5 by default)",
-    "generatingWithContext": "Generating suggestions based on your {{count}} existing {{word}}...",
-    "generatingGeneric": "Generating suggestions with AI...",
-    "selectPrompt": "Select words to add ({{count}} selected)",
-    "noSuggestions": "No suggestions yet. Click Generate to get AI-powered word suggestions!",
-    "addSelected": "Add {{count}} {{word}}"
+    "countHint": "產生最多{{max}}個單字（預設5個）",
+    "generatingWithContext": "根據您現有的{{count}}個{{word}}產生建議中...",
+    "generatingGeneric": "使用AI產生建議中...",
+    "selectPrompt": "選擇要新增的單字（已選擇{{count}}個）",
+    "noSuggestions": "還沒有建議。點選產生以獲取AI驅動的單字建議！",
+    "addSelected": "新增{{count}}個{{word}}"
+  },
+  "bulkImport": {
+    "button": "批次匯入",
+    "title": "批次匯入單字",
+    "howTo": "如何匯入",
+    "instructions": "在下面貼上您的單字對，每行一個。用Tab鍵、逗號或破折號分隔每個單字和翻譯。",
+    "example": "範例:",
+    "separator": "分隔符號",
+    "separators": {
+      "tab": "Tab鍵",
+      "comma": "逗號 (,)",
+      "dash": "破折號 (-)"
+    },
+    "pasteWords": "貼上您的單字",
+    "placeholder": "word1\ttranslation1\nword2\ttranslation2\nword3\ttranslation3",
+    "preview": "預覽",
+    "previewTitle": "預覽",
+    "import": "匯入{{count}}個單字"
+  },
+  "languageOverride": {
+    "title": "語言設定",
+    "custom": "自訂",
+    "description": "僅為此集合覆寫預設語言。保持預設以使用全域語言設定。",
+    "usingDefaults": "使用預設語言",
+    "selectTarget": "選擇目標語言",
+    "selectNative": "選擇母語",
+    "targetLabel": "學習",
+    "nativeLabel": "翻譯",
+    "useDefaults": "使用預設語言"
   }
 }

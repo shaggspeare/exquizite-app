@@ -1,25 +1,31 @@
 {
-  "_note": "This is a placeholder file. Please replace with fr translations.",
-  "title": "Settings",
+  "title": "Paramètres",
+  "appLanguage": {
+    "title": "Langue de l'application",
+    "description": "Choisissez la langue de l'interface de l'application.",
+    "label": "Langue de l'interface",
+    "placeholder": "Sélectionner la langue de l'application"
+  },
   "languages": {
-    "title": "Languages",
-    "description": "Choose which languages you want to learn and translate to.",
-    "targetLanguage": "Language to Learn",
-    "targetPlaceholder": "Select language to learn",
-    "nativeLanguage": "Translate To",
-    "nativePlaceholder": "Select your native language"
+    "title": "Paramètres de langue",
+    "description": "Modifiez votre langue d'apprentissage et d'interface. Les nouveaux ensembles utiliseront ces langues.",
+    "targetLanguage": "Apprentissage",
+    "targetPlaceholder": "Sélectionner la langue à apprendre",
+    "nativeLanguage": "Interface et traductions",
+    "nativePlaceholder": "Sélectionner votre langue",
+    "changeNote": "La modification de ces paramètres affectera les nouveaux ensembles de mots. Vos ensembles existants conserveront leurs langues d'origine."
   },
   "appearance": {
-    "title": "Appearance",
-    "description": "Choose how the app looks. Auto will match your device's theme.",
-    "light": "Light",
-    "dark": "Dark",
+    "title": "Apparence",
+    "description": "Choisissez l'apparence de l'application. Auto correspondra au thème de votre appareil.",
+    "light": "Clair",
+    "dark": "Sombre",
     "auto": "Auto",
-    "info": "Theme changes apply immediately to all screens"
+    "info": "Les modifications de thème s'appliquent immédiatement à tous les écrans"
   },
   "mySets": {
-    "title": "My Sets",
-    "manage": "Manage your word sets. Click to expand and view words.",
-    "noSets": "No sets created yet"
+    "title": "Mes ensembles",
+    "manage": "Gérez vos ensembles de mots. Cliquez pour développer et voir les mots.",
+    "noSets": "Aucun ensemble créé pour le moment"
   }
 }

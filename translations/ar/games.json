@@ -1,88 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with ar translations.",
-  "chooseActivity": "Choose Activity",
-  "setNotFound": "Set not found",
-  "wordsInSet": "Words in this set",
-  "startPractice": "Start Practice",
-  "quickPractice": "Quick Practice",
+  "chooseActivity": "اختر النشاط",
+  "setNotFound": "لم يتم العثور على المجموعة",
+  "wordsInSet": "الكلمات في هذه المجموعة",
+  "startPractice": "بدء الممارسة",
+  "quickPractice": "ممارسة سريعة",
   "templates": {
     "flashcard": {
-      "name": "Flashcard",
-      "description": "Flip to reveal translations"
+      "name": "البطاقات التعليمية",
+      "description": "اقلب لكشف الترجمات"
     },
     "match": {
-      "name": "Match",
-      "description": "Drag and connect pairs"
+      "name": "مطابقة",
+      "description": "اسحب وربط الأزواج"
     },
     "quiz": {
-      "name": "Quiz",
-      "description": "Multiple choice questions"
+      "name": "اختبار",
+      "description": "أسئلة متعددة الخيارات"
     },
     "fillBlank": {
-      "name": "Fill in the Blank",
-      "description": "Complete sentences with the right word",
-      "aiHints": "AI hints available"
+      "name": "ملء الفراغ",
+      "description": "أكمل الجمل بالكلمة الصحيحة",
+      "aiHints": "تلميحات الذكاء الاصطناعي متاحة"
     }
   },
   "flashcard": {
-    "title": "Flashcards: {{setName}}",
-    "tapToFlip": "Tap to flip",
-    "clickToFlip": "Click to flip",
-    "complete": "Complete"
+    "title": "البطاقات التعليمية: {{setName}}",
+    "tapToFlip": "انقر للقلب",
+    "clickToFlip": "انقر للقلب",
+    "complete": "مكتمل"
   },
   "quiz": {
-    "title": "Quiz: {{setName}}",
-    "question": "Question {{current}} / {{total}}",
-    "translate": "Translate:",
-    "nextQuestion": "Next Question",
-    "loadingQuiz": "Loading quiz...",
+    "title": "اختبار: {{setName}}",
+    "question": "السؤال {{current}} / {{total}}",
+    "translate": "ترجم:",
+    "nextQuestion": "السؤال التالي",
+    "loadingQuiz": "جارٍ تحميل الاختبار...",
     "complete": {
-      "title": "Quiz Complete!",
-      "score": "You scored {{score}}/{{total}} ({{percentage}}%)"
+      "title": "اكتمل الاختبار!",
+      "score": "لقد سجلت {{score}}/{{total}} ({{percentage}}%)"
     }
   },
   "match": {
-    "title": "Match: {{setName}}",
-    "words": "Words",
-    "translations": "Translations",
+    "title": "مطابقة: {{setName}}",
+    "words": "كلمات",
+    "translations": "ترجمات",
     "complete": {
-      "title": "Congratulations!",
-      "message": "You completed the match game in {{time}}!"
+      "title": "تهانينا!",
+      "message": "لقد أكملت لعبة المطابقة في {{time}}!"
     }
   },
   "fillBlank": {
-    "title": "Fill in the Blank: {{setName}}",
-    "question": "Question {{current}} / {{total}}",
-    "translation": "Translation:",
-    "fillPrompt": "Fill in the blank:",
-    "choosePrompt": "Choose the correct word:",
-    "loadingNext": "Loading next question...",
-    "generatingSentences": "Generating sentences...",
-    "correctAnswer": "Correct answer:",
+    "title": "ملء الفراغ: {{setName}}",
+    "question": "السؤال {{current}} / {{total}}",
+    "translation": "ترجمة:",
+    "fillPrompt": "املأ الفراغ:",
+    "choosePrompt": "اختر الكلمة الصحيحة:",
+    "loadingNext": "جارٍ تحميل السؤال التالي...",
+    "generatingSentences": "جارٍ إنشاء الجمل...",
+    "correctAnswer": "الإجابة الصحيحة:",
     "complete": {
-      "title": "Exercise Complete!",
-      "score": "You scored {{score}}/{{total}} ({{percentage}}%)"
+      "title": "اكتمل التمرين!",
+      "score": "لقد سجلت {{score}}/{{total}} ({{percentage}}%)"
     }
   },
   "home": {
-    "greeting": "Hello, {{name}}!",
-    "readyToLearn": "Ready to learn today?",
-    "noSets": "No sets yet",
-    "createFirstSet": "Create your first word set to get started!",
-    "createSet": "Create Set",
-    "featuredSets": "Featured Sets",
-    "tryThem": "Try them!",
-    "demoDescription": "Practice with these demo sets to get started"
+    "title": "الرئيسية",
+    "greeting": "مرحبًا، {{name}}!",
+    "readyToLearn": "هل أنت مستعد للتعلم اليوم؟",
+    "noSets": "لا توجد مجموعات بعد",
+    "createFirstSet": "قم بإنشاء مجموعة كلماتك الأولى للبدء!",
+    "createSet": "إنشاء مجموعة",
+    "featuredSets": "المجموعات المميزة",
+    "tryThem": "جربهم!",
+    "demoDescription": "تدرب مع هذه المجموعات التجريبية للبدء"
+  },
+  "dashboard": {
+    "title": "لوحة التحكم",
+    "lastPracticed": "آخر ممارسة",
+    "streak": "السلسلة"
   },
   "mySets": {
-    "title": "My Sets",
-    "noSets": "No sets yet",
-    "createFirstSet": "Create your first word set to get started!",
-    "createSet": "Create Set"
+    "title": "مجموعاتي",
+    "noSets": "لا توجد مجموعات بعد",
+    "createFirstSet": "قم بإنشاء مجموعة كلماتك الأولى للبدء!",
+    "createSet": "إنشاء مجموعة"
   },
   "setCard": {
-    "featured": "Featured",
-    "complete": "{{count}}/{{total}}% complete",
-    "demoInfo": "This is a demo set. Create your own set to get started!"
+    "featured": "مميز",
+    "complete": "{{percent}}% مكتمل",
+    "lastPracticed": "آخر ممارسة {{date}}",
+    "deleteSet": "حذف المجموعة",
+    "deleteConfirm": "هل أنت متأكد من حذف \"{{setName}}\"؟ لا يمكن التراجع عن هذا الإجراء.",
+    "demoInfo": "هذه مجموعة تجريبية. قم بإنشاء مجموعتك الخاصة للبدء!"
   }
 }

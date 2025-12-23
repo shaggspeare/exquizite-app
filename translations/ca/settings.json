@@ -1,25 +1,31 @@
 {
-  "_note": "This is a placeholder file. Please replace with ca translations.",
-  "title": "Settings",
+  "title": "Configuració",
+  "appLanguage": {
+    "title": "Idioma de l'aplicació",
+    "description": "Tria l'idioma de la interfície de l'aplicació.",
+    "label": "Idioma de la interfície",
+    "placeholder": "Selecciona l'idioma de l'aplicació"
+  },
   "languages": {
-    "title": "Languages",
-    "description": "Choose which languages you want to learn and translate to.",
-    "targetLanguage": "Language to Learn",
-    "targetPlaceholder": "Select language to learn",
-    "nativeLanguage": "Translate To",
-    "nativePlaceholder": "Select your native language"
+    "title": "Configuració d'idioma",
+    "description": "Canvia el teu idioma d'aprenentatge i interfície. Els nous conjunts utilitzaran aquests idiomes.",
+    "targetLanguage": "Aprenentatge",
+    "targetPlaceholder": "Selecciona idioma per aprendre",
+    "nativeLanguage": "Interfície i traduccions",
+    "nativePlaceholder": "Selecciona el teu idioma",
+    "changeNote": "Canviar aquesta configuració afectarà els nous conjunts de paraules. Els teus conjunts existents mantindran els seus idiomes originals."
   },
   "appearance": {
-    "title": "Appearance",
-    "description": "Choose how the app looks. Auto will match your device's theme.",
-    "light": "Light",
-    "dark": "Dark",
+    "title": "Aparença",
+    "description": "Tria com es veu l'aplicació. Auto coincidirà amb el tema del teu dispositiu.",
+    "light": "Clar",
+    "dark": "Fosc",
     "auto": "Auto",
-    "info": "Theme changes apply immediately to all screens"
+    "info": "Els canvis de tema s'apliquen immediatament a totes les pantalles"
   },
   "mySets": {
-    "title": "My Sets",
-    "manage": "Manage your word sets. Click to expand and view words.",
-    "noSets": "No sets created yet"
+    "title": "Els meus conjunts",
+    "manage": "Gestiona els teus conjunts de paraules. Fes clic per expandir i veure paraules.",
+    "noSets": "Cap conjunt creat encara"
   }
 }

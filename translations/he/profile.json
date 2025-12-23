@@ -1,25 +1,24 @@
 {
-  "_note": "This is a placeholder file. Please replace with he translations.",
-  "title": "Profile",
-  "guest": "Guest",
-  "guestAccount": "Guest Account",
-  "appAccount": "App Account",
+  "title": "פרופיל",
+  "guest": "אורח",
+  "guestAccount": "חשבון אורח",
+  "appAccount": "חשבון אפליקציה",
   "stats": {
-    "sets": "Sets",
-    "words": "Words",
-    "practiced": "Practiced"
+    "sets": "ערכות",
+    "words": "מילים",
+    "practiced": "תורגל"
   },
-  "progress": "Progress",
+  "progress": "התקדמות",
   "settings": {
-    "title": "Settings",
-    "subtitle": "App Settings",
-    "description": "Theme, languages, and preferences"
+    "title": "הגדרות",
+    "subtitle": "הגדרות אפליקציה",
+    "description": "נושא, שפות והעדפות"
   },
-  "yourSets": "Your Sets",
-  "noSetsYet": "No sets created yet",
+  "yourSets": "הערכות שלך",
+  "noSetsYet": "טרם נוצרו ערכות",
   "deleteSet": {
-    "title": "Delete Set",
-    "message": "Are you sure you want to delete \"{{setName}}\"?",
-    "confirm": "Delete"
+    "title": "מחק ערכה",
+    "message": "האם אתה בטוח שברצונך למחוק את \"{{setName}}\"?",
+    "confirm": "מחק"
   }
 }

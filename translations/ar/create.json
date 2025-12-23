@@ -1,33 +1,62 @@
 {
-  "_note": "This is a placeholder file. Please replace with ar translations.",
-  "title": "Create Set",
-  "editTitle": "Edit Set",
-  "setName": "Set Name",
-  "setNamePlaceholder": "e.g., Spanish Vocabulary",
-  "words": "Words",
-  "addWord": "Add Word",
-  "aiSuggestions": "AI Suggestions",
-  "limitReached": "Limit Reached",
-  "limitMessage": "Maximum {{max}} words per set",
+  "title": "إنشاء مجموعة",
+  "editTitle": "تحرير المجموعة",
+  "setName": "اسم المجموعة",
+  "setNamePlaceholder": "مثال: مفردات العمل",
+  "languagePair": "تعلم {{target}} ← {{native}}",
+  "words": "كلمات",
+  "addWord": "إضافة كلمة",
+  "aiSuggestions": "اقتراحات الذكاء الاصطناعي",
+  "limitReached": "تم الوصول إلى الحد",
+  "limitMessage": "الحد الأقصى {{max}} كلمة لكل مجموعة",
   "errors": {
-    "fillAllFields": "Please fill in all fields",
-    "atLeastOneWord": "Please add at least one word pair",
-    "createFailed": "Failed to create set. Please try again.",
-    "networkError": "Network error. Please check your connection and try again."
+    "fillAllFields": "يرجى ملء جميع الحقول",
+    "atLeastOneWord": "يرجى إضافة زوج كلمة واحد على الأقل",
+    "createFailed": "فشل إنشاء المجموعة. يرجى المحاولة مرة أخرى.",
+    "networkError": "خطأ في الشبكة. يرجى التحقق من اتصالك والمحاولة مرة أخرى."
   },
   "success": {
-    "created": "Set created successfully!",
-    "updated": "Set updated successfully!"
+    "created": "تم إنشاء المجموعة بنجاح!",
+    "updated": "تم تحديث المجموعة بنجاح!"
   },
   "ai": {
-    "modalTitle": "AI Word Suggestions",
-    "themePlaceholder": "Theme (e.g., animals, food)",
+    "modalTitle": "اقتراحات كلمات الذكاء الاصطناعي",
+    "themePlaceholder": "موضوع (مثل: حيوانات، طعام)",
     "countPlaceholder": "#",
-    "countHint": "Generate up to {{max}} words (5 by default)",
-    "generatingWithContext": "Generating suggestions based on your {{count}} existing {{word}}...",
-    "generatingGeneric": "Generating suggestions with AI...",
-    "selectPrompt": "Select words to add ({{count}} selected)",
-    "noSuggestions": "No suggestions yet. Click Generate to get AI-powered word suggestions!",
-    "addSelected": "Add {{count}} {{word}}"
+    "countHint": "إنشاء ما يصل إلى {{max}} كلمة (5 افتراضيًا)",
+    "generatingWithContext": "جارٍ إنشاء الاقتراحات بناءً على {{count}} {{word}} الموجودة لديك...",
+    "generatingGeneric": "جارٍ إنشاء الاقتراحات بالذكاء الاصطناعي...",
+    "selectPrompt": "حدد الكلمات المراد إضافتها ({{count}} محدد)",
+    "noSuggestions": "لا توجد اقتراحات بعد. انقر فوق إنشاء للحصول على اقتراحات كلمات مدعومة بالذكاء الاصطناعي!",
+    "addSelected": "إضافة {{count}} {{word}}"
+  },
+  "bulkImport": {
+    "button": "استيراد جماعي",
+    "title": "استيراد كلمات جماعي",
+    "howTo": "كيفية الاستيراد",
+    "instructions": "الصق أزواج كلماتك أدناه، واحد لكل سطر. افصل كل كلمة عن ترجمتها بعلامة تبويب أو فاصلة أو شرطة.",
+    "example": "مثال:",
+    "separator": "فاصل",
+    "separators": {
+      "tab": "تبويب",
+      "comma": "فاصلة (,)",
+      "dash": "شرطة (-)"
+    },
+    "pasteWords": "الصق كلماتك",
+    "placeholder": "word1\ttranslation1\nword2\ttranslation2\nword3\ttranslation3",
+    "preview": "معاينة",
+    "previewTitle": "معاينة",
+    "import": "استيراد {{count}} كلمة"
+  },
+  "languageOverride": {
+    "title": "إعدادات اللغة",
+    "custom": "مخصص",
+    "description": "تجاوز اللغات الافتراضية لهذه المجموعة فقط. اترك كافتراضي لاستخدام إعدادات اللغة العامة.",
+    "usingDefaults": "استخدام اللغات الافتراضية",
+    "selectTarget": "حدد اللغة المستهدفة",
+    "selectNative": "حدد اللغة الأم",
+    "targetLabel": "التعلم",
+    "nativeLabel": "الترجمات",
+    "useDefaults": "استخدام اللغات الافتراضية"
   }
 }

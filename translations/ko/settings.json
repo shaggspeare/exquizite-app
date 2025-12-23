@@ -1,25 +1,31 @@
 {
-  "_note": "This is a placeholder file. Please replace with ko translations.",
-  "title": "Settings",
+  "title": "설정",
+  "appLanguage": {
+    "title": "앱 언어",
+    "description": "앱 인터페이스 언어를 선택하세요.",
+    "label": "인터페이스 언어",
+    "placeholder": "앱 언어 선택"
+  },
   "languages": {
-    "title": "Languages",
-    "description": "Choose which languages you want to learn and translate to.",
-    "targetLanguage": "Language to Learn",
-    "targetPlaceholder": "Select language to learn",
-    "nativeLanguage": "Translate To",
-    "nativePlaceholder": "Select your native language"
+    "title": "언어 설정",
+    "description": "학습 언어와 인터페이스 언어를 변경하세요. 새 세트는 이러한 언어를 사용합니다.",
+    "targetLanguage": "학습",
+    "targetPlaceholder": "학습할 언어 선택",
+    "nativeLanguage": "인터페이스 및 번역",
+    "nativePlaceholder": "사용 언어 선택",
+    "changeNote": "이 설정을 변경하면 새 단어 세트에 영향을 미칩니다. 기존 세트는 원래 언어를 유지합니다."
   },
   "appearance": {
-    "title": "Appearance",
-    "description": "Choose how the app looks. Auto will match your device's theme.",
-    "light": "Light",
-    "dark": "Dark",
-    "auto": "Auto",
-    "info": "Theme changes apply immediately to all screens"
+    "title": "외관",
+    "description": "앱 모양을 선택하세요. 자동은 기기의 테마와 일치합니다.",
+    "light": "라이트",
+    "dark": "다크",
+    "auto": "자동",
+    "info": "테마 변경은 모든 화면에 즉시 적용됩니다"
   },
   "mySets": {
-    "title": "My Sets",
-    "manage": "Manage your word sets. Click to expand and view words.",
-    "noSets": "No sets created yet"
+    "title": "내 세트",
+    "manage": "단어 세트를 관리하세요. 클릭하여 확장하고 단어를 확인하세요.",
+    "noSets": "아직 생성된 세트가 없습니다"
   }
 }

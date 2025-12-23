@@ -1,33 +1,62 @@
 {
-  "_note": "This is a placeholder file. Please replace with it translations.",
-  "title": "Create Set",
-  "editTitle": "Edit Set",
-  "setName": "Set Name",
-  "setNamePlaceholder": "e.g., Spanish Vocabulary",
-  "words": "Words",
-  "addWord": "Add Word",
-  "aiSuggestions": "AI Suggestions",
-  "limitReached": "Limit Reached",
-  "limitMessage": "Maximum {{max}} words per set",
+  "title": "Crea set",
+  "editTitle": "Modifica set",
+  "setName": "Nome set",
+  "setNamePlaceholder": "es., Vocabolario di lavoro",
+  "languagePair": "Impara {{target}} → {{native}}",
+  "words": "Parole",
+  "addWord": "Aggiungi parola",
+  "aiSuggestions": "Suggerimenti IA",
+  "limitReached": "Limite raggiunto",
+  "limitMessage": "Massimo {{max}} parole per set",
   "errors": {
-    "fillAllFields": "Please fill in all fields",
-    "atLeastOneWord": "Please add at least one word pair",
-    "createFailed": "Failed to create set. Please try again.",
-    "networkError": "Network error. Please check your connection and try again."
+    "fillAllFields": "Compila tutti i campi",
+    "atLeastOneWord": "Aggiungi almeno una coppia di parole",
+    "createFailed": "Impossibile creare il set. Riprova.",
+    "networkError": "Errore di rete. Controlla la connessione e riprova."
   },
   "success": {
-    "created": "Set created successfully!",
-    "updated": "Set updated successfully!"
+    "created": "Set creato con successo!",
+    "updated": "Set aggiornato con successo!"
   },
   "ai": {
-    "modalTitle": "AI Word Suggestions",
-    "themePlaceholder": "Theme (e.g., animals, food)",
+    "modalTitle": "Suggerimenti di parole IA",
+    "themePlaceholder": "Tema (es., animali, cibo)",
     "countPlaceholder": "#",
-    "countHint": "Generate up to {{max}} words (5 by default)",
-    "generatingWithContext": "Generating suggestions based on your {{count}} existing {{word}}...",
-    "generatingGeneric": "Generating suggestions with AI...",
-    "selectPrompt": "Select words to add ({{count}} selected)",
-    "noSuggestions": "No suggestions yet. Click Generate to get AI-powered word suggestions!",
-    "addSelected": "Add {{count}} {{word}}"
+    "countHint": "Genera fino a {{max}} parole (5 per impostazione predefinita)",
+    "generatingWithContext": "Generazione suggerimenti basati sulle tue {{count}} {{word}} esistenti...",
+    "generatingGeneric": "Generazione suggerimenti con IA...",
+    "selectPrompt": "Seleziona parole da aggiungere ({{count}} selezionate)",
+    "noSuggestions": "Nessun suggerimento ancora. Clicca Genera per ottenere suggerimenti di parole alimentati da IA!",
+    "addSelected": "Aggiungi {{count}} {{word}}"
+  },
+  "bulkImport": {
+    "button": "Importazione di massa",
+    "title": "Importazione di massa di parole",
+    "howTo": "Come importare",
+    "instructions": "Incolla le tue coppie di parole sotto, una per riga. Separa ogni parola dalla sua traduzione con una tabulazione, virgola o trattino.",
+    "example": "Esempio:",
+    "separator": "Separatore",
+    "separators": {
+      "tab": "Tabulazione",
+      "comma": "Virgola (,)",
+      "dash": "Trattino (-)"
+    },
+    "pasteWords": "Incolla le tue parole",
+    "placeholder": "parola1\ttraduzione1\nparola2\ttraduzione2\nparola3\ttraduzione3",
+    "preview": "Anteprima",
+    "previewTitle": "Anteprima",
+    "import": "Importa {{count}} parole"
+  },
+  "languageOverride": {
+    "title": "Impostazioni lingua",
+    "custom": "Personalizzato",
+    "description": "Sovrascrivi le lingue predefinite solo per questo set. Lascia predefinito per usare le impostazioni lingua globali.",
+    "usingDefaults": "Utilizzo lingue predefinite",
+    "selectTarget": "Seleziona lingua di destinazione",
+    "selectNative": "Seleziona lingua madre",
+    "targetLabel": "Apprendimento",
+    "nativeLabel": "Traduzioni",
+    "useDefaults": "Usa lingue predefinite"
   }
 }

@@ -1,33 +1,62 @@
 {
-  "_note": "This is a placeholder file. Please replace with hi translations.",
-  "title": "Create Set",
-  "editTitle": "Edit Set",
-  "setName": "Set Name",
-  "setNamePlaceholder": "e.g., Spanish Vocabulary",
-  "words": "Words",
-  "addWord": "Add Word",
-  "aiSuggestions": "AI Suggestions",
-  "limitReached": "Limit Reached",
-  "limitMessage": "Maximum {{max}} words per set",
+  "title": "सेट बनाएं",
+  "editTitle": "सेट संपादित करें",
+  "setName": "सेट का नाम",
+  "setNamePlaceholder": "उदाहरण: कार्य शब्दावली",
+  "languagePair": "सीख रहे हैं {{target}} → {{native}}",
+  "words": "शब्द",
+  "addWord": "शब्द जोड़ें",
+  "aiSuggestions": "AI सुझाव",
+  "limitReached": "सीमा पहुंच गई",
+  "limitMessage": "प्रति सेट अधिकतम {{max}} शब्द",
   "errors": {
-    "fillAllFields": "Please fill in all fields",
-    "atLeastOneWord": "Please add at least one word pair",
-    "createFailed": "Failed to create set. Please try again.",
-    "networkError": "Network error. Please check your connection and try again."
+    "fillAllFields": "कृपया सभी फ़ील्ड भरें",
+    "atLeastOneWord": "कृपया कम से कम एक शब्द जोड़ी जोड़ें",
+    "createFailed": "सेट बनाने में विफल। कृपया पुनः प्रयास करें।",
+    "networkError": "नेटवर्क त्रुटि। कृपया अपना कनेक्शन जांचें और पुनः प्रयास करें।"
   },
   "success": {
-    "created": "Set created successfully!",
-    "updated": "Set updated successfully!"
+    "created": "सेट सफलतापूर्वक बनाया गया!",
+    "updated": "सेट सफलतापूर्वक अपडेट किया गया!"
   },
   "ai": {
-    "modalTitle": "AI Word Suggestions",
-    "themePlaceholder": "Theme (e.g., animals, food)",
+    "modalTitle": "AI शब्द सुझाव",
+    "themePlaceholder": "थीम (उदा: जानवर, भोजन)",
     "countPlaceholder": "#",
-    "countHint": "Generate up to {{max}} words (5 by default)",
-    "generatingWithContext": "Generating suggestions based on your {{count}} existing {{word}}...",
-    "generatingGeneric": "Generating suggestions with AI...",
-    "selectPrompt": "Select words to add ({{count}} selected)",
-    "noSuggestions": "No suggestions yet. Click Generate to get AI-powered word suggestions!",
-    "addSelected": "Add {{count}} {{word}}"
+    "countHint": "अधिकतम {{max}} शब्द उत्पन्न करें (डिफ़ॉल्ट 5)",
+    "generatingWithContext": "आपके मौजूदा {{count}} {{word}} के आधार पर सुझाव उत्पन्न हो रहे हैं...",
+    "generatingGeneric": "AI के साथ सुझाव उत्पन्न हो रहे हैं...",
+    "selectPrompt": "जोड़ने के लिए शब्द चुनें ({{count}} चयनित)",
+    "noSuggestions": "अभी तक कोई सुझाव नहीं। AI-संचालित शब्द सुझाव प्राप्त करने के लिए उत्पन्न करें पर क्लिक करें!",
+    "addSelected": "{{count}} {{word}} जोड़ें"
+  },
+  "bulkImport": {
+    "button": "बल्क आयात",
+    "title": "बल्क शब्द आयात",
+    "howTo": "आयात कैसे करें",
+    "instructions": "नीचे अपने शब्द जोड़े पेस्ट करें, प्रति पंक्ति एक। प्रत्येक शब्द को उसके अनुवाद से टैब, अल्पविराम या डैश से अलग करें।",
+    "example": "उदाहरण:",
+    "separator": "विभाजक",
+    "separators": {
+      "tab": "टैब",
+      "comma": "अल्पविराम (,)",
+      "dash": "डैश (-)"
+    },
+    "pasteWords": "अपने शब्द पेस्ट करें",
+    "placeholder": "word1\ttranslation1\nword2\ttranslation2\nword3\ttranslation3",
+    "preview": "पूर्वावलोकन",
+    "previewTitle": "पूर्वावलोकन",
+    "import": "{{count}} शब्द आयात करें"
+  },
+  "languageOverride": {
+    "title": "भाषा सेटिंग्स",
+    "custom": "कस्टम",
+    "description": "केवल इस सेट के लिए डिफ़ॉल्ट भाषाओं को ओवरराइड करें। अपनी वैश्विक भाषा सेटिंग्स का उपयोग करने के लिए डिफ़ॉल्ट के रूप में छोड़ दें।",
+    "usingDefaults": "डिफ़ॉल्ट भाषाओं का उपयोग कर रहे हैं",
+    "selectTarget": "लक्ष्य भाषा चुनें",
+    "selectNative": "मूल भाषा चुनें",
+    "targetLabel": "सीखना",
+    "nativeLabel": "अनुवाद",
+    "useDefaults": "डिफ़ॉल्ट भाषाओं का उपयोग करें"
   }
 }

@@ -8,9 +8,8 @@ import {
   Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useState, useRef } from 'react';
+import { useState, useRef , useCallback } from 'react';
 import { useRouter, useLocalSearchParams, useFocusEffect } from 'expo-router';
-import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/ui/Input';
 import { WordPairInput } from '@/components/set/WordPairInput';
@@ -44,17 +43,7 @@ export default function CreateSetScreen() {
   const { preferences } = useLanguage();
   const { isDesktop } = useResponsive();
 
-  // Use desktop layout for desktop screens
-  if (isDesktop) {
-    return (
-      <DesktopLayout>
-        <DesktopCreateView />
-      </DesktopLayout>
-    );
-  }
-
-  // Mobile layout below
-
+  // All hooks must be called before any conditional returns
   const editingSetId = params.editId as string | undefined;
   const isEditing = !!editingSetId;
   const previousEditId = useRef<string | undefined>(undefined);
@@ -244,7 +233,7 @@ export default function CreateSetScreen() {
         showAlert(t('common:status.success'), t('success.updated'), [
           {
             text: 'OK',
-            onPress: () => router.push(`/sets/${editingSetId}`),
+            onPress: () => router.push(`/(tabs)/sets/${editingSetId}`),
           },
         ]);
       } else {
@@ -260,7 +249,7 @@ export default function CreateSetScreen() {
           showAlert(t('common:status.success'), t('success.created'), [
             {
               text: 'OK',
-              onPress: () => router.push(`/sets/${newSet.id}`),
+              onPress: () => router.push(`/(tabs)/sets/${newSet.id}`),
             },
           ]);
         } else {
@@ -287,6 +276,16 @@ export default function CreateSetScreen() {
     }
   };
 
+  // Use desktop layout for desktop screens
+  if (isDesktop) {
+    return (
+      <DesktopLayout>
+        <DesktopCreateView />
+      </DesktopLayout>
+    );
+  }
+
+  // Mobile layout below
   return (
     <SafeAreaView
       style={[styles.container, { backgroundColor: colors.background }]}

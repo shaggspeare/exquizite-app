@@ -1,53 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with ko translations.",
   "buttons": {
-    "add": "Add",
-    "done": "Done",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "share": "Share",
-    "play": "Play",
-    "next": "Next",
-    "previous": "Previous",
-    "skip": "Skip",
-    "check": "Check Answer",
-    "save": "Save",
-    "saving": "Saving...",
-    "finish": "Finish",
-    "tryAgain": "Try Again",
-    "playAgain": "Play Again",
-    "showHint": "Show Hint",
-    "generate": "Generate",
-    "generating": "Generating..."
+    "add": "추가",
+    "done": "완료",
+    "cancel": "취소",
+    "delete": "삭제",
+    "share": "공유",
+    "play": "재생",
+    "next": "다음",
+    "previous": "이전",
+    "skip": "건너뛰기",
+    "check": "답안 확인",
+    "save": "저장",
+    "saving": "저장 중...",
+    "finish": "완료",
+    "tryAgain": "다시 시도",
+    "playAgain": "다시 하기",
+    "showHint": "힌트 보기",
+    "generate": "생성",
+    "generating": "생성 중..."
   },
   "status": {
-    "loading": "Loading...",
-    "saving": "Saving...",
-    "generating": "Generating...",
-    "noWords": "No words in this set",
-    "success": "Success",
-    "error": "Error"
+    "loading": "로딩 중...",
+    "saving": "저장 중...",
+    "generating": "생성 중...",
+    "noWords": "이 세트에 단어가 없습니다",
+    "success": "성공",
+    "error": "오류"
   },
   "time": {
-    "never": "Never",
-    "today": "Today",
-    "yesterday": "Yesterday",
-    "daysAgo": "{{count}} days ago",
-    "lastPracticed": "Last practiced {{date}}"
+    "never": "없음",
+    "today": "오늘",
+    "yesterday": "어제",
+    "daysAgo": "{{count}}일 전",
+    "lastPracticed": "마지막 연습: {{date}}"
   },
   "counts": {
-    "word": "word",
-    "words": "words",
-    "set": "set",
-    "sets": "sets",
-    "wordCount": "{{count}} word",
-    "wordCount_other": "{{count}} words",
-    "setCount": "{{count}} set",
-    "setCount_other": "{{count}} sets",
+    "word": "단어",
+    "words": "단어",
+    "set": "세트",
+    "sets": "세트",
+    "wordCount": "{{count}}개의 단어",
+    "wordCount_other": "{{count}}개의 단어",
+    "setCount": "{{count}}개의 세트",
+    "setCount_other": "{{count}}개의 세트",
     "progress": "{{current}}/{{total}}"
   },
   "dialogs": {
-    "areYouSure": "Are you sure?",
-    "cannotUndo": "This action cannot be undone."
+    "areYouSure": "확실합니까?",
+    "cannotUndo": "이 작업은 취소할 수 없습니다."
+  },
+  "sharing": {
+    "shareSet": "세트 공유",
+    "shareCode": "공유 코드",
+    "shareLink": "공유 링크",
+    "copyLink": "링크 복사",
+    "copied": "복사됨!",
+    "copy": "복사",
+    "views": "조회수",
+    "copies": "복사 수",
+    "generatingLink": "공유 링크 생성 중...",
+    "linkInfo": "이 링크를 가진 사람은 누구나 세트를 보고 복사할 수 있습니다",
+    "deactivateLink": "공유 링크 비활성화",
+    "deactivateConfirm": "이 공유 링크를 비활성화하시겠습니까? 링크를 가진 사람은 더 이상 이 세트에 액세스할 수 없습니다.",
+    "deactivate": "비활성화",
+    "linkDeactivated": "공유 링크가 비활성화되었습니다",
+    "shareError": "공유 링크 생성에 실패했습니다. 다시 시도해주세요.",
+    "copyError": "링크 복사에 실패했습니다",
+    "linkCopied": "링크 복사됨",
+    "linkCopiedToClipboard": "공유 링크가 클립보드에 복사되었습니다"
+  },
+  "tour": {
+    "skip": "건너뛰기",
+    "next": "다음",
+    "back": "뒤로",
+    "getStarted": "시작하기",
+    "slides": {
+      "vocabulary": {
+        "title": "어휘력 키우기",
+        "description": "수동으로 단어를 추가하거나 AI를 사용하여 테마별 어휘 세트를 생성하세요. 세트당 최대 20개의 단어를 만들 수 있습니다."
+      },
+      "organize": {
+        "title": "학습 정리하기",
+        "description": "\"스페인 음식\" 또는 \"독일 여행\"과 같은 테마별로 단어를 그룹화하세요. 쉬운 접근을 위해 세트에 이름을 지정하세요."
+      },
+      "learn": {
+        "title": "나만의 학습 방법",
+        "description": "4가지 게임 모드로 연습: 플래시카드, 짝 맞추기, 객관식 퀴즈, 빈칸 채우기."
+      },
+      "share": {
+        "title": "지식 공유하기",
+        "description": "세트에 대한 공유 링크를 생성하세요. 다른 사람들이 보고 자신의 라이브러리에 복사할 수 있습니다."
+      }
+    }
   }
 }

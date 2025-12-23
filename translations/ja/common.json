@@ -1,53 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with ja translations.",
   "buttons": {
-    "add": "Add",
-    "done": "Done",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "share": "Share",
-    "play": "Play",
-    "next": "Next",
-    "previous": "Previous",
-    "skip": "Skip",
-    "check": "Check Answer",
-    "save": "Save",
-    "saving": "Saving...",
-    "finish": "Finish",
-    "tryAgain": "Try Again",
-    "playAgain": "Play Again",
-    "showHint": "Show Hint",
-    "generate": "Generate",
-    "generating": "Generating..."
+    "add": "追加",
+    "done": "完了",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "share": "共有",
+    "play": "再生",
+    "next": "次へ",
+    "previous": "前へ",
+    "skip": "スキップ",
+    "check": "答えを確認",
+    "save": "保存",
+    "saving": "保存中...",
+    "finish": "完了",
+    "tryAgain": "再試行",
+    "playAgain": "もう一度",
+    "showHint": "ヒントを表示",
+    "generate": "生成",
+    "generating": "生成中..."
   },
   "status": {
-    "loading": "Loading...",
-    "saving": "Saving...",
-    "generating": "Generating...",
-    "noWords": "No words in this set",
-    "success": "Success",
-    "error": "Error"
+    "loading": "読み込み中...",
+    "saving": "保存中...",
+    "generating": "生成中...",
+    "noWords": "このセットに単語がありません",
+    "success": "成功",
+    "error": "エラー"
   },
   "time": {
-    "never": "Never",
-    "today": "Today",
-    "yesterday": "Yesterday",
-    "daysAgo": "{{count}} days ago",
-    "lastPracticed": "Last practiced {{date}}"
+    "never": "なし",
+    "today": "今日",
+    "yesterday": "昨日",
+    "daysAgo": "{{count}}日前",
+    "lastPracticed": "最後の練習: {{date}}"
   },
   "counts": {
-    "word": "word",
-    "words": "words",
-    "set": "set",
-    "sets": "sets",
-    "wordCount": "{{count}} word",
-    "wordCount_other": "{{count}} words",
-    "setCount": "{{count}} set",
-    "setCount_other": "{{count}} sets",
+    "word": "単語",
+    "words": "単語",
+    "set": "セット",
+    "sets": "セット",
+    "wordCount": "{{count}}個の単語",
+    "wordCount_other": "{{count}}個の単語",
+    "setCount": "{{count}}個のセット",
+    "setCount_other": "{{count}}個のセット",
     "progress": "{{current}}/{{total}}"
   },
   "dialogs": {
-    "areYouSure": "Are you sure?",
-    "cannotUndo": "This action cannot be undone."
+    "areYouSure": "よろしいですか？",
+    "cannotUndo": "この操作は元に戻せません。"
+  },
+  "sharing": {
+    "shareSet": "セットを共有",
+    "shareCode": "共有コード",
+    "shareLink": "共有リンク",
+    "copyLink": "リンクをコピー",
+    "copied": "コピーしました！",
+    "copy": "コピー",
+    "views": "閲覧数",
+    "copies": "コピー数",
+    "generatingLink": "共有リンクを生成中...",
+    "linkInfo": "このリンクを持っている人は誰でもあなたのセットを閲覧・コピーできます",
+    "deactivateLink": "共有リンクを無効化",
+    "deactivateConfirm": "この共有リンクを無効化してもよろしいですか？リンクを持っている人はこのセットにアクセスできなくなります。",
+    "deactivate": "無効化",
+    "linkDeactivated": "共有リンクが無効化されました",
+    "shareError": "共有リンクの生成に失敗しました。もう一度お試しください。",
+    "copyError": "リンクのコピーに失敗しました",
+    "linkCopied": "リンクをコピーしました",
+    "linkCopiedToClipboard": "共有リンクをクリップボードにコピーしました"
+  },
+  "tour": {
+    "skip": "スキップ",
+    "next": "次へ",
+    "back": "戻る",
+    "getStarted": "始める",
+    "slides": {
+      "vocabulary": {
+        "title": "語彙を増やそう",
+        "description": "手動で単語を追加するか、AIを使ってテーマ別の語彙セットを生成できます。1セットあたり最大20語まで作成可能です。"
+      },
+      "organize": {
+        "title": "学習を整理する",
+        "description": "「スペイン料理」や「ドイツ旅行」のようなテーマ別に単語をグループ化。簡単にアクセスできるようにセットに名前を付けましょう。"
+      },
+      "learn": {
+        "title": "自分に合った学習方法",
+        "description": "4つのゲームモードで練習：フラッシュカード、ペアマッチ、多肢選択クイズ、穴埋め問題。"
+      },
+      "share": {
+        "title": "知識を共有する",
+        "description": "セットの共有リンクを生成。他の人が閲覧して自分のライブラリにコピーできます。"
+      }
+    }
   }
 }

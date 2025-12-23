@@ -1,33 +1,62 @@
 {
-  "_note": "This is a placeholder file. Please replace with ro translations.",
-  "title": "Create Set",
-  "editTitle": "Edit Set",
-  "setName": "Set Name",
-  "setNamePlaceholder": "e.g., Spanish Vocabulary",
-  "words": "Words",
-  "addWord": "Add Word",
-  "aiSuggestions": "AI Suggestions",
-  "limitReached": "Limit Reached",
-  "limitMessage": "Maximum {{max}} words per set",
+  "title": "Creează set",
+  "editTitle": "Editează setul",
+  "setName": "Nume set",
+  "setNamePlaceholder": "de ex. Vocabular de lucru",
+  "languagePair": "Învățare {{target}} → {{native}}",
+  "words": "Cuvinte",
+  "addWord": "Adaugă cuvânt",
+  "aiSuggestions": "Sugestii AI",
+  "limitReached": "Limită atinsă",
+  "limitMessage": "Maxim {{max}} cuvinte per set",
   "errors": {
-    "fillAllFields": "Please fill in all fields",
-    "atLeastOneWord": "Please add at least one word pair",
-    "createFailed": "Failed to create set. Please try again.",
-    "networkError": "Network error. Please check your connection and try again."
+    "fillAllFields": "Completează toate câmpurile",
+    "atLeastOneWord": "Adaugă cel puțin o pereche de cuvinte",
+    "createFailed": "Nu s-a putut crea setul. Încearcă din nou.",
+    "networkError": "Eroare de rețea. Verifică conexiunea și încearcă din nou."
   },
   "success": {
-    "created": "Set created successfully!",
-    "updated": "Set updated successfully!"
+    "created": "Set creat cu succes!",
+    "updated": "Set actualizat cu succes!"
   },
   "ai": {
-    "modalTitle": "AI Word Suggestions",
-    "themePlaceholder": "Theme (e.g., animals, food)",
+    "modalTitle": "Sugestii de cuvinte AI",
+    "themePlaceholder": "Temă (de ex. animale, mâncare)",
     "countPlaceholder": "#",
-    "countHint": "Generate up to {{max}} words (5 by default)",
-    "generatingWithContext": "Generating suggestions based on your {{count}} existing {{word}}...",
-    "generatingGeneric": "Generating suggestions with AI...",
-    "selectPrompt": "Select words to add ({{count}} selected)",
-    "noSuggestions": "No suggestions yet. Click Generate to get AI-powered word suggestions!",
-    "addSelected": "Add {{count}} {{word}}"
+    "countHint": "Generează până la {{max}} cuvinte (5 implicit)",
+    "generatingWithContext": "Se generează sugestii bazate pe cele {{count}} {{word}} existente...",
+    "generatingGeneric": "Se generează sugestii cu AI...",
+    "selectPrompt": "Selectează cuvinte de adăugat ({{count}} selectate)",
+    "noSuggestions": "Nicio sugestie încă. Clic pe Generează pentru a obține sugestii de cuvinte generate de AI!",
+    "addSelected": "Adaugă {{count}} {{word}}"
+  },
+  "bulkImport": {
+    "button": "Import în bloc",
+    "title": "Import în bloc de cuvinte",
+    "howTo": "Cum să imporți",
+    "instructions": "Lipește perechile de cuvinte mai jos, una pe linie. Separă fiecare cuvânt de traducerea sa cu o tabulație, virgulă sau liniuță.",
+    "example": "Exemplu:",
+    "separator": "Separator",
+    "separators": {
+      "tab": "Tabulație",
+      "comma": "Virgulă (,)",
+      "dash": "Liniuță (-)"
+    },
+    "pasteWords": "Lipește cuvintele tale",
+    "placeholder": "cuvânt1\ttraducere1\ncuvânt2\ttraducere2\ncuvânt3\ttraducere3",
+    "preview": "Previzualizare",
+    "previewTitle": "Previzualizare",
+    "import": "Importă {{count}} cuvinte"
+  },
+  "languageOverride": {
+    "title": "Setări de limbă",
+    "custom": "Personalizat",
+    "description": "Suprascrie limbile implicite doar pentru acest set. Lasă implicit pentru a folosi setările de limbă globale.",
+    "usingDefaults": "Folosind limbile implicite",
+    "selectTarget": "Selectează limba țintă",
+    "selectNative": "Selectează limba maternă",
+    "targetLabel": "Învățare",
+    "nativeLabel": "Traduceri",
+    "useDefaults": "Folosește limbile implicite"
   }
 }

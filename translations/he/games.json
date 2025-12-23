@@ -1,88 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with he translations.",
-  "chooseActivity": "Choose Activity",
-  "setNotFound": "Set not found",
-  "wordsInSet": "Words in this set",
-  "startPractice": "Start Practice",
-  "quickPractice": "Quick Practice",
+  "chooseActivity": "בחר פעילות",
+  "setNotFound": "הערכה לא נמצאה",
+  "wordsInSet": "מילים בערכה זו",
+  "startPractice": "התחל תרגול",
+  "quickPractice": "תרגול מהיר",
   "templates": {
     "flashcard": {
-      "name": "Flashcard",
-      "description": "Flip to reveal translations"
+      "name": "כרטיסיות",
+      "description": "הפוך לחשוף תרגומים"
     },
     "match": {
-      "name": "Match",
-      "description": "Drag and connect pairs"
+      "name": "התאמה",
+      "description": "גרור וחבר זוגות"
     },
     "quiz": {
-      "name": "Quiz",
-      "description": "Multiple choice questions"
+      "name": "בוחן",
+      "description": "שאלות רב ברירות"
     },
     "fillBlank": {
-      "name": "Fill in the Blank",
-      "description": "Complete sentences with the right word",
-      "aiHints": "AI hints available"
+      "name": "מלא את החסר",
+      "description": "השלם משפטים עם המילה הנכונה",
+      "aiHints": "רמזי AI זמינים"
     }
   },
   "flashcard": {
-    "title": "Flashcards: {{setName}}",
-    "tapToFlip": "Tap to flip",
-    "clickToFlip": "Click to flip",
-    "complete": "Complete"
+    "title": "כרטיסיות: {{setName}}",
+    "tapToFlip": "הקש להיפוך",
+    "clickToFlip": "לחץ להיפוך",
+    "complete": "הושלם"
   },
   "quiz": {
-    "title": "Quiz: {{setName}}",
-    "question": "Question {{current}} / {{total}}",
-    "translate": "Translate:",
-    "nextQuestion": "Next Question",
-    "loadingQuiz": "Loading quiz...",
+    "title": "בוחן: {{setName}}",
+    "question": "שאלה {{current}} / {{total}}",
+    "translate": "תרגם:",
+    "nextQuestion": "שאלה הבאה",
+    "loadingQuiz": "טוען בוחן...",
     "complete": {
-      "title": "Quiz Complete!",
-      "score": "You scored {{score}}/{{total}} ({{percentage}}%)"
+      "title": "הבוחן הושלם!",
+      "score": "קיבלת ציון {{score}}/{{total}} ({{percentage}}%)"
     }
   },
   "match": {
-    "title": "Match: {{setName}}",
-    "words": "Words",
-    "translations": "Translations",
+    "title": "התאמה: {{setName}}",
+    "words": "מילים",
+    "translations": "תרגומים",
     "complete": {
-      "title": "Congratulations!",
-      "message": "You completed the match game in {{time}}!"
+      "title": "כל הכבוד!",
+      "message": "השלמת את משחק ההתאמה ב-{{time}}!"
     }
   },
   "fillBlank": {
-    "title": "Fill in the Blank: {{setName}}",
-    "question": "Question {{current}} / {{total}}",
-    "translation": "Translation:",
-    "fillPrompt": "Fill in the blank:",
-    "choosePrompt": "Choose the correct word:",
-    "loadingNext": "Loading next question...",
-    "generatingSentences": "Generating sentences...",
-    "correctAnswer": "Correct answer:",
+    "title": "מלא את החסר: {{setName}}",
+    "question": "שאלה {{current}} / {{total}}",
+    "translation": "תרגום:",
+    "fillPrompt": "מלא את החסר:",
+    "choosePrompt": "בחר את המילה הנכונה:",
+    "loadingNext": "טוען שאלה הבאה...",
+    "generatingSentences": "יוצר משפטים...",
+    "correctAnswer": "תשובה נכונה:",
     "complete": {
-      "title": "Exercise Complete!",
-      "score": "You scored {{score}}/{{total}} ({{percentage}}%)"
+      "title": "התרגיל הושלם!",
+      "score": "קיבלת ציון {{score}}/{{total}} ({{percentage}}%)"
     }
   },
   "home": {
-    "greeting": "Hello, {{name}}!",
-    "readyToLearn": "Ready to learn today?",
-    "noSets": "No sets yet",
-    "createFirstSet": "Create your first word set to get started!",
-    "createSet": "Create Set",
-    "featuredSets": "Featured Sets",
-    "tryThem": "Try them!",
-    "demoDescription": "Practice with these demo sets to get started"
+    "title": "בית",
+    "greeting": "שלום, {{name}}!",
+    "readyToLearn": "מוכן ללמוד היום?",
+    "noSets": "אין ערכות עדיין",
+    "createFirstSet": "צור את ערכת המילים הראשונה שלך כדי להתחיל!",
+    "createSet": "צור ערכה",
+    "featuredSets": "ערכות מומלצות",
+    "tryThem": "נסה אותן!",
+    "demoDescription": "תרגל עם ערכות הדגמה אלה כדי להתחיל"
+  },
+  "dashboard": {
+    "title": "לוח בקרה",
+    "lastPracticed": "תרגול אחרון",
+    "streak": "רצף"
   },
   "mySets": {
-    "title": "My Sets",
-    "noSets": "No sets yet",
-    "createFirstSet": "Create your first word set to get started!",
-    "createSet": "Create Set"
+    "title": "הערכות שלי",
+    "noSets": "אין ערכות עדיין",
+    "createFirstSet": "צור את ערכת המילים הראשונה שלך כדי להתחיל!",
+    "createSet": "צור ערכה"
   },
   "setCard": {
-    "featured": "Featured",
-    "complete": "{{count}}/{{total}}% complete",
-    "demoInfo": "This is a demo set. Create your own set to get started!"
+    "featured": "מומלץ",
+    "complete": "{{percent}}% הושלם",
+    "lastPracticed": "תרגול אחרון {{date}}",
+    "deleteSet": "מחק ערכה",
+    "deleteConfirm": "האם אתה בטוח שברצונך למחוק את \"{{setName}}\"? לא ניתן לבטל פעולה זו.",
+    "demoInfo": "זוהי ערכת הדגמה. צור את הערכה שלך כדי להתחיל!"
   }
 }

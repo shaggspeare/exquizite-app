@@ -1,53 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with ro translations.",
   "buttons": {
-    "add": "Add",
-    "done": "Done",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "share": "Share",
-    "play": "Play",
-    "next": "Next",
-    "previous": "Previous",
-    "skip": "Skip",
-    "check": "Check Answer",
-    "save": "Save",
-    "saving": "Saving...",
-    "finish": "Finish",
-    "tryAgain": "Try Again",
-    "playAgain": "Play Again",
-    "showHint": "Show Hint",
-    "generate": "Generate",
-    "generating": "Generating..."
+    "add": "Adaugă",
+    "done": "Gata",
+    "cancel": "Anulează",
+    "delete": "Șterge",
+    "share": "Distribuie",
+    "play": "Joacă",
+    "next": "Următorul",
+    "previous": "Anterior",
+    "skip": "Omite",
+    "check": "Verifică răspunsul",
+    "save": "Salvează",
+    "saving": "Se salvează...",
+    "finish": "Termină",
+    "tryAgain": "Încearcă din nou",
+    "playAgain": "Joacă din nou",
+    "showHint": "Arată indiciu",
+    "generate": "Generează",
+    "generating": "Se generează..."
   },
   "status": {
-    "loading": "Loading...",
-    "saving": "Saving...",
-    "generating": "Generating...",
-    "noWords": "No words in this set",
-    "success": "Success",
-    "error": "Error"
+    "loading": "Se încarcă...",
+    "saving": "Se salvează...",
+    "generating": "Se generează...",
+    "noWords": "Niciun cuvânt în acest set",
+    "success": "Succes",
+    "error": "Eroare"
   },
   "time": {
-    "never": "Never",
-    "today": "Today",
-    "yesterday": "Yesterday",
-    "daysAgo": "{{count}} days ago",
-    "lastPracticed": "Last practiced {{date}}"
+    "never": "Niciodată",
+    "today": "Astăzi",
+    "yesterday": "Ieri",
+    "daysAgo": "Acum {{count}} zile",
+    "lastPracticed": "Ultima practică {{date}}"
   },
   "counts": {
-    "word": "word",
-    "words": "words",
+    "word": "cuvânt",
+    "words": "cuvinte",
     "set": "set",
-    "sets": "sets",
-    "wordCount": "{{count}} word",
-    "wordCount_other": "{{count}} words",
+    "sets": "seturi",
+    "wordCount": "{{count}} cuvânt",
+    "wordCount_other": "{{count}} cuvinte",
     "setCount": "{{count}} set",
-    "setCount_other": "{{count}} sets",
+    "setCount_other": "{{count}} seturi",
     "progress": "{{current}}/{{total}}"
   },
   "dialogs": {
-    "areYouSure": "Are you sure?",
-    "cannotUndo": "This action cannot be undone."
+    "areYouSure": "Ești sigur?",
+    "cannotUndo": "Această acțiune nu poate fi anulată."
+  },
+  "sharing": {
+    "shareSet": "Distribuie setul",
+    "shareCode": "Cod de distribuire",
+    "shareLink": "Link de distribuire",
+    "copyLink": "Copiază linkul",
+    "copied": "Copiat!",
+    "copy": "Copiază",
+    "views": "Vizualizări",
+    "copies": "Copii",
+    "generatingLink": "Se generează linkul de distribuire...",
+    "linkInfo": "Oricine are acest link poate vizualiza și copia setul tău",
+    "deactivateLink": "Dezactivează linkul de distribuire",
+    "deactivateConfirm": "Ești sigur că vrei să dezactivezi acest link de distribuire? Oricine are linkul nu va mai putea accesa acest set.",
+    "deactivate": "Dezactivează",
+    "linkDeactivated": "Linkul de distribuire a fost dezactivat",
+    "shareError": "Nu s-a putut genera linkul de distribuire. Încearcă din nou.",
+    "copyError": "Nu s-a putut copia linkul în clipboard",
+    "linkCopied": "Link copiat",
+    "linkCopiedToClipboard": "Link de distribuire copiat în clipboard"
+  },
+  "tour": {
+    "skip": "Omite",
+    "next": "Următorul",
+    "back": "Înapoi",
+    "getStarted": "Începe",
+    "slides": {
+      "vocabulary": {
+        "title": "Construiește-ți vocabularul",
+        "description": "Adaugă cuvinte manual sau folosește AI pentru a genera seturi de vocabular tematice. Creează până la 20 de cuvinte per set."
+      },
+      "organize": {
+        "title": "Organizează-ți învățarea",
+        "description": "Grupează cuvintele în seturi tematice precum \"Mâncare spaniolă\" sau \"Călătorie germană\". Numește-ți seturile pentru acces facil."
+      },
+      "learn": {
+        "title": "Învață în felul tău",
+        "description": "Exersează cu 4 moduri de joc: Flashcards, Potrivește perechile, Quiz cu alegere multiplă și Completează spațiile."
+      },
+      "share": {
+        "title": "Distribuie-ți cunoștințele",
+        "description": "Generează linkuri de distribuire pentru seturile tale. Alții le pot vizualiza și copia în biblioteca lor."
+      }
+    }
   }
 }

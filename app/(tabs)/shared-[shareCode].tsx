@@ -128,6 +128,7 @@ export default function SharedSetScreen() {
     return (
       <SafeAreaView
         style={[styles.container, { backgroundColor: colors.background }]}
+        edges={['top']}
       >
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={colors.primary} />
@@ -143,6 +144,7 @@ export default function SharedSetScreen() {
     return (
       <SafeAreaView
         style={[styles.container, { backgroundColor: colors.background }]}
+        edges={['top']}
       >
         <View style={styles.errorContainer}>
           <Ionicons name="alert-circle" size={64} color={colors.error} />
@@ -169,6 +171,7 @@ export default function SharedSetScreen() {
   return (
     <SafeAreaView
       style={[styles.container, { backgroundColor: colors.background }]}
+      edges={['top']}
     >
       <ScrollView
         style={styles.scrollView}

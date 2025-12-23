@@ -1,33 +1,62 @@
 {
-  "_note": "This is a placeholder file. Please replace with tr translations.",
-  "title": "Create Set",
-  "editTitle": "Edit Set",
-  "setName": "Set Name",
-  "setNamePlaceholder": "e.g., Spanish Vocabulary",
-  "words": "Words",
-  "addWord": "Add Word",
-  "aiSuggestions": "AI Suggestions",
-  "limitReached": "Limit Reached",
-  "limitMessage": "Maximum {{max}} words per set",
+  "title": "Set Oluştur",
+  "editTitle": "Seti Düzenle",
+  "setName": "Set Adı",
+  "setNamePlaceholder": "ör., İş Kelime Dağarcığı",
+  "languagePair": "{{target}} öğren → {{native}}",
+  "words": "Kelimeler",
+  "addWord": "Kelime Ekle",
+  "aiSuggestions": "Yapay Zeka Önerileri",
+  "limitReached": "Limite Ulaşıldı",
+  "limitMessage": "Set başına maksimum {{max}} kelime",
   "errors": {
-    "fillAllFields": "Please fill in all fields",
-    "atLeastOneWord": "Please add at least one word pair",
-    "createFailed": "Failed to create set. Please try again.",
-    "networkError": "Network error. Please check your connection and try again."
+    "fillAllFields": "Lütfen tüm alanları doldurun",
+    "atLeastOneWord": "Lütfen en az bir kelime çifti ekleyin",
+    "createFailed": "Set oluşturulamadı. Lütfen tekrar deneyin.",
+    "networkError": "Ağ hatası. Lütfen bağlantınızı kontrol edin ve tekrar deneyin."
   },
   "success": {
-    "created": "Set created successfully!",
-    "updated": "Set updated successfully!"
+    "created": "Set başarıyla oluşturuldu!",
+    "updated": "Set başarıyla güncellendi!"
   },
   "ai": {
-    "modalTitle": "AI Word Suggestions",
-    "themePlaceholder": "Theme (e.g., animals, food)",
+    "modalTitle": "Yapay Zeka Kelime Önerileri",
+    "themePlaceholder": "Tema (ör., hayvanlar, yemek)",
     "countPlaceholder": "#",
-    "countHint": "Generate up to {{max}} words (5 by default)",
-    "generatingWithContext": "Generating suggestions based on your {{count}} existing {{word}}...",
-    "generatingGeneric": "Generating suggestions with AI...",
-    "selectPrompt": "Select words to add ({{count}} selected)",
-    "noSuggestions": "No suggestions yet. Click Generate to get AI-powered word suggestions!",
-    "addSelected": "Add {{count}} {{word}}"
+    "countHint": "{{max}}'e kadar kelime oluşturun (varsayılan 5)",
+    "generatingWithContext": "Mevcut {{count}} {{word}}'nize dayalı öneriler oluşturuluyor...",
+    "generatingGeneric": "Yapay zeka ile öneriler oluşturuluyor...",
+    "selectPrompt": "Eklenecek kelimeleri seçin ({{count}} seçildi)",
+    "noSuggestions": "Henüz öneri yok. Yapay zeka destekli kelime önerileri almak için Oluştur'a tıklayın!",
+    "addSelected": "{{count}} {{word}} ekle"
+  },
+  "bulkImport": {
+    "button": "Toplu İçe Aktarma",
+    "title": "Kelimeleri Toplu İçe Aktarma",
+    "howTo": "Nasıl İçe Aktarılır",
+    "instructions": "Kelime çiftlerinizi aşağıya, her satıra bir tane olacak şekilde yapıştırın. Her kelimeyi çevirisiyle sekme, virgül veya tire ile ayırın.",
+    "example": "Örnek:",
+    "separator": "Ayırıcı",
+    "separators": {
+      "tab": "Sekme",
+      "comma": "Virgül (,)",
+      "dash": "Tire (-)"
+    },
+    "pasteWords": "Kelimelerinizi Yapıştırın",
+    "placeholder": "kelime1\tçeviri1\nkelime2\tçeviri2\nkelime3\tçeviri3",
+    "preview": "Önizleme",
+    "previewTitle": "Önizleme",
+    "import": "{{count}} Kelime İçe Aktar"
+  },
+  "languageOverride": {
+    "title": "Dil Ayarları",
+    "custom": "Özel",
+    "description": "Varsayılan dilleri yalnızca bu set için geçersiz kılın. Global dil ayarlarınızı kullanmak için varsayılan olarak bırakın.",
+    "usingDefaults": "Varsayılan diller kullanılıyor",
+    "selectTarget": "Hedef dili seçin",
+    "selectNative": "Ana dili seçin",
+    "targetLabel": "Öğrenme",
+    "nativeLabel": "Çeviriler",
+    "useDefaults": "Varsayılan Dilleri Kullan"
   }
 }
