@@ -46,7 +46,9 @@
       "Bash(else)",
       "Bash(fi)",
       "Bash(mv:*)",
-      "Bash(npm run lint:*)"
+      "Bash(npm run lint:*)",
+      "Bash(supabase --version:*)",
+      "Bash(supabase status:*)"
     ],
     "deny": [],
     "ask": []

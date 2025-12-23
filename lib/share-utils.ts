@@ -3,12 +3,11 @@ import { Platform } from 'react-native';
 
 /**
  * Share link configuration
- * Note: Update WEB_URL to 'https://exquizite.app/shared' when custom domain is configured
  */
 export const SHARE_CONFIG = {
   SCHEME: 'exquiziteapp',
   HOST: 'shared',
-  WEB_URL: 'https://exquizite-app.vercel.app/shared',
+  WEB_URL: 'https://app.exquizite.app/shared',
   CODE_LENGTH: 12,
 } as const;
 
