@@ -9,4 +9,8 @@ export const config = {
     url: process.env.EXPO_PUBLIC_SUPABASE_URL || '',
     anonKey: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '',
   },
+  app: {
+    webUrl: 'https://app.exquizite.app',
+    landingPageUrl: 'https://www.exquizite.app',
+  },
 };
