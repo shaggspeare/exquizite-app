@@ -6,6 +6,9 @@
 -- UPDATE SHARE URL GENERATION FUNCTION
 -- ============================================================================
 
+-- Drop the existing function first (required when changing return type)
+DROP FUNCTION IF EXISTS get_or_create_share(uuid, uuid, boolean, integer);
+
 -- Function: Get or create share for a set
 -- Updated to use production web URL instead of app scheme
 CREATE OR REPLACE FUNCTION get_or_create_share(
@@ -16,12 +19,12 @@ CREATE OR REPLACE FUNCTION get_or_create_share(
 )
 RETURNS TABLE (
   share_id UUID,
-  share_code TEXT,
+  share_code VARCHAR(12),
   share_url TEXT,
   is_new BOOLEAN
 ) AS $$
 DECLARE
-  v_share_code TEXT;
+  v_share_code VARCHAR(12);
   v_share_id UUID;
   v_existing_share RECORD;
   v_is_new BOOLEAN := false;
@@ -61,7 +64,7 @@ BEGIN
     -- Generate unique share code
     LOOP
       v_share_code := generate_share_code();
-      EXIT WHEN NOT EXISTS (SELECT 1 FROM shared_sets WHERE share_code = v_share_code);
+      EXIT WHEN NOT EXISTS (SELECT 1 FROM shared_sets WHERE shared_sets.share_code = v_share_code);
     END LOOP;
 
     -- Insert new share

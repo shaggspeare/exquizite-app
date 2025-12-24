@@ -701,8 +701,6 @@ export function SetsProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      console.log('Sharing set:', { setId, options });
-
       // Add timeout to prevent infinite loading
       const timeoutPromise = new Promise((_, reject) => {
         setTimeout(
@@ -729,16 +727,16 @@ export function SetsProvider({ children }: { children: ReactNode }) {
 
       if (error) {
         console.error('Error generating share link:', error);
-        console.error('Error details:', JSON.stringify(error, null, 2));
         throw error;
       }
 
-      console.log('Share link generated successfully:', data);
+      if (!data) {
+        throw new Error('No data returned from share function');
+      }
+
       return data as ShareMetadata;
     } catch (error: any) {
       console.error('Error sharing set:', error);
-      console.error('Error message:', error?.message);
-      console.error('Error stack:', error?.stack);
       return null;
     }
   };

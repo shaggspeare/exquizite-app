@@ -69,13 +69,11 @@ export function ShareModal({ visible, set, onClose }: ShareModalProps) {
   }, [visible, set]);
 
   const generateShareLink = async () => {
-    if (!set || isLoading) return; // Prevent multiple simultaneous calls
+    if (!set || isLoading) return;
 
     setIsLoading(true);
     try {
-      console.log('ShareModal: Generating share link for set:', set.id);
       const data = await shareSet(set.id);
-      console.log('ShareModal: Share link result:', data);
 
       if (data) {
         setShareData(data);
@@ -84,7 +82,7 @@ export function ShareModal({ visible, set, onClose }: ShareModalProps) {
         onClose();
       }
     } catch (error) {
-      console.error('ShareModal: Error generating share link:', error);
+      console.error('Error generating share link:', error);
       showAlert(t('common:status.error'), t('common:sharing.shareError'));
       onClose();
     } finally {

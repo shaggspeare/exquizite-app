@@ -90,13 +90,6 @@ serve(async req => {
     }
 
     // Call the database function to get or create share
-    console.log('Calling get_or_create_share with:', {
-      p_set_id: setId,
-      p_user_id: user.id,
-      p_is_public: isPublic,
-      p_expires_in_days: expiresInDays || null,
-    });
-
     const { data, error } = await supabaseClient.rpc('get_or_create_share', {
       p_set_id: setId,
       p_user_id: user.id,
