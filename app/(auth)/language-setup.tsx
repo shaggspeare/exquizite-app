@@ -1,7 +1,6 @@
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState, useEffect } from 'react';
-import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import * as Localization from 'expo-localization';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -36,7 +35,6 @@ const getDeviceLanguage = (): string => {
 
 export default function LanguageSetupScreen() {
   const { t } = useTranslation('auth');
-  const router = useRouter();
   const { colors } = useTheme();
   const { isDesktop } = useResponsive();
   const { preferences, setLanguages } = useLanguage();
@@ -63,11 +61,12 @@ export default function LanguageSetupScreen() {
     if (!targetLanguage || !nativeLanguage) return;
 
     try {
-      // Change UI language to the native language (translate-to language)
-      await changeLanguage(nativeLanguage);
-      // Save language preferences
+      // Save language preferences first
       await setLanguages(targetLanguage, nativeLanguage);
-      router.replace('/(tabs)');
+      // Then change UI language to the native language (translate-to language)
+      await changeLanguage(nativeLanguage);
+      // Don't navigate here - let the routing logic in _layout handle it
+      // This prevents race condition where we navigate before state updates
     } catch (error) {
       console.error('Error saving language preferences:', error);
     }

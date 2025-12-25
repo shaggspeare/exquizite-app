@@ -61,6 +61,7 @@ function RootLayoutNav() {
 
     const inAuthGroup = segments[0] === '(auth)';
     const onLanguageSetup = segments[1] === 'language-setup';
+    const inTabsGroup = segments[0] === '(tabs)';
 
     if (!user && !inAuthGroup) {
       // Redirect to login if not authenticated
@@ -76,20 +77,32 @@ function RootLayoutNav() {
     } else if (
       user &&
       shouldSkipLanguageSetup &&
-      (onLanguageSetup || (inAuthGroup && !onLanguageSetup)) &&
+      onLanguageSetup &&
       !user.isGuest
     ) {
-      // Redirect to main app if authenticated (NOT guest) and languages configured
-      // Guest users can stay in auth group to sign up
-      // This handles both: being on language-setup page AND being elsewhere in auth group
+      // User completed language setup - redirect to main app
+      // Only redirect if not already in tabs to avoid loop
       console.log(
-        '➡️  Redirecting to main app (user and languages configured)'
+        '➡️  Redirecting from language setup to main app (completed setup)'
       );
       router.replace('/(tabs)');
     } else if (
       user &&
       shouldSkipLanguageSetup &&
-      !inAuthGroup &&
+      inAuthGroup &&
+      !onLanguageSetup &&
+      !user.isGuest
+    ) {
+      // User is in auth group but not on language setup and is configured
+      // Redirect to main app
+      console.log(
+        '➡️  Redirecting to main app (user configured, in auth group)'
+      );
+      router.replace('/(tabs)');
+    } else if (
+      user &&
+      shouldSkipLanguageSetup &&
+      inTabsGroup &&
       !user.isGuest
     ) {
       // User is authenticated (NOT guest), configured, and already in main app - no redirect needed

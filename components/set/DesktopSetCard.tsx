@@ -72,8 +72,117 @@ export function DesktopSetCard({ set, compact = false }: DesktopSetCardProps) {
 
   const gradientColors = getGradientColors();
 
+  // Compact vertical layout for grid
+  if (compact) {
+    return (
+      <View style={styles.compactVerticalContainer}>
+        <View style={styles.compactHorizontalWrapper}>
+          <TouchableOpacity
+            style={styles.compactCardWrapper}
+            onPress={() => router.push(`/(tabs)/sets/${set.id}`)}
+            activeOpacity={0.9}
+          >
+            {set.isFeatured && (
+              <View style={styles.featuredBadge}>
+                <Ionicons name="star" size={10} color="#000" />
+                <Text style={styles.featuredBadgeText}>{t('setCard.featured')}</Text>
+              </View>
+            )}
+
+            <LinearGradient
+              colors={gradientColors}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.compactVerticalCard}
+            >
+              <View style={styles.compactCardContent}>
+                <View style={styles.compactHeader}>
+                  <Text style={styles.compactVerticalTitle} numberOfLines={2}>
+                    {set.name}
+                  </Text>
+                  <View style={styles.wordBadge}>
+                    <Ionicons name="book" size={12} color="#FFFFFF" />
+                    <Text style={styles.wordBadgeText}>{set.words.length}</Text>
+                  </View>
+                </View>
+
+                <View style={styles.progressSection}>
+                  <View style={styles.progressBar}>
+                    <View
+                      style={[
+                        styles.progressFill,
+                        {
+                          width: `${Math.min((set.words.length / 20) * 100, 100)}%`,
+                        },
+                      ]}
+                    />
+                  </View>
+                  <Text style={styles.progressText}>
+                    {t('setCard.complete', { percent: Math.round((set.words.length / 20) * 100) })}
+                  </Text>
+                </View>
+
+                {set.lastPracticed && (
+                  <View style={styles.metaRow}>
+                    <Ionicons
+                      name="time-outline"
+                      size={12}
+                      color="rgba(255,255,255,0.8)"
+                    />
+                    <Text style={styles.metaText}>
+                      {formatDate(set.lastPracticed)}
+                    </Text>
+                  </View>
+                )}
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+
+          <View style={styles.compactActionsColumn}>
+            <TouchableOpacity
+              style={[styles.compactPlayButton, { backgroundColor: colors.primary }]}
+              onPress={() => router.push(`/(tabs)/sets/${set.id}/play/template`)}
+            >
+              <Ionicons name="play" size={16} color="#FFFFFF" />
+              <Text style={styles.compactPlayButtonText}>{t('common:buttons.play')}</Text>
+            </TouchableOpacity>
+
+            {!set.isFeatured && (
+              <View style={styles.compactIconButtonsRow}>
+                <TouchableOpacity
+                  style={[styles.smallIconButton, { backgroundColor: colors.card }]}
+                  onPress={() => setShowShareModal(true)}
+                >
+                  <Ionicons
+                    name="share-social-outline"
+                    size={16}
+                    color={colors.primary}
+                  />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[styles.smallIconButton, { backgroundColor: colors.card }]}
+                  onPress={handleDeletePress}
+                >
+                  <Ionicons name="trash-outline" size={16} color={colors.error} />
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+        </View>
+
+        <ShareModal
+          visible={showShareModal}
+          set={set}
+          onClose={() => setShowShareModal(false)}
+        />
+      </View>
+    );
+  }
+
+  // Horizontal layout (original)
   return (
-    <View style={[styles.horizontalContainer, compact && styles.compactContainer]}>
+    <View style={styles.horizontalContainer}>
       <TouchableOpacity
         style={styles.cardWrapper}
         onPress={() => router.push(`/(tabs)/sets/${set.id}`)}
@@ -91,11 +200,11 @@ export function DesktopSetCard({ set, compact = false }: DesktopSetCardProps) {
           colors={gradientColors}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={[styles.gradientCard, compact && styles.compactGradientCard]}
+          style={styles.gradientCard}
         >
           <View style={styles.cardContent}>
             <View style={styles.header}>
-              <Text style={[styles.title, compact && styles.compactTitle]} numberOfLines={2}>
+              <Text style={styles.title} numberOfLines={2}>
                 {set.name}
               </Text>
               {/* Word count badge */}
@@ -137,40 +246,38 @@ export function DesktopSetCard({ set, compact = false }: DesktopSetCardProps) {
         </LinearGradient>
       </TouchableOpacity>
 
-      {/* Action Buttons on the Right - hide in compact mode */}
-      {!compact && (
-        <View style={styles.actionsColumn}>
-          <TouchableOpacity
-            style={[styles.playButton, { backgroundColor: colors.primary }]}
-            onPress={() => router.push(`/(tabs)/sets/${set.id}/play/template`)}
-          >
-            <Ionicons name="play" size={18} color="#FFFFFF" />
-            <Text style={styles.playButtonText}>{t('common:buttons.play')}</Text>
-          </TouchableOpacity>
+      {/* Action Buttons on the Right */}
+      <View style={styles.actionsColumn}>
+        <TouchableOpacity
+          style={[styles.playButton, { backgroundColor: colors.primary }]}
+          onPress={() => router.push(`/(tabs)/sets/${set.id}/play/template`)}
+        >
+          <Ionicons name="play" size={18} color="#FFFFFF" />
+          <Text style={styles.playButtonText}>{t('common:buttons.play')}</Text>
+        </TouchableOpacity>
 
-          {!set.isFeatured && (
-            <View style={styles.iconButtonsRow}>
-              <TouchableOpacity
-                style={[styles.smallIconButton, { backgroundColor: colors.card }]}
-                onPress={() => setShowShareModal(true)}
-              >
-                <Ionicons
-                  name="share-social-outline"
-                  size={18}
-                  color={colors.primary}
-                />
-              </TouchableOpacity>
+        {!set.isFeatured && (
+          <View style={styles.iconButtonsRow}>
+            <TouchableOpacity
+              style={[styles.smallIconButton, { backgroundColor: colors.card }]}
+              onPress={() => setShowShareModal(true)}
+            >
+              <Ionicons
+                name="share-social-outline"
+                size={18}
+                color={colors.primary}
+              />
+            </TouchableOpacity>
 
-              <TouchableOpacity
-                style={[styles.smallIconButton, { backgroundColor: colors.card }]}
-                onPress={handleDeletePress}
-              >
-                <Ionicons name="trash-outline" size={18} color={colors.error} />
-              </TouchableOpacity>
-            </View>
-          )}
-        </View>
-      )}
+            <TouchableOpacity
+              style={[styles.smallIconButton, { backgroundColor: colors.card }]}
+              onPress={handleDeletePress}
+            >
+              <Ionicons name="trash-outline" size={18} color={colors.error} />
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
 
       <ShareModal
         visible={showShareModal}
@@ -182,16 +289,13 @@ export function DesktopSetCard({ set, compact = false }: DesktopSetCardProps) {
 }
 
 const styles = StyleSheet.create({
+  // Horizontal layout styles (original)
   horizontalContainer: {
     flexDirection: 'row',
     gap: Spacing.md,
     alignItems: 'center',
     marginBottom: Spacing.md,
     marginTop: Spacing.sm,
-  },
-  compactContainer: {
-    marginBottom: Spacing.sm,
-    marginTop: 0,
   },
   cardWrapper: {
     flex: 1,
@@ -202,10 +306,6 @@ const styles = StyleSheet.create({
     padding: Spacing.lg,
     minHeight: 110,
     ...Shadow.card,
-  },
-  compactGradientCard: {
-    padding: Spacing.md,
-    minHeight: 90,
   },
   cardContent: {
     flex: 1,
@@ -224,9 +324,97 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: Spacing.sm,
   },
-  compactTitle: {
-    fontSize: 15,
+  actionsColumn: {
+    flexDirection: 'column',
+    gap: Spacing.sm,
+    minWidth: 120,
   },
+  playButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.md,
+    borderRadius: BorderRadius.button,
+    gap: Spacing.xs,
+    ...Shadow.button,
+  },
+  playButtonText: {
+    ...Typography.body,
+    color: '#FFFFFF',
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  iconButtonsRow: {
+    flexDirection: 'row',
+    gap: Spacing.sm,
+    justifyContent: 'center',
+  },
+
+  // Compact vertical layout styles (for grid)
+  compactVerticalContainer: {
+    width: '100%',
+  },
+  compactHorizontalWrapper: {
+    flexDirection: 'row',
+    gap: Spacing.md,
+    alignItems: 'center',
+  },
+  compactCardWrapper: {
+    flex: 1,
+    position: 'relative',
+  },
+  compactVerticalCard: {
+    borderRadius: BorderRadius.cardLarge,
+    padding: Spacing.lg,
+    minHeight: 130,
+    ...Shadow.card,
+  },
+  compactCardContent: {
+    flex: 1,
+  },
+  compactHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: Spacing.md,
+  },
+  compactVerticalTitle: {
+    ...Typography.h2,
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    flex: 1,
+    marginRight: Spacing.sm,
+  },
+  compactActionsColumn: {
+    flexDirection: 'column',
+    gap: Spacing.sm,
+    minWidth: 100,
+  },
+  compactPlayButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.md,
+    borderRadius: BorderRadius.button,
+    gap: Spacing.xs,
+    ...Shadow.button,
+  },
+  compactPlayButtonText: {
+    ...Typography.body,
+    color: '#FFFFFF',
+    fontWeight: '600',
+    fontSize: 13,
+  },
+  compactIconButtonsRow: {
+    flexDirection: 'row',
+    gap: Spacing.sm,
+    justifyContent: 'center',
+  },
+
+  // Shared styles
   featuredBadge: {
     position: 'absolute',
     top: -Spacing.xs,
@@ -292,32 +480,6 @@ const styles = StyleSheet.create({
     ...Typography.caption,
     fontSize: 10,
     color: 'rgba(255,255,255,0.8)',
-  },
-  actionsColumn: {
-    flexDirection: 'column',
-    gap: Spacing.sm,
-    minWidth: 120,
-  },
-  playButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: Spacing.sm,
-    paddingHorizontal: Spacing.md,
-    borderRadius: BorderRadius.button,
-    gap: Spacing.xs,
-    ...Shadow.button,
-  },
-  playButtonText: {
-    ...Typography.body,
-    color: '#FFFFFF',
-    fontWeight: '600',
-    fontSize: 14,
-  },
-  iconButtonsRow: {
-    flexDirection: 'row',
-    gap: Spacing.sm,
-    justifyContent: 'center',
   },
   smallIconButton: {
     width: 36,

@@ -71,8 +71,10 @@ export function DesktopMySetsView() {
           <>
             <View style={styles.setsWrapper}>
               <View style={styles.setsGrid}>
-                {userSets.map(set => (
-                  <DesktopSetCard key={set.id} set={set} />
+                {userSets.map((set, index) => (
+                  <View key={set.id} style={styles.gridItem}>
+                    <DesktopSetCard set={set} compact />
+                  </View>
                 ))}
               </View>
             </View>
@@ -160,10 +162,19 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   setsWrapper: {
-    paddingHorizontal: Spacing.xxl * 2,
+    width: '100%',
   },
   setsGrid: {
-    gap: Spacing.md,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    rowGap: Spacing.xl,
+    columnGap: Spacing.xxl,
+    justifyContent: 'flex-start',
+  },
+  gridItem: {
+    width: 'calc(33.333% - 32px)',
+    minWidth: 300,
+    maxWidth: 450,
   },
   emptyState: {
     alignItems: 'center',
