@@ -370,18 +370,13 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         lastPracticed: undefined,
       };
 
-      // Update local state - add new set and remove featured sets if present
+      // Update local state - add new set and keep featured sets
       setSets(prev => {
-        const hasFeaturedSets = prev.some(set => set.isFeatured);
-        if (hasFeaturedSets) {
-          console.log(
-            '🗑️ Removing featured sets as user created their first set'
-          );
-          // Keep all user sets (non-featured) and add the new set at the top
-          const userSets = prev.filter(set => !set.isFeatured);
-          return [newSet, ...userSets];
-        }
-        return [newSet, ...prev];
+        // Separate user sets from featured sets
+        const userSets = prev.filter(set => !set.isFeatured);
+        const featuredSets = prev.filter(set => set.isFeatured);
+        // Add new set at the top, followed by other user sets, then featured sets
+        return [newSet, ...userSets, ...featuredSets];
       });
 
       return newSet;
