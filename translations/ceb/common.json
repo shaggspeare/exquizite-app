@@ -1,32 +1,42 @@
 {
-  "_note": "This is a placeholder file. Please replace with ceb translations.",
   "buttons": {
-    "add": "Add",
-    "done": "Done",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "share": "Share",
-    "play": "Play",
-    "next": "Next",
-    "previous": "Previous",
-    "skip": "Skip",
-    "check": "Check Answer",
-    "save": "Save",
-    "saving": "Saving...",
-    "finish": "Finish",
-    "tryAgain": "Try Again",
-    "playAgain": "Play Again",
-    "showHint": "Show Hint",
-    "generate": "Generate",
-    "generating": "Generating..."
+    "add": "Idugang",
+    "done": "Nahuman",
+    "cancel": "Kanselahon",
+    "delete": "Papahawaon",
+    "edit": "I-edit",
+    "save": "I-save",
+    "back": "Balik",
+    "next": "Sunod",
+    "skip": "Laktawi",
+    "confirm": "Konpirmahon",
+    "close": "Sirado",
+    "share": "Ipaambit",
+    "copy": "Kopyahon",
+    "generate": "Paghimo",
+    "import": "I-import",
+    "export": "I-export",
+    "select": "Pilia",
+    "selectAll": "Pilia Tanan",
+    "deselectAll": "Tangtangon ang Pagpili",
+    "submit": "Isumite",
+    "continue": "Padayon",
+    "finish": "Tapuson",
+    "retry": "Sulayi Pag-usab",
+    "viewAll": "Tan-awa Tanan"
   },
   "status": {
-    "loading": "Loading...",
-    "saving": "Saving...",
-    "generating": "Generating...",
-    "noWords": "No words in this set",
-    "success": "Success",
-    "error": "Error"
+    "loading": "Nag-load...",
+    "saving": "Nagsave...",
+    "saved": "Naluwas na",
+    "error": "Sayop",
+    "success": "Malampuson",
+    "failed": "Napakyas",
+    "processing": "Nagproseso...",
+    "uploading": "Nag-upload...",
+    "downloading": "Nag-download...",
+    "syncing": "Nagsinsinkro...",
+    "ready": "Andam na"
   },
   "time": {
     "never": "Never",
@@ -47,7 +57,54 @@
     "progress": "{{current}}/{{total}}"
   },
   "dialogs": {
-    "areYouSure": "Are you sure?",
-    "cannotUndo": "This action cannot be undone."
+    "confirmDelete": "Sigurado ka ba nga papahawaon kini?",
+    "confirmCancel": "Isalibay ang mga kausaban?",
+    "unsavedChanges": "Aduna kay mga kausaban nga wala pa ma-save",
+    "areYouSure": "Sigurado ka ba?",
+    "cannotBeUndone": "Dili kini mahimong ipahunong"
+  },
+  "sharing": {
+    "shareSet": "Share Set",
+    "shareCode": "Share Code",
+    "shareLink": "Share Link",
+    "copyLink": "Copy Link",
+    "copied": "Copied!",
+    "copy": "Copy",
+    "views": "Views",
+    "copies": "Copies",
+    "generatingLink": "Generating share link...",
+    "linkInfo": "Anyone with this link can view and copy your set",
+    "deactivateLink": "Deactivate Share Link",
+    "deactivateConfirm": "Are you sure you want to deactivate this share link? Anyone with the link will no longer be able to access this set.",
+    "deactivate": "Deactivate",
+    "linkDeactivated": "Share link has been deactivated",
+    "shareError": "Failed to generate share link. Please try again.",
+    "copyError": "Failed to copy link to clipboard",
+    "linkCopied": "Link Copied",
+    "linkCopiedToClipboard": "Share link copied to clipboard"
+  },
+  "tour": {
+    "skip": "Skip",
+    "next": "Next",
+    "back": "Back",
+    "getStarted": "Get Started",
+    "slides": {
+      "vocabulary": {
+        "title": "Build Your Vocabulary",
+        "description": "Add words manually or use AI to generate themed vocabulary sets. Create up to 20 words per set."
+      },
+      "organize": {
+        "title": "Organize Your Learning",
+        "description": "Group words into themed sets like \"Spanish Food\" or \"German Travel\". Name your sets for easy access."
+      },
+      "learn": {
+        "title": "Learn Your Way",
+        "description": "Practice with 4 game modes: Flashcards, Match Pairs, Multiple Choice Quiz, and Fill in the Blank."
+      },
+      "share": {
+        "title": "Share Your Knowledge",
+        "description": "Generate share links for your sets. Others can view and copy them to their library."
+      }
+    }
   }
 }

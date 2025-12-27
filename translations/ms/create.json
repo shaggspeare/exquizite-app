@@ -1,33 +1,62 @@
 {
-  "_note": "This is a placeholder file. Please replace with ms translations.",
-  "title": "Create Set",
-  "editTitle": "Edit Set",
-  "setName": "Set Name",
-  "setNamePlaceholder": "e.g., Spanish Vocabulary",
-  "words": "Words",
-  "addWord": "Add Word",
-  "aiSuggestions": "AI Suggestions",
-  "limitReached": "Limit Reached",
-  "limitMessage": "Maximum {{max}} words per set",
+  "title": "Cipta set",
+  "editTitle": "Edit set",
+  "setName": "Nama set",
+  "setNamePlaceholder": "cth. Kosa kata Perniagaan",
+  "languagePair": "Belajar {{target}} → {{native}}",
+  "words": "Perkataan",
+  "addWord": "Tambah perkataan",
+  "aiSuggestions": "Cadangan AI",
+  "limitReached": "Had dicapai",
+  "limitMessage": "Maks {{max}} perkataan per set",
   "errors": {
-    "fillAllFields": "Please fill in all fields",
-    "atLeastOneWord": "Please add at least one word pair",
-    "createFailed": "Failed to create set. Please try again.",
-    "networkError": "Network error. Please check your connection and try again."
+    "fillAllFields": "Isi semua medan",
+    "atLeastOneWord": "Tambah sekurang-kurangnya satu perkataan",
+    "createFailed": "Gagal cipta",
+    "networkError": "Ralat rangkaian"
   },
   "success": {
-    "created": "Set created successfully!",
-    "updated": "Set updated successfully!"
+    "created": "Set dicipta!",
+    "updated": "Set dikemas kini!"
   },
   "ai": {
-    "modalTitle": "AI Word Suggestions",
-    "themePlaceholder": "Theme (e.g., animals, food)",
+    "modalTitle": "Cadangan perkataan AI",
+    "themePlaceholder": "Tema (cth. haiwan, makanan)",
     "countPlaceholder": "#",
-    "countHint": "Generate up to {{max}} words (5 by default)",
-    "generatingWithContext": "Generating suggestions based on your {{count}} existing {{word}}...",
-    "generatingGeneric": "Generating suggestions with AI...",
-    "selectPrompt": "Select words to add ({{count}} selected)",
-    "noSuggestions": "No suggestions yet. Click Generate to get AI-powered word suggestions!",
-    "addSelected": "Add {{count}} {{word}}"
+    "countHint": "Jana sehingga {{max}} perkataan",
+    "generatingWithContext": "Menjana berdasarkan {{count}} {{word}}...",
+    "generatingGeneric": "Menjana dengan AI...",
+    "selectPrompt": "Pilih perkataan ({{count}} dipilih)",
+    "noSuggestions": "Tiada cadangan. Klik Jana!",
+    "addSelected": "Tambah {{count}} {{word}}"
+  },
+  "bulkImport": {
+    "button": "Import pukal",
+    "title": "Import perkataan pukal",
+    "howTo": "Cara import",
+    "instructions": "Tampal pasangan perkataan, satu per baris.",
+    "example": "Contoh:",
+    "separator": "Pemisah",
+    "separators": {
+      "tab": "Tab",
+      "comma": "Koma (,)",
+      "dash": "Sengkang (-)"
+    },
+    "pasteWords": "Tampal perkataan",
+    "placeholder": "perkataan1\tterjemahan1",
+    "preview": "Pratonton",
+    "previewTitle": "Pratonton",
+    "import": "Import {{count}} perkataan"
+  },
+  "languageOverride": {
+    "title": "Tetapan bahasa",
+    "custom": "Tersuai",
+    "description": "Tindih bahasa lalai untuk set ini sahaja.",
+    "usingDefaults": "Guna lalai",
+    "selectTarget": "Pilih bahasa sasaran",
+    "selectNative": "Pilih bahasa asal",
+    "targetLabel": "Pembelajaran",
+    "nativeLabel": "Terjemahan",
+    "useDefaults": "Guna lalai"
   }
 }

@@ -1,5 +1,4 @@
 {
-  "_note": "This is a placeholder file. Please replace with ceb translations.",
   "chooseActivity": "Choose Activity",
   "setNotFound": "Set not found",
   "wordsInSet": "Words in this set",
@@ -65,6 +64,7 @@
     }
   },
   "home": {
+    "title": "Home",
     "greeting": "Hello, {{name}}!",
     "readyToLearn": "Ready to learn today?",
     "noSets": "No sets yet",
@@ -74,6 +74,11 @@
     "tryThem": "Try them!",
     "demoDescription": "Practice with these demo sets to get started"
   },
+  "dashboard": {
+    "title": "Dashboard",
+    "lastPracticed": "Last Practiced",
+    "streak": "Streak"
+  },
   "mySets": {
     "title": "My Sets",
     "noSets": "No sets yet",
@@ -82,7 +87,10 @@
   },
   "setCard": {
     "featured": "Featured",
-    "complete": "{{count}}/{{total}}% complete",
+    "complete": "{{percent}}% complete",
+    "lastPracticed": "Last practiced {{date}}",
+    "deleteSet": "Delete Set",
+    "deleteConfirm": "Are you sure you want to delete \"{{setName}}\"? This action cannot be undone.",
     "demoInfo": "This is a demo set. Create your own set to get started!"
   }
 }

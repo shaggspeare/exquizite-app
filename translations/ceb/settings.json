@@ -1,13 +1,19 @@
 {
-  "_note": "This is a placeholder file. Please replace with ceb translations.",
   "title": "Settings",
+  "appLanguage": {
+    "title": "App Language",
+    "description": "Choose the language for the app interface.",
+    "label": "Interface Language",
+    "placeholder": "Select app language"
+  },
   "languages": {
-    "title": "Languages",
-    "description": "Choose which languages you want to learn and translate to.",
-    "targetLanguage": "Language to Learn",
+    "title": "Language Settings",
+    "description": "Change your learning and interface language. New sets will use these languages.",
+    "targetLanguage": "Learning",
     "targetPlaceholder": "Select language to learn",
-    "nativeLanguage": "Translate To",
-    "nativePlaceholder": "Select your native language"
+    "nativeLanguage": "Interface & Translations",
+    "nativePlaceholder": "Select your language",
+    "changeNote": "Changing these settings will affect new word sets. Your existing sets will keep their original languages."
   },
   "appearance": {
     "title": "Appearance",

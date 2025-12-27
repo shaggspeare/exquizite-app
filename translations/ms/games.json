@@ -1,88 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with ms translations.",
-  "chooseActivity": "Choose Activity",
-  "setNotFound": "Set not found",
-  "wordsInSet": "Words in this set",
-  "startPractice": "Start Practice",
-  "quickPractice": "Quick Practice",
+  "chooseActivity": "Pilih aktiviti",
+  "setNotFound": "Set tidak dijumpai",
+  "wordsInSet": "Perkataan dalam set ini",
+  "startPractice": "Mula latihan",
+  "quickPractice": "Latihan pantas",
   "templates": {
     "flashcard": {
-      "name": "Flashcard",
-      "description": "Flip to reveal translations"
+      "name": "Kad imbas",
+      "description": "Balikkan untuk lihat terjemahan"
     },
     "match": {
-      "name": "Match",
-      "description": "Drag and connect pairs"
+      "name": "Padankan",
+      "description": "Seret dan sambungkan pasangan"
     },
     "quiz": {
-      "name": "Quiz",
-      "description": "Multiple choice questions"
+      "name": "Kuiz",
+      "description": "Pilihan berganda"
     },
     "fillBlank": {
-      "name": "Fill in the Blank",
-      "description": "Complete sentences with the right word",
-      "aiHints": "AI hints available"
+      "name": "Isi tempat kosong",
+      "description": "Lengkapkan ayat",
+      "aiHints": "Petunjuk AI tersedia"
     }
   },
   "flashcard": {
-    "title": "Flashcards: {{setName}}",
-    "tapToFlip": "Tap to flip",
-    "clickToFlip": "Click to flip",
-    "complete": "Complete"
+    "title": "Kad imbas: {{setName}}",
+    "tapToFlip": "Ketik untuk balikkan",
+    "clickToFlip": "Klik untuk balikkan",
+    "complete": "Selesai"
   },
   "quiz": {
-    "title": "Quiz: {{setName}}",
-    "question": "Question {{current}} / {{total}}",
-    "translate": "Translate:",
-    "nextQuestion": "Next Question",
-    "loadingQuiz": "Loading quiz...",
+    "title": "Kuiz: {{setName}}",
+    "question": "Soalan {{current}} / {{total}}",
+    "translate": "Terjemahkan:",
+    "nextQuestion": "Soalan seterusnya",
+    "loadingQuiz": "Memuatkan kuiz...",
     "complete": {
-      "title": "Quiz Complete!",
-      "score": "You scored {{score}}/{{total}} ({{percentage}}%)"
+      "title": "Kuiz selesai!",
+      "score": "Skor: {{score}}/{{total}} ({{percentage}}%)"
     }
   },
   "match": {
-    "title": "Match: {{setName}}",
-    "words": "Words",
-    "translations": "Translations",
+    "title": "Padankan: {{setName}}",
+    "words": "Perkataan",
+    "translations": "Terjemahan",
     "complete": {
-      "title": "Congratulations!",
-      "message": "You completed the match game in {{time}}!"
+      "title": "Tahniah!",
+      "message": "Anda selesaikan permainan dalam {{time}}!"
     }
   },
   "fillBlank": {
-    "title": "Fill in the Blank: {{setName}}",
-    "question": "Question {{current}} / {{total}}",
-    "translation": "Translation:",
-    "fillPrompt": "Fill in the blank:",
-    "choosePrompt": "Choose the correct word:",
-    "loadingNext": "Loading next question...",
-    "generatingSentences": "Generating sentences...",
-    "correctAnswer": "Correct answer:",
+    "title": "Isi: {{setName}}",
+    "question": "Soalan {{current}} / {{total}}",
+    "translation": "Terjemahan:",
+    "fillPrompt": "Isi:",
+    "choosePrompt": "Pilih perkataan yang betul:",
+    "loadingNext": "Memuatkan...",
+    "generatingSentences": "Menjana ayat...",
+    "correctAnswer": "Jawapan betul:",
     "complete": {
-      "title": "Exercise Complete!",
-      "score": "You scored {{score}}/{{total}} ({{percentage}}%)"
+      "title": "Latihan selesai!",
+      "score": "Skor: {{score}}/{{total}} ({{percentage}}%)"
     }
   },
   "home": {
-    "greeting": "Hello, {{name}}!",
-    "readyToLearn": "Ready to learn today?",
-    "noSets": "No sets yet",
-    "createFirstSet": "Create your first word set to get started!",
-    "createSet": "Create Set",
-    "featuredSets": "Featured Sets",
-    "tryThem": "Try them!",
-    "demoDescription": "Practice with these demo sets to get started"
+    "title": "Laman utama",
+    "greeting": "Hai, {{name}}!",
+    "readyToLearn": "Sedia belajar?",
+    "noSets": "Tiada set",
+    "createFirstSet": "Cipta set pertama anda!",
+    "createSet": "Cipta set",
+    "featuredSets": "Set pilihan",
+    "tryThem": "Cuba!",
+    "demoDescription": "Latih dengan set demo ini"
+  },
+  "dashboard": {
+    "title": "Papan pemuka",
+    "lastPracticed": "Terakhir berlatih",
+    "streak": "Berturut-turut"
   },
   "mySets": {
-    "title": "My Sets",
-    "noSets": "No sets yet",
-    "createFirstSet": "Create your first word set to get started!",
-    "createSet": "Create Set"
+    "title": "Set saya",
+    "noSets": "Tiada set",
+    "createFirstSet": "Cipta set pertama anda!",
+    "createSet": "Cipta set"
   },
   "setCard": {
-    "featured": "Featured",
-    "complete": "{{count}}/{{total}}% complete",
-    "demoInfo": "This is a demo set. Create your own set to get started!"
+    "featured": "Pilihan",
+    "complete": "{{percent}}% selesai",
+    "lastPracticed": "Terakhir {{date}}",
+    "deleteSet": "Padam set",
+    "deleteConfirm": "Pasti mahu padam \"{{setName}}\"?",
+    "demoInfo": "Ini set demo. Cipta set anda sendiri!"
   }
 }

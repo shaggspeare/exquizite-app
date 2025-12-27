@@ -1,25 +1,31 @@
 {
-  "_note": "This is a placeholder file. Please replace with ms translations.",
-  "title": "Settings",
+  "title": "Tetapan",
+  "appLanguage": {
+    "title": "Bahasa aplikasi",
+    "description": "Pilih bahasa untuk antara muka.",
+    "label": "Bahasa antara muka",
+    "placeholder": "Pilih bahasa aplikasi"
+  },
   "languages": {
-    "title": "Languages",
-    "description": "Choose which languages you want to learn and translate to.",
-    "targetLanguage": "Language to Learn",
-    "targetPlaceholder": "Select language to learn",
-    "nativeLanguage": "Translate To",
-    "nativePlaceholder": "Select your native language"
+    "title": "Tetapan bahasa",
+    "description": "Ubah pembelajaran dan bahasa antara muka.",
+    "targetLanguage": "Pembelajaran",
+    "targetPlaceholder": "Pilih bahasa untuk belajar",
+    "nativeLanguage": "Antara muka dan terjemahan",
+    "nativePlaceholder": "Pilih bahasa anda",
+    "changeNote": "Ini akan mempengaruhi set baru."
   },
   "appearance": {
-    "title": "Appearance",
-    "description": "Choose how the app looks. Auto will match your device's theme.",
-    "light": "Light",
-    "dark": "Dark",
+    "title": "Penampilan",
+    "description": "Pilih tema aplikasi. Auto mengikut peranti.",
+    "light": "Cerah",
+    "dark": "Gelap",
     "auto": "Auto",
-    "info": "Theme changes apply immediately to all screens"
+    "info": "Perubahan tema digunakan serta-merta"
   },
   "mySets": {
-    "title": "My Sets",
-    "manage": "Manage your word sets. Click to expand and view words.",
-    "noSets": "No sets created yet"
+    "title": "Set saya",
+    "manage": "Urus set perkataan.",
+    "noSets": "Tiada set lagi"
   }
 }

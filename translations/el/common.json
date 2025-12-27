@@ -1,53 +1,107 @@
 {
-  "_note": "This is a placeholder file. Please replace with el translations.",
   "buttons": {
-    "add": "Add",
-    "done": "Done",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "share": "Share",
-    "play": "Play",
-    "next": "Next",
-    "previous": "Previous",
-    "skip": "Skip",
-    "check": "Check Answer",
-    "save": "Save",
-    "saving": "Saving...",
-    "finish": "Finish",
-    "tryAgain": "Try Again",
-    "playAgain": "Play Again",
-    "showHint": "Show Hint",
-    "generate": "Generate",
-    "generating": "Generating..."
+    "add": "Προσθήκη",
+    "done": "Τέλος",
+    "cancel": "Ακύρωση",
+    "delete": "Διαγραφή",
+    "edit": "Επεξεργασία",
+    "save": "Αποθήκευση",
+    "back": "Πίσω",
+    "next": "Επόμενο",
+    "skip": "Παράλειψη",
+    "confirm": "Επιβεβαίωση",
+    "close": "Κλείσιμο",
+    "share": "Κοινοποίηση",
+    "copy": "Αντιγραφή",
+    "generate": "Δημιουργία",
+    "import": "Εισαγωγή",
+    "export": "Εξαγωγή",
+    "select": "Επιλογή",
+    "selectAll": "Επιλογή όλων",
+    "deselectAll": "Αποεπιλογή όλων",
+    "submit": "Υποβολή",
+    "continue": "Συνέχεια",
+    "finish": "Ολοκλήρωση",
+    "retry": "Επανάληψη",
+    "viewAll": "Προβολή όλων"
   },
   "status": {
-    "loading": "Loading...",
-    "saving": "Saving...",
-    "generating": "Generating...",
-    "noWords": "No words in this set",
-    "success": "Success",
-    "error": "Error"
+    "loading": "Φόρτωση...",
+    "saving": "Αποθήκευση...",
+    "saved": "Αποθηκεύτηκε",
+    "error": "Σφάλμα",
+    "success": "Επιτυχία",
+    "failed": "Απέτυχε",
+    "processing": "Επεξεργασία...",
+    "uploading": "Μεταφόρτωση...",
+    "downloading": "Λήψη...",
+    "syncing": "Συγχρονισμός...",
+    "ready": "Έτοιμο"
   },
   "time": {
-    "never": "Never",
-    "today": "Today",
-    "yesterday": "Yesterday",
-    "daysAgo": "{{count}} days ago",
-    "lastPracticed": "Last practiced {{date}}"
+    "never": "Tidak pernah",
+    "today": "Hari ini",
+    "yesterday": "Kemarin",
+    "daysAgo": "{{count}} hari lalu",
+    "lastPracticed": "Terakhir dipraktikkan {{date}}"
   },
   "counts": {
-    "word": "word",
-    "words": "words",
+    "word": "kata",
+    "words": "kata",
     "set": "set",
-    "sets": "sets",
-    "wordCount": "{{count}} word",
-    "wordCount_other": "{{count}} words",
+    "sets": "set",
+    "wordCount": "{{count}} kata",
+    "wordCount_other": "{{count}} kata",
     "setCount": "{{count}} set",
-    "setCount_other": "{{count}} sets",
+    "setCount_other": "{{count}} set",
     "progress": "{{current}}/{{total}}"
   },
   "dialogs": {
-    "areYouSure": "Are you sure?",
-    "cannotUndo": "This action cannot be undone."
+    "areYouSure": "Apakah Anda yakin?",
+    "cannotUndo": "Tindakan ini tidak dapat dibatalkan."
+  },
+  "sharing": {
+    "shareSet": "Bagikan set",
+    "shareCode": "Kode berbagi",
+    "shareLink": "Link berbagi",
+    "copyLink": "Salin link",
+    "copied": "Disalin!",
+    "copy": "Salin",
+    "views": "Tampilan",
+    "copies": "Salinan",
+    "generatingLink": "Membuat link...",
+    "linkInfo": "Siapa pun dengan link ini dapat melihat dan menyalin set Anda",
+    "deactivateLink": "Nonaktifkan link",
+    "deactivateConfirm": "Yakin ingin menonaktifkan link ini?",
+    "deactivate": "Nonaktifkan",
+    "linkDeactivated": "Link dinonaktifkan",
+    "shareError": "Gagal membuat link",
+    "copyError": "Gagal menyalin link",
+    "linkCopied": "Link disalin",
+    "linkCopiedToClipboard": "Link disalin ke clipboard"
+  },
+  "tour": {
+    "skip": "Lewati",
+    "next": "Selanjutnya",
+    "back": "Kembali",
+    "getStarted": "Mulai",
+    "slides": {
+      "vocabulary": {
+        "title": "Bangun kosakata Anda",
+        "description": "Tambahkan kata secara manual atau gunakan AI. Buat hingga 20 kata per set."
+      },
+      "organize": {
+        "title": "Atur pembelajaran Anda",
+        "description": "Kelompokkan kata dalam set tema. Beri nama set untuk akses mudah."
+      },
+      "learn": {
+        "title": "Belajar dengan cara Anda",
+        "description": "Latihan dengan 4 mode: Flashcard, Pasangkan, Kuis, dan Isi."
+      },
+      "share": {
+        "title": "Bagikan pengetahuan Anda",
+        "description": "Buat link berbagi. Orang lain dapat menyalin ke perpustakaan mereka."
+      }
+    }
   }
 }

@@ -1,25 +1,24 @@
 {
-  "_note": "This is a placeholder file. Please replace with gu translations.",
-  "title": "Profile",
-  "guest": "Guest",
-  "guestAccount": "Guest Account",
-  "appAccount": "App Account",
+  "title": "Profil",
+  "guest": "Tamu",
+  "guestAccount": "Akun tamu",
+  "appAccount": "Akun aplikasi",
   "stats": {
-    "sets": "Sets",
-    "words": "Words",
-    "practiced": "Practiced"
+    "sets": "Set",
+    "words": "Kata",
+    "practiced": "Dipraktikkan"
   },
-  "progress": "Progress",
+  "progress": "Kemajuan",
   "settings": {
-    "title": "Settings",
-    "subtitle": "App Settings",
-    "description": "Theme, languages, and preferences"
+    "title": "Pengaturan",
+    "subtitle": "Pengaturan aplikasi",
+    "description": "Tema, bahasa, dan preferensi"
   },
-  "yourSets": "Your Sets",
-  "noSetsYet": "No sets created yet",
+  "yourSets": "Set Anda",
+  "noSetsYet": "Belum ada set",
   "deleteSet": {
-    "title": "Delete Set",
-    "message": "Are you sure you want to delete \"{{setName}}\"?",
-    "confirm": "Delete"
+    "title": "Hapus set",
+    "message": "Yakin ingin menghapus \"{{setName}}\"?",
+    "confirm": "Hapus"
   }
 }

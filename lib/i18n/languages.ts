@@ -93,6 +93,24 @@ export const FULLY_TRANSLATED_LANGUAGES = [
   'da', // Danish
   'fi', // Finnish
   'id', // Indonesian
+  'ms', // Malay
+  'ceb', // Cebuano
+  'tl', // Tagalog
+  'vi', // Vietnamese
+  'uz', // Uzbek
+  'kk', // Kazakh
+  'gu', // Gujarati
+  'cs', // Czech
+  'hr', // Croatian
+  'sk', // Slovak
+  'sl', // Slovenian
+  'sr', // Serbian
+  'lv', // Latvian
+  'lt', // Lithuanian
+  'et', // Estonian
+  'hu', // Hungarian
+  'el', // Greek
+  'bg', // Bulgarian
 ] as const;
 
 export const RTL_LANGUAGES = SUPPORTED_UI_LANGUAGES.filter(
