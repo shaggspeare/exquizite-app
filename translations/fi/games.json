@@ -1,88 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with fi translations.",
-  "chooseActivity": "Choose Activity",
-  "setNotFound": "Set not found",
-  "wordsInSet": "Words in this set",
-  "startPractice": "Start Practice",
-  "quickPractice": "Quick Practice",
+  "chooseActivity": "Valitse aktiviteetti",
+  "setNotFound": "Joukkoa ei löytynyt",
+  "wordsInSet": "Sanat tässä joukossa",
+  "startPractice": "Aloita harjoittelu",
+  "quickPractice": "Pika-harjoitus",
   "templates": {
     "flashcard": {
-      "name": "Flashcard",
-      "description": "Flip to reveal translations"
+      "name": "Kortit",
+      "description": "Käännä nähdäksesi käännöksen"
     },
     "match": {
-      "name": "Match",
-      "description": "Drag and connect pairs"
+      "name": "Parit",
+      "description": "Vedä ja yhdistä parit"
     },
     "quiz": {
-      "name": "Quiz",
-      "description": "Multiple choice questions"
+      "name": "Tietokilpailu",
+      "description": "Monivalinta"
     },
     "fillBlank": {
-      "name": "Fill in the Blank",
-      "description": "Complete sentences with the right word",
-      "aiHints": "AI hints available"
+      "name": "Täytä",
+      "description": "Täydennä lauseet",
+      "aiHints": "AI-vihjeet saatavilla"
     }
   },
   "flashcard": {
-    "title": "Flashcards: {{setName}}",
-    "tapToFlip": "Tap to flip",
-    "clickToFlip": "Click to flip",
-    "complete": "Complete"
+    "title": "Kortit: {{setName}}",
+    "tapToFlip": "Napauta kääntääksesi",
+    "clickToFlip": "Klikkaa kääntääksesi",
+    "complete": "Valmis"
   },
   "quiz": {
-    "title": "Quiz: {{setName}}",
-    "question": "Question {{current}} / {{total}}",
-    "translate": "Translate:",
-    "nextQuestion": "Next Question",
-    "loadingQuiz": "Loading quiz...",
+    "title": "Tietokilpailu: {{setName}}",
+    "question": "Kysymys {{current}} / {{total}}",
+    "translate": "Käännä:",
+    "nextQuestion": "Seuraava kysymys",
+    "loadingQuiz": "Ladataan tietokilpailua...",
     "complete": {
-      "title": "Quiz Complete!",
-      "score": "You scored {{score}}/{{total}} ({{percentage}}%)"
+      "title": "Tietokilpailu valmis!",
+      "score": "Pisteet: {{score}}/{{total}} ({{percentage}}%)"
     }
   },
   "match": {
-    "title": "Match: {{setName}}",
-    "words": "Words",
-    "translations": "Translations",
+    "title": "Parit: {{setName}}",
+    "words": "Sanat",
+    "translations": "Käännökset",
     "complete": {
-      "title": "Congratulations!",
-      "message": "You completed the match game in {{time}}!"
+      "title": "Onnittelut!",
+      "message": "Suoritit pelin ajassa {{time}}!"
     }
   },
   "fillBlank": {
-    "title": "Fill in the Blank: {{setName}}",
-    "question": "Question {{current}} / {{total}}",
-    "translation": "Translation:",
-    "fillPrompt": "Fill in the blank:",
-    "choosePrompt": "Choose the correct word:",
-    "loadingNext": "Loading next question...",
-    "generatingSentences": "Generating sentences...",
-    "correctAnswer": "Correct answer:",
+    "title": "Täytä: {{setName}}",
+    "question": "Kysymys {{current}} / {{total}}",
+    "translation": "Käännös:",
+    "fillPrompt": "Täytä:",
+    "choosePrompt": "Valitse oikea sana:",
+    "loadingNext": "Ladataan...",
+    "generatingSentences": "Luodaan lauseita...",
+    "correctAnswer": "Oikea vastaus:",
     "complete": {
-      "title": "Exercise Complete!",
-      "score": "You scored {{score}}/{{total}} ({{percentage}}%)"
+      "title": "Harjoitus valmis!",
+      "score": "Pisteet: {{score}}/{{total}} ({{percentage}}%)"
     }
   },
   "home": {
-    "greeting": "Hello, {{name}}!",
-    "readyToLearn": "Ready to learn today?",
-    "noSets": "No sets yet",
-    "createFirstSet": "Create your first word set to get started!",
-    "createSet": "Create Set",
-    "featuredSets": "Featured Sets",
-    "tryThem": "Try them!",
-    "demoDescription": "Practice with these demo sets to get started"
+    "title": "Koti",
+    "greeting": "Hei, {{name}}!",
+    "readyToLearn": "Valmis oppimaan?",
+    "noSets": "Ei joukkoja",
+    "createFirstSet": "Luo ensimmäinen joukko!",
+    "createSet": "Luo joukko",
+    "featuredSets": "Suositellut joukot",
+    "tryThem": "Kokeile!",
+    "demoDescription": "Harjoittele näillä demo-joukoilla"
+  },
+  "dashboard": {
+    "title": "Kojelauta",
+    "lastPracticed": "Viimeksi harjoiteltu",
+    "streak": "Putki"
   },
   "mySets": {
-    "title": "My Sets",
-    "noSets": "No sets yet",
-    "createFirstSet": "Create your first word set to get started!",
-    "createSet": "Create Set"
+    "title": "Omat joukot",
+    "noSets": "Ei joukkoja",
+    "createFirstSet": "Luo ensimmäinen joukko!",
+    "createSet": "Luo joukko"
   },
   "setCard": {
-    "featured": "Featured",
-    "complete": "{{count}}/{{total}}% complete",
-    "demoInfo": "This is a demo set. Create your own set to get started!"
+    "featured": "Suositeltu",
+    "complete": "{{percent}}% valmis",
+    "lastPracticed": "Viimeksi {{date}}",
+    "deleteSet": "Poista joukko",
+    "deleteConfirm": "Haluatko varmasti poistaa \"{{setName}}\"?",
+    "demoInfo": "Tämä on demo. Luo oma joukko!"
   }
 }

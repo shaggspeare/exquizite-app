@@ -137,6 +137,55 @@ import caProfile from '@/translations/ca/profile.json';
 import caCreate from '@/translations/ca/create.json';
 import caAuth from '@/translations/ca/auth.json';
 
+import plCommon from '@/translations/pl/common.json';
+import plSettings from '@/translations/pl/settings.json';
+import plGames from '@/translations/pl/games.json';
+import plProfile from '@/translations/pl/profile.json';
+import plCreate from '@/translations/pl/create.json';
+import plAuth from '@/translations/pl/auth.json';
+
+import nlCommon from '@/translations/nl/common.json';
+import nlSettings from '@/translations/nl/settings.json';
+import nlGames from '@/translations/nl/games.json';
+import nlProfile from '@/translations/nl/profile.json';
+import nlCreate from '@/translations/nl/create.json';
+import nlAuth from '@/translations/nl/auth.json';
+
+import svCommon from '@/translations/sv/common.json';
+import svSettings from '@/translations/sv/settings.json';
+import svGames from '@/translations/sv/games.json';
+import svProfile from '@/translations/sv/profile.json';
+import svCreate from '@/translations/sv/create.json';
+import svAuth from '@/translations/sv/auth.json';
+
+import noCommon from '@/translations/no/common.json';
+import noSettings from '@/translations/no/settings.json';
+import noGames from '@/translations/no/games.json';
+import noProfile from '@/translations/no/profile.json';
+import noCreate from '@/translations/no/create.json';
+import noAuth from '@/translations/no/auth.json';
+
+import daCommon from '@/translations/da/common.json';
+import daSettings from '@/translations/da/settings.json';
+import daGames from '@/translations/da/games.json';
+import daProfile from '@/translations/da/profile.json';
+import daCreate from '@/translations/da/create.json';
+import daAuth from '@/translations/da/auth.json';
+
+import fiCommon from '@/translations/fi/common.json';
+import fiSettings from '@/translations/fi/settings.json';
+import fiGames from '@/translations/fi/games.json';
+import fiProfile from '@/translations/fi/profile.json';
+import fiCreate from '@/translations/fi/create.json';
+import fiAuth from '@/translations/fi/auth.json';
+
+import idCommon from '@/translations/id/common.json';
+import idSettings from '@/translations/id/settings.json';
+import idGames from '@/translations/id/games.json';
+import idProfile from '@/translations/id/profile.json';
+import idCreate from '@/translations/id/create.json';
+import idAuth from '@/translations/id/auth.json';
+
 // Translation resources
 const resources = {
   en: {
@@ -291,6 +340,62 @@ const resources = {
     create: caCreate,
     auth: caAuth,
   },
+  pl: {
+    common: plCommon,
+    settings: plSettings,
+    games: plGames,
+    profile: plProfile,
+    create: plCreate,
+    auth: plAuth,
+  },
+  nl: {
+    common: nlCommon,
+    settings: nlSettings,
+    games: nlGames,
+    profile: nlProfile,
+    create: nlCreate,
+    auth: nlAuth,
+  },
+  sv: {
+    common: svCommon,
+    settings: svSettings,
+    games: svGames,
+    profile: svProfile,
+    create: svCreate,
+    auth: svAuth,
+  },
+  no: {
+    common: noCommon,
+    settings: noSettings,
+    games: noGames,
+    profile: noProfile,
+    create: noCreate,
+    auth: noAuth,
+  },
+  da: {
+    common: daCommon,
+    settings: daSettings,
+    games: daGames,
+    profile: daProfile,
+    create: daCreate,
+    auth: daAuth,
+  },
+  fi: {
+    common: fiCommon,
+    settings: fiSettings,
+    games: fiGames,
+    profile: fiProfile,
+    create: fiCreate,
+    auth: fiAuth,
+  },
+  id: {
+    common: idCommon,
+    settings: idSettings,
+    games: idGames,
+    profile: idProfile,
+    create: idCreate,
+    auth: idAuth,
+  },
 };
 
 // Get device language
@@ -321,7 +426,7 @@ i18n.use(initReactI18next).init({
     useSuspense: false, // Important for React Native
   },
 
-  compatibilityJSON: 'v3', // For better compatibility
+  compatibilityJSON: 'v4', // For better compatibility
 });
 
 export default i18n;

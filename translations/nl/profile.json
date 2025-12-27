@@ -1,25 +1,24 @@
 {
-  "_note": "This is a placeholder file. Please replace with nl translations.",
-  "title": "Profile",
-  "guest": "Guest",
-  "guestAccount": "Guest Account",
-  "appAccount": "App Account",
+  "title": "Profiel",
+  "guest": "Gast",
+  "guestAccount": "Gastaccount",
+  "appAccount": "App-account",
   "stats": {
     "sets": "Sets",
-    "words": "Words",
-    "practiced": "Practiced"
+    "words": "Woorden",
+    "practiced": "Geoefend"
   },
-  "progress": "Progress",
+  "progress": "Voortgang",
   "settings": {
-    "title": "Settings",
-    "subtitle": "App Settings",
-    "description": "Theme, languages, and preferences"
+    "title": "Instellingen",
+    "subtitle": "App-instellingen",
+    "description": "Thema, talen en voorkeuren"
   },
-  "yourSets": "Your Sets",
-  "noSetsYet": "No sets created yet",
+  "yourSets": "Je sets",
+  "noSetsYet": "Nog geen sets",
   "deleteSet": {
-    "title": "Delete Set",
-    "message": "Are you sure you want to delete \"{{setName}}\"?",
-    "confirm": "Delete"
+    "title": "Verwijder set",
+    "message": "Weet je zeker dat je \"{{setName}}\" wilt verwijderen?",
+    "confirm": "Verwijderen"
   }
 }

@@ -1,25 +1,31 @@
 {
-  "_note": "This is a placeholder file. Please replace with pl translations.",
-  "title": "Settings",
+  "title": "Ustawienia",
+  "appLanguage": {
+    "title": "Język aplikacji",
+    "description": "Wybierz język interfejsu.",
+    "label": "Język interfejsu",
+    "placeholder": "Wybierz język aplikacji"
+  },
   "languages": {
-    "title": "Languages",
-    "description": "Choose which languages you want to learn and translate to.",
-    "targetLanguage": "Language to Learn",
-    "targetPlaceholder": "Select language to learn",
-    "nativeLanguage": "Translate To",
-    "nativePlaceholder": "Select your native language"
+    "title": "Ustawienia języka",
+    "description": "Zmień język nauki i interfejsu. Nowe zestawy użyją tych języków.",
+    "targetLanguage": "Nauka",
+    "targetPlaceholder": "Wybierz język do nauki",
+    "nativeLanguage": "Interfejs i tłumaczenia",
+    "nativePlaceholder": "Wybierz swój język",
+    "changeNote": "Zmiana wpłynie na nowe zestawy. Istniejące zachowają oryginalne języki."
   },
   "appearance": {
-    "title": "Appearance",
-    "description": "Choose how the app looks. Auto will match your device's theme.",
-    "light": "Light",
-    "dark": "Dark",
+    "title": "Wygląd",
+    "description": "Wybierz wygląd aplikacji. Auto dopasuje się do motywu urządzenia.",
+    "light": "Jasny",
+    "dark": "Ciemny",
     "auto": "Auto",
-    "info": "Theme changes apply immediately to all screens"
+    "info": "Zmiany motywu stosowane natychmiast"
   },
   "mySets": {
-    "title": "My Sets",
-    "manage": "Manage your word sets. Click to expand and view words.",
-    "noSets": "No sets created yet"
+    "title": "Moje zestawy",
+    "manage": "Zarządzaj zestawami. Kliknij aby rozwinąć.",
+    "noSets": "Brak zestawów"
   }
 }

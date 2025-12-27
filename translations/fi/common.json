@@ -1,53 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with fi translations.",
   "buttons": {
-    "add": "Add",
-    "done": "Done",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "share": "Share",
-    "play": "Play",
-    "next": "Next",
-    "previous": "Previous",
-    "skip": "Skip",
-    "check": "Check Answer",
-    "save": "Save",
-    "saving": "Saving...",
-    "finish": "Finish",
-    "tryAgain": "Try Again",
-    "playAgain": "Play Again",
-    "showHint": "Show Hint",
-    "generate": "Generate",
-    "generating": "Generating..."
+    "add": "Lisää",
+    "done": "Valmis",
+    "cancel": "Peruuta",
+    "delete": "Poista",
+    "share": "Jaa",
+    "play": "Pelaa",
+    "next": "Seuraava",
+    "previous": "Edellinen",
+    "skip": "Ohita",
+    "check": "Tarkista vastaus",
+    "save": "Tallenna",
+    "saving": "Tallennetaan...",
+    "finish": "Lopeta",
+    "tryAgain": "Yritä uudelleen",
+    "playAgain": "Pelaa uudelleen",
+    "showHint": "Näytä vihje",
+    "generate": "Luo",
+    "generating": "Luodaan..."
   },
   "status": {
-    "loading": "Loading...",
-    "saving": "Saving...",
-    "generating": "Generating...",
-    "noWords": "No words in this set",
-    "success": "Success",
-    "error": "Error"
+    "loading": "Ladataan...",
+    "saving": "Tallennetaan...",
+    "generating": "Luodaan...",
+    "noWords": "Ei sanoja tässä joukossa",
+    "success": "Onnistui",
+    "error": "Virhe"
   },
   "time": {
-    "never": "Never",
-    "today": "Today",
-    "yesterday": "Yesterday",
-    "daysAgo": "{{count}} days ago",
-    "lastPracticed": "Last practiced {{date}}"
+    "never": "Ei koskaan",
+    "today": "Tänään",
+    "yesterday": "Eilen",
+    "daysAgo": "{{count}} päivää sitten",
+    "lastPracticed": "Viimeksi harjoiteltu {{date}}"
   },
   "counts": {
-    "word": "word",
-    "words": "words",
-    "set": "set",
-    "sets": "sets",
-    "wordCount": "{{count}} word",
-    "wordCount_other": "{{count}} words",
-    "setCount": "{{count}} set",
-    "setCount_other": "{{count}} sets",
+    "word": "sana",
+    "words": "sanaa",
+    "set": "joukko",
+    "sets": "joukkoa",
+    "wordCount": "{{count}} sana",
+    "wordCount_other": "{{count}} sanaa",
+    "setCount": "{{count}} joukko",
+    "setCount_other": "{{count}} joukkoa",
     "progress": "{{current}}/{{total}}"
   },
   "dialogs": {
-    "areYouSure": "Are you sure?",
-    "cannotUndo": "This action cannot be undone."
+    "areYouSure": "Oletko varma?",
+    "cannotUndo": "Tätä toimintoa ei voi perua."
+  },
+  "sharing": {
+    "shareSet": "Jaa joukko",
+    "shareCode": "Jakamiskoodi",
+    "shareLink": "Jakolinkki",
+    "copyLink": "Kopioi linkki",
+    "copied": "Kopioitu!",
+    "copy": "Kopioi",
+    "views": "Katselukerrat",
+    "copies": "Kopiot",
+    "generatingLink": "Luodaan linkkiä...",
+    "linkInfo": "Kuka tahansa tällä linkillä voi katsella ja kopioida joukkosi",
+    "deactivateLink": "Poista linkki käytöstä",
+    "deactivateConfirm": "Haluatko varmasti poistaa linkin käytöstä?",
+    "deactivate": "Poista käytöstä",
+    "linkDeactivated": "Linkki poistettu käytöstä",
+    "shareError": "Linkin luominen epäonnistui",
+    "copyError": "Linkin kopiointi epäonnistui",
+    "linkCopied": "Linkki kopioitu",
+    "linkCopiedToClipboard": "Linkki kopioitu leikepöydälle"
+  },
+  "tour": {
+    "skip": "Ohita",
+    "next": "Seuraava",
+    "back": "Takaisin",
+    "getStarted": "Aloita",
+    "slides": {
+      "vocabulary": {
+        "title": "Rakenna sanastoa",
+        "description": "Lisää sanoja manuaalisesti tai käytä tekoälyä. Luo jopa 20 sanaa per joukko."
+      },
+      "organize": {
+        "title": "Järjestä oppimisesi",
+        "description": "Ryhmittele sanat teemajoukkoihin. Nimeä joukot helppoa käyttöä varten."
+      },
+      "learn": {
+        "title": "Opi omalla tavallasi",
+        "description": "Harjoittele 4 tilassa: Kortit, Parit, Tietokilpailu ja Täytä."
+      },
+      "share": {
+        "title": "Jaa tietosi",
+        "description": "Luo jakolinkkejä. Muut voivat kopioida kirjastoonsa."
+      }
+    }
   }
 }

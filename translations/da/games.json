@@ -1,88 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with da translations.",
-  "chooseActivity": "Choose Activity",
-  "setNotFound": "Set not found",
-  "wordsInSet": "Words in this set",
-  "startPractice": "Start Practice",
-  "quickPractice": "Quick Practice",
+  "chooseActivity": "Vælg aktivitet",
+  "setNotFound": "Sæt ikke fundet",
+  "wordsInSet": "Ord i dette sæt",
+  "startPractice": "Start øvelse",
+  "quickPractice": "Hurtig øvelse",
   "templates": {
     "flashcard": {
       "name": "Flashcard",
-      "description": "Flip to reveal translations"
+      "description": "Vend for at se oversættelse"
     },
     "match": {
       "name": "Match",
-      "description": "Drag and connect pairs"
+      "description": "Træk og forbind par"
     },
     "quiz": {
       "name": "Quiz",
-      "description": "Multiple choice questions"
+      "description": "Multiple choice"
     },
     "fillBlank": {
-      "name": "Fill in the Blank",
-      "description": "Complete sentences with the right word",
-      "aiHints": "AI hints available"
+      "name": "Udfyld",
+      "description": "Fuldfør sætninger",
+      "aiHints": "AI-hints tilgængelig"
     }
   },
   "flashcard": {
     "title": "Flashcards: {{setName}}",
-    "tapToFlip": "Tap to flip",
-    "clickToFlip": "Click to flip",
-    "complete": "Complete"
+    "tapToFlip": "Tryk for at vende",
+    "clickToFlip": "Klik for at vende",
+    "complete": "Færdig"
   },
   "quiz": {
     "title": "Quiz: {{setName}}",
-    "question": "Question {{current}} / {{total}}",
-    "translate": "Translate:",
-    "nextQuestion": "Next Question",
-    "loadingQuiz": "Loading quiz...",
+    "question": "Spørgsmål {{current}} / {{total}}",
+    "translate": "Oversæt:",
+    "nextQuestion": "Næste spørgsmål",
+    "loadingQuiz": "Indlæser quiz...",
     "complete": {
-      "title": "Quiz Complete!",
-      "score": "You scored {{score}}/{{total}} ({{percentage}}%)"
+      "title": "Quiz færdig!",
+      "score": "Point: {{score}}/{{total}} ({{percentage}}%)"
     }
   },
   "match": {
     "title": "Match: {{setName}}",
-    "words": "Words",
-    "translations": "Translations",
+    "words": "Ord",
+    "translations": "Oversættelser",
     "complete": {
-      "title": "Congratulations!",
-      "message": "You completed the match game in {{time}}!"
+      "title": "Tillykke!",
+      "message": "Du gennemførte spillet på {{time}}!"
     }
   },
   "fillBlank": {
-    "title": "Fill in the Blank: {{setName}}",
-    "question": "Question {{current}} / {{total}}",
-    "translation": "Translation:",
-    "fillPrompt": "Fill in the blank:",
-    "choosePrompt": "Choose the correct word:",
-    "loadingNext": "Loading next question...",
-    "generatingSentences": "Generating sentences...",
-    "correctAnswer": "Correct answer:",
+    "title": "Udfyld: {{setName}}",
+    "question": "Spørgsmål {{current}} / {{total}}",
+    "translation": "Oversættelse:",
+    "fillPrompt": "Udfyld:",
+    "choosePrompt": "Vælg det rigtige ord:",
+    "loadingNext": "Indlæser...",
+    "generatingSentences": "Genererer sætninger...",
+    "correctAnswer": "Rigtigt svar:",
     "complete": {
-      "title": "Exercise Complete!",
-      "score": "You scored {{score}}/{{total}} ({{percentage}}%)"
+      "title": "Øvelse færdig!",
+      "score": "Point: {{score}}/{{total}} ({{percentage}}%)"
     }
   },
   "home": {
-    "greeting": "Hello, {{name}}!",
-    "readyToLearn": "Ready to learn today?",
-    "noSets": "No sets yet",
-    "createFirstSet": "Create your first word set to get started!",
-    "createSet": "Create Set",
-    "featuredSets": "Featured Sets",
-    "tryThem": "Try them!",
-    "demoDescription": "Practice with these demo sets to get started"
+    "title": "Hjem",
+    "greeting": "Hej, {{name}}!",
+    "readyToLearn": "Klar til at lære?",
+    "noSets": "Ingen sæt",
+    "createFirstSet": "Opret dit første sæt!",
+    "createSet": "Opret sæt",
+    "featuredSets": "Fremhævede sæt",
+    "tryThem": "Prøv dem!",
+    "demoDescription": "Øv med disse demosæt"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "lastPracticed": "Sidst øvet",
+    "streak": "Stribe"
   },
   "mySets": {
-    "title": "My Sets",
-    "noSets": "No sets yet",
-    "createFirstSet": "Create your first word set to get started!",
-    "createSet": "Create Set"
+    "title": "Mine sæt",
+    "noSets": "Ingen sæt",
+    "createFirstSet": "Opret dit første sæt!",
+    "createSet": "Opret sæt"
   },
   "setCard": {
-    "featured": "Featured",
-    "complete": "{{count}}/{{total}}% complete",
-    "demoInfo": "This is a demo set. Create your own set to get started!"
+    "featured": "Fremhævet",
+    "complete": "{{percent}}% færdig",
+    "lastPracticed": "Sidst {{date}}",
+    "deleteSet": "Slet sæt",
+    "deleteConfirm": "Vil du slette \"{{setName}}\"?",
+    "demoInfo": "Dette er et demo. Opret dit eget!"
   }
 }

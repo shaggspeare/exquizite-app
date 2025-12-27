@@ -1,25 +1,31 @@
 {
-  "_note": "This is a placeholder file. Please replace with no translations.",
-  "title": "Settings",
+  "title": "Innstillinger",
+  "appLanguage": {
+    "title": "Appspråk",
+    "description": "Velg språk for grensesnittet.",
+    "label": "Grensesnittspråk",
+    "placeholder": "Velg appspråk"
+  },
   "languages": {
-    "title": "Languages",
-    "description": "Choose which languages you want to learn and translate to.",
-    "targetLanguage": "Language to Learn",
-    "targetPlaceholder": "Select language to learn",
-    "nativeLanguage": "Translate To",
-    "nativePlaceholder": "Select your native language"
+    "title": "Språkinnstillinger",
+    "description": "Endre lærings- og grensesnittsspråk.",
+    "targetLanguage": "Læring",
+    "targetPlaceholder": "Velg språk å lære",
+    "nativeLanguage": "Grensesnitt og oversettelser",
+    "nativePlaceholder": "Velg ditt språk",
+    "changeNote": "Dette påvirker nye sett."
   },
   "appearance": {
-    "title": "Appearance",
-    "description": "Choose how the app looks. Auto will match your device's theme.",
-    "light": "Light",
-    "dark": "Dark",
+    "title": "Utseende",
+    "description": "Velg hvordan appen ser ut. Auto følger enheten.",
+    "light": "Lys",
+    "dark": "Mørk",
     "auto": "Auto",
-    "info": "Theme changes apply immediately to all screens"
+    "info": "Temaendringer anvendes umiddelbart"
   },
   "mySets": {
-    "title": "My Sets",
-    "manage": "Manage your word sets. Click to expand and view words.",
-    "noSets": "No sets created yet"
+    "title": "Mine sett",
+    "manage": "Administrer ordsett.",
+    "noSets": "Ingen sett ennå"
   }
 }

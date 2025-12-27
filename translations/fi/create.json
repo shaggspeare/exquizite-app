@@ -1,33 +1,62 @@
 {
-  "_note": "This is a placeholder file. Please replace with fi translations.",
-  "title": "Create Set",
-  "editTitle": "Edit Set",
-  "setName": "Set Name",
-  "setNamePlaceholder": "e.g., Spanish Vocabulary",
-  "words": "Words",
-  "addWord": "Add Word",
-  "aiSuggestions": "AI Suggestions",
-  "limitReached": "Limit Reached",
-  "limitMessage": "Maximum {{max}} words per set",
+  "title": "Luo joukko",
+  "editTitle": "Muokkaa joukkoa",
+  "setName": "Joukon nimi",
+  "setNamePlaceholder": "esim. Liiketoiminnan sanasto",
+  "languagePair": "Opi {{target}} → {{native}}",
+  "words": "Sanat",
+  "addWord": "Lisää sana",
+  "aiSuggestions": "AI-ehdotukset",
+  "limitReached": "Raja saavutettu",
+  "limitMessage": "Enintään {{max}} sanaa per joukko",
   "errors": {
-    "fillAllFields": "Please fill in all fields",
-    "atLeastOneWord": "Please add at least one word pair",
-    "createFailed": "Failed to create set. Please try again.",
-    "networkError": "Network error. Please check your connection and try again."
+    "fillAllFields": "Täytä kaikki kentät",
+    "atLeastOneWord": "Lisää vähintään yksi sana",
+    "createFailed": "Luominen epäonnistui",
+    "networkError": "Verkkovirhe"
   },
   "success": {
-    "created": "Set created successfully!",
-    "updated": "Set updated successfully!"
+    "created": "Joukko luotu!",
+    "updated": "Joukko päivitetty!"
   },
   "ai": {
-    "modalTitle": "AI Word Suggestions",
-    "themePlaceholder": "Theme (e.g., animals, food)",
+    "modalTitle": "AI-sanaehdotukset",
+    "themePlaceholder": "Teema (esim. eläimet, ruoka)",
     "countPlaceholder": "#",
-    "countHint": "Generate up to {{max}} words (5 by default)",
-    "generatingWithContext": "Generating suggestions based on your {{count}} existing {{word}}...",
-    "generatingGeneric": "Generating suggestions with AI...",
-    "selectPrompt": "Select words to add ({{count}} selected)",
-    "noSuggestions": "No suggestions yet. Click Generate to get AI-powered word suggestions!",
-    "addSelected": "Add {{count}} {{word}}"
+    "countHint": "Luo jopa {{max}} sanaa",
+    "generatingWithContext": "Luodaan {{count}} {{word}} perusteella...",
+    "generatingGeneric": "Luodaan AI:lla...",
+    "selectPrompt": "Valitse sanat ({{count}} valittu)",
+    "noSuggestions": "Ei ehdotuksia. Klikkaa Luo!",
+    "addSelected": "Lisää {{count}} {{word}}"
+  },
+  "bulkImport": {
+    "button": "Massatuonti",
+    "title": "Massatuo sanoja",
+    "howTo": "Kuinka tuoda",
+    "instructions": "Liitä sanaparit, yksi per rivi.",
+    "example": "Esimerkki:",
+    "separator": "Erotin",
+    "separators": {
+      "tab": "Sarkain",
+      "comma": "Pilkku (,)",
+      "dash": "Viiva (-)"
+    },
+    "pasteWords": "Liitä sanat",
+    "placeholder": "sana1\tkäännös1",
+    "preview": "Esikatselu",
+    "previewTitle": "Esikatselu",
+    "import": "Tuo {{count}} sanaa"
+  },
+  "languageOverride": {
+    "title": "Kieliasetukset",
+    "custom": "Mukautettu",
+    "description": "Ohita oletuskielet vain tälle joukolle.",
+    "usingDefaults": "Käytetään oletuksia",
+    "selectTarget": "Valitse kohdekieli",
+    "selectNative": "Valitse äidinkieli",
+    "targetLabel": "Oppiminen",
+    "nativeLabel": "Käännökset",
+    "useDefaults": "Käytä oletuksia"
   }
 }

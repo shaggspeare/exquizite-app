@@ -43,9 +43,12 @@ export const AVAILABLE_LANGUAGES = [
   { code: 'ru', name: 'Russian', flag: '🇷🇺' },
   { code: 'ja', name: 'Japanese', flag: '🇯🇵' },
   { code: 'ko', name: 'Korean', flag: '🇰🇷' },
-  { code: 'zh', name: 'Chinese', flag: '🇨🇳' },
+  { code: 'zh', name: 'Chinese (Simplified)', flag: '🇨🇳' },
+  { code: 'zh-Hant', name: 'Chinese (Traditional)', flag: '🇹🇼' },
   { code: 'ar', name: 'Arabic', flag: '🇸🇦' },
+  { code: 'he', name: 'Hebrew', flag: '🇮🇱' },
   { code: 'hi', name: 'Hindi', flag: '🇮🇳' },
+  { code: 'th', name: 'Thai', flag: '🇹🇭' },
   { code: 'uk', name: 'Ukrainian', flag: '🇺🇦' },
   { code: 'pl', name: 'Polish', flag: '🇵🇱' },
   { code: 'tr', name: 'Turkish', flag: '🇹🇷' },
@@ -54,6 +57,9 @@ export const AVAILABLE_LANGUAGES = [
   { code: 'no', name: 'Norwegian', flag: '🇳🇴' },
   { code: 'da', name: 'Danish', flag: '🇩🇰' },
   { code: 'fi', name: 'Finnish', flag: '🇫🇮' },
+  { code: 'ro', name: 'Romanian', flag: '🇷🇴' },
+  { code: 'ca', name: 'Catalan', flag: '🇪🇸' },
+  { code: 'id', name: 'Indonesian', flag: '🇮🇩' },
 ];
 
 // Detect device language

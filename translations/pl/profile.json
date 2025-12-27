@@ -1,25 +1,24 @@
 {
-  "_note": "This is a placeholder file. Please replace with pl translations.",
-  "title": "Profile",
-  "guest": "Guest",
-  "guestAccount": "Guest Account",
-  "appAccount": "App Account",
+  "title": "Profil",
+  "guest": "Gość",
+  "guestAccount": "Konto gościa",
+  "appAccount": "Konto aplikacji",
   "stats": {
-    "sets": "Sets",
-    "words": "Words",
-    "practiced": "Practiced"
+    "sets": "Zestawy",
+    "words": "Słowa",
+    "practiced": "Ćwiczone"
   },
-  "progress": "Progress",
+  "progress": "Postęp",
   "settings": {
-    "title": "Settings",
-    "subtitle": "App Settings",
-    "description": "Theme, languages, and preferences"
+    "title": "Ustawienia",
+    "subtitle": "Ustawienia aplikacji",
+    "description": "Motyw, języki i preferencje"
   },
-  "yourSets": "Your Sets",
-  "noSetsYet": "No sets created yet",
+  "yourSets": "Twoje zestawy",
+  "noSetsYet": "Brak zestawów",
   "deleteSet": {
-    "title": "Delete Set",
-    "message": "Are you sure you want to delete \"{{setName}}\"?",
-    "confirm": "Delete"
+    "title": "Usuń zestaw",
+    "message": "Czy na pewno chcesz usunąć \"{{setName}}\"?",
+    "confirm": "Usuń"
   }
 }

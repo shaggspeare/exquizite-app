@@ -1,25 +1,24 @@
 {
-  "_note": "This is a placeholder file. Please replace with no translations.",
-  "title": "Profile",
-  "guest": "Guest",
-  "guestAccount": "Guest Account",
-  "appAccount": "App Account",
+  "title": "Profil",
+  "guest": "Gjest",
+  "guestAccount": "Gjestkonto",
+  "appAccount": "Appkonto",
   "stats": {
-    "sets": "Sets",
-    "words": "Words",
-    "practiced": "Practiced"
+    "sets": "Sett",
+    "words": "Ord",
+    "practiced": "Øvd"
   },
-  "progress": "Progress",
+  "progress": "Fremgang",
   "settings": {
-    "title": "Settings",
-    "subtitle": "App Settings",
-    "description": "Theme, languages, and preferences"
+    "title": "Innstillinger",
+    "subtitle": "Appinnstillinger",
+    "description": "Tema, språk og preferanser"
   },
-  "yourSets": "Your Sets",
-  "noSetsYet": "No sets created yet",
+  "yourSets": "Dine sett",
+  "noSetsYet": "Ingen sett ennå",
   "deleteSet": {
-    "title": "Delete Set",
-    "message": "Are you sure you want to delete \"{{setName}}\"?",
-    "confirm": "Delete"
+    "title": "Slett sett",
+    "message": "Vil du slette \"{{setName}}\"?",
+    "confirm": "Slett"
   }
 }

@@ -1,33 +1,62 @@
 {
-  "_note": "This is a placeholder file. Please replace with pl translations.",
-  "title": "Create Set",
-  "editTitle": "Edit Set",
-  "setName": "Set Name",
-  "setNamePlaceholder": "e.g., Spanish Vocabulary",
-  "words": "Words",
-  "addWord": "Add Word",
-  "aiSuggestions": "AI Suggestions",
-  "limitReached": "Limit Reached",
-  "limitMessage": "Maximum {{max}} words per set",
+  "title": "Utwórz zestaw",
+  "editTitle": "Edytuj zestaw",
+  "setName": "Nazwa zestawu",
+  "setNamePlaceholder": "np. Słownictwo biznesowe",
+  "languagePair": "Ucz się {{target}} → {{native}}",
+  "words": "Słowa",
+  "addWord": "Dodaj słowo",
+  "aiSuggestions": "Sugestie AI",
+  "limitReached": "Osiągnięto limit",
+  "limitMessage": "Maksymalnie {{max}} słów na zestaw",
   "errors": {
-    "fillAllFields": "Please fill in all fields",
-    "atLeastOneWord": "Please add at least one word pair",
-    "createFailed": "Failed to create set. Please try again.",
-    "networkError": "Network error. Please check your connection and try again."
+    "fillAllFields": "Wypełnij wszystkie pola",
+    "atLeastOneWord": "Dodaj przynajmniej jedno słowo",
+    "createFailed": "Nie udało się utworzyć. Spróbuj ponownie.",
+    "networkError": "Błąd sieci. Sprawdź połączenie."
   },
   "success": {
-    "created": "Set created successfully!",
-    "updated": "Set updated successfully!"
+    "created": "Zestaw utworzony!",
+    "updated": "Zestaw zaktualizowany!"
   },
   "ai": {
-    "modalTitle": "AI Word Suggestions",
-    "themePlaceholder": "Theme (e.g., animals, food)",
+    "modalTitle": "Sugestie słów AI",
+    "themePlaceholder": "Temat (np. zwierzęta, jedzenie)",
     "countPlaceholder": "#",
-    "countHint": "Generate up to {{max}} words (5 by default)",
-    "generatingWithContext": "Generating suggestions based on your {{count}} existing {{word}}...",
-    "generatingGeneric": "Generating suggestions with AI...",
-    "selectPrompt": "Select words to add ({{count}} selected)",
-    "noSuggestions": "No suggestions yet. Click Generate to get AI-powered word suggestions!",
-    "addSelected": "Add {{count}} {{word}}"
+    "countHint": "Generuj do {{max}} słów (domyślnie 5)",
+    "generatingWithContext": "Generowanie na podstawie {{count}} {{word}}...",
+    "generatingGeneric": "Generowanie z AI...",
+    "selectPrompt": "Wybierz słowa ({{count}} zaznaczonych)",
+    "noSuggestions": "Brak sugestii. Kliknij Generuj!",
+    "addSelected": "Dodaj {{count}} {{word}}"
+  },
+  "bulkImport": {
+    "button": "Import masowy",
+    "title": "Import masowy słów",
+    "howTo": "Jak importować",
+    "instructions": "Wklej pary słów, po jednej w wierszu. Rozdziel tabulatorem, przecinkiem lub myślnikiem.",
+    "example": "Przykład:",
+    "separator": "Separator",
+    "separators": {
+      "tab": "Tabulator",
+      "comma": "Przecinek (,)",
+      "dash": "Myślnik (-)"
+    },
+    "pasteWords": "Wklej słowa",
+    "placeholder": "słowo1\ttłumaczenie1\nsłowo2\ttłumaczenie2",
+    "preview": "Podgląd",
+    "previewTitle": "Podgląd",
+    "import": "Importuj {{count}} słów"
+  },
+  "languageOverride": {
+    "title": "Ustawienia języka",
+    "custom": "Niestandardowe",
+    "description": "Nadpisz domyślne języki tylko dla tego zestawu.",
+    "usingDefaults": "Używanie domyślnych",
+    "selectTarget": "Wybierz język docelowy",
+    "selectNative": "Wybierz język rodzimy",
+    "targetLabel": "Nauka",
+    "nativeLabel": "Tłumaczenia",
+    "useDefaults": "Użyj domyślnych"
   }
 }

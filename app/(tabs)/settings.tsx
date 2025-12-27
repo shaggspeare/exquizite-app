@@ -24,7 +24,7 @@ import { Spacing, Typography, BorderRadius } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 import { DesktopLayout } from '@/components/layout/DesktopLayout';
 import { DesktopContainer } from '@/components/layout/DesktopContainer';
-import { SUPPORTED_UI_LANGUAGES, FULLY_TRANSLATED_LANGUAGES } from '@/lib/i18n/languages';
+import { FULLY_TRANSLATED_LANGUAGES } from '@/lib/i18n/languages';
 
 type ThemeOption = 'light' | 'dark' | 'auto';
 
@@ -33,7 +33,7 @@ export default function SettingsScreen() {
   const router = useRouter();
   const { colors, theme, setTheme } = useTheme();
   const { preferences, setLanguages } = useLanguage();
-  const { currentLanguage, changeLanguage } = useI18n();
+  const { changeLanguage } = useI18n();
   const { sets } = useSets();
   const { user } = useAuth();
   const { isDesktop } = useResponsive();

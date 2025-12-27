@@ -1,53 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with da translations.",
   "buttons": {
-    "add": "Add",
-    "done": "Done",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "share": "Share",
-    "play": "Play",
-    "next": "Next",
-    "previous": "Previous",
-    "skip": "Skip",
-    "check": "Check Answer",
-    "save": "Save",
-    "saving": "Saving...",
-    "finish": "Finish",
-    "tryAgain": "Try Again",
-    "playAgain": "Play Again",
-    "showHint": "Show Hint",
-    "generate": "Generate",
-    "generating": "Generating..."
+    "add": "Tilføj",
+    "done": "Færdig",
+    "cancel": "Annuller",
+    "delete": "Slet",
+    "share": "Del",
+    "play": "Spil",
+    "next": "Næste",
+    "previous": "Forrige",
+    "skip": "Spring over",
+    "check": "Tjek svar",
+    "save": "Gem",
+    "saving": "Gemmer...",
+    "finish": "Afslut",
+    "tryAgain": "Prøv igen",
+    "playAgain": "Spil igen",
+    "showHint": "Vis hint",
+    "generate": "Generer",
+    "generating": "Genererer..."
   },
   "status": {
-    "loading": "Loading...",
-    "saving": "Saving...",
-    "generating": "Generating...",
-    "noWords": "No words in this set",
-    "success": "Success",
-    "error": "Error"
+    "loading": "Indlæser...",
+    "saving": "Gemmer...",
+    "generating": "Genererer...",
+    "noWords": "Ingen ord i dette sæt",
+    "success": "Succes",
+    "error": "Fejl"
   },
   "time": {
-    "never": "Never",
-    "today": "Today",
-    "yesterday": "Yesterday",
-    "daysAgo": "{{count}} days ago",
-    "lastPracticed": "Last practiced {{date}}"
+    "never": "Aldrig",
+    "today": "I dag",
+    "yesterday": "I går",
+    "daysAgo": "{{count}} dage siden",
+    "lastPracticed": "Sidst øvet {{date}}"
   },
   "counts": {
-    "word": "word",
-    "words": "words",
-    "set": "set",
-    "sets": "sets",
-    "wordCount": "{{count}} word",
-    "wordCount_other": "{{count}} words",
-    "setCount": "{{count}} set",
-    "setCount_other": "{{count}} sets",
+    "word": "ord",
+    "words": "ord",
+    "set": "sæt",
+    "sets": "sæt",
+    "wordCount": "{{count}} ord",
+    "wordCount_other": "{{count}} ord",
+    "setCount": "{{count}} sæt",
+    "setCount_other": "{{count}} sæt",
     "progress": "{{current}}/{{total}}"
   },
   "dialogs": {
-    "areYouSure": "Are you sure?",
-    "cannotUndo": "This action cannot be undone."
+    "areYouSure": "Er du sikker?",
+    "cannotUndo": "Denne handling kan ikke fortrydes."
+  },
+  "sharing": {
+    "shareSet": "Del sæt",
+    "shareCode": "Delingskode",
+    "shareLink": "Delingslink",
+    "copyLink": "Kopier link",
+    "copied": "Kopieret!",
+    "copy": "Kopier",
+    "views": "Visninger",
+    "copies": "Kopier",
+    "generatingLink": "Genererer link...",
+    "linkInfo": "Alle med dette link kan se og kopiere dit sæt",
+    "deactivateLink": "Deaktiver link",
+    "deactivateConfirm": "Er du sikker på at du vil deaktivere linket?",
+    "deactivate": "Deaktiver",
+    "linkDeactivated": "Link deaktiveret",
+    "shareError": "Kunne ikke generere link",
+    "copyError": "Kunne ikke kopiere link",
+    "linkCopied": "Link kopieret",
+    "linkCopiedToClipboard": "Link kopieret til udklipsholder"
+  },
+  "tour": {
+    "skip": "Spring over",
+    "next": "Næste",
+    "back": "Tilbage",
+    "getStarted": "Kom i gang",
+    "slides": {
+      "vocabulary": {
+        "title": "Byg dit ordforråd",
+        "description": "Tilføj ord manuelt eller brug AI. Opret op til 20 ord per sæt."
+      },
+      "organize": {
+        "title": "Organiser din læring",
+        "description": "Grupper ord i temasæt. Navngiv sæt for nem adgang."
+      },
+      "learn": {
+        "title": "Lær på din måde",
+        "description": "Øv med 4 tilstande: Flashcards, Match par, Quiz og Udfyld."
+      },
+      "share": {
+        "title": "Del din viden",
+        "description": "Generer delingslinks. Andre kan kopiere til deres bibliotek."
+      }
+    }
   }
 }

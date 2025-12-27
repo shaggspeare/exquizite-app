@@ -1,25 +1,24 @@
 {
-  "_note": "This is a placeholder file. Please replace with sv translations.",
-  "title": "Profile",
-  "guest": "Guest",
-  "guestAccount": "Guest Account",
-  "appAccount": "App Account",
+  "title": "Profil",
+  "guest": "Gäst",
+  "guestAccount": "Gästkonto",
+  "appAccount": "Appkonto",
   "stats": {
-    "sets": "Sets",
-    "words": "Words",
-    "practiced": "Practiced"
+    "sets": "Uppsättningar",
+    "words": "Ord",
+    "practiced": "Övad"
   },
-  "progress": "Progress",
+  "progress": "Framsteg",
   "settings": {
-    "title": "Settings",
-    "subtitle": "App Settings",
-    "description": "Theme, languages, and preferences"
+    "title": "Inställningar",
+    "subtitle": "Appinställningar",
+    "description": "Tema, språk och preferenser"
   },
-  "yourSets": "Your Sets",
-  "noSetsYet": "No sets created yet",
+  "yourSets": "Dina uppsättningar",
+  "noSetsYet": "Inga uppsättningar än",
   "deleteSet": {
-    "title": "Delete Set",
-    "message": "Are you sure you want to delete \"{{setName}}\"?",
-    "confirm": "Delete"
+    "title": "Radera uppsättning",
+    "message": "Vill du radera \"{{setName}}\"?",
+    "confirm": "Radera"
   }
 }

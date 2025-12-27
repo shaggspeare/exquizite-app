@@ -1,25 +1,24 @@
 {
-  "_note": "This is a placeholder file. Please replace with fi translations.",
-  "title": "Profile",
-  "guest": "Guest",
-  "guestAccount": "Guest Account",
-  "appAccount": "App Account",
+  "title": "Profiili",
+  "guest": "Vieras",
+  "guestAccount": "Vierastili",
+  "appAccount": "Sovellustili",
   "stats": {
-    "sets": "Sets",
-    "words": "Words",
-    "practiced": "Practiced"
+    "sets": "Joukot",
+    "words": "Sanat",
+    "practiced": "Harjoiteltu"
   },
-  "progress": "Progress",
+  "progress": "Edistyminen",
   "settings": {
-    "title": "Settings",
-    "subtitle": "App Settings",
-    "description": "Theme, languages, and preferences"
+    "title": "Asetukset",
+    "subtitle": "Sovelluksen asetukset",
+    "description": "Teema, kielet ja asetukset"
   },
-  "yourSets": "Your Sets",
-  "noSetsYet": "No sets created yet",
+  "yourSets": "Sinun joukot",
+  "noSetsYet": "Ei vielä joukkoja",
   "deleteSet": {
-    "title": "Delete Set",
-    "message": "Are you sure you want to delete \"{{setName}}\"?",
-    "confirm": "Delete"
+    "title": "Poista joukko",
+    "message": "Haluatko varmasti poistaa \"{{setName}}\"?",
+    "confirm": "Poista"
   }
 }

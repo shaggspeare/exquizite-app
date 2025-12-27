@@ -1,25 +1,31 @@
 {
-  "_note": "This is a placeholder file. Please replace with fi translations.",
-  "title": "Settings",
+  "title": "Asetukset",
+  "appLanguage": {
+    "title": "Sovelluksen kieli",
+    "description": "Valitse käyttöliittymän kieli.",
+    "label": "Käyttöliittymän kieli",
+    "placeholder": "Valitse sovelluksen kieli"
+  },
   "languages": {
-    "title": "Languages",
-    "description": "Choose which languages you want to learn and translate to.",
-    "targetLanguage": "Language to Learn",
-    "targetPlaceholder": "Select language to learn",
-    "nativeLanguage": "Translate To",
-    "nativePlaceholder": "Select your native language"
+    "title": "Kieliasetukset",
+    "description": "Vaihda oppimis- ja käyttöliittymäkieli.",
+    "targetLanguage": "Oppiminen",
+    "targetPlaceholder": "Valitse opittava kieli",
+    "nativeLanguage": "Käyttöliittymä ja käännökset",
+    "nativePlaceholder": "Valitse kielesi",
+    "changeNote": "Tämä vaikuttaa uusiin joukkoihin."
   },
   "appearance": {
-    "title": "Appearance",
-    "description": "Choose how the app looks. Auto will match your device's theme.",
-    "light": "Light",
-    "dark": "Dark",
-    "auto": "Auto",
-    "info": "Theme changes apply immediately to all screens"
+    "title": "Ulkoasu",
+    "description": "Valitse sovelluksen ulkoasu. Autom. seuraa laitetta.",
+    "light": "Vaalea",
+    "dark": "Tumma",
+    "auto": "Automaattinen",
+    "info": "Teeman muutokset otetaan heti käyttöön"
   },
   "mySets": {
-    "title": "My Sets",
-    "manage": "Manage your word sets. Click to expand and view words.",
-    "noSets": "No sets created yet"
+    "title": "Omat joukot",
+    "manage": "Hallinnoi sanajoukkoja.",
+    "noSets": "Ei vielä joukkoja"
   }
 }

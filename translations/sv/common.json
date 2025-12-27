@@ -1,53 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with sv translations.",
   "buttons": {
-    "add": "Add",
-    "done": "Done",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "share": "Share",
-    "play": "Play",
-    "next": "Next",
-    "previous": "Previous",
-    "skip": "Skip",
-    "check": "Check Answer",
-    "save": "Save",
-    "saving": "Saving...",
-    "finish": "Finish",
-    "tryAgain": "Try Again",
-    "playAgain": "Play Again",
-    "showHint": "Show Hint",
-    "generate": "Generate",
-    "generating": "Generating..."
+    "add": "Lägg till",
+    "done": "Klar",
+    "cancel": "Avbryt",
+    "delete": "Radera",
+    "share": "Dela",
+    "play": "Spela",
+    "next": "Nästa",
+    "previous": "Föregående",
+    "skip": "Hoppa över",
+    "check": "Kontrollera svar",
+    "save": "Spara",
+    "saving": "Sparar...",
+    "finish": "Avsluta",
+    "tryAgain": "Försök igen",
+    "playAgain": "Spela igen",
+    "showHint": "Visa tips",
+    "generate": "Generera",
+    "generating": "Genererar..."
   },
   "status": {
-    "loading": "Loading...",
-    "saving": "Saving...",
-    "generating": "Generating...",
-    "noWords": "No words in this set",
-    "success": "Success",
-    "error": "Error"
+    "loading": "Laddar...",
+    "saving": "Sparar...",
+    "generating": "Genererar...",
+    "noWords": "Inga ord i denna uppsättning",
+    "success": "Framgång",
+    "error": "Fel"
   },
   "time": {
-    "never": "Never",
-    "today": "Today",
-    "yesterday": "Yesterday",
-    "daysAgo": "{{count}} days ago",
-    "lastPracticed": "Last practiced {{date}}"
+    "never": "Aldrig",
+    "today": "Idag",
+    "yesterday": "Igår",
+    "daysAgo": "{{count}} dagar sedan",
+    "lastPracticed": "Senast övad {{date}}"
   },
   "counts": {
-    "word": "word",
-    "words": "words",
-    "set": "set",
-    "sets": "sets",
-    "wordCount": "{{count}} word",
-    "wordCount_other": "{{count}} words",
-    "setCount": "{{count}} set",
-    "setCount_other": "{{count}} sets",
+    "word": "ord",
+    "words": "ord",
+    "set": "uppsättning",
+    "sets": "uppsättningar",
+    "wordCount": "{{count}} ord",
+    "wordCount_other": "{{count}} ord",
+    "setCount": "{{count}} uppsättning",
+    "setCount_other": "{{count}} uppsättningar",
     "progress": "{{current}}/{{total}}"
   },
   "dialogs": {
-    "areYouSure": "Are you sure?",
-    "cannotUndo": "This action cannot be undone."
+    "areYouSure": "Är du säker?",
+    "cannotUndo": "Denna åtgärd kan inte ångras."
+  },
+  "sharing": {
+    "shareSet": "Dela uppsättning",
+    "shareCode": "Delningskod",
+    "shareLink": "Delningslänk",
+    "copyLink": "Kopiera länk",
+    "copied": "Kopierad!",
+    "copy": "Kopiera",
+    "views": "Visningar",
+    "copies": "Kopior",
+    "generatingLink": "Genererar länk...",
+    "linkInfo": "Alla med denna länk kan se och kopiera din uppsättning",
+    "deactivateLink": "Inaktivera länk",
+    "deactivateConfirm": "Är du säker på att du vill inaktivera länken?",
+    "deactivate": "Inaktivera",
+    "linkDeactivated": "Länk inaktiverad",
+    "shareError": "Kunde inte generera länk",
+    "copyError": "Kunde inte kopiera länk",
+    "linkCopied": "Länk kopierad",
+    "linkCopiedToClipboard": "Länk kopierad till urklipp"
+  },
+  "tour": {
+    "skip": "Hoppa över",
+    "next": "Nästa",
+    "back": "Tillbaka",
+    "getStarted": "Kom igång",
+    "slides": {
+      "vocabulary": {
+        "title": "Bygg ditt ordförråd",
+        "description": "Lägg till ord manuellt eller använd AI. Skapa upp till 20 ord per uppsättning."
+      },
+      "organize": {
+        "title": "Organisera ditt lärande",
+        "description": "Gruppera ord i temauppsättningar. Namnge uppsättningar för enkel åtkomst."
+      },
+      "learn": {
+        "title": "Lär dig på ditt sätt",
+        "description": "Öva med 4 lägen: Flashcards, Matcha par, Quiz och Fyll i."
+      },
+      "share": {
+        "title": "Dela din kunskap",
+        "description": "Generera delningslänkar. Andra kan kopiera till sitt bibliotek."
+      }
+    }
   }
 }

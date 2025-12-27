@@ -1,33 +1,62 @@
 {
-  "_note": "This is a placeholder file. Please replace with no translations.",
-  "title": "Create Set",
-  "editTitle": "Edit Set",
-  "setName": "Set Name",
-  "setNamePlaceholder": "e.g., Spanish Vocabulary",
-  "words": "Words",
-  "addWord": "Add Word",
-  "aiSuggestions": "AI Suggestions",
-  "limitReached": "Limit Reached",
-  "limitMessage": "Maximum {{max}} words per set",
+  "title": "Opprett sett",
+  "editTitle": "Rediger sett",
+  "setName": "Settnavn",
+  "setNamePlaceholder": "f.eks. Forretningsordforråd",
+  "languagePair": "Lær {{target}} → {{native}}",
+  "words": "Ord",
+  "addWord": "Legg til ord",
+  "aiSuggestions": "AI-forslag",
+  "limitReached": "Grense nådd",
+  "limitMessage": "Maks {{max}} ord per sett",
   "errors": {
-    "fillAllFields": "Please fill in all fields",
-    "atLeastOneWord": "Please add at least one word pair",
-    "createFailed": "Failed to create set. Please try again.",
-    "networkError": "Network error. Please check your connection and try again."
+    "fillAllFields": "Fyll ut alle felt",
+    "atLeastOneWord": "Legg til minst ett ord",
+    "createFailed": "Kunne ikke opprette",
+    "networkError": "Nettverksfeil"
   },
   "success": {
-    "created": "Set created successfully!",
-    "updated": "Set updated successfully!"
+    "created": "Sett opprettet!",
+    "updated": "Sett oppdatert!"
   },
   "ai": {
-    "modalTitle": "AI Word Suggestions",
-    "themePlaceholder": "Theme (e.g., animals, food)",
+    "modalTitle": "AI-ordforslag",
+    "themePlaceholder": "Tema (f.eks. dyr, mat)",
     "countPlaceholder": "#",
-    "countHint": "Generate up to {{max}} words (5 by default)",
-    "generatingWithContext": "Generating suggestions based on your {{count}} existing {{word}}...",
-    "generatingGeneric": "Generating suggestions with AI...",
-    "selectPrompt": "Select words to add ({{count}} selected)",
-    "noSuggestions": "No suggestions yet. Click Generate to get AI-powered word suggestions!",
-    "addSelected": "Add {{count}} {{word}}"
+    "countHint": "Generer opptil {{max}} ord",
+    "generatingWithContext": "Genererer basert på {{count}} {{word}}...",
+    "generatingGeneric": "Genererer med AI...",
+    "selectPrompt": "Velg ord ({{count}} valgt)",
+    "noSuggestions": "Ingen forslag. Klikk Generer!",
+    "addSelected": "Legg til {{count}} {{word}}"
+  },
+  "bulkImport": {
+    "button": "Masseimport",
+    "title": "Masseimporter ord",
+    "howTo": "Hvordan importere",
+    "instructions": "Lim inn ordpar, ett per linje.",
+    "example": "Eksempel:",
+    "separator": "Separator",
+    "separators": {
+      "tab": "Tab",
+      "comma": "Komma (,)",
+      "dash": "Bindestrek (-)"
+    },
+    "pasteWords": "Lim inn ord",
+    "placeholder": "ord1\toversettelse1",
+    "preview": "Forhåndsvisning",
+    "previewTitle": "Forhåndsvisning",
+    "import": "Importer {{count}} ord"
+  },
+  "languageOverride": {
+    "title": "Språkinnstillinger",
+    "custom": "Tilpasset",
+    "description": "Overstyr standardspråk bare for dette settet.",
+    "usingDefaults": "Bruker standard",
+    "selectTarget": "Velg målspråk",
+    "selectNative": "Velg morsmål",
+    "targetLabel": "Læring",
+    "nativeLabel": "Oversettelser",
+    "useDefaults": "Bruk standard"
   }
 }

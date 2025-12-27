@@ -1,53 +1,96 @@
 {
-  "_note": "This is a placeholder file. Please replace with pl translations.",
   "buttons": {
-    "add": "Add",
-    "done": "Done",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "share": "Share",
-    "play": "Play",
-    "next": "Next",
-    "previous": "Previous",
-    "skip": "Skip",
-    "check": "Check Answer",
-    "save": "Save",
-    "saving": "Saving...",
-    "finish": "Finish",
-    "tryAgain": "Try Again",
-    "playAgain": "Play Again",
-    "showHint": "Show Hint",
-    "generate": "Generate",
-    "generating": "Generating..."
+    "add": "Dodaj",
+    "done": "Gotowe",
+    "cancel": "Anuluj",
+    "delete": "Usuń",
+    "share": "Udostępnij",
+    "play": "Graj",
+    "next": "Dalej",
+    "previous": "Wstecz",
+    "skip": "Pomiń",
+    "check": "Sprawdź odpowiedź",
+    "save": "Zapisz",
+    "saving": "Zapisywanie...",
+    "finish": "Zakończ",
+    "tryAgain": "Spróbuj ponownie",
+    "playAgain": "Graj ponownie",
+    "showHint": "Pokaż podpowiedź",
+    "generate": "Generuj",
+    "generating": "Generowanie..."
   },
   "status": {
-    "loading": "Loading...",
-    "saving": "Saving...",
-    "generating": "Generating...",
-    "noWords": "No words in this set",
-    "success": "Success",
-    "error": "Error"
+    "loading": "Ładowanie...",
+    "saving": "Zapisywanie...",
+    "generating": "Generowanie...",
+    "noWords": "Brak słów w tym zestawie",
+    "success": "Sukces",
+    "error": "Błąd"
   },
   "time": {
-    "never": "Never",
-    "today": "Today",
-    "yesterday": "Yesterday",
-    "daysAgo": "{{count}} days ago",
-    "lastPracticed": "Last practiced {{date}}"
+    "never": "Nigdy",
+    "today": "Dziś",
+    "yesterday": "Wczoraj",
+    "daysAgo": "{{count}} dni temu",
+    "lastPracticed": "Ostatnio ćwiczone {{date}}"
   },
   "counts": {
-    "word": "word",
-    "words": "words",
-    "set": "set",
-    "sets": "sets",
-    "wordCount": "{{count}} word",
-    "wordCount_other": "{{count}} words",
-    "setCount": "{{count}} set",
-    "setCount_other": "{{count}} sets",
+    "word": "słowo",
+    "words": "słowa",
+    "set": "zestaw",
+    "sets": "zestawy",
+    "wordCount": "{{count}} słowo",
+    "wordCount_other": "{{count}} słów",
+    "setCount": "{{count}} zestaw",
+    "setCount_other": "{{count}} zestawów",
     "progress": "{{current}}/{{total}}"
   },
   "dialogs": {
-    "areYouSure": "Are you sure?",
-    "cannotUndo": "This action cannot be undone."
+    "areYouSure": "Czy jesteś pewien?",
+    "cannotUndo": "Tej operacji nie można cofnąć."
+  },
+  "sharing": {
+    "shareSet": "Udostępnij zestaw",
+    "shareCode": "Kod udostępniania",
+    "shareLink": "Link do udostępniania",
+    "copyLink": "Kopiuj link",
+    "copied": "Skopiowano!",
+    "copy": "Kopiuj",
+    "views": "Wyświetlenia",
+    "copies": "Kopie",
+    "generatingLink": "Generowanie linku...",
+    "linkInfo": "Każdy z tym linkiem może wyświetlić i skopiować twój zestaw",
+    "deactivateLink": "Dezaktywuj link",
+    "deactivateConfirm": "Czy na pewno chcesz dezaktywować ten link? Nikt nie będzie mógł uzyskać dostępu.",
+    "deactivate": "Dezaktywuj",
+    "linkDeactivated": "Link został dezaktywowany",
+    "shareError": "Nie udało się wygenerować linku. Spróbuj ponownie.",
+    "copyError": "Nie udało się skopiować linku",
+    "linkCopied": "Link skopiowany",
+    "linkCopiedToClipboard": "Link skopiowany do schowka"
+  },
+  "tour": {
+    "skip": "Pomiń",
+    "next": "Dalej",
+    "back": "Wstecz",
+    "getStarted": "Rozpocznij",
+    "slides": {
+      "vocabulary": {
+        "title": "Zbuduj słownictwo",
+        "description": "Dodawaj słowa ręcznie lub użyj AI do generowania zestawów. Twórz do 20 słów na zestaw."
+      },
+      "organize": {
+        "title": "Organizuj naukę",
+        "description": "Grupuj słowa w zestawy tematyczne. Nazywaj zestawy dla łatwego dostępu."
+      },
+      "learn": {
+        "title": "Ucz się po swojemu",
+        "description": "Ćwicz z 4 trybami: Fiszki, Dopasuj pary, Quiz i Uzupełnij lukę."
+      },
+      "share": {
+        "title": "Dziel się wiedzą",
+        "description": "Generuj linki do udostępniania. Inni mogą kopiować do swojej biblioteki."
+      }
+    }
   }
 }

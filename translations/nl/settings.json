@@ -1,25 +1,31 @@
 {
-  "_note": "This is a placeholder file. Please replace with nl translations.",
-  "title": "Settings",
+  "title": "Instellingen",
+  "appLanguage": {
+    "title": "App-taal",
+    "description": "Kies de taal voor de interface.",
+    "label": "Interfacetaal",
+    "placeholder": "Selecteer app-taal"
+  },
   "languages": {
-    "title": "Languages",
-    "description": "Choose which languages you want to learn and translate to.",
-    "targetLanguage": "Language to Learn",
-    "targetPlaceholder": "Select language to learn",
-    "nativeLanguage": "Translate To",
-    "nativePlaceholder": "Select your native language"
+    "title": "Taalinstellingen",
+    "description": "Wijzig je leer- en interfacetaal. Nieuwe sets gebruiken deze talen.",
+    "targetLanguage": "Leren",
+    "targetPlaceholder": "Selecteer taal om te leren",
+    "nativeLanguage": "Interface en vertalingen",
+    "nativePlaceholder": "Selecteer je taal",
+    "changeNote": "Dit beïnvloedt nieuwe sets. Bestaande sets behouden originele talen."
   },
   "appearance": {
-    "title": "Appearance",
-    "description": "Choose how the app looks. Auto will match your device's theme.",
-    "light": "Light",
-    "dark": "Dark",
+    "title": "Uiterlijk",
+    "description": "Kies hoe de app eruitziet. Auto volgt je apparaat.",
+    "light": "Licht",
+    "dark": "Donker",
     "auto": "Auto",
-    "info": "Theme changes apply immediately to all screens"
+    "info": "Themawijzigingen worden direct toegepast"
   },
   "mySets": {
-    "title": "My Sets",
-    "manage": "Manage your word sets. Click to expand and view words.",
-    "noSets": "No sets created yet"
+    "title": "Mijn sets",
+    "manage": "Beheer je woordsets. Klik om uit te vouwen.",
+    "noSets": "Nog geen sets"
   }
 }

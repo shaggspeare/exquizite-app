@@ -86,6 +86,13 @@ export const FULLY_TRANSLATED_LANGUAGES = [
   'th', // Thai
   'ro', // Romanian
   'ca', // Catalan
+  'pl', // Polish
+  'nl', // Dutch
+  'sv', // Swedish
+  'no', // Norwegian
+  'da', // Danish
+  'fi', // Finnish
+  'id', // Indonesian
 ] as const;
 
 export const RTL_LANGUAGES = SUPPORTED_UI_LANGUAGES.filter(
