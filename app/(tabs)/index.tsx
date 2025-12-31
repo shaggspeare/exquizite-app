@@ -42,14 +42,21 @@ export default function HomeScreen() {
       return;
     }
 
-    // Show tour to new users: configured languages but no sets and haven't completed tour
-    const isNewUser =
-      user &&
-      preferences.isConfigured &&
-      sets.length === 0 &&
-      !hasCompletedTour;
+    // Don't show tour if already completed
+    if (hasCompletedTour) {
+      return;
+    }
 
-    if (isNewUser) {
+    // Show tour to:
+    // 1. Guest users who haven't completed the tour (no language config required)
+    // 2. Authenticated users with configured languages and no sets
+    const userSets = sets.filter(s => !s.isFeatured);
+    const shouldShowTour =
+      user &&
+      !hasCompletedTour &&
+      (user.isGuest || (preferences.isConfigured && userSets.length === 0));
+
+    if (shouldShowTour) {
       // Small delay to allow UI to settle after navigation
       const timer = setTimeout(() => {
         showTour();
@@ -64,7 +71,7 @@ export default function HomeScreen() {
     setsLoading,
     tourLoading,
     preferences.isConfigured,
-    sets.length,
+    sets,
     hasCompletedTour,
     showTour,
   ]);

@@ -57,7 +57,8 @@
       "Bash(for lang in pl nl sv no da fi cs hr id ms sk sl sr lv lt et hu ceb tl vi uz el bg kk gu)",
       "Bash(if grep -q '\"\"_note\"\"' \"/Users/slava/Projects/exquizite-app/translations/$lang/common.json\")",
       "Bash(node /Users/slava/Projects/exquizite-app/scripts/generate-7-languages.js:*)",
-      "Bash(node -e:*)"
+      "Bash(node -e:*)",
+      "Bash(npm test:*)"
     ],
     "deny": [],
     "ask": []
