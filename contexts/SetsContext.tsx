@@ -86,13 +86,56 @@ export function SetsProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
   const { preferences } = useLanguage();
   const [sets, setSets] = useState<WordSet[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  // Start with isLoading true - we'll set it to false once we know there's nothing to load
+  const [isLoading, setIsLoading] = useState(true);
   const [hasMigrated, setHasMigrated] = useState(false);
   const isMigratingRef = useRef(false);
 
+  // Track previous values to detect actual changes and prevent unnecessary reloads
+  const prevUserIdRef = useRef<string | null>(null);
+  const prevIsConfiguredRef = useRef<boolean>(false);
+  const prevTargetLanguageRef = useRef<string>('');
+  const hasLoadedRef = useRef<boolean>(false);
+
   useEffect(() => {
     if (user) {
-      loadSets();
+      // Determine what changed
+      const userChanged = prevUserIdRef.current !== user.id;
+      const isConfiguredChanged = prevIsConfiguredRef.current !== preferences.isConfigured && preferences.isConfigured;
+      const targetLanguageChanged = prevTargetLanguageRef.current !== preferences.targetLanguage && !!preferences.targetLanguage;
+
+      // Update refs BEFORE determining shouldLoad to avoid stale comparisons
+      const wasFirstLoad = !hasLoadedRef.current;
+
+      // Update tracking refs
+      prevUserIdRef.current = user.id;
+      prevIsConfiguredRef.current = preferences.isConfigured;
+      prevTargetLanguageRef.current = preferences.targetLanguage;
+
+      // Load sets if:
+      // 1. User changed (new login) - reset loaded flag too
+      // 2. isConfigured just became true (completed language setup)
+      // 3. targetLanguage changed (to update featured sets)
+      // 4. First load for this user (haven't loaded yet)
+      if (userChanged) {
+        hasLoadedRef.current = false; // Reset on user change
+      }
+
+      const shouldLoad = userChanged || isConfiguredChanged || targetLanguageChanged || wasFirstLoad;
+
+      if (shouldLoad) {
+        console.log('🔄 Loading sets:', {
+          userChanged,
+          isConfiguredChanged,
+          targetLanguageChanged,
+          wasFirstLoad,
+          userId: user.id,
+          isConfigured: preferences.isConfigured,
+          targetLanguage: preferences.targetLanguage
+        });
+        hasLoadedRef.current = true;
+        loadSets();
+      }
 
       // Automatically migrate guest data when user becomes authenticated (not a guest)
       if (!user.isGuest && !hasMigrated) {
@@ -100,10 +143,19 @@ export function SetsProvider({ children }: { children: ReactNode }) {
       }
     } else {
       setSets([]);
+      setIsLoading(false); // No user means nothing to load
       setHasMigrated(false);
       isMigratingRef.current = false;
+      // Reset refs when user logs out
+      prevUserIdRef.current = null;
+      prevIsConfiguredRef.current = false;
+      prevTargetLanguageRef.current = '';
+      hasLoadedRef.current = false;
     }
-  }, [user, preferences.targetLanguage]);
+    // Note: loadSets, checkAndMigrateGuestData, and hasMigrated are intentionally excluded
+    // to prevent infinite loops - these functions/values change on every render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, preferences.isConfigured, preferences.targetLanguage]);
 
   const checkAndMigrateGuestData = async () => {
     // Prevent concurrent migrations
