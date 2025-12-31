@@ -50,7 +50,6 @@
     "expo-updates": "^29.0.15",
     "expo-web-browser": "~15.0.10",
     "i18next": "^25.7.2",
-    "openai": "^6.9.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-i18next": "^16.4.0",
@@ -76,13 +75,20 @@
   },
   "jest": {
     "preset": "jest-expo",
+    "setupFilesAfterEnv": [
+      "<rootDir>/__tests__/setup.ts"
+    ],
     "testPathIgnorePatterns": [
       "/node_modules/",
-      "/app/"
+      "/app/",
+      "/__tests__/setup.ts"
     ],
     "transformIgnorePatterns": [
       "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@sentry/react-native|native-base|react-native-svg)"
-    ]
+    ],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/$1"
+    }
   },
   "private": true
 }
