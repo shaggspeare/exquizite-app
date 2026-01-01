@@ -60,7 +60,8 @@
       "Bash(node -e:*)",
       "Bash(npm test:*)",
       "Bash(npx husky:*)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(node:*)"
     ],
     "deny": [],
     "ask": []

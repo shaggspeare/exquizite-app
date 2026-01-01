@@ -40,14 +40,13 @@ export function AlertDialog({
   const isDesktop = Platform.OS === 'web' && isDesktopWeb();
   const isMobile = SCREEN_WIDTH < 768;
 
-  const handleButtonPress = (button: AlertButton) => {
+  const handleButtonPress = async (button: AlertButton) => {
     if (button.onPress) {
       try {
         const result = button.onPress();
+        // If the handler returns a promise, wait for it to complete
         if (result instanceof Promise) {
-          result.catch(error => {
-            console.error('Error in alert button handler:', error);
-          });
+          await result;
         }
       } catch (error: any) {
         console.error('Error in alert button handler:', error);

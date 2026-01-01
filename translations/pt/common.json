@@ -5,6 +5,7 @@
     "cancel": "Cancelar",
     "delete": "Excluir",
     "share": "Compartilhar",
+    "edit": "Editar",
     "play": "Jogar",
     "next": "Próximo",
     "previous": "Anterior",
@@ -88,6 +89,7 @@
         "description": "Pratique com 4 modos de jogo: Flashcards, Combine pares, Quiz de múltipla escolha e Preencha o espaço em branco."
       },
       "share": {
+    "edit": "Editar",
         "title": "Compartilhe seu conhecimento",
         "description": "Gere links de compartilhamento para seus conjuntos. Outros podem visualizá-los e copiá-los para sua biblioteca."
       }

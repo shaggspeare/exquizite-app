@@ -5,6 +5,7 @@
     "cancel": "Annulla",
     "delete": "Elimina",
     "share": "Condividi",
+    "edit": "Modifica",
     "play": "Gioca",
     "next": "Avanti",
     "previous": "Precedente",
@@ -88,6 +89,7 @@
         "description": "Pratica con 4 modalità di gioco: Flashcard, Abbina coppie, Quiz a scelta multipla e Riempi lo spazio vuoto."
       },
       "share": {
+    "edit": "Modifica",
         "title": "Condividi la tua conoscenza",
         "description": "Genera link di condivisione per i tuoi set. Altri possono visualizzarli e copiarli nella loro libreria."
       }

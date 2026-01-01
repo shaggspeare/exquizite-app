@@ -1,5 +1,5 @@
-// Desktop Set Card with external play button
-import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
+// Desktop Set Card with internal controls and clean design
+import { TouchableOpacity, Text, StyleSheet, View, Pressable } from 'react-native';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -14,21 +14,22 @@ import { showAlert } from '@/lib/alert';
 
 interface DesktopSetCardProps {
   set: WordSet;
-  compact?: boolean;
+  backgroundIcon?: keyof typeof Ionicons.glyphMap;
 }
 
-export function DesktopSetCard({ set, compact = false }: DesktopSetCardProps) {
+export function DesktopSetCard({ set, backgroundIcon }: DesktopSetCardProps) {
   const { t } = useTranslation('games');
   const { colors } = useTheme();
   const { deleteSet } = useSets();
   const router = useRouter();
   const [showShareModal, setShowShareModal] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
 
-  const getGradientColors = () => {
+  const getGradientColors = (): [string, string] => {
     const hash = set.id
       .split('')
       .reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    const gradients = [
+    const gradients: [string, string][] = [
       ['#4A90E2', '#5B9EFF'],
       ['#B537F2', '#E066FF'],
       ['#00D4FF', '#06593f'],
@@ -55,7 +56,18 @@ export function DesktopSetCard({ set, compact = false }: DesktopSetCardProps) {
     return date.toLocaleDateString();
   };
 
+  const handleEditPress = () => {
+    setShowMenu(false);
+    router.push(`/(tabs)/sets/${set.id}`);
+  };
+
+  const handleSharePress = () => {
+    setShowMenu(false);
+    setShowShareModal(true);
+  };
+
   const handleDeletePress = () => {
+    setShowMenu(false);
     showAlert(
       t('setCard.deleteSet'),
       t('setCard.deleteConfirm', { setName: set.name }),
@@ -79,150 +91,77 @@ export function DesktopSetCard({ set, compact = false }: DesktopSetCardProps) {
     );
   };
 
+  const handlePlayPress = () => {
+    router.push(`/(tabs)/sets/${set.id}/play/template`);
+  };
+
   const gradientColors = getGradientColors();
 
-  // Compact vertical layout for grid
-  if (compact) {
-    return (
-      <View style={styles.compactVerticalContainer}>
-        <View style={styles.compactHorizontalWrapper}>
-          <TouchableOpacity
-            style={styles.compactCardWrapper}
-            onPress={() => router.push(`/(tabs)/sets/${set.id}`)}
-            activeOpacity={0.9}
-          >
-            {set.isFeatured && (
-              <View style={styles.featuredBadge}>
-                <Ionicons name="star" size={10} color="#000" />
-                <Text style={styles.featuredBadgeText}>{t('setCard.featured')}</Text>
-              </View>
-            )}
-
-            <LinearGradient
-              colors={gradientColors}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.compactVerticalCard}
-            >
-              <View style={styles.compactCardContent}>
-                <View style={styles.compactHeader}>
-                  <Text style={styles.compactVerticalTitle} numberOfLines={2}>
-                    {set.name}
-                  </Text>
-                  <View style={styles.wordBadge}>
-                    <Ionicons name="book" size={12} color="#FFFFFF" />
-                    <Text style={styles.wordBadgeText}>{set.words.length}</Text>
-                  </View>
-                </View>
-
-                <View style={styles.progressSection}>
-                  <View style={styles.progressBar}>
-                    <View
-                      style={[
-                        styles.progressFill,
-                        {
-                          width: `${Math.min((set.words.length / 20) * 100, 100)}%`,
-                        },
-                      ]}
-                    />
-                  </View>
-                  <Text style={styles.progressText}>
-                    {t('setCard.complete', { percent: Math.round((set.words.length / 20) * 100) })}
-                  </Text>
-                </View>
-
-                {set.lastPracticed && (
-                  <View style={styles.metaRow}>
-                    <Ionicons
-                      name="time-outline"
-                      size={12}
-                      color="rgba(255,255,255,0.8)"
-                    />
-                    <Text style={styles.metaText}>
-                      {formatDate(set.lastPracticed)}
-                    </Text>
-                  </View>
-                )}
-              </View>
-            </LinearGradient>
-          </TouchableOpacity>
-
-          <View style={styles.compactActionsColumn}>
-            <TouchableOpacity
-              style={[styles.compactPlayButton, { backgroundColor: colors.primary }]}
-              onPress={() => router.push(`/(tabs)/sets/${set.id}/play/template`)}
-            >
-              <Ionicons name="play" size={16} color="#FFFFFF" />
-              <Text style={styles.compactPlayButtonText}>{t('common:buttons.play')}</Text>
-            </TouchableOpacity>
-
-            {!set.isFeatured && (
-              <View style={styles.compactIconButtonsRow}>
-                <TouchableOpacity
-                  style={[styles.smallIconButton, { backgroundColor: colors.card }]}
-                  onPress={() => setShowShareModal(true)}
-                >
-                  <Ionicons
-                    name="share-social-outline"
-                    size={16}
-                    color={colors.primary}
-                  />
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={[styles.smallIconButton, { backgroundColor: colors.card }]}
-                  onPress={handleDeletePress}
-                >
-                  <Ionicons name="trash-outline" size={16} color={colors.error} />
-                </TouchableOpacity>
-              </View>
-            )}
-          </View>
-        </View>
-
-        <ShareModal
-          visible={showShareModal}
-          set={set}
-          onClose={() => setShowShareModal(false)}
-        />
-      </View>
-    );
-  }
-
-  // Horizontal layout (original)
   return (
-    <View style={styles.horizontalContainer}>
-      <TouchableOpacity
-        style={styles.cardWrapper}
-        onPress={() => router.push(`/(tabs)/sets/${set.id}`)}
-        activeOpacity={0.9}
-      >
-        {/* Featured badge - absolutely positioned outside gradient */}
-        {set.isFeatured && (
-          <View style={styles.featuredBadge}>
-            <Ionicons name="star" size={10} color="#000" />
-            <Text style={styles.featuredBadgeText}>{t('setCard.featured')}</Text>
-          </View>
-        )}
+    <View style={styles.cardContainer}>
+      {/* Backdrop to close menu - placed first so it's behind everything */}
+      {showMenu && (
+        <Pressable
+          style={styles.menuBackdrop}
+          onPress={() => setShowMenu(false)}
+        />
+      )}
 
+      {/* Featured badge */}
+      {set.isFeatured && (
+        <View style={styles.featuredBadge}>
+          <Ionicons name="star" size={10} color="#000" />
+          <Text style={styles.featuredBadgeText}>{t('setCard.featured')}</Text>
+        </View>
+      )}
+
+      <View style={styles.cardWrapper}>
         <LinearGradient
           colors={gradientColors}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.gradientCard}
         >
-          <View style={styles.cardContent}>
+          {/* Background Icon - Large and semi-transparent */}
+          {backgroundIcon && (
+            <View style={styles.backgroundIconContainer}>
+              <Ionicons
+                name={backgroundIcon}
+                size={80}
+                color="rgba(255, 255, 255, 0.15)"
+              />
+            </View>
+          )}
+
+          {/* Three-dot menu button - Top right */}
+          {!set.isFeatured && (
+            <TouchableOpacity
+              style={styles.menuButton}
+              onPress={() => setShowMenu(!showMenu)}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="ellipsis-horizontal" size={20} color="#FFFFFF" />
+            </TouchableOpacity>
+          )}
+
+          {/* Card Content */}
+          <TouchableOpacity
+            style={styles.cardContent}
+            onPress={() => router.push(`/(tabs)/sets/${set.id}`)}
+            activeOpacity={0.9}
+          >
+            {/* Title and Word Count */}
             <View style={styles.header}>
               <Text style={styles.title} numberOfLines={2}>
                 {set.name}
               </Text>
-              {/* Word count badge */}
               <View style={styles.wordBadge}>
                 <Ionicons name="book" size={12} color="#FFFFFF" />
                 <Text style={styles.wordBadgeText}>{set.words.length}</Text>
               </View>
             </View>
 
+            {/* Progress Section */}
             <View style={styles.progressSection}>
               <View style={styles.progressBar}>
                 <View
@@ -239,6 +178,7 @@ export function DesktopSetCard({ set, compact = false }: DesktopSetCardProps) {
               </Text>
             </View>
 
+            {/* Last Practiced */}
             {set.lastPracticed && (
               <View style={styles.metaRow}>
                 <Ionicons
@@ -251,38 +191,57 @@ export function DesktopSetCard({ set, compact = false }: DesktopSetCardProps) {
                 </Text>
               </View>
             )}
-          </View>
+          </TouchableOpacity>
+
+          {/* Play Button - Internal at bottom */}
+          <TouchableOpacity
+            style={styles.playButton}
+            onPress={handlePlayPress}
+            activeOpacity={0.8}
+          >
+            <Ionicons name="play" size={18} color={gradientColors[0]} />
+            <Text style={[styles.playButtonText, { color: gradientColors[0] }]}>
+              {t('common:buttons.play')}
+            </Text>
+          </TouchableOpacity>
         </LinearGradient>
-      </TouchableOpacity>
 
-      {/* Action Buttons on the Right */}
-      <View style={styles.actionsColumn}>
-        <TouchableOpacity
-          style={[styles.playButton, { backgroundColor: colors.primary }]}
-          onPress={() => router.push(`/(tabs)/sets/${set.id}/play/template`)}
-        >
-          <Ionicons name="play" size={18} color="#FFFFFF" />
-          <Text style={styles.playButtonText}>{t('common:buttons.play')}</Text>
-        </TouchableOpacity>
-
-        {!set.isFeatured && (
-          <View style={styles.iconButtonsRow}>
+        {/* Menu Dropdown - placed outside gradient so it can overflow */}
+        {showMenu && (
+          <View style={[styles.menuDropdown, { backgroundColor: colors.card }]}>
             <TouchableOpacity
-              style={[styles.smallIconButton, { backgroundColor: colors.card }]}
-              onPress={() => setShowShareModal(true)}
+              style={styles.menuItem}
+              onPress={handleEditPress}
+              activeOpacity={0.7}
             >
-              <Ionicons
-                name="share-social-outline"
-                size={18}
-                color={colors.primary}
-              />
+              <Ionicons name="pencil-outline" size={18} color={colors.text} />
+              <Text style={[styles.menuItemText, { color: colors.text }]}>
+                {t('common:buttons.edit')}
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.smallIconButton, { backgroundColor: colors.card }]}
+              style={styles.menuItem}
+              onPress={handleSharePress}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="share-social-outline" size={18} color={colors.text} />
+              <Text style={[styles.menuItemText, { color: colors.text }]}>
+                {t('common:buttons.share')}
+              </Text>
+            </TouchableOpacity>
+
+            <View style={[styles.menuDivider, { backgroundColor: colors.border }]} />
+
+            <TouchableOpacity
+              style={styles.menuItem}
               onPress={handleDeletePress}
+              activeOpacity={0.7}
             >
               <Ionicons name="trash-outline" size={18} color={colors.error} />
+              <Text style={[styles.menuItemText, { color: colors.error }]}>
+                {t('common:buttons.delete')}
+              </Text>
             </TouchableOpacity>
           </View>
         )}
@@ -298,132 +257,75 @@ export function DesktopSetCard({ set, compact = false }: DesktopSetCardProps) {
 }
 
 const styles = StyleSheet.create({
-  // Horizontal layout styles (original)
-  horizontalContainer: {
-    flexDirection: 'row',
-    gap: Spacing.md,
-    alignItems: 'center',
+  cardContainer: {
+    position: 'relative',
     marginBottom: Spacing.md,
-    marginTop: Spacing.sm,
   },
   cardWrapper: {
-    flex: 1,
     position: 'relative',
+    zIndex: 10,
   },
   gradientCard: {
     borderRadius: BorderRadius.cardLarge,
     padding: Spacing.lg,
-    minHeight: 110,
-    ...Shadow.card,
-  },
-  cardContent: {
-    flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: Spacing.sm,
-  },
-  title: {
-    ...Typography.h2,
-    fontSize: 17,
-    fontWeight: '700',
-    color: '#FFFFFF',
-    flex: 1,
-    marginRight: Spacing.sm,
-  },
-  actionsColumn: {
-    flexDirection: 'column',
-    gap: Spacing.sm,
-    minWidth: 120,
-  },
-  playButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: Spacing.sm,
-    paddingHorizontal: Spacing.md,
-    borderRadius: BorderRadius.button,
-    gap: Spacing.xs,
-    ...Shadow.button,
-  },
-  playButtonText: {
-    ...Typography.body,
-    color: '#FFFFFF',
-    fontWeight: '600',
-    fontSize: 14,
-  },
-  iconButtonsRow: {
-    flexDirection: 'row',
-    gap: Spacing.sm,
-    justifyContent: 'center',
-  },
-
-  // Compact vertical layout styles (for grid)
-  compactVerticalContainer: {
-    width: '100%',
-  },
-  compactHorizontalWrapper: {
-    flexDirection: 'row',
-    gap: Spacing.md,
-    alignItems: 'center',
-  },
-  compactCardWrapper: {
-    flex: 1,
+    minHeight: 200,
     position: 'relative',
-  },
-  compactVerticalCard: {
-    borderRadius: BorderRadius.cardLarge,
-    padding: Spacing.lg,
-    minHeight: 130,
+    overflow: 'hidden',
     ...Shadow.card,
   },
-  compactCardContent: {
-    flex: 1,
+  backgroundIconContainer: {
+    position: 'absolute',
+    right: Spacing.md,
+    top: '50%',
+    transform: [{ translateY: -40 }],
+    zIndex: 0,
   },
-  compactHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: Spacing.md,
+  menuButton: {
+    position: 'absolute',
+    top: Spacing.md,
+    right: Spacing.md,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 20,
   },
-  compactVerticalTitle: {
-    ...Typography.h2,
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#FFFFFF',
-    flex: 1,
-    marginRight: Spacing.sm,
+  menuDropdown: {
+    position: 'absolute',
+    top: Spacing.md + 36,
+    right: Spacing.md,
+    borderRadius: BorderRadius.input,
+    paddingVertical: Spacing.xs,
+    minWidth: 160,
+    zIndex: 100,
+    ...Shadow.cardDeep,
   },
-  compactActionsColumn: {
-    flexDirection: 'column',
-    gap: Spacing.sm,
-    minWidth: 100,
-  },
-  compactPlayButton: {
+  menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: Spacing.sm,
-    paddingHorizontal: Spacing.md,
-    borderRadius: BorderRadius.button,
-    gap: Spacing.xs,
-    ...Shadow.button,
-  },
-  compactPlayButtonText: {
-    ...Typography.body,
-    color: '#FFFFFF',
-    fontWeight: '600',
-    fontSize: 13,
-  },
-  compactIconButtonsRow: {
-    flexDirection: 'row',
     gap: Spacing.sm,
-    justifyContent: 'center',
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
   },
-
-  // Shared styles
+  menuItemText: {
+    ...Typography.body,
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  menuDivider: {
+    height: 1,
+    marginVertical: Spacing.xs,
+  },
+  menuBackdrop: {
+    position: 'absolute',
+    top: -1000,
+    left: -1000,
+    right: -1000,
+    bottom: -1000,
+    zIndex: 5,
+  },
   featuredBadge: {
     position: 'absolute',
     top: -Spacing.xs,
@@ -444,6 +346,26 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#000',
   },
+  cardContent: {
+    flex: 1,
+    zIndex: 1,
+    paddingBottom: Spacing.md,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: Spacing.md,
+    paddingRight: 40,
+  },
+  title: {
+    ...Typography.h2,
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    flex: 1,
+    marginRight: Spacing.sm,
+  },
   wordBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -460,7 +382,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   progressSection: {
-    marginBottom: Spacing.xs,
+    marginBottom: Spacing.sm,
   },
   progressBar: {
     height: 5,
@@ -490,12 +412,23 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: 'rgba(255,255,255,0.8)',
   },
-  smallIconButton: {
-    width: 36,
-    height: 36,
-    borderRadius: BorderRadius.button,
+  playButton: {
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    ...Shadow.card,
+    backgroundColor: '#FFFFFF',
+    borderRadius: BorderRadius.round,
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.lg,
+    gap: Spacing.xs,
+    alignSelf: 'center',
+    minWidth: 120,
+    zIndex: 1,
+    ...Shadow.button,
+  },
+  playButtonText: {
+    ...Typography.body,
+    fontSize: 15,
+    fontWeight: '700',
   },
 });

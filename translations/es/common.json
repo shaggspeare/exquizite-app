@@ -5,6 +5,7 @@
     "cancel": "Cancelar",
     "delete": "Eliminar",
     "share": "Compartir",
+    "edit": "Editar",
     "play": "Jugar",
     "next": "Siguiente",
     "previous": "Anterior",
@@ -88,6 +89,7 @@
         "description": "Practica con 4 modos de juego: Tarjetas, Emparejar, Prueba de opción múltiple y Completar espacios en blanco."
       },
       "share": {
+    "edit": "Editar",
         "title": "Comparte tu conocimiento",
         "description": "Genera enlaces para compartir tus conjuntos. Otros pueden verlos y copiarlos a su biblioteca."
       }

@@ -19,6 +19,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Card } from '@/components/ui/Card';
 import { DesktopContainer } from '@/components/layout/DesktopContainer';
+import { getIconForSet } from '@/lib/setIcons';
 
 export function DesktopHomeView() {
   const { t } = useTranslation('games');
@@ -269,7 +270,7 @@ export function DesktopHomeView() {
 
                   <View style={styles.setsList}>
                     {featuredSets.map(set => (
-                      <DesktopSetCard key={set.id} set={set} />
+                      <DesktopSetCard key={set.id} set={set} backgroundIcon="star" />
                     ))}
                   </View>
                 </View>
@@ -284,7 +285,7 @@ export function DesktopHomeView() {
                     </Text>
                     <View style={styles.lastPracticedList}>
                       {practicedSets.map(set => (
-                        <DesktopSetCard key={set.id} set={set} compact />
+                        <DesktopSetCard key={set.id} set={set} backgroundIcon={getIconForSet(set.name)} />
                       ))}
                     </View>
                   </View>

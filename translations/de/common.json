@@ -5,6 +5,7 @@
     "cancel": "Abbrechen",
     "delete": "Löschen",
     "share": "Teilen",
+    "edit": "Bearbeiten",
     "play": "Spielen",
     "next": "Weiter",
     "previous": "Zurück",
@@ -88,6 +89,7 @@
         "description": "Übe mit 4 Spielmodi: Karteikarten, Paare zuordnen, Multiple-Choice-Quiz und Lückentext ausfüllen."
       },
       "share": {
+    "edit": "Bearbeiten",
         "title": "Teile dein Wissen",
         "description": "Erstelle Freigabe-Links für deine Sets. Andere können sie ansehen und in ihre Bibliothek kopieren."
       }
