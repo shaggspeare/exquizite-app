@@ -587,16 +587,42 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         return;
       }
 
+      // Ensure session is valid before making the request
+      const sessionValid = await ensureValidSession();
+      if (!sessionValid) {
+        console.error('🔴 Session validation failed for delete operation');
+        throw new Error('Your session has expired. Please sign in again.');
+      }
+
       // Otherwise, delete from Supabase
       // Word pairs will be deleted automatically due to CASCADE
-      const { error } = await supabase.from('word_sets').delete().eq('id', id);
+      // Include user_id filter as safety measure (RLS also enforces this)
+      const { error, count } = await retryOperation(async () => {
+        return await supabase
+          .from('word_sets')
+          .delete({ count: 'exact' })
+          .eq('id', id)
+          .eq('user_id', user.id);
+      });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error deleting set:', error);
+        throw new Error(`Failed to delete set: ${error.message}`);
+      }
+
+      // Verify that a row was actually deleted
+      if (count === 0) {
+        console.error('🔴 Delete returned 0 rows - set may not exist or user lacks permission');
+        throw new Error('Failed to delete set. Please try again.');
+      }
+
+      console.log('✅ Set deleted successfully');
 
       // Update local state
       setSets(prev => prev.filter(set => set.id !== id));
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error deleting set:', error);
+      throw error; // Re-throw so the UI can handle it
     }
   };
 

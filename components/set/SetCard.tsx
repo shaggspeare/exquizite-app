@@ -97,7 +97,16 @@ export function SetCard({ set, onPress }: SetCardProps) {
         {
           text: t('common:buttons.delete'),
           style: 'destructive',
-          onPress: () => deleteSet(set.id),
+          onPress: async () => {
+            try {
+              await deleteSet(set.id);
+            } catch (error: any) {
+              showAlert(
+                t('common:status.error'),
+                error?.message || 'Failed to delete set. Please try again.'
+              );
+            }
+          },
         },
       ]
     );
