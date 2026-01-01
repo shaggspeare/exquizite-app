@@ -6,7 +6,7 @@ import {
   ReactNode,
 } from 'react';
 import { AppState, AppStateStatus } from 'react-native';
-import { supabase } from '@/lib/supabase';
+import { supabase, retryOperation } from '@/lib/supabase';
 import { User } from '@/lib/types';
 import * as guestStorage from '@/lib/guestStorage';
 
@@ -156,11 +156,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const loadUserProfile = async (userId: string, retries = 5) => {
     try {
-      const { data: profile, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
+      // Wrap in retryOperation to handle network failures
+      const { data: profile, error } = await retryOperation(async () => {
+        return await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', userId)
+          .single();
+      });
 
       if (error) {
         // Check if it's an authentication error

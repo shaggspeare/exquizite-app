@@ -83,7 +83,7 @@ export async function ensureValidSession(): Promise<boolean> {
   }
 }
 
-// Helper function to retry operations on network failure
+// Helper function to retry operations on network failure or transient errors
 export async function retryOperation<T>(
   operation: () => Promise<T>,
   maxRetries: number = 2,
@@ -99,9 +99,15 @@ export async function retryOperation<T>(
       const isNetworkError =
         error?.message?.includes('Network request failed') ||
         error?.message?.includes('Failed to fetch') ||
-        error?.code === 'NETWORK_ERROR';
+        error?.message?.includes('timeout') ||
+        error?.message?.includes('ETIMEDOUT') ||
+        error?.message?.includes('ECONNREFUSED') ||
+        error?.message?.includes('ENOTFOUND') ||
+        error?.code === 'NETWORK_ERROR' ||
+        error?.code === 'ETIMEDOUT' ||
+        error?.code === 'ECONNREFUSED';
 
-      // Only retry on network errors
+      // Only retry on network errors and transient errors
       if (isNetworkError && attempt < maxRetries) {
         console.log(
           `Network error on attempt ${attempt + 1}, retrying in ${delayMs}ms...`

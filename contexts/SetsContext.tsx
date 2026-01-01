@@ -210,16 +210,19 @@ export function SetsProvider({ children }: { children: ReactNode }) {
           return;
         }
 
-        const { data: setsData, error: setsError } = await supabase
-          .from('word_sets')
-          .select(
+        // Wrap the query in retryOperation to handle Supabase cold starts
+        const { data: setsData, error: setsError } = await retryOperation(async () => {
+          return await supabase
+            .from('word_sets')
+            .select(
+              `
+              *,
+              word_pairs (*)
             `
-            *,
-            word_pairs (*)
-          `
-          )
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false });
+            )
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false });
+        });
 
         if (setsError) {
           // Check if it's an authentication error

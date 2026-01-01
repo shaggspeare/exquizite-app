@@ -7,7 +7,7 @@ import {
 } from 'react';
 import * as Localization from 'expo-localization';
 import { useAuth } from './AuthContext';
-import { supabase } from '@/lib/supabase';
+import { supabase, retryOperation } from '@/lib/supabase';
 import { storage } from '@/lib/storage';
 import i18n from '@/lib/i18n';
 
@@ -142,11 +142,14 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
             '📚 Checking Supabase for existing sets for user:',
             user.id
           );
-          const { data: sets, error } = await supabase
-            .from('word_sets')
-            .select('id, target_language, native_language')
-            .eq('user_id', user.id)
-            .limit(1);
+          // Wrap in retryOperation to handle network failures
+          const { data: sets, error } = await retryOperation(async () => {
+            return await supabase
+              .from('word_sets')
+              .select('id, target_language, native_language')
+              .eq('user_id', user.id)
+              .limit(1);
+          });
 
           if (error) {
             console.error('❌ Error querying sets from Supabase:', error);
