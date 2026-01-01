@@ -48,7 +48,7 @@ export function DesktopSetCard({ set, backgroundIcon }: DesktopSetCardProps) {
     const date = new Date(dateString);
     const now = new Date();
     const diffTime = Math.abs(now.getTime() - date.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays === 0) return t('common:time.today');
     if (diffDays === 1) return t('common:time.yesterday');
@@ -174,7 +174,7 @@ export function DesktopSetCard({ set, backgroundIcon }: DesktopSetCardProps) {
                 />
               </View>
               <Text style={styles.progressText}>
-                {t('setCard.complete', { percent: Math.round((set.words.length / 20) * 100) })}
+                {t('setCard.complete', { percent: Math.min(Math.round((set.words.length / 20) * 100), 100) })}
               </Text>
             </View>
 

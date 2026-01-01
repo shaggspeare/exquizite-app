@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1767296750113" clover="3.2.0">
-  <project timestamp="1767296750113" name="All files">
-    <metrics statements="1182" coveredstatements="423" conditionals="771" coveredconditionals="305" methods="223" coveredmethods="102" elements="2176" coveredelements="830" complexity="0" loc="1182" ncloc="1182" packages="8" files="28" classes="28"/>
+<coverage generated="1767297030907" clover="3.2.0">
+  <project timestamp="1767297030907" name="All files">
+    <metrics statements="1182" coveredstatements="422" conditionals="771" coveredconditionals="304" methods="223" coveredmethods="102" elements="2176" coveredelements="828" complexity="0" loc="1182" ncloc="1182" packages="8" files="28" classes="28"/>
     <package name="components.layout">
       <metrics statements="5" coveredstatements="5" conditionals="6" coveredconditionals="6" methods="1" coveredmethods="1"/>
       <file name="DesktopContainer.tsx" path="/Users/slava/Projects/exquizite-app/components/layout/DesktopContainer.tsx">
@@ -14,7 +14,7 @@
       </file>
     </package>
     <package name="components.set">
-      <metrics statements="175" coveredstatements="90" conditionals="122" coveredconditionals="43" methods="42" coveredmethods="16"/>
+      <metrics statements="175" coveredstatements="89" conditionals="122" coveredconditionals="42" methods="42" coveredmethods="16"/>
       <file name="DesktopSetCard.tsx" path="/Users/slava/Projects/exquizite-app/components/set/DesktopSetCard.tsx">
         <metrics statements="42" coveredstatements="30" conditionals="22" coveredconditionals="15" methods="13" coveredmethods="6"/>
         <line num="21" count="20" type="stmt"/>
@@ -61,7 +61,7 @@
         <line num="259" count="1" type="stmt"/>
       </file>
       <file name="SetCard.tsx" path="/Users/slava/Projects/exquizite-app/components/set/SetCard.tsx">
-        <metrics statements="46" coveredstatements="35" conditionals="22" coveredconditionals="14" methods="14" coveredmethods="7"/>
+        <metrics statements="46" coveredstatements="34" conditionals="22" coveredconditionals="13" methods="14" coveredmethods="7"/>
         <line num="25" count="10" type="stmt"/>
         <line num="26" count="10" type="stmt"/>
         <line num="27" count="10" type="stmt"/>
@@ -81,7 +81,7 @@
         <line num="56" count="1" type="stmt"/>
         <line num="57" count="1" type="stmt"/>
         <line num="59" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="60" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="60" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="61" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="62" count="0" type="stmt"/>
         <line num="65" count="10" type="stmt"/>
