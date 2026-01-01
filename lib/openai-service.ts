@@ -11,17 +11,21 @@ async function callEdgeFunction(body: Record<string, any>) {
     data: { session },
   } = await supabase.auth.getSession();
 
-  if (!session?.access_token) {
-    throw new Error('Not authenticated');
+  // Allow both authenticated users and guests
+  // For guests, we don't include an Authorization header
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    apikey: config.supabase.anonKey,
+  };
+
+  // Only add Authorization header if we have a valid session
+  if (session?.access_token) {
+    headers.Authorization = `Bearer ${session.access_token}`;
   }
 
   const response = await fetch(EDGE_FUNCTION_URL, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${session.access_token}`,
-      apikey: config.supabase.anonKey,
-    },
+    headers,
     body: JSON.stringify(body),
   });
 

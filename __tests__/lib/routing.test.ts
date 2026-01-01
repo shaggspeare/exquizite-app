@@ -25,7 +25,19 @@ describe('getRoutingDecision', () => {
   });
 
   describe('Guest user scenarios', () => {
-    it('redirects guest from auth group (not language-setup) to main app', () => {
+    it('redirects guest without config to language-setup', () => {
+      const state: RoutingState = {
+        user: { isGuest: true },
+        isConfigured: false,
+        segments: ['(tabs)'],
+      };
+      expect(getRoutingDecision(state)).toEqual({
+        action: 'redirect',
+        to: '/(auth)/language-setup',
+      });
+    });
+
+    it('redirects guest from login page to language-setup when not configured', () => {
       const state: RoutingState = {
         user: { isGuest: true },
         isConfigured: false,
@@ -33,7 +45,7 @@ describe('getRoutingDecision', () => {
       };
       expect(getRoutingDecision(state)).toEqual({
         action: 'redirect',
-        to: '/(tabs)',
+        to: '/(auth)/language-setup',
       });
     });
 
@@ -46,6 +58,18 @@ describe('getRoutingDecision', () => {
       expect(getRoutingDecision(state)).toEqual({ action: 'stay' });
     });
 
+    it('redirects guest from language-setup to main app after completing setup', () => {
+      const state: RoutingState = {
+        user: { isGuest: true },
+        isConfigured: true,
+        segments: ['(auth)', 'language-setup'],
+      };
+      expect(getRoutingDecision(state)).toEqual({
+        action: 'redirect',
+        to: '/(tabs)',
+      });
+    });
+
     it('stays when guest is in main app with config', () => {
       const state: RoutingState = {
         user: { isGuest: true },
@@ -55,13 +79,16 @@ describe('getRoutingDecision', () => {
       expect(getRoutingDecision(state)).toEqual({ action: 'stay' });
     });
 
-    it('stays when guest is in main app without config (no redirect loop)', () => {
+    it('redirects guest with config from auth group to main app', () => {
       const state: RoutingState = {
         user: { isGuest: true },
-        isConfigured: false,
-        segments: ['(tabs)'],
+        isConfigured: true,
+        segments: ['(auth)', 'login'],
       };
-      expect(getRoutingDecision(state)).toEqual({ action: 'stay' });
+      expect(getRoutingDecision(state)).toEqual({
+        action: 'redirect',
+        to: '/(tabs)',
+      });
     });
   });
 
@@ -182,21 +209,43 @@ describe('getRoutingDecision', () => {
     });
 
     it('does not redirect guest users back and forth', () => {
-      // Guest in tabs without config should stay
+      // Guest in tabs without config should be redirected to language-setup
       const guestInTabs: RoutingState = {
         user: { isGuest: true },
         isConfigured: false,
         segments: ['(tabs)'],
       };
-      expect(getRoutingDecision(guestInTabs)).toEqual({ action: 'stay' });
+      expect(getRoutingDecision(guestInTabs)).toEqual({
+        action: 'redirect',
+        to: '/(auth)/language-setup',
+      });
 
-      // Guest who voluntarily goes to language-setup should stay there
+      // Guest on language-setup should stay there
       const guestOnSetup: RoutingState = {
         user: { isGuest: true },
         isConfigured: false,
         segments: ['(auth)', 'language-setup'],
       };
       expect(getRoutingDecision(guestOnSetup)).toEqual({ action: 'stay' });
+
+      // After guest completes setup, should be redirected to tabs
+      const guestAfterSetup: RoutingState = {
+        user: { isGuest: true },
+        isConfigured: true,
+        segments: ['(auth)', 'language-setup'],
+      };
+      expect(getRoutingDecision(guestAfterSetup)).toEqual({
+        action: 'redirect',
+        to: '/(tabs)',
+      });
+
+      // Guest with config in tabs should stay
+      const guestWithConfigInTabs: RoutingState = {
+        user: { isGuest: true },
+        isConfigured: true,
+        segments: ['(tabs)'],
+      };
+      expect(getRoutingDecision(guestWithConfigInTabs)).toEqual({ action: 'stay' });
     });
   });
 });

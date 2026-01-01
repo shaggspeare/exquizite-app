@@ -210,49 +210,29 @@ export function SetCard({ set, onPress }: SetCardProps) {
               </Text>
             </View>
 
-            {set.isFeatured ? (
-              <View
+            <View style={styles.actions}>
+              <TouchableOpacity
                 style={[
-                  styles.featuredInfo,
-                  { backgroundColor: 'rgba(255,255,255,0.2)' },
+                  styles.playButton,
+                  { backgroundColor: colors.primary },
                 ]}
+                onPress={handlePlayPress}
+                activeOpacity={0.7}
               >
-                <Ionicons
-                  name="information-circle"
-                  size={20}
-                  color="#FFFFFF"
-                />
-                <Text
-                  style={[
-                    styles.featuredInfoText,
-                    { color: '#FFFFFF' },
-                  ]}
-                >
-                  {t('setCard.demoInfo')}
-                </Text>
-              </View>
-            ) : (
-              <View style={styles.actions}>
-                <TouchableOpacity
-                  style={[
-                    styles.playButton,
-                    { backgroundColor: colors.primary },
-                  ]}
-                  onPress={handlePlayPress}
-                  activeOpacity={0.7}
-                >
-                  <Ionicons name="play-circle" size={24} color="#FFFFFF" />
-                  <Text style={styles.playButtonText}>{t('common:buttons.play')}</Text>
-                </TouchableOpacity>
+                <Ionicons name="play-circle" size={24} color="#FFFFFF" />
+                <Text style={styles.playButtonText}>{t('common:buttons.play')}</Text>
+              </TouchableOpacity>
 
-                <TouchableOpacity
-                  style={[
-                    styles.actionButton,
-                    { backgroundColor: colors.success },
-                  ]}
-                  onPress={handleSharePress}
-                  activeOpacity={0.7}
-                >
+              {!set.isFeatured && (
+                <>
+                  <TouchableOpacity
+                    style={[
+                      styles.actionButton,
+                      { backgroundColor: colors.success },
+                    ]}
+                    onPress={handleSharePress}
+                    activeOpacity={0.7}
+                  >
                   <Ionicons name="share-social" size={24} color="#FFFFFF" />
                 </TouchableOpacity>
 
@@ -266,8 +246,9 @@ export function SetCard({ set, onPress }: SetCardProps) {
                 >
                   <Ionicons name="trash" size={24} color="#FFFFFF" />
                 </TouchableOpacity>
-              </View>
-            )}
+                </>
+              )}
+            </View>
           </View>
         )}
         </LinearGradient>
