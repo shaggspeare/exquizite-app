@@ -97,6 +97,10 @@ export function SetsProvider({ children }: { children: ReactNode }) {
   const prevTargetLanguageRef = useRef<string>('');
   const hasLoadedRef = useRef<boolean>(false);
 
+  // Track cold start retry attempts
+  const coldStartRetryRef = useRef<boolean>(false);
+  const coldStartTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   useEffect(() => {
     if (user) {
       // Determine what changed
@@ -151,7 +155,21 @@ export function SetsProvider({ children }: { children: ReactNode }) {
       prevIsConfiguredRef.current = false;
       prevTargetLanguageRef.current = '';
       hasLoadedRef.current = false;
+      // Clear cold start timeout
+      coldStartRetryRef.current = false;
+      if (coldStartTimeoutRef.current) {
+        clearTimeout(coldStartTimeoutRef.current);
+        coldStartTimeoutRef.current = null;
+      }
     }
+
+    // Cleanup timeout on unmount
+    return () => {
+      if (coldStartTimeoutRef.current) {
+        clearTimeout(coldStartTimeoutRef.current);
+        coldStartTimeoutRef.current = null;
+      }
+    };
     // Note: loadSets, checkAndMigrateGuestData, and hasMigrated are intentionally excluded
     // to prevent infinite loops - these functions/values change on every render
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -184,7 +202,7 @@ export function SetsProvider({ children }: { children: ReactNode }) {
     return user?.isGuest === true;
   };
 
-  const loadSets = async () => {
+  const loadSets = async (isColdStartRetry: boolean = false) => {
     if (!user) return;
 
     setIsLoading(true);
@@ -199,7 +217,7 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         console.log(`✅ Loaded ${guestSets.length} guest sets`);
       } else {
         // Load from Supabase for authenticated users
-        console.log('☁️ Loading sets from Supabase...');
+        console.log(`☁️ Loading sets from Supabase... ${isColdStartRetry ? '(Cold start retry)' : ''}`);
 
         // Ensure session is valid before making the request
         const sessionValid = await ensureValidSession();
@@ -277,15 +295,49 @@ export function SetsProvider({ children }: { children: ReactNode }) {
       } else {
         setSets(userSets);
       }
+
+      // Clear cold start retry flag on successful load
+      coldStartRetryRef.current = false;
+      if (coldStartTimeoutRef.current) {
+        clearTimeout(coldStartTimeoutRef.current);
+        coldStartTimeoutRef.current = null;
+      }
+
+      // Detect if we got empty data when we should have user info
+      // This indicates a potential cold start issue
+      if (!isGuestUser() && preferences.isConfigured && userSets.length === 0 && !isColdStartRetry && !coldStartRetryRef.current) {
+        console.log('⚠️ Detected potential cold start - no sets loaded for configured user. Scheduling retry in 4 seconds...');
+        coldStartRetryRef.current = true;
+
+        coldStartTimeoutRef.current = setTimeout(() => {
+          console.log('🔄 Executing cold start retry...');
+          loadSets(true);
+        }, 4000);
+      }
     } catch (error) {
       console.error('Error loading sets:', error);
-      // On any error during load, if user is authenticated (not guest), sign them out
-      if (!isGuestUser()) {
-        console.error('🔴 Error loading data for authenticated user, forcing sign-out');
-        await supabase.auth.signOut();
+
+      // If this wasn't a retry and we haven't retried yet, schedule a retry
+      if (!isColdStartRetry && !coldStartRetryRef.current && !isGuestUser()) {
+        console.log('⚠️ Error loading sets, scheduling cold start retry in 4 seconds...');
+        coldStartRetryRef.current = true;
+
+        coldStartTimeoutRef.current = setTimeout(() => {
+          console.log('🔄 Executing cold start retry after error...');
+          loadSets(true);
+        }, 4000);
+      } else {
+        // On final error, if user is authenticated (not guest), sign them out
+        if (!isGuestUser()) {
+          console.error('🔴 Error loading data for authenticated user after retry, forcing sign-out');
+          await supabase.auth.signOut();
+        }
       }
     } finally {
-      setIsLoading(false);
+      // Don't set loading to false if we're scheduling a retry
+      if (!coldStartRetryRef.current || isColdStartRetry) {
+        setIsLoading(false);
+      }
     }
   };
 
