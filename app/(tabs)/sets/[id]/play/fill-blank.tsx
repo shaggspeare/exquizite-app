@@ -498,35 +498,6 @@ export default function FillBlankScreen() {
                   })}
                 </View>
 
-                {isAnswered && !isCorrect && (
-                  <View
-                    style={[
-                      styles.correctAnswerContainer,
-                      {
-                        backgroundColor: colors.card,
-                        borderColor: colors.error,
-                      },
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        styles.correctAnswerLabel,
-                        { color: colors.textSecondary },
-                      ]}
-                    >
-                      {t('fillBlank.correctAnswer')}
-                    </Text>
-                    <Text
-                      style={[
-                        styles.correctAnswerText,
-                        { color: colors.error },
-                      ]}
-                    >
-                      {currentQuestion.correctAnswer}
-                    </Text>
-                  </View>
-                )}
-
                 <View style={styles.desktopFooter}>
                   {isAnswered ? (
                     <Button
@@ -727,27 +698,6 @@ export default function FillBlankScreen() {
             );
           })}
         </View>
-
-        {isAnswered && !isCorrect && (
-          <View
-            style={[
-              styles.correctAnswerContainer,
-              { backgroundColor: colors.card, borderColor: colors.error },
-            ]}
-          >
-            <Text
-              style={[
-                styles.correctAnswerLabel,
-                { color: colors.textSecondary },
-              ]}
-            >
-              {t('fillBlank.correctAnswer')}
-            </Text>
-            <Text style={[styles.correctAnswerText, { color: colors.error }]}>
-              {currentQuestion.correctAnswer}
-            </Text>
-          </View>
-        )}
       </ScrollView>
 
       <View

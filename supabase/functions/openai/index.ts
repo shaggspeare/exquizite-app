@@ -297,28 +297,46 @@ async function generateMultipleSentences(
     .map((w, i) => `${i + 1}. "${w.word}" (means "${w.translation}")`)
     .join('\n');
 
-  const prompt = `Generate simple, natural sentences in ${targetLanguage} for the following words. Each sentence should use the word and then have it replaced with "___" to create fill-in-the-blank exercises.
-For each word, also generate 3 plausible but incorrect ${targetLanguage} words that could trick a language learner. These distractors should be different words that could grammatically fit in the sentence but doesnt fit to it in term of sense. If user understands the word correctly he should have no doubt to select right word.
+  const prompt = `Generate fill-in-the-blank sentences in ${targetLanguage} for these words. Replace each word with "___" and provide 3 incorrect options.
+
+SENTENCE REQUIREMENTS:
+- Create natural sentences with contextual details that hint at the correct answer
+- Include 2-3 specific clues (action, characteristic, location, purpose) that distinguish this word
+- Keep it conversational but descriptive enough to identify the word if you know its meaning
+
+DISTRACTOR STRATEGY - BALANCED DIFFICULTY:
+Create a mix of distractor types for each question:
+1. One "nearby distractor" - related category but clearly different (e.g., "padre" if answer is "madre")
+2. One "grammatical distractor" - different category but same grammar/gender (e.g., "mesa" for "madre" - both feminine)
+3. One "random distractor" - completely unrelated but grammatically fits (e.g., "escuela" for "madre")
+
+This creates fair difficulty: not all same category (too hard) and not all random (too easy).
+
+RULES:
+- All distractors must be grammatically compatible (same gender/number/part of speech)
+- The sentence context must make the correct answer clear if you understand the word's meaning
+- Avoid using only words from the same narrow category (e.g., all immediate family members, all breakfast foods)
+- Avoid using only completely random words (makes it too easy)
+
+Examples:
+BAD - too easy: "Mi ___ me ayuda" → madre, ventana, cielo, piedra (all random)
+BAD - too hard: "Mi ___ me ayuda" → madre, hermana, tía, abuela (all family)
+GOOD: "Mi ___ siempre me prepara el desayuno antes de ir al trabajo" → madre, maestra, amiga, vecina (mix: family, teacher, friend, neighbor - all people who could help, but context points to madre)
 
 Words:
 ${wordsList}
 
-Format the response as a JSON object with a "sentences" property containing an array of objects.
-Each object should have:
-- "sentence": the sentence with ___
-- "correctAnswer": the original word
-- "distractors": array of 3 incorrect ${targetLanguage} words
-
-Example format: {
+Return JSON format:
+{
   "sentences": [
     {
-      "sentence": "Я люблю ___ на сніданок",
-      "correctAnswer": "яблука",
-      "distractors": ["банани", "молоко", "хліб"]
+      "sentence": "sentence with ___",
+      "correctAnswer": "the word",
+      "distractors": ["word1", "word2", "word3"]
     }
   ]
 }
-Only return valid JSON, no additional text.`;
+Only JSON, no additional text.`;
 
   const responseText = await callOpenAI(
     [

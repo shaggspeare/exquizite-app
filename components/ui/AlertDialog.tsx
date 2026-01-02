@@ -182,41 +182,44 @@ export function AlertDialog({
                   </Text>
                 </TouchableOpacity>
               ) : (
-                sortedButtons.map((button, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    style={[
-                      styles.button,
-                      button.style === 'cancel' && styles.cancelButton,
-                      button.style === 'destructive' && {
-                        backgroundColor: colors.error,
-                      },
-                      button.style === 'default' && {
-                        backgroundColor: colors.primary,
-                      },
-                      button.style === 'cancel' && {
-                        backgroundColor: 'transparent',
-                        borderWidth: 1,
-                        borderColor: colors.border,
-                      },
-                      isMobile && styles.buttonMobile,
-                    ]}
-                    onPress={() => handleButtonPress(button)}
-                    activeOpacity={0.8}
-                  >
-                    <Text
+                sortedButtons.map((button, index) => {
+                  const buttonStyle = button.style || 'default';
+                  return (
+                    <TouchableOpacity
+                      key={index}
                       style={[
-                        styles.buttonText,
-                        button.style === 'cancel'
-                          ? { color: colors.text }
-                          : { color: '#FFFFFF' },
+                        styles.button,
+                        buttonStyle === 'cancel' && styles.cancelButton,
+                        buttonStyle === 'destructive' && {
+                          backgroundColor: colors.error,
+                        },
+                        (buttonStyle === 'default' || !button.style) && {
+                          backgroundColor: colors.primary,
+                        },
+                        buttonStyle === 'cancel' && {
+                          backgroundColor: 'transparent',
+                          borderWidth: 1,
+                          borderColor: colors.border,
+                        },
+                        isMobile && styles.buttonMobile,
                       ]}
-                      numberOfLines={1}
+                      onPress={() => handleButtonPress(button)}
+                      activeOpacity={0.8}
                     >
-                      {button.text}
-                    </Text>
-                  </TouchableOpacity>
-                ))
+                      <Text
+                        style={[
+                          styles.buttonText,
+                          buttonStyle === 'cancel'
+                            ? { color: colors.text }
+                            : { color: '#FFFFFF' },
+                        ]}
+                        numberOfLines={1}
+                      >
+                        {button.text}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })
               )}
             </View>
           </View>
