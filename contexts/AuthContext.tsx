@@ -9,6 +9,7 @@ import { AppState, AppStateStatus } from 'react-native';
 import { supabase, retryOperation } from '@/lib/supabase';
 import { User } from '@/lib/types';
 import * as guestStorage from '@/lib/guestStorage';
+import { storage } from '@/lib/storage';
 
 interface AuthContextType {
   user: User | null;
@@ -26,6 +27,43 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+const USER_PROFILE_CACHE_KEY = 'cached_user_profile';
+
+// Helper to save user profile to cache
+async function cacheUserProfile(user: User) {
+  try {
+    await storage.setItem(USER_PROFILE_CACHE_KEY, JSON.stringify(user));
+    console.log('💾 User profile cached');
+  } catch (error) {
+    console.error('Error caching user profile:', error);
+  }
+}
+
+// Helper to load user profile from cache
+async function loadCachedUserProfile(): Promise<User | null> {
+  try {
+    const cached = await storage.getItem(USER_PROFILE_CACHE_KEY);
+    if (cached) {
+      const user = JSON.parse(cached);
+      console.log('💾 User profile loaded from cache:', user.name);
+      return user;
+    }
+  } catch (error) {
+    console.error('Error loading cached user profile:', error);
+  }
+  return null;
+}
+
+// Helper to clear user profile cache
+async function clearUserProfileCache() {
+  try {
+    await storage.removeItem(USER_PROFILE_CACHE_KEY);
+    console.log('💾 User profile cache cleared');
+  } catch (error) {
+    console.error('Error clearing user profile cache:', error);
+  }
+}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -108,6 +146,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           console.error('Failed to refresh session:', refreshError?.message);
           // Clear invalid session and check for guest user
           await supabase.auth.signOut();
+          await clearUserProfileCache();
           const guestUser = await guestStorage.getGuestUser();
           if (guestUser) {
             console.log('✅ Guest user loaded from storage:', guestUser.name);
@@ -126,7 +165,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       if (session?.user) {
-        await loadUserProfile(session.user.id);
+        // Load cached profile immediately for faster UI
+        const cachedProfile = await loadCachedUserProfile();
+        if (cachedProfile && cachedProfile.id === session.user.id) {
+          console.log('⚡ Using cached profile for immediate display');
+          setUser(cachedProfile);
+          // Still load fresh profile in background
+          loadUserProfile(session.user.id);
+        } else {
+          await loadUserProfile(session.user.id);
+        }
       } else {
         // If no Supabase session, check for guest user in local storage
         const guestUser = await guestStorage.getGuestUser();
@@ -139,13 +187,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     } catch (error) {
       console.error('Error checking session:', error);
-      // On any error, clear session and check for guest user
-      const guestUser = await guestStorage.getGuestUser();
-      if (guestUser) {
-        console.log('✅ Guest user loaded from storage after error:', guestUser.name);
-        setUser(guestUser);
+      // On any error, try cached profile first
+      const cachedProfile = await loadCachedUserProfile();
+      if (cachedProfile) {
+        console.log('⚡ Using cached profile after error');
+        setUser(cachedProfile);
       } else {
-        setUser(null);
+        const guestUser = await guestStorage.getGuestUser();
+        if (guestUser) {
+          console.log('✅ Guest user loaded from storage after error:', guestUser.name);
+          setUser(guestUser);
+        } else {
+          setUser(null);
+        }
       }
     } finally {
       if (shouldSetLoading) {
@@ -157,13 +211,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const loadUserProfile = async (userId: string, retries = 5) => {
     try {
       // Wrap in retryOperation to handle network failures
+      // Use longer retry delays for cold starts (1s, 2s, 3s)
       const { data: profile, error } = await retryOperation(async () => {
         return await supabase
           .from('profiles')
           .select('*')
           .eq('id', userId)
           .single();
-      });
+      }, 3, 2000); // 3 retries with 2 second delay
 
       if (error) {
         // Check if it's an authentication error
@@ -176,6 +231,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (isAuthError) {
           console.error('🔴 Auth error loading profile, signing out...');
           await supabase.auth.signOut();
+          await clearUserProfileCache();
           setUser(null);
           return;
         }
@@ -185,34 +241,64 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           console.log(
             `Profile not found, retrying... (${retries} attempts left)`
           );
-          await new Promise(resolve => setTimeout(resolve, 500));
+          await new Promise(resolve => setTimeout(resolve, 1000));
           return loadUserProfile(userId, retries - 1);
         }
 
-        console.error('🔴 Failed to load profile after retries, signing out...');
-        await supabase.auth.signOut();
-        setUser(null);
+        console.error('🔴 Failed to load profile after retries');
+        // Don't sign out - keep cached profile if available
+        const cachedProfile = await loadCachedUserProfile();
+        if (cachedProfile && cachedProfile.id === userId) {
+          console.log('⚡ Using cached profile as fallback');
+          setUser(cachedProfile);
+        } else {
+          console.error('🔴 No cached profile available, signing out...');
+          await supabase.auth.signOut();
+          await clearUserProfileCache();
+          setUser(null);
+        }
         return;
       }
 
       if (profile) {
         console.log('✅ Profile loaded successfully:', profile.name);
-        setUser({
+        const userData: User = {
           id: profile.id,
           name: profile.name,
           email: profile.email || undefined,
           isGuest: profile.is_guest,
           avatar: profile.avatar_url || undefined,
-        });
+        };
+        setUser(userData);
+        // Cache the profile for future use
+        await cacheUserProfile(userData);
       } else {
-        console.error('🔴 Profile is null, signing out...');
-        await supabase.auth.signOut();
-        setUser(null);
+        console.error('🔴 Profile is null');
+        // Try to use cached profile
+        const cachedProfile = await loadCachedUserProfile();
+        if (cachedProfile && cachedProfile.id === userId) {
+          console.log('⚡ Using cached profile as fallback');
+          setUser(cachedProfile);
+        } else {
+          console.error('🔴 No cached profile available, signing out...');
+          await supabase.auth.signOut();
+          await clearUserProfileCache();
+          setUser(null);
+        }
       }
     } catch (error) {
-      console.error('🔴 Error loading profile, signing out:', error);
-      await supabase.auth.signOut();
-      setUser(null);
+      console.error('🔴 Error loading profile:', error);
+      // Try to use cached profile
+      const cachedProfile = await loadCachedUserProfile();
+      if (cachedProfile && cachedProfile.id === userId) {
+        console.log('⚡ Using cached profile after exception');
+        setUser(cachedProfile);
+      } else {
+        console.error('🔴 No cached profile available, signing out...');
+        await supabase.auth.signOut();
+        await clearUserProfileCache();
+        setUser(null);
+      }
     }
   };
 
@@ -305,6 +391,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         // Sign out from Supabase
         await supabase.auth.signOut();
+        // Clear cached profile
+        await clearUserProfileCache();
       }
       setUser(null);
     } catch (error) {
