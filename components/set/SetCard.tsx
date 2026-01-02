@@ -268,6 +268,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
     marginTop: Spacing.sm,
     position: 'relative',
+    zIndex: 1,
   },
   gradientCard: {
     borderRadius: BorderRadius.cardLarge,

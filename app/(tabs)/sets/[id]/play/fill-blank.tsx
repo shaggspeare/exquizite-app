@@ -233,6 +233,9 @@ export default function FillBlankScreen() {
     setIsCorrect(false);
     setScore(0);
     setShowHint(false);
+    setLoading(true);
+    setQuestions([]);
+    setIsLoadingMore(false);
     generateQuestions();
   };
 
@@ -262,6 +265,22 @@ export default function FillBlankScreen() {
   const currentQuestion = questions[currentIndex];
   const isWaitingForNextQuestion =
     isAnswered && currentIndex === questions.length - 1 && isLoadingMore;
+
+  // Safety check: if currentQuestion is undefined, show loading screen
+  if (!currentQuestion) {
+    return (
+      <SafeAreaView
+        style={[styles.container, { backgroundColor: colors.background }]}
+      >
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color={colors.primary} />
+          <Text style={[styles.loadingText, { color: colors.text }]}>
+            {t('fillBlank.generatingSentences')}
+          </Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   if (isDesktop) {
     return (

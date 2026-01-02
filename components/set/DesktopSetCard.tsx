@@ -337,7 +337,7 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     borderRadius: BorderRadius.round,
     backgroundColor: 'rgba(255,215,0,0.9)',
-    zIndex: 10,
+    zIndex: 20,
     ...Shadow.button,
   },
   featuredBadgeText: {
