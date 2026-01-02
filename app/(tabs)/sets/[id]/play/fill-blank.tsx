@@ -360,7 +360,7 @@ export default function FillBlankScreen() {
           >
             <DesktopContainer>
               <View style={styles.desktopGameContent}>
-                {!showHint && !isAnswered && (
+                {!showHint ? (
                   <TouchableOpacity
                     style={[
                       styles.hintButton,
@@ -377,9 +377,7 @@ export default function FillBlankScreen() {
                       {t('common:buttons.showHint')}
                     </Text>
                   </TouchableOpacity>
-                )}
-
-                {showHint && (
+                ) : (
                   <View
                     style={[
                       styles.hintCard,
@@ -581,7 +579,7 @@ export default function FillBlankScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {!showHint && !isAnswered && (
+        {!showHint ? (
           <TouchableOpacity
             style={[
               styles.hintButton,
@@ -595,9 +593,7 @@ export default function FillBlankScreen() {
               {t('common:buttons.showHint')}
             </Text>
           </TouchableOpacity>
-        )}
-
-        {showHint && (
+        ) : (
           <View
             style={[
               styles.hintCard,
