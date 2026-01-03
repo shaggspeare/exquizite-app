@@ -222,10 +222,9 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         // Ensure session is valid before making the request
         const sessionValid = await ensureValidSession();
         if (!sessionValid) {
-          console.error('🔴 Session validation failed, signing out...');
-          await supabase.auth.signOut();
-          setSets([]);
-          return;
+          console.warn('⚠️ Session validation failed, but continuing with cached session');
+          // Don't sign out here - let AuthContext handle session management
+          // Just log the warning and attempt the query anyway
         }
 
         // Wrap the query in retryOperation to handle Supabase cold starts
@@ -251,11 +250,11 @@ export function SetsProvider({ children }: { children: ReactNode }) {
             setsError.code === 'PGRST301';
 
           if (isAuthError) {
-            console.error('🔴 Authentication error detected, session is invalid');
+            console.error('🔴 Authentication error detected when loading sets');
             console.error('Error details:', setsError);
-            // Sign out the user to force re-login
-            await supabase.auth.signOut();
-            throw new Error('Your session has expired. Please sign in again.');
+            // Don't sign out here - AuthContext will handle session refresh
+            // Just throw error to trigger retry logic
+            throw new Error('Authentication error - will retry after session refresh');
           }
 
           throw setsError;
@@ -327,11 +326,9 @@ export function SetsProvider({ children }: { children: ReactNode }) {
           loadSets(true);
         }, 4000);
       } else {
-        // On final error, if user is authenticated (not guest), sign them out
-        if (!isGuestUser()) {
-          console.error('🔴 Error loading data for authenticated user after retry, forcing sign-out');
-          await supabase.auth.signOut();
-        }
+        // On final error, just log it - don't sign out the user
+        // AuthContext will handle session management
+        console.error('🔴 Error loading sets after retry - keeping user logged in');
       }
     } finally {
       // Don't set loading to false if we're scheduling a retry
@@ -642,8 +639,8 @@ export function SetsProvider({ children }: { children: ReactNode }) {
       // Ensure session is valid before making the request
       const sessionValid = await ensureValidSession();
       if (!sessionValid) {
-        console.error('🔴 Session validation failed for delete operation');
-        throw new Error('Your session has expired. Please sign in again.');
+        console.warn('⚠️ Session validation failed for delete operation, but attempting anyway');
+        // Don't throw here - let the actual operation fail if needed
       }
 
       // Otherwise, delete from Supabase

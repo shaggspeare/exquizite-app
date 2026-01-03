@@ -115,8 +115,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const appStateSubscription = AppState.addEventListener(
       'change',
       (nextAppState: AppStateStatus) => {
+        console.log('🔍 AppState changed to:', nextAppState);
         if (nextAppState === 'active') {
-          console.log('App became active, refreshing session...');
+          console.log('📱 App became active, refreshing session...');
           checkSession(false); // Don't show loading state when resuming from background
         }
       }
@@ -129,12 +130,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const checkSession = async (shouldSetLoading: boolean = true) => {
+    console.log('🔍 checkSession called, shouldSetLoading:', shouldSetLoading);
     try {
       // First check for Supabase auth session
       const {
         data: { session },
         error: sessionError,
       } = await supabase.auth.getSession();
+
+      console.log('🔍 Session state:', {
+        hasSession: !!session,
+        hasUser: !!session?.user,
+        userId: session?.user?.id,
+        expiresAt: session?.expires_at,
+        hasError: !!sessionError,
+      });
 
       // If there's an error getting the session, try to refresh it
       if (sessionError) {
@@ -144,7 +154,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         if (refreshError || !refreshedSession) {
           console.error('Failed to refresh session:', refreshError?.message);
-          // Clear invalid session and check for guest user
+          // Try to use cached profile before giving up
+          const cachedProfile = await loadCachedUserProfile();
+          if (cachedProfile) {
+            console.log('⚡ Using cached profile after refresh failure');
+            setUser(cachedProfile);
+            return;
+          }
+          // Only clear session and check for guest user if we have no cached profile
           await supabase.auth.signOut();
           await clearUserProfileCache();
           const guestUser = await guestStorage.getGuestUser();
@@ -157,31 +174,66 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           return;
         }
 
-        // Use refreshed session
+        // Use refreshed session - wait for profile to load before continuing
+        console.log('✅ Session refreshed, loading profile...');
         if (refreshedSession?.user) {
-          await loadUserProfile(refreshedSession.user.id);
+          await loadUserProfile(refreshedSession.user.id, 5, true);
         }
         return;
       }
 
       if (session?.user) {
+        // Check if token is expired or close to expiration
+        if (session.expires_at) {
+          const expiresAt = session.expires_at * 1000;
+          const now = Date.now();
+
+          // If expired or expiring within 5 minutes, refresh first
+          if (expiresAt <= now || expiresAt - now < 5 * 60 * 1000) {
+            console.log('Token expired or expiring soon, refreshing before loading profile...');
+            const { data: { session: refreshedSession }, error: refreshError } =
+              await supabase.auth.refreshSession();
+
+            if (refreshError || !refreshedSession) {
+              console.warn('Session refresh failed:', refreshError?.message);
+              // Try to use cached profile
+              const cachedProfile = await loadCachedUserProfile();
+              if (cachedProfile && cachedProfile.id === session.user.id) {
+                console.log('⚡ Using cached profile after refresh failure');
+                setUser(cachedProfile);
+                return;
+              }
+              // Fall through to try loading with existing session
+            } else {
+              console.log('✅ Session refreshed proactively');
+              // Use refreshed session
+              if (refreshedSession?.user) {
+                await loadUserProfile(refreshedSession.user.id, 5, true);
+              }
+              return;
+            }
+          }
+        }
+
         // Load cached profile immediately for faster UI
         const cachedProfile = await loadCachedUserProfile();
         if (cachedProfile && cachedProfile.id === session.user.id) {
           console.log('⚡ Using cached profile for immediate display');
           setUser(cachedProfile);
           // Still load fresh profile in background
-          loadUserProfile(session.user.id);
+          loadUserProfile(session.user.id, 5, false);
         } else {
-          await loadUserProfile(session.user.id);
+          await loadUserProfile(session.user.id, 5, true);
         }
       } else {
+        console.log('🔍 No Supabase session found, checking for guest user');
         // If no Supabase session, check for guest user in local storage
         const guestUser = await guestStorage.getGuestUser();
         if (guestUser) {
           console.log('✅ Guest user loaded from storage:', guestUser.name);
           setUser(guestUser);
         } else {
+          console.log('🔍 No guest user found, setting user to null');
           setUser(null);
         }
       }
@@ -208,7 +260,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const loadUserProfile = async (userId: string, retries = 5) => {
+  const loadUserProfile = async (userId: string, retries = 5, isAfterRefresh = false) => {
     try {
       // Wrap in retryOperation to handle network failures
       // Use longer retry delays for cold starts (1s, 2s, 3s)
@@ -229,7 +281,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           error.code === 'PGRST301';
 
         if (isAuthError) {
-          console.error('🔴 Auth error loading profile, signing out...');
+          console.error('🔴 Auth error loading profile');
+
+          // If this happened right after a successful refresh, something is seriously wrong
+          // Otherwise, try to use cached profile and let the app continue
+          if (isAfterRefresh) {
+            console.error('🔴 Auth error after successful refresh - signing out');
+            await supabase.auth.signOut();
+            await clearUserProfileCache();
+            setUser(null);
+            return;
+          }
+
+          // Try to use cached profile instead of signing out immediately
+          const cachedProfile = await loadCachedUserProfile();
+          if (cachedProfile && cachedProfile.id === userId) {
+            console.log('⚡ Using cached profile after auth error');
+            setUser(cachedProfile);
+            return;
+          }
+
+          // No cached profile available - sign out
+          console.error('🔴 No cached profile available, signing out');
           await supabase.auth.signOut();
           await clearUserProfileCache();
           setUser(null);

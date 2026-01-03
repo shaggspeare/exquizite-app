@@ -504,8 +504,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.lg,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.md,
   },
   progress: {
     ...Typography.body,
@@ -534,14 +534,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingHorizontal: Spacing.lg,
-    paddingTop: Spacing.xl,
-    paddingBottom: Spacing.xl,
+    paddingHorizontal: Spacing.md,
+    paddingTop: Spacing.md,
+    paddingBottom: Spacing.md,
   },
   questionCard: {
     borderRadius: BorderRadius.cardLarge,
-    padding: Spacing.lg,
-    marginBottom: Spacing.lg,
+    padding: Spacing.md,
+    marginBottom: Spacing.md,
     alignItems: 'center',
     ...Shadow.cardDeep,
   },
@@ -560,16 +560,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   options: {
-    gap: Spacing.md,
+    gap: Spacing.sm,
   },
   option: {
     borderRadius: BorderRadius.button,
-    padding: Spacing.lg,
+    padding: Spacing.md,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.md,
+    gap: Spacing.sm,
     borderWidth: 2,
-    minHeight: 72,
+    minHeight: 60,
     ...Shadow.card,
   },
   optionNumber: {
@@ -591,7 +591,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   footer: {
-    padding: Spacing.lg,
+    padding: Spacing.md,
     borderTopWidth: 1,
   },
   loading: {
