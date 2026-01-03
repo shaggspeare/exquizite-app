@@ -3,6 +3,7 @@ import {
   useContext,
   useState,
   useEffect,
+  useRef,
   ReactNode,
 } from 'react';
 import { AppState, AppStateStatus } from 'react-native';
@@ -68,6 +69,7 @@ async function clearUserProfileCache() {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const isManualSignOutRef = useRef(false);
 
   useEffect(() => {
     // Check for existing session (both Supabase auth and local guest)
@@ -84,13 +86,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
 
         if (event === 'SIGNED_OUT') {
-          console.log('🔴 User signed out');
-          // Check for guest user in local storage
+          console.log('🔴 User signed out event received, isManual:', isManualSignOutRef.current);
+
+          // If this was a manual sign out, clear everything and don't use cache
+          if (isManualSignOutRef.current) {
+            isManualSignOutRef.current = false; // Reset flag
+            console.log('🔴 Manual sign out - clearing all state');
+            setUser(null);
+            return;
+          }
+
+          // Automatic sign out (expired refresh token)
+          // IMPORTANT: Don't immediately clear user state
+          // The refresh token might be expired, but we can still use cached profile
+          const cachedProfile = await loadCachedUserProfile();
+          if (cachedProfile) {
+            console.log('⚡ Using cached profile instead of signing out:', cachedProfile.name);
+            setUser(cachedProfile);
+            return;
+          }
+
+          // Only if no cached profile, check for guest user
           const guestUser = await guestStorage.getGuestUser();
           if (guestUser) {
             console.log('✅ Guest user loaded from storage:', guestUser.name);
             setUser(guestUser);
           } else {
+            console.log('🔍 No cached profile or guest user, clearing user state');
             setUser(null);
           }
           return;
@@ -456,6 +478,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = async () => {
     try {
+      // Set flag to indicate this is a manual sign out
+      isManualSignOutRef.current = true;
+
       // Check if current user is a guest
       if (user?.isGuest) {
         // Clear guest data from local storage
@@ -470,6 +495,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null);
     } catch (error) {
       console.error('Error signing out:', error);
+      // Reset flag on error
+      isManualSignOutRef.current = false;
       throw error;
     }
   };
