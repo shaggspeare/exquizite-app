@@ -85,6 +85,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           if (session?.user) {
             console.log('🔄 Loading profile after token refresh...');
             await loadUserProfile(session.user.id, 5, true);
+            // Ensure loading state is cleared after successful refresh
+            setIsLoading(false);
           }
           return;
         }
@@ -196,29 +198,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         hasError: !!sessionError,
       });
 
-      // If there's an error getting the session, try to refresh it
+      // If there's an error getting the session (including timeout), use cached profile
       if (sessionError) {
-        console.warn('Session error, attempting refresh:', sessionError.message);
+        console.warn('Session error:', sessionError.message);
+
+        // If we already loaded cached profile at the start, just continue with it
+        if (cachedProfile) {
+          console.log('⚡ Continuing with cached profile after session error');
+          // Don't try to refresh - the TOKEN_REFRESHED event will handle it if needed
+          return;
+        }
+
+        // No cached profile - try to refresh session as last resort
+        console.warn('No cached profile, attempting session refresh...');
         const { data: { session: refreshedSession }, error: refreshError } =
           await supabase.auth.refreshSession();
 
         if (refreshError || !refreshedSession) {
           console.error('Failed to refresh session:', refreshError?.message);
-          // Try to use cached profile before giving up
-          const cachedProfile = await loadCachedUserProfile();
-          if (cachedProfile) {
-            console.log('⚡ Using cached profile after refresh failure');
-            setUser(cachedProfile);
-            return;
-          }
-          // Only clear session and check for guest user if we have no cached profile
-          await supabase.auth.signOut();
-          await clearUserProfileCache();
+          // Check for guest user
           const guestUser = await guestStorage.getGuestUser();
           if (guestUser) {
             console.log('✅ Guest user loaded from storage:', guestUser.name);
             setUser(guestUser);
           } else {
+            console.log('🔍 No session, no cache, no guest - clearing user');
             setUser(null);
           }
           return;
