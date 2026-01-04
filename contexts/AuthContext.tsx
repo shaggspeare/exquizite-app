@@ -72,10 +72,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const isManualSignOutRef = useRef(false);
 
   useEffect(() => {
-    // Check for existing session (both Supabase auth and local guest)
-    checkSession();
-
-    // Listen for auth state changes
+    // Listen for auth state changes FIRST (before checkSession)
+    // This ensures we catch TOKEN_REFRESHED events during initialization
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         console.log('Auth state changed:', event, session?.user?.id);
@@ -83,6 +81,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // Handle token refresh
         if (event === 'TOKEN_REFRESHED') {
           console.log('✅ Token refreshed successfully');
+          // After successful refresh, load the user profile
+          if (session?.user) {
+            console.log('🔄 Loading profile after token refresh...');
+            await loadUserProfile(session.user.id, 5, true);
+          }
+          return;
         }
 
         if (event === 'SIGNED_OUT') {
@@ -145,6 +149,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     );
 
+    // Check for existing session (both Supabase auth and local guest)
+    // Do this AFTER setting up listeners to catch any events during initialization
+    checkSession();
+
     return () => {
       authListener?.subscription.unsubscribe();
       appStateSubscription.remove();
@@ -154,17 +162,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const checkSession = async (shouldSetLoading: boolean = true) => {
     console.log('🔍 checkSession called, shouldSetLoading:', shouldSetLoading);
     try {
-      // First check for Supabase auth session
+      // First try to load cached profile immediately for faster UI
+      const cachedProfile = await loadCachedUserProfile();
+      if (cachedProfile) {
+        console.log('⚡ Loading cached profile immediately while checking session');
+        setUser(cachedProfile);
+      }
+
+      // Check for Supabase auth session
+      console.log('🔍 Calling supabase.auth.getSession()...');
+
+      // Add a timeout to prevent hanging forever
+      const getSessionPromise = supabase.auth.getSession();
+      const timeoutPromise = new Promise<any>((_, reject) =>
+        setTimeout(() => reject(new Error('getSession timeout')), 10000)
+      );
+
       const {
         data: { session },
         error: sessionError,
-      } = await supabase.auth.getSession();
+      } = await Promise.race([getSessionPromise, timeoutPromise]).catch((error) => {
+        console.error('🔴 getSession failed or timed out:', error);
+        return { data: { session: null }, error };
+      });
 
       console.log('🔍 Session state:', {
         hasSession: !!session,
         hasUser: !!session?.user,
         userId: session?.user?.id,
         expiresAt: session?.expires_at,
+        expiresAtDate: session?.expires_at ? new Date(session.expires_at * 1000).toISOString() : null,
+        now: new Date().toISOString(),
         hasError: !!sessionError,
       });
 
