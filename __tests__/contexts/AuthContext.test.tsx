@@ -1,12 +1,25 @@
 import React from 'react';
 import { renderHook, waitFor, act } from '@testing-library/react-native';
-import { AuthProvider, useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/lib/supabase';
-import * as guestStorage from '@/lib/guestStorage';
-import { storage } from '@/lib/storage';
+
+// Mock supabase module FIRST
+jest.mock('@/lib/supabase', () => {
+  const mockSupabaseInstance = {
+    auth: {
+      onAuthStateChange: jest.fn(),
+      getSession: jest.fn(),
+      refreshSession: jest.fn(),
+      signOut: jest.fn(),
+    },
+    from: jest.fn(),
+  };
+
+  return {
+    supabase: mockSupabaseInstance,
+    retryOperation: jest.fn((fn) => fn()),
+  };
+});
 
 // Mock dependencies
-jest.mock('@/lib/supabase');
 jest.mock('@/lib/guestStorage');
 jest.mock('@/lib/storage');
 jest.mock('react-native', () => ({
@@ -15,13 +28,18 @@ jest.mock('react-native', () => ({
   },
 }));
 
+// Now import after mocks are set up
+import { AuthProvider, useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/lib/supabase';
+import * as guestStorage from '@/lib/guestStorage';
+import { storage } from '@/lib/storage';
+
 describe('AuthContext - Session Management', () => {
   const mockUser = {
     id: 'test-user-id',
     email: 'test@example.com',
     name: 'Test User',
     isGuest: false,
-    avatarUrl: null,
   };
 
   const mockSession = {
@@ -55,6 +73,7 @@ describe('AuthContext - Session Management', () => {
     it('should store session from TOKEN_REFRESHED event', async () => {
       let authStateCallback: any;
 
+      // Set up all mocks before rendering
       (supabase.auth.onAuthStateChange as jest.Mock).mockImplementation((callback) => {
         authStateCallback = callback;
         return { data: { subscription: { unsubscribe: jest.fn() } } };
@@ -79,6 +98,11 @@ describe('AuthContext - Session Management', () => {
       );
 
       const { result } = renderHook(() => useAuth(), { wrapper });
+
+      // Wait for initial load to complete
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      });
 
       // Simulate TOKEN_REFRESHED event
       await act(async () => {
@@ -119,6 +143,7 @@ describe('AuthContext - Session Management', () => {
       let authStateCallback: any;
       const cachedProfile = JSON.stringify(mockUser);
 
+      // Ensure storage returns cached profile throughout the test
       (storage.getItem as jest.Mock).mockResolvedValue(cachedProfile);
 
       (supabase.auth.onAuthStateChange as jest.Mock).mockImplementation((callback) => {
@@ -126,9 +151,19 @@ describe('AuthContext - Session Management', () => {
         return { data: { subscription: { unsubscribe: jest.fn() } } };
       });
 
+      // Start with a valid session
       (supabase.auth.getSession as jest.Mock).mockResolvedValue({
-        data: { session: null },
+        data: { session: mockSession },
         error: null,
+      });
+
+      (supabase.from as jest.Mock).mockReturnValue({
+        select: jest.fn().mockReturnThis(),
+        eq: jest.fn().mockReturnThis(),
+        single: jest.fn().mockResolvedValue({
+          data: mockProfile,
+          error: null,
+        }),
       });
 
       const wrapper = ({ children }: { children: React.ReactNode }) => (
@@ -136,6 +171,12 @@ describe('AuthContext - Session Management', () => {
       );
 
       const { result } = renderHook(() => useAuth(), { wrapper });
+
+      // Wait for initial load with user
+      await waitFor(() => {
+        expect(result.current.user).toEqual(mockUser);
+        expect(result.current.isLoading).toBe(false);
+      });
 
       // Simulate automatic SIGNED_OUT (not manual)
       await act(async () => {
@@ -259,7 +300,6 @@ describe('AuthContext - Session Management', () => {
         id: 'guest-id',
         name: 'Guest User',
         isGuest: true,
-        avatarUrl: null,
       };
 
       (guestStorage.getGuestUser as jest.Mock).mockResolvedValue(mockGuestUser);
@@ -290,7 +330,6 @@ describe('AuthContext - Session Management', () => {
         id: 'guest-id',
         name: 'Guest User',
         isGuest: true,
-        avatarUrl: null,
       };
 
       (guestStorage.getGuestUser as jest.Mock).mockResolvedValue(mockGuestUser);
