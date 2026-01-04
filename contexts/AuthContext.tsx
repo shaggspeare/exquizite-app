@@ -74,6 +74,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const isManualSignOutRef = useRef(false);
   // Store the last valid session to avoid calling getSession() repeatedly
   const lastValidSessionRef = useRef<any>(null);
+  // Track when we last received a TOKEN_REFRESHED event
+  const lastTokenRefreshTimeRef = useRef<number>(0);
 
   useEffect(() => {
     // Listen for auth state changes FIRST (before checkSession)
@@ -87,6 +89,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           console.log('✅ Token refreshed successfully');
           // Store the refreshed session for immediate use
           lastValidSessionRef.current = session;
+          // Track when we received this refresh (to avoid redundant checkSession calls)
+          lastTokenRefreshTimeRef.current = Date.now();
+
+          // IMPORTANT: Explicitly set the session to ensure Supabase client has it
+          // This is critical for subsequent database queries to work
+          if (session) {
+            try {
+              await supabase.auth.setSession({
+                access_token: session.access_token,
+                refresh_token: session.refresh_token,
+              });
+              console.log('✅ Session explicitly set in Supabase client');
+            } catch (error) {
+              console.error('Error setting session:', error);
+            }
+          }
+
           // After successful refresh, load the user profile
           if (session?.user) {
             console.log('🔄 Loading profile after token refresh...');
@@ -170,6 +189,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const checkSession = async (shouldSetLoading: boolean = true) => {
     console.log('🔍 checkSession called, shouldSetLoading:', shouldSetLoading);
+
+    // If we just received a TOKEN_REFRESHED event (within last 5 seconds), skip this check
+    // The session is already valid and calling getSession() will likely timeout
+    const timeSinceLastRefresh = Date.now() - lastTokenRefreshTimeRef.current;
+    if (timeSinceLastRefresh < 5000) {
+      console.log('⏭️ Skipping checkSession - token was just refreshed', timeSinceLastRefresh, 'ms ago');
+      if (shouldSetLoading) {
+        setIsLoading(false);
+        setIsAuthReady(true);
+      }
+      return;
+    }
+
     try {
       // First try to load cached profile immediately for faster UI
       const cachedProfile = await loadCachedUserProfile();
@@ -191,7 +223,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         data: { session },
         error: sessionError,
       } = await Promise.race([getSessionPromise, timeoutPromise]).catch((error) => {
-        console.error('🔴 getSession failed or timed out:', error);
+        console.warn('⚠️ getSession timed out (known Supabase issue, app continues with cached profile)');
         return { data: { session: null }, error };
       });
 

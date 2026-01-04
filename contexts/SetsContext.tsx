@@ -223,7 +223,7 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         console.log(`✅ Loaded ${guestSets.length} guest sets`);
       } else {
         // Load from Supabase for authenticated users
-        console.log(`☁️ Loading sets from Supabase... ${isColdStartRetry ? '(Cold start retry)' : ''}`);
+        console.log(`☁️ Loading sets from Supabase for user: ${user.id} ${isColdStartRetry ? '(Cold start retry)' : ''}`);
 
         // Simply query - Supabase client handles auth internally
         // RLS policies ensure we only get this user's sets
@@ -241,6 +241,7 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         });
 
         if (setsError) {
+          console.error('🔴 Error loading sets from Supabase:', setsError);
           // Check if it's an authentication error
           const isAuthError =
             setsError.message?.includes('JWT') ||
@@ -258,6 +259,8 @@ export function SetsProvider({ children }: { children: ReactNode }) {
 
           throw setsError;
         }
+
+        console.log(`✅ Successfully loaded ${setsData?.length || 0} sets from Supabase`);
 
         // Transform database format to app format
         userSets = (setsData || []).map(set => ({
