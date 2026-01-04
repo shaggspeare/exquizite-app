@@ -49,6 +49,13 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
+// Mock expo-secure-store
+jest.mock('expo-secure-store', () => ({
+  getItemAsync: jest.fn(),
+  setItemAsync: jest.fn(),
+  deleteItemAsync: jest.fn(),
+}));
+
 // Silence console.log during tests (optional)
 // global.console = {
 //   ...console,

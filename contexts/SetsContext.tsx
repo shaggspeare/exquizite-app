@@ -6,7 +6,7 @@ import {
   useRef,
   ReactNode,
 } from 'react';
-import { supabase, retryOperation, ensureValidSession } from '@/lib/supabase';
+import { supabase, retryOperation } from '@/lib/supabase';
 import { useAuth } from './AuthContext';
 import { useLanguage } from './LanguageContext';
 import {
@@ -83,7 +83,7 @@ function selectFeaturedSets(targetLanguage: string): WordSet[] {
 }
 
 export function SetsProvider({ children }: { children: ReactNode }) {
-  const { user } = useAuth();
+  const { user, isAuthReady } = useAuth();
   const { preferences } = useLanguage();
   const [sets, setSets] = useState<WordSet[]>([]);
   // Start with isLoading true - we'll set it to false once we know there's nothing to load
@@ -102,6 +102,12 @@ export function SetsProvider({ children }: { children: ReactNode }) {
   const coldStartTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    // Don't load sets until auth is ready (to avoid race conditions with token refresh)
+    if (!isAuthReady) {
+      console.log('⏳ Waiting for auth to be ready before loading sets...');
+      return;
+    }
+
     if (user) {
       // Determine what changed
       const userChanged = prevUserIdRef.current !== user.id;
@@ -173,7 +179,7 @@ export function SetsProvider({ children }: { children: ReactNode }) {
     // Note: loadSets, checkAndMigrateGuestData, and hasMigrated are intentionally excluded
     // to prevent infinite loops - these functions/values change on every render
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, preferences.isConfigured, preferences.targetLanguage]);
+  }, [user, isAuthReady, preferences.isConfigured, preferences.targetLanguage]);
 
   const checkAndMigrateGuestData = async () => {
     // Prevent concurrent migrations
@@ -219,17 +225,8 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         // Load from Supabase for authenticated users
         console.log(`☁️ Loading sets from Supabase... ${isColdStartRetry ? '(Cold start retry)' : ''}`);
 
-        // Skip session validation on web - it hangs during/after token refresh
-        // The auth state is already managed by AuthContext
-        if (typeof window === 'undefined') {
-          // Only validate session on native platforms
-          const sessionValid = await ensureValidSession();
-          if (!sessionValid) {
-            console.warn('⚠️ Session validation failed, but continuing with cached session');
-          }
-        }
-
-        // Wrap the query in retryOperation to handle Supabase cold starts
+        // Simply query - Supabase client handles auth internally
+        // RLS policies ensure we only get this user's sets
         const { data: setsData, error: setsError } = await retryOperation(async () => {
           return await supabase
             .from('word_sets')
@@ -638,14 +635,7 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      // Ensure session is valid before making the request
-      const sessionValid = await ensureValidSession();
-      if (!sessionValid) {
-        console.warn('⚠️ Session validation failed for delete operation, but attempting anyway');
-        // Don't throw here - let the actual operation fail if needed
-      }
-
-      // Otherwise, delete from Supabase
+      // Delete from Supabase
       // Word pairs will be deleted automatically due to CASCADE
       // Include user_id filter as safety measure (RLS also enforces this)
       const { error, count } = await retryOperation(async () => {

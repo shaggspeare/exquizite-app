@@ -15,6 +15,7 @@ import { storage } from '@/lib/storage';
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
+  isAuthReady: boolean;
   signInWithEmail: (email: string, password: string) => Promise<void>;
   signUpWithEmail: (
     email: string,
@@ -69,7 +70,10 @@ async function clearUserProfileCache() {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAuthReady, setIsAuthReady] = useState(false);
   const isManualSignOutRef = useRef(false);
+  // Store the last valid session to avoid calling getSession() repeatedly
+  const lastValidSessionRef = useRef<any>(null);
 
   useEffect(() => {
     // Listen for auth state changes FIRST (before checkSession)
@@ -81,12 +85,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // Handle token refresh
         if (event === 'TOKEN_REFRESHED') {
           console.log('✅ Token refreshed successfully');
+          // Store the refreshed session for immediate use
+          lastValidSessionRef.current = session;
           // After successful refresh, load the user profile
           if (session?.user) {
             console.log('🔄 Loading profile after token refresh...');
             await loadUserProfile(session.user.id, 5, true);
             // Ensure loading state is cleared after successful refresh
             setIsLoading(false);
+            setIsAuthReady(true);
           }
           return;
         }
@@ -310,6 +317,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } finally {
       if (shouldSetLoading) {
         setIsLoading(false);
+        setIsAuthReady(true);
       }
     }
   };
@@ -574,6 +582,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       value={{
         user,
         isLoading,
+        isAuthReady,
         signInWithEmail,
         signUpWithEmail,
         signInAsGuest,
