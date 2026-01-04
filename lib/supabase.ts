@@ -31,10 +31,31 @@ export const supabase = createClient(
 // Helper function to validate and refresh session if needed
 export async function ensureValidSession(): Promise<boolean> {
   try {
+    // Add timeout protection to prevent hanging on web
+    const getSessionPromise = supabase.auth.getSession();
+    const timeoutPromise = new Promise<any>((_, reject) =>
+      setTimeout(() => reject(new Error('getSession timeout in ensureValidSession')), 5000)
+    );
+
+    const result = await Promise.race([getSessionPromise, timeoutPromise]).catch((error) => {
+      if (error.message?.includes('timeout')) {
+        console.warn('⚠️ getSession timed out in ensureValidSession, assuming session is valid');
+        // If getSession hangs on web, it's likely because token was just refreshed
+        // Return a special marker to skip validation
+        return { data: { session: null }, error: null, timedOut: true };
+      }
+      return { data: { session: null }, error };
+    });
+
+    // If timed out, assume session is valid (likely just refreshed)
+    if (result.timedOut) {
+      return true;
+    }
+
     const {
       data: { session },
       error,
-    } = await supabase.auth.getSession();
+    } = result;
 
     // If there's an error or no session, try to refresh
     if (error || !session) {

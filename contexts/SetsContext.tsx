@@ -219,19 +219,14 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         // Load from Supabase for authenticated users
         console.log(`☁️ Loading sets from Supabase... ${isColdStartRetry ? '(Cold start retry)' : ''}`);
 
-        // On web, if this is the first load, wait a bit for token refresh to complete
-        // This prevents the query from hanging during Supabase initialization
-        if (!isColdStartRetry && typeof window !== 'undefined') {
-          console.log('⏳ Waiting 2 seconds for token refresh to complete on web...');
-          await new Promise(resolve => setTimeout(resolve, 2000));
-        }
-
-        // Ensure session is valid before making the request
-        const sessionValid = await ensureValidSession();
-        if (!sessionValid) {
-          console.warn('⚠️ Session validation failed, but continuing with cached session');
-          // Don't sign out here - let AuthContext handle session management
-          // Just log the warning and attempt the query anyway
+        // Skip session validation on web - it hangs during/after token refresh
+        // The auth state is already managed by AuthContext
+        if (typeof window === 'undefined') {
+          // Only validate session on native platforms
+          const sessionValid = await ensureValidSession();
+          if (!sessionValid) {
+            console.warn('⚠️ Session validation failed, but continuing with cached session');
+          }
         }
 
         // Wrap the query in retryOperation to handle Supabase cold starts
