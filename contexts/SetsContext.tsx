@@ -235,13 +235,13 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         // Load from Supabase for authenticated users
         console.log(`☁️ Loading sets from Supabase for user: ${user.id} ${isColdStartRetry ? '(Cold start retry)' : ''}`);
 
-        // RADICAL APPROACH: On web, if sets don't load within 3 seconds, force page refresh
+        // RADICAL APPROACH: On web, if sets don't load within 1 second, force page refresh
         // This works around the Supabase getSession bug
         if (Platform.OS === 'web' && !isColdStartRetry) {
           setsLoadStartTimeRef.current = Date.now();
           forceRefreshTimeoutRef.current = setTimeout(() => {
             const elapsed = Date.now() - setsLoadStartTimeRef.current;
-            console.warn(`⚠️ Sets failed to load within 3 seconds (${elapsed}ms) - forcing page refresh`);
+            console.warn(`⚠️ Sets failed to load within 1 second (${elapsed}ms) - forcing page refresh`);
             setShowForceRefreshLoader(true);
             // Give a brief moment to show the loader, then refresh
             setTimeout(() => {
@@ -249,7 +249,7 @@ export function SetsProvider({ children }: { children: ReactNode }) {
                 window.location.reload();
               }
             }, 100);
-          }, 3000);
+          }, 1000);
         }
 
         // Simply query - Supabase client handles auth internally
