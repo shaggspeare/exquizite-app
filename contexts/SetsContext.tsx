@@ -6,6 +6,7 @@ import {
   useRef,
   ReactNode,
 } from 'react';
+import { Platform } from 'react-native';
 import { supabase, retryOperation } from '@/lib/supabase';
 import { useAuth } from './AuthContext';
 import { useLanguage } from './LanguageContext';
@@ -88,6 +89,7 @@ export function SetsProvider({ children }: { children: ReactNode }) {
   const [sets, setSets] = useState<WordSet[]>([]);
   // Start with isLoading true - we'll set it to false once we know there's nothing to load
   const [isLoading, setIsLoading] = useState(true);
+  const [showForceRefreshLoader, setShowForceRefreshLoader] = useState(false);
   const [hasMigrated, setHasMigrated] = useState(false);
   const isMigratingRef = useRef(false);
 
@@ -100,6 +102,10 @@ export function SetsProvider({ children }: { children: ReactNode }) {
   // Track cold start retry attempts
   const coldStartRetryRef = useRef<boolean>(false);
   const coldStartTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Track when sets loading started (for radical refresh approach on web)
+  const setsLoadStartTimeRef = useRef<number>(0);
+  const forceRefreshTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     // Don't load sets until auth is ready (to avoid race conditions with token refresh)
@@ -169,11 +175,15 @@ export function SetsProvider({ children }: { children: ReactNode }) {
       }
     }
 
-    // Cleanup timeout on unmount
+    // Cleanup timeouts on unmount
     return () => {
       if (coldStartTimeoutRef.current) {
         clearTimeout(coldStartTimeoutRef.current);
         coldStartTimeoutRef.current = null;
+      }
+      if (forceRefreshTimeoutRef.current) {
+        clearTimeout(forceRefreshTimeoutRef.current);
+        forceRefreshTimeoutRef.current = null;
       }
     };
     // Note: loadSets, checkAndMigrateGuestData, and hasMigrated are intentionally excluded
@@ -225,6 +235,23 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         // Load from Supabase for authenticated users
         console.log(`☁️ Loading sets from Supabase for user: ${user.id} ${isColdStartRetry ? '(Cold start retry)' : ''}`);
 
+        // RADICAL APPROACH: On web, if sets don't load within 3 seconds, force page refresh
+        // This works around the Supabase getSession bug
+        if (Platform.OS === 'web' && !isColdStartRetry) {
+          setsLoadStartTimeRef.current = Date.now();
+          forceRefreshTimeoutRef.current = setTimeout(() => {
+            const elapsed = Date.now() - setsLoadStartTimeRef.current;
+            console.warn(`⚠️ Sets failed to load within 3 seconds (${elapsed}ms) - forcing page refresh`);
+            setShowForceRefreshLoader(true);
+            // Give a brief moment to show the loader, then refresh
+            setTimeout(() => {
+              if (typeof window !== 'undefined') {
+                window.location.reload();
+              }
+            }, 100);
+          }, 3000);
+        }
+
         // Simply query - Supabase client handles auth internally
         // RLS policies ensure we only get this user's sets
         const { data: setsData, error: setsError } = await retryOperation(async () => {
@@ -239,6 +266,12 @@ export function SetsProvider({ children }: { children: ReactNode }) {
             .eq('user_id', user.id)
             .order('created_at', { ascending: false });
         });
+
+        // Cancel the force refresh timeout if we got here successfully
+        if (forceRefreshTimeoutRef.current) {
+          clearTimeout(forceRefreshTimeoutRef.current);
+          forceRefreshTimeoutRef.current = null;
+        }
 
         if (setsError) {
           console.error('🔴 Error loading sets from Supabase:', setsError);
@@ -1029,6 +1062,44 @@ export function SetsProvider({ children }: { children: ReactNode }) {
       }}
     >
       {children}
+      {showForceRefreshLoader && Platform.OS === 'web' && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
+            flexDirection: 'column',
+            gap: '20px',
+          }}
+        >
+          <div
+            style={{
+              width: '50px',
+              height: '50px',
+              border: '5px solid rgba(255, 255, 255, 0.3)',
+              borderTop: '5px solid white',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite',
+            }}
+          />
+          <div style={{ color: 'white', fontSize: '18px' }}>
+            Refreshing page...
+          </div>
+          <style>{`
+            @keyframes spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+          `}</style>
+        </div>
+      )}
     </SetsContext.Provider>
   );
 }
