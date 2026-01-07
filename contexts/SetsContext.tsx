@@ -84,12 +84,11 @@ function selectFeaturedSets(targetLanguage: string): WordSet[] {
 }
 
 export function SetsProvider({ children }: { children: ReactNode }) {
-  const { user, isAuthReady } = useAuth();
+  const { user } = useAuth();
   const { preferences } = useLanguage();
   const [sets, setSets] = useState<WordSet[]>([]);
   // Start with isLoading true - we'll set it to false once we know there's nothing to load
   const [isLoading, setIsLoading] = useState(true);
-  const [showForceRefreshLoader, setShowForceRefreshLoader] = useState(false);
   const [hasMigrated, setHasMigrated] = useState(false);
   const isMigratingRef = useRef(false);
 
@@ -108,12 +107,8 @@ export function SetsProvider({ children }: { children: ReactNode }) {
   const forceRefreshTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    // Don't load sets until auth is ready (to avoid race conditions with token refresh)
-    if (!isAuthReady) {
-      console.log('⏳ Waiting for auth to be ready before loading sets...');
-      return;
-    }
-
+    // Start loading sets as soon as we have a user
+    // The force-refresh mechanism will handle any auth issues
     if (user) {
       // Determine what changed
       const userChanged = prevUserIdRef.current !== user.id;
@@ -182,14 +177,14 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         coldStartTimeoutRef.current = null;
       }
       if (forceRefreshTimeoutRef.current) {
-        clearTimeout(forceRefreshTimeoutRef.current);
+        clearInterval(forceRefreshTimeoutRef.current);
         forceRefreshTimeoutRef.current = null;
       }
     };
     // Note: loadSets, checkAndMigrateGuestData, and hasMigrated are intentionally excluded
     // to prevent infinite loops - these functions/values change on every render
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, isAuthReady, preferences.isConfigured, preferences.targetLanguage]);
+  }, [user, preferences.isConfigured, preferences.targetLanguage]);
 
   const checkAndMigrateGuestData = async () => {
     // Prevent concurrent migrations
@@ -236,20 +231,28 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         console.log(`☁️ Loading sets from Supabase for user: ${user.id} ${isColdStartRetry ? '(Cold start retry)' : ''}`);
 
         // RADICAL APPROACH: On web, if sets don't load within 1 second, force page refresh
-        // This works around the Supabase getSession bug
+        // Use setInterval instead of setTimeout to avoid timer throttling in background tabs
         if (Platform.OS === 'web' && !isColdStartRetry) {
+          // Clear any existing interval first
+          if (forceRefreshTimeoutRef.current) {
+            clearInterval(forceRefreshTimeoutRef.current);
+            forceRefreshTimeoutRef.current = null;
+          }
+
           setsLoadStartTimeRef.current = Date.now();
-          forceRefreshTimeoutRef.current = setTimeout(() => {
+          const intervalId = setInterval(() => {
             const elapsed = Date.now() - setsLoadStartTimeRef.current;
-            console.warn(`⚠️ Sets failed to load within 1 second (${elapsed}ms) - forcing page refresh`);
-            setShowForceRefreshLoader(true);
-            // Give a brief moment to show the loader, then refresh
-            setTimeout(() => {
+            if (elapsed >= 1000) {
+              console.warn(`⚠️ TIMEOUT! Sets failed to load within 1 second (${elapsed}ms) - forcing page refresh NOW`);
+              clearInterval(intervalId);
+              // Immediately reload - no loader, no delay
               if (typeof window !== 'undefined') {
                 window.location.reload();
               }
-            }, 100);
-          }, 1000);
+            }
+          }, 100); // Check every 100ms
+          forceRefreshTimeoutRef.current = intervalId as any;
+          console.log('⏱️ Starting 1-second check interval for sets loading... Interval ID:', intervalId);
         }
 
         // Simply query - Supabase client handles auth internally
@@ -267,9 +270,11 @@ export function SetsProvider({ children }: { children: ReactNode }) {
             .order('created_at', { ascending: false });
         });
 
-        // Cancel the force refresh timeout if we got here successfully
+        // Cancel the force refresh interval if we got here successfully
         if (forceRefreshTimeoutRef.current) {
-          clearTimeout(forceRefreshTimeoutRef.current);
+          const elapsed = Date.now() - setsLoadStartTimeRef.current;
+          console.log(`✅ Sets loaded in ${elapsed}ms - cancelling force refresh interval`);
+          clearInterval(forceRefreshTimeoutRef.current);
           forceRefreshTimeoutRef.current = null;
         }
 
@@ -1062,44 +1067,6 @@ export function SetsProvider({ children }: { children: ReactNode }) {
       }}
     >
       {children}
-      {showForceRefreshLoader && Platform.OS === 'web' && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 9999,
-            flexDirection: 'column',
-            gap: '20px',
-          }}
-        >
-          <div
-            style={{
-              width: '50px',
-              height: '50px',
-              border: '5px solid rgba(255, 255, 255, 0.3)',
-              borderTop: '5px solid white',
-              borderRadius: '50%',
-              animation: 'spin 1s linear infinite',
-            }}
-          />
-          <div style={{ color: 'white', fontSize: '18px' }}>
-            Refreshing page...
-          </div>
-          <style>{`
-            @keyframes spin {
-              0% { transform: rotate(0deg); }
-              100% { transform: rotate(360deg); }
-            }
-          `}</style>
-        </div>
-      )}
     </SetsContext.Provider>
   );
 }
