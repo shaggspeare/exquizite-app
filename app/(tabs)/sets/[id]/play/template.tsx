@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
   },
   playButton: {
     position: 'absolute',
-    top: Spacing.lg,
+    top: '50%',
     right: Spacing.lg,
     width: 56,
     height: 56,
@@ -322,6 +322,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.3)',
     justifyContent: 'center',
     alignItems: 'center',
+    transform: [{ translateY: -28 }],
   },
   // Desktop styles
   desktopContainer: {
