@@ -46,7 +46,8 @@
     "placeholder": "kelime1\tçeviri1\nkelime2\tçeviri2\nkelime3\tçeviri3",
     "preview": "Önizleme",
     "previewTitle": "Önizleme",
-    "import": "{{count}} Kelime İçe Aktar"
+    "import": "{{count}} Kelime İçe Aktar",
+    "previewPairs": "Çiftleri Önizle"
   },
   "languageOverride": {
     "title": "Dil Ayarları",

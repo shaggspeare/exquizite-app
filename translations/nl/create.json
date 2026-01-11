@@ -46,7 +46,8 @@
     "placeholder": "woord1\tvertaling1\nwoord2\tvertaling2",
     "preview": "Voorbeeld",
     "previewTitle": "Voorbeeld",
-    "import": "Importeer {{count}} woorden"
+    "import": "Importeer {{count}} woorden",
+    "previewPairs": "Voorbeeldparen"
   },
   "languageOverride": {
     "title": "Taalinstellingen",

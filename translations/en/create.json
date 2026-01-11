@@ -45,6 +45,7 @@
     "pasteWords": "Paste Your Words",
     "placeholder": "word1\ttranslation1\nword2\ttranslation2\nword3\ttranslation3",
     "preview": "Preview",
+    "previewPairs": "Preview Pairs",
     "previewTitle": "Preview",
     "import": "Import {{count}} Words"
   },

@@ -46,7 +46,8 @@
     "placeholder": "mot1\ttraduction1\nmot2\ttraduction2\nmot3\ttraduction3",
     "preview": "Aperçu",
     "previewTitle": "Aperçu",
-    "import": "Importer {{count}} mots"
+    "import": "Importer {{count}} mots",
+    "previewPairs": "Aperçu des paires"
   },
   "languageOverride": {
     "title": "Paramètres de langue",

@@ -86,19 +86,25 @@ export function DesktopSidebar() {
     >
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Logo/Brand */}
-        <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.header}
+          onPress={() => router.push('/(tabs)')}
+          activeOpacity={0.7}
+        >
           <Image
             source={require('@/assets/images/logo.png')}
             style={styles.logoImage}
             resizeMode="cover"
           />
           <Text style={[styles.logo, { color: colors.text }]}>Exquizite</Text>
-        </View>
+        </TouchableOpacity>
 
         {/* User Info */}
         {user && (
-          <View
+          <TouchableOpacity
             style={[styles.userCard, { backgroundColor: colors.background }]}
+            onPress={() => router.push('/(tabs)/profile')}
+            activeOpacity={0.7}
           >
             <View style={styles.avatar}>
               <Ionicons name="person" size={20} color={colors.primary} />
@@ -118,7 +124,7 @@ export function DesktopSidebar() {
                 </Text>
               )}
             </View>
-          </View>
+          </TouchableOpacity>
         )}
 
         {/* Navigation */}

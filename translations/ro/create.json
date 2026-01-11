@@ -46,7 +46,8 @@
     "placeholder": "cuvânt1\ttraducere1\ncuvânt2\ttraducere2\ncuvânt3\ttraducere3",
     "preview": "Previzualizare",
     "previewTitle": "Previzualizare",
-    "import": "Importă {{count}} cuvinte"
+    "import": "Importă {{count}} cuvinte",
+    "previewPairs": "Previzualizare perechi"
   },
   "languageOverride": {
     "title": "Setări de limbă",

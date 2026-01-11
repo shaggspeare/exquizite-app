@@ -45,7 +45,8 @@
     "placeholder": "wort1\tübersetzung1\nwort2\tübersetzung2\nwort3\tübersetzung3",
     "preview": "Vorschau",
     "previewTitle": "Vorschau",
-    "import": "{{count}} Wörter importieren"
+    "import": "{{count}} Wörter importieren",
+    "previewPairs": "Paare vorschau"
   },
   "languageOverride": {
     "title": "Spracheinstellungen",

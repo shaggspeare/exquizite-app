@@ -45,7 +45,8 @@
     "placeholder": "слово1\tперевод1\nслово2\tперевод2\nслово3\tперевод3",
     "preview": "Предпросмотр",
     "previewTitle": "Предпросмотр",
-    "import": "Импортировать {{count}} слов"
+    "import": "Импортировать {{count}} слов",
+    "previewPairs": "Предпросмотр пар"
   },
   "languageOverride": {
     "title": "Настройки языка",

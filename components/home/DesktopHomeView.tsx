@@ -136,57 +136,69 @@ export function DesktopHomeView() {
               {userSets.length > 0 && !user?.isGuest && (
                 <View style={styles.leftColumn}>
                   <View style={styles.statsRow}>
-                    <Card style={[styles.statCard, styles.bentoCard]}>
-                      <View
-                        style={[
-                          styles.statIconContainer,
-                          { backgroundColor: `${colors.primary}20` },
-                        ]}
-                      >
-                        <Ionicons
-                          name="library"
-                          size={28}
-                          color={colors.primary}
-                        />
-                      </View>
-                      <Text style={[styles.statValue, { color: colors.text }]}>
-                        {userSets.length}
-                      </Text>
-                      <Text
-                        style={[
-                          styles.statLabel,
-                          { color: colors.textSecondary },
-                        ]}
-                      >
-                        {t('common:counts.sets')}
-                      </Text>
-                    </Card>
+                    <TouchableOpacity
+                      onPress={() => router.push('/(tabs)/my-sets')}
+                      activeOpacity={0.7}
+                      style={{ flex: 1 }}
+                    >
+                      <Card style={[styles.statCard, styles.bentoCard]}>
+                        <View
+                          style={[
+                            styles.statIconContainer,
+                            { backgroundColor: `${colors.primary}20` },
+                          ]}
+                        >
+                          <Ionicons
+                            name="library"
+                            size={28}
+                            color={colors.primary}
+                          />
+                        </View>
+                        <Text style={[styles.statValue, { color: colors.text }]}>
+                          {userSets.length}
+                        </Text>
+                        <Text
+                          style={[
+                            styles.statLabel,
+                            { color: colors.textSecondary },
+                          ]}
+                        >
+                          {t('common:counts.sets')}
+                        </Text>
+                      </Card>
+                    </TouchableOpacity>
 
-                    <Card style={[styles.statCard, styles.bentoCard]}>
-                      <View
-                        style={[
-                          styles.statIconContainer,
-                          { backgroundColor: `${colors.success}20` },
-                        ]}
-                      >
-                        <Ionicons
-                          name="book"
-                          size={28}
-                          color={colors.success}
-                        />
-                      </View>
-                      <Text style={[styles.statValue, { color: colors.text }]}>
-                        {totalWords}
-                      </Text>
-                      <Text
-                        style={[
-                          styles.statLabel,
-                          { color: colors.textSecondary },
-                        ]}
-                      >
-                        {t('common:counts.words')}
-                      </Text>
-                    </Card>
+                    <TouchableOpacity
+                      onPress={() => router.push('/(tabs)/all-words')}
+                      activeOpacity={0.7}
+                      style={{ flex: 1 }}
+                    >
+                      <Card style={[styles.statCard, styles.bentoCard]}>
+                        <View
+                          style={[
+                            styles.statIconContainer,
+                            { backgroundColor: `${colors.success}20` },
+                          ]}
+                        >
+                          <Ionicons
+                            name="book"
+                            size={28}
+                            color={colors.success}
+                          />
+                        </View>
+                        <Text style={[styles.statValue, { color: colors.text }]}>
+                          {totalWords}
+                        </Text>
+                        <Text
+                          style={[
+                            styles.statLabel,
+                            { color: colors.textSecondary },
+                          ]}
+                        >
+                          {t('common:counts.words')}
+                        </Text>
+                      </Card>
+                    </TouchableOpacity>
 
                     <Card style={[styles.statCard, styles.bentoCard]}>
                       <View

@@ -46,7 +46,8 @@
     "placeholder": "parola1\ttraduzione1\nparola2\ttraduzione2\nparola3\ttraduzione3",
     "preview": "Anteprima",
     "previewTitle": "Anteprima",
-    "import": "Importa {{count}} parole"
+    "import": "Importa {{count}} parole",
+    "previewPairs": "Anteprima coppie"
   },
   "languageOverride": {
     "title": "Impostazioni lingua",

@@ -46,7 +46,8 @@
     "placeholder": "word1\ttranslation1\nword2\ttranslation2\nword3\ttranslation3",
     "preview": "プレビュー",
     "previewTitle": "プレビュー",
-    "import": "{{count}}語をインポート"
+    "import": "{{count}}語をインポート",
+    "previewPairs": "ペアをプレビュー"
   },
   "languageOverride": {
     "title": "言語設定",

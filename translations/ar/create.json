@@ -46,7 +46,8 @@
     "placeholder": "word1\ttranslation1\nword2\ttranslation2\nword3\ttranslation3",
     "preview": "معاينة",
     "previewTitle": "معاينة",
-    "import": "استيراد {{count}} كلمة"
+    "import": "استيراد {{count}} كلمة",
+    "previewPairs": "معاينة الأزواج"
   },
   "languageOverride": {
     "title": "إعدادات اللغة",

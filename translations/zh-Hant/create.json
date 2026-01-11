@@ -46,7 +46,8 @@
     "placeholder": "word1\ttranslation1\nword2\ttranslation2\nword3\ttranslation3",
     "preview": "預覽",
     "previewTitle": "預覽",
-    "import": "匯入{{count}}個單字"
+    "import": "匯入{{count}}個單字",
+    "previewPairs": "預覽配對"
   },
   "languageOverride": {
     "title": "語言設定",

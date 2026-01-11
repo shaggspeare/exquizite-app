@@ -46,7 +46,8 @@
     "placeholder": "word1\ttranslation1\nword2\ttranslation2\nword3\ttranslation3",
     "preview": "תצוגה מקדימה",
     "previewTitle": "תצוגה מקדימה",
-    "import": "ייבא {{count}} מילים"
+    "import": "ייבא {{count}} מילים",
+    "previewPairs": "תצוגה מקדימה של זוגות"
   },
   "languageOverride": {
     "title": "הגדרות שפה",

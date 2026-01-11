@@ -46,7 +46,8 @@
     "placeholder": "paraula1\ttraducció1\nparaula2\ttraducció2\nparaula3\ttraducció3",
     "preview": "Vista prèvia",
     "previewTitle": "Vista prèvia",
-    "import": "Importa {{count}} paraules"
+    "import": "Importa {{count}} paraules",
+    "previewPairs": "Vista prèvia de parells"
   },
   "languageOverride": {
     "title": "Configuració d'idioma",

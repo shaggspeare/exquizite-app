@@ -46,7 +46,8 @@
     "placeholder": "palavra1\ttradução1\npalavra2\ttradução2\npalavra3\ttradução3",
     "preview": "Visualizar",
     "previewTitle": "Visualizar",
-    "import": "Importar {{count}} palavras"
+    "import": "Importar {{count}} palavras",
+    "previewPairs": "Visualizar pares"
   },
   "languageOverride": {
     "title": "Configurações de idioma",

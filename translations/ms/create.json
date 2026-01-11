@@ -46,7 +46,8 @@
     "placeholder": "perkataan1\tterjemahan1",
     "preview": "Pratonton",
     "previewTitle": "Pratonton",
-    "import": "Import {{count}} perkataan"
+    "import": "Import {{count}} perkataan",
+    "previewPairs": "Pratonton Pasangan"
   },
   "languageOverride": {
     "title": "Tetapan bahasa",

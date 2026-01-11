@@ -45,7 +45,8 @@
     "placeholder": "palabra1\ttraducción1\npalabra2\ttraducción2\npalabra3\ttraducción3",
     "preview": "Vista previa",
     "previewTitle": "Vista previa",
-    "import": "Importar {{count}} palabras"
+    "import": "Importar {{count}} palabras",
+    "previewPairs": "Vista previa de pares"
   },
   "languageOverride": {
     "title": "Configuración de idioma",

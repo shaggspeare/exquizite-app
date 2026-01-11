@@ -46,7 +46,8 @@
     "placeholder": "word1\ttranslation1\nword2\ttranslation2\nword3\ttranslation3",
     "preview": "ดูตัวอย่าง",
     "previewTitle": "ดูตัวอย่าง",
-    "import": "นำเข้า {{count}} คำ"
+    "import": "นำเข้า {{count}} คำ",
+    "previewPairs": "ดูตัวอย่างคู่"
   },
   "languageOverride": {
     "title": "การตั้งค่าภาษา",

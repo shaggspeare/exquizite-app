@@ -46,7 +46,8 @@
     "placeholder": "kata1\tterjemahan1",
     "preview": "Pratinjau",
     "previewTitle": "Pratinjau",
-    "import": "Impor {{count}} kata"
+    "import": "Impor {{count}} kata",
+    "previewPairs": "Eelvaade paaride"
   },
   "languageOverride": {
     "title": "Pengaturan bahasa",

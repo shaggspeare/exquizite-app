@@ -272,12 +272,6 @@ export function BulkImportModal({
                 autoCorrect={false}
               />
             </View>
-            <Button
-              title={t('bulkImport.preview')}
-              onPress={handlePreview}
-              variant="outline"
-              style={styles.previewButton}
-            />
           </Card>
 
           {/* Preview */}
@@ -335,6 +329,25 @@ export function BulkImportModal({
           )}
         </ScrollView>
 
+        {/* Sticky Preview Button */}
+        <View
+          style={[
+            styles.stickyButtonContainer,
+            {
+              backgroundColor: colors.card,
+              borderTopColor: colors.border,
+            },
+          ]}
+        >
+          <Button
+            title={t('bulkImport.previewPairs')}
+            onPress={handlePreview}
+            variant="outline"
+            style={styles.stickyPreviewButton}
+            textStyle={styles.stickyPreviewButtonText}
+          />
+        </View>
+
         {/* Footer */}
         <View
           style={[
@@ -347,12 +360,14 @@ export function BulkImportModal({
             onPress={handleClose}
             variant="outline"
             style={styles.footerButton}
+            textStyle={styles.footerButtonText}
           />
           <Button
             title={t('bulkImport.import', { count: previewWords.length })}
             onPress={handleImport}
             disabled={previewWords.length === 0}
             style={styles.footerButton}
+            textStyle={styles.footerButtonText}
           />
         </View>
         </View>
@@ -539,13 +554,34 @@ const styles = StyleSheet.create({
     fontSize: 14,
     flex: 1,
   },
+  stickyButtonContainer: {
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
+    borderTopWidth: 1,
+  },
+  stickyPreviewButton: {
+    marginTop: 0,
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.md,
+    minHeight: 40,
+  },
+  stickyPreviewButtonText: {
+    fontSize: 14,
+  },
   footer: {
     flexDirection: 'row',
-    gap: Spacing.md,
-    padding: Spacing.lg,
+    gap: Spacing.sm,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
     borderTopWidth: 1,
   },
   footerButton: {
     flex: 1,
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.md,
+    minHeight: 40,
+  },
+  footerButtonText: {
+    fontSize: 14,
   },
 });

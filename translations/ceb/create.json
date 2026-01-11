@@ -46,7 +46,8 @@
     "placeholder": "word1\ttranslation1\nword2\ttranslation2\nword3\ttranslation3",
     "preview": "Preview",
     "previewTitle": "Preview",
-    "import": "Import {{count}} Words"
+    "import": "Import {{count}} Words",
+    "previewPairs": "Preview sa mga Pares"
   },
   "languageOverride": {
     "title": "Language Settings",

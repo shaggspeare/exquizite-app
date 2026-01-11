@@ -76,6 +76,12 @@ export default function TabsLayout() {
           href: null, // Hide from tab bar - accessed via share links
         }}
       />
+      <Tabs.Screen
+        name="all-words"
+        options={{
+          href: null, // Hide from tab bar - inner page only
+        }}
+      />
     </Tabs>
   );
 }

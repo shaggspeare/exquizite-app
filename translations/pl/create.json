@@ -46,7 +46,8 @@
     "placeholder": "słowo1\ttłumaczenie1\nsłowo2\ttłumaczenie2",
     "preview": "Podgląd",
     "previewTitle": "Podgląd",
-    "import": "Importuj {{count}} słów"
+    "import": "Importuj {{count}} słów",
+    "previewPairs": "Podgląd par"
   },
   "languageOverride": {
     "title": "Ustawienia języka",

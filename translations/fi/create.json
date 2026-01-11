@@ -46,7 +46,8 @@
     "placeholder": "sana1\tkäännös1",
     "preview": "Esikatselu",
     "previewTitle": "Esikatselu",
-    "import": "Tuo {{count}} sanaa"
+    "import": "Tuo {{count}} sanaa",
+    "previewPairs": "Esikatsele pareja"
   },
   "languageOverride": {
     "title": "Kieliasetukset",

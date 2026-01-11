@@ -46,7 +46,8 @@
     "placeholder": "word1\ttranslation1\nword2\ttranslation2\nword3\ttranslation3",
     "preview": "पूर्वावलोकन",
     "previewTitle": "पूर्वावलोकन",
-    "import": "{{count}} शब्द आयात करें"
+    "import": "{{count}} शब्द आयात करें",
+    "previewPairs": "जोड़े पूर्वावलोकन करें"
   },
   "languageOverride": {
     "title": "भाषा सेटिंग्स",

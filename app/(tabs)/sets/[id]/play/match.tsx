@@ -55,6 +55,10 @@ export default function MatchScreen() {
   const [selectedTranslation, setSelectedTranslation] = useState<string | null>(
     null
   );
+  const [wrongPair, setWrongPair] = useState<{
+    wordId: string;
+    translationId: string;
+  } | null>(null);
   const [score, setScore] = useState(0);
   const [timer, setTimer] = useState(0);
   const { t } = useTranslation('games');
@@ -135,16 +139,19 @@ export default function MatchScreen() {
       setScore(score + 1);
       setSelectedWord(null);
       setSelectedTranslation(null);
+      setWrongPair(null);
 
       // Check if game is complete
       if (score + 1 === set!.words.length) {
         setTimeout(() => handleComplete(), 500);
       }
     } else {
-      // Wrong match - shake animation would go here
+      // Wrong match - show red feedback
+      setWrongPair({ wordId, translationId });
       setTimeout(() => {
         setSelectedWord(null);
         setSelectedTranslation(null);
+        setWrongPair(null);
       }, 500);
     }
   };
@@ -261,6 +268,7 @@ export default function MatchScreen() {
                         key={item.id}
                         item={item}
                         isSelected={selectedWord === item.id}
+                        isWrong={wrongPair?.wordId === item.id}
                         onPress={() => handleWordPress(item)}
                         colors={colors}
                         accentColor="#B537F2"
@@ -289,6 +297,7 @@ export default function MatchScreen() {
                         key={item.id}
                         item={item}
                         isSelected={selectedTranslation === item.id}
+                        isWrong={wrongPair?.translationId === item.id}
                         onPress={() => handleTranslationPress(item)}
                         colors={colors}
                         accentColor="#00D4FF"
@@ -366,6 +375,7 @@ export default function MatchScreen() {
                   key={item.id}
                   item={item}
                   isSelected={selectedWord === item.id}
+                  isWrong={wrongPair?.wordId === item.id}
                   onPress={() => handleWordPress(item)}
                   colors={colors}
                   accentColor="#B537F2"
@@ -394,6 +404,7 @@ export default function MatchScreen() {
                   key={item.id}
                   item={item}
                   isSelected={selectedTranslation === item.id}
+                  isWrong={wrongPair?.translationId === item.id}
                   onPress={() => handleTranslationPress(item)}
                   colors={colors}
                   accentColor="#00D4FF"
@@ -410,6 +421,7 @@ export default function MatchScreen() {
 interface MatchCardProps {
   item: MatchItem;
   isSelected: boolean;
+  isWrong: boolean;
   onPress: () => void;
   colors: any;
   accentColor: string;
@@ -418,6 +430,7 @@ interface MatchCardProps {
 function MatchCard({
   item,
   isSelected,
+  isWrong,
   onPress,
   colors,
   accentColor,
@@ -442,12 +455,14 @@ function MatchCard({
 
   const getBorderColor = () => {
     if (item.matched) return colors.success;
+    if (isWrong) return colors.error;
     if (isSelected) return accentColor;
     return colors.border;
   };
 
   const getBackgroundColor = () => {
     if (item.matched) return `${colors.success}15`;
+    if (isWrong) return `${colors.error}20`;
     if (isSelected) return `${accentColor}15`;
     return colors.card;
   };
@@ -474,6 +489,9 @@ function MatchCard({
         </Text>
         {item.matched && (
           <Ionicons name="checkmark-circle" size={24} color={colors.success} />
+        )}
+        {isWrong && (
+          <Ionicons name="close-circle" size={24} color={colors.error} />
         )}
       </TouchableOpacity>
     </Animated.View>

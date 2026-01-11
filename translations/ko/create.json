@@ -46,7 +46,8 @@
     "placeholder": "word1\ttranslation1\nword2\ttranslation2\nword3\ttranslation3",
     "preview": "미리보기",
     "previewTitle": "미리보기",
-    "import": "{{count}}개 단어 가져오기"
+    "import": "{{count}}개 단어 가져오기",
+    "previewPairs": "쌍 미리보기"
   },
   "languageOverride": {
     "title": "언어 설정",

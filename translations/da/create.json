@@ -46,7 +46,8 @@
     "placeholder": "ord1\toversættelse1",
     "preview": "Forhåndsvisning",
     "previewTitle": "Forhåndsvisning",
-    "import": "Importer {{count}} ord"
+    "import": "Importer {{count}} ord",
+    "previewPairs": "Forhåndsvisning af par"
   },
   "languageOverride": {
     "title": "Sprogindstillinger",

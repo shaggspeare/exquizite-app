@@ -93,5 +93,11 @@
         "description": "Generate share links for your sets. Others can view and copy them to their library."
       }
     }
+  },
+  "allWords": {
+    "title": "All Words",
+    "subtitle": "{{count}} total words",
+    "noWords": "No words yet",
+    "createSetsFirst": "Create sets to see your words here"
   }
 }
