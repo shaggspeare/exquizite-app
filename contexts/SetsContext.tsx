@@ -216,7 +216,10 @@ export function SetsProvider({ children }: { children: ReactNode }) {
   const loadSets = async (isColdStartRetry: boolean = false) => {
     if (!user) return;
 
+    // Always show loading state during sets fetch
+    // This ensures users see a loader during session recreation
     setIsLoading(true);
+
     try {
       let userSets: WordSet[] = [];
 
@@ -245,7 +248,8 @@ export function SetsProvider({ children }: { children: ReactNode }) {
             if (elapsed >= 1000) {
               console.warn(`⚠️ TIMEOUT! Sets failed to load within 1 second (${elapsed}ms) - forcing page refresh NOW`);
               clearInterval(intervalId);
-              // Immediately reload - no loader, no delay
+              // Keep loading state visible during reload for better UX
+              // The page will refresh before this matters, but good practice
               if (typeof window !== 'undefined') {
                 window.location.reload();
               }

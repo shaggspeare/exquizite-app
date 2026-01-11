@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
@@ -24,7 +25,7 @@ import { getIconForSet } from '@/lib/setIcons';
 export function DesktopHomeView() {
   const { t } = useTranslation('games');
   const { user } = useAuth();
-  const { sets, refreshSets } = useSets();
+  const { sets, isLoading: setsLoading, refreshSets } = useSets();
   const { colors } = useTheme();
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
@@ -75,6 +76,18 @@ export function DesktopHomeView() {
       </TouchableOpacity>
     </View>
   );
+
+  // Show loading state during initial load or session recreation
+  if (setsLoading && sets.length === 0) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={colors.primary} />
+        <Text style={[styles.loadingText, { color: colors.textSecondary }]}>
+          {t('common:status.loading')}
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView
@@ -305,6 +318,17 @@ export function DesktopHomeView() {
 }
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: Spacing.md,
+  },
+  loadingText: {
+    ...Typography.body,
+    fontSize: 16,
+    marginTop: Spacing.sm,
+  },
   scrollView: {
     flex: 1,
   },
