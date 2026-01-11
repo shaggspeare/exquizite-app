@@ -58,5 +58,11 @@
     "targetLabel": "Pembelajaran",
     "nativeLabel": "Terjemahan",
     "useDefaults": "Gunakan default"
+  },
+  "unsavedChanges": {
+    "title": "Neuložené změny",
+    "message": "Máte neuložené změny. Opravdu chcete odejít bez uložení?",
+    "discard": "Zahodit",
+    "cancel": "Zrušit"
   }
 }

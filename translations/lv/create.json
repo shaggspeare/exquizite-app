@@ -58,5 +58,11 @@
     "targetLabel": "Pembelajaran",
     "nativeLabel": "Terjemahan",
     "useDefaults": "Gunakan default"
+  },
+  "unsavedChanges": {
+    "title": "Nesaglabātas izmaiņas",
+    "message": "Jums ir nesaglabātas izmaiņas. Vai tiešām vēlaties iziet bez saglabāšanas?",
+    "discard": "Atmest",
+    "cancel": "Atcelt"
   }
 }

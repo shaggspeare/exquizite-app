@@ -58,5 +58,11 @@
     "targetLabel": "學習",
     "nativeLabel": "翻譯",
     "useDefaults": "使用預設語言"
+  },
+  "unsavedChanges": {
+    "title": "未儲存的變更",
+    "message": "您有未儲存的變更。您確定要在不儲存的情況下離開嗎？",
+    "discard": "捨棄",
+    "cancel": "取消"
   }
 }

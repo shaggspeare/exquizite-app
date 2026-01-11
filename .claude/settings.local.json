@@ -62,7 +62,8 @@
       "Bash(npx husky:*)",
       "Bash(chmod:*)",
       "Bash(node:*)",
-      "Bash(git rm:*)"
+      "Bash(git rm:*)",
+      "Bash(wc:*)"
     ],
     "deny": [],
     "ask": []

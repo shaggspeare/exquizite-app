@@ -58,5 +58,11 @@
     "targetLabel": "Pembelajaran",
     "nativeLabel": "Terjemahan",
     "useDefaults": "Gunakan default"
+  },
+  "unsavedChanges": {
+    "title": "અસંગ્રહિત ફેરફારો",
+    "message": "તમારી પાસે અસંગ્રહિત ફેરફારો છે. શું તમે ખરેખર સંગ્રહ કર્યા વિના છોડવા માંગો છો?",
+    "discard": "રદ કરો",
+    "cancel": "રદ કરો"
   }
 }

@@ -58,5 +58,11 @@
     "targetLabel": "Învățare",
     "nativeLabel": "Traduceri",
     "useDefaults": "Folosește limbile implicite"
+  },
+  "unsavedChanges": {
+    "title": "Modificări nesalvate",
+    "message": "Ai modificări nesalvate. Ești sigur că vrei să ieși fără a salva?",
+    "discard": "Renunță",
+    "cancel": "Anulează"
   }
 }

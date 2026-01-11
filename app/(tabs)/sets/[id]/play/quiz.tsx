@@ -66,6 +66,8 @@ export default function QuizScreen() {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [score, setScore] = useState(0);
+  const [answeredCount, setAnsweredCount] = useState(0);
+  const [originalQuestionCount, setOriginalQuestionCount] = useState(0);
   const { t } = useTranslation('games');
 
   useEffect(() => {
@@ -88,6 +90,7 @@ export default function QuizScreen() {
     }));
 
     setQuestions(quizQuestions);
+    setOriginalQuestionCount(quizQuestions.length);
   };
 
   const handleSelectAnswer = (answer: string) => {
@@ -102,6 +105,15 @@ export default function QuizScreen() {
   };
 
   const handleNext = () => {
+    // If question was answered, increment answered count
+    if (isAnswered) {
+      setAnsweredCount(prev => prev + 1);
+    } else {
+      // If question was skipped, add it to the end of the queue
+      const currentQuestion = questions[currentIndex];
+      setQuestions(prev => [...prev, currentQuestion]);
+    }
+
     if (currentIndex < questions.length - 1) {
       setCurrentIndex(currentIndex + 1);
       setSelectedAnswer(null);
@@ -113,10 +125,10 @@ export default function QuizScreen() {
 
   const handleComplete = () => {
     updateLastPracticed(id!);
-    const percentage = Math.round((score / questions.length) * 100);
+    const percentage = Math.round((score / originalQuestionCount) * 100);
     showAlert(
       t('quiz.complete.title'),
-      t('quiz.complete.score', { score, total: questions.length, percentage }),
+      t('quiz.complete.score', { score, total: originalQuestionCount, percentage }),
       [
         { text: t('common:buttons.tryAgain'), onPress: () => resetQuiz() },
         { text: t('common:buttons.done'), onPress: () => router.back() },
@@ -129,6 +141,7 @@ export default function QuizScreen() {
     setSelectedAnswer(null);
     setIsAnswered(false);
     setScore(0);
+    setAnsweredCount(0);
     generateQuestions();
   };
 
@@ -151,6 +164,21 @@ export default function QuizScreen() {
   }
 
   const currentQuestion = questions[currentIndex];
+
+  // Safety check: if currentQuestion is undefined, something went wrong
+  if (!currentQuestion) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.loading}>
+          <Text>{t('common:status.error')}</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  // Check if this is the last unanswered question
+  const remainingQuestions = questions.length - currentIndex - 1;
+  const isLastUnansweredQuestion = answeredCount === originalQuestionCount - 1 && !isAnswered;
 
   if (isDesktop) {
     return (
@@ -184,7 +212,7 @@ export default function QuizScreen() {
                 </Text>
                 <View style={styles.desktopHeaderRight}>
                   <Text style={[styles.progress, { color: colors.text }]}>
-                    {t('quiz.question', { current: currentIndex + 1, total: questions.length })}
+                    {t('quiz.question', { current: answeredCount + 1, total: originalQuestionCount })}
                   </Text>
                   <View
                     style={[
@@ -215,7 +243,7 @@ export default function QuizScreen() {
               end={{ x: 1, y: 0 }}
               style={[
                 styles.progressFill,
-                { width: `${((currentIndex + 1) / questions.length) * 100}%` },
+                { width: `${(answeredCount / originalQuestionCount) * 100}%` },
               ]}
             />
           </View>
@@ -280,14 +308,14 @@ export default function QuizScreen() {
                       onPress={handleNext}
                       style={styles.desktopButton}
                     />
-                  ) : (
+                  ) : !isLastUnansweredQuestion ? (
                     <Button
                       title={t('common:buttons.skip')}
                       onPress={handleNext}
                       variant="outline"
                       style={styles.desktopButton}
                     />
-                  )}
+                  ) : null}
                 </View>
               </View>
             </DesktopContainer>
@@ -310,7 +338,7 @@ export default function QuizScreen() {
           <Ionicons name="close" size={28} color={colors.text} />
         </TouchableOpacity>
         <Text style={[styles.progress, { color: colors.text }]}>
-          {t('quiz.question', { current: currentIndex + 1, total: questions.length })}
+          {t('quiz.question', { current: answeredCount + 1, total: originalQuestionCount })}
         </Text>
         <View
           style={[
@@ -337,7 +365,7 @@ export default function QuizScreen() {
           end={{ x: 1, y: 0 }}
           style={[
             styles.progressFill,
-            { width: `${((currentIndex + 1) / questions.length) * 100}%` },
+            { width: `${(answeredCount / originalQuestionCount) * 100}%` },
           ]}
         />
       </View>
@@ -400,9 +428,9 @@ export default function QuizScreen() {
             }
             onPress={handleNext}
           />
-        ) : (
+        ) : !isLastUnansweredQuestion ? (
           <Button title={t('common:buttons.skip')} onPress={handleNext} variant="outline" />
-        )}
+        ) : null}
       </View>
     </SafeAreaView>
   );

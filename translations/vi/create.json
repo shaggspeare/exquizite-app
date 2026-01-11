@@ -58,5 +58,11 @@
     "targetLabel": "Pembelajaran",
     "nativeLabel": "Terjemahan",
     "useDefaults": "Gunakan default"
+  },
+  "unsavedChanges": {
+    "title": "Thay đổi chưa lưu",
+    "message": "Bạn có các thay đổi chưa được lưu. Bạn có chắc chắn muốn rời đi mà không lưu?",
+    "discard": "Bỏ qua",
+    "cancel": "Hủy"
   }
 }

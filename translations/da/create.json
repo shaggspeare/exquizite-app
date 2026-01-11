@@ -58,5 +58,11 @@
     "targetLabel": "Læring",
     "nativeLabel": "Oversættelser",
     "useDefaults": "Brug standard"
+  },
+  "unsavedChanges": {
+    "title": "Ugemte ændringer",
+    "message": "Du har ugemte ændringer. Er du sikker på, at du vil forlade uden at gemme?",
+    "discard": "Kassér",
+    "cancel": "Annullér"
   }
 }

@@ -58,5 +58,11 @@
     "targetLabel": "Pembelajaran",
     "nativeLabel": "Terjemahan",
     "useDefaults": "Guna lalai"
+  },
+  "unsavedChanges": {
+    "title": "Perubahan Tidak Disimpan",
+    "message": "Anda mempunyai perubahan yang tidak disimpan. Adakah anda pasti mahu keluar tanpa menyimpan?",
+    "discard": "Buang",
+    "cancel": "Batal"
   }
 }

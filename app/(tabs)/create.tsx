@@ -178,6 +178,33 @@ export default function CreateSetScreen() {
     setOverrideNativeLanguage(null);
   };
 
+  const hasUnsavedChanges = () => {
+    // Check if set name has content
+    if (setName.trim()) return true;
+
+    // Check if any word pairs have content
+    const hasContent = wordPairs.some(
+      pair => pair.word.trim() || pair.translation.trim()
+    );
+
+    return hasContent;
+  };
+
+  const handleClose = () => {
+    if (hasUnsavedChanges()) {
+      showAlert(
+        t('unsavedChanges.title'),
+        t('unsavedChanges.message'),
+        [
+          { text: t('unsavedChanges.discard'), onPress: () => router.back(), style: 'destructive' },
+          { text: t('unsavedChanges.cancel'), style: 'cancel' },
+        ]
+      );
+    } else {
+      router.back();
+    }
+  };
+
   const handleUseDefaultLanguages = () => {
     setOverrideTargetLanguage(null);
     setOverrideNativeLanguage(null);
@@ -298,7 +325,7 @@ export default function CreateSetScreen() {
         style={styles.header}
       >
         <TouchableOpacity
-          onPress={() => router.back()}
+          onPress={handleClose}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <Ionicons name="close" size={28} color="#FFFFFF" />

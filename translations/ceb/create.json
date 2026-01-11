@@ -58,5 +58,11 @@
     "targetLabel": "Learning",
     "nativeLabel": "Translations",
     "useDefaults": "Use Default Languages"
+  },
+  "unsavedChanges": {
+    "title": "Wala Pay Na-save nga mga Pagbag-o",
+    "message": "Naa kay wala pay na-save nga mga pagbag-o. Sigurado ka ba nga gusto nimong mobiya nga wala mag-save?",
+    "discard": "Isalikway",
+    "cancel": "Kanselahon"
   }
 }

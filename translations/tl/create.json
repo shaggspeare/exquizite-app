@@ -58,5 +58,11 @@
     "targetLabel": "Pembelajaran",
     "nativeLabel": "Terjemahan",
     "useDefaults": "Gunakan default"
+  },
+  "unsavedChanges": {
+    "title": "Hindi Pa Nai-save ang mga Pagbabago",
+    "message": "Mayroon kang mga pagbabagong hindi pa nai-save. Sigurado ka bang gusto mong umalis nang hindi nag-se-save?",
+    "discard": "Itapon",
+    "cancel": "Kanselahin"
   }
 }

@@ -58,5 +58,11 @@
     "targetLabel": "Oppiminen",
     "nativeLabel": "Käännökset",
     "useDefaults": "Käytä oletuksia"
+  },
+  "unsavedChanges": {
+    "title": "Tallentamattomat muutokset",
+    "message": "Sinulla on tallentamattomia muutoksia. Haluatko varmasti poistua tallentamatta?",
+    "discard": "Hylkää",
+    "cancel": "Peruuta"
   }
 }

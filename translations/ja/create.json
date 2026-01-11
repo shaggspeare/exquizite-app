@@ -58,5 +58,11 @@
     "targetLabel": "学習",
     "nativeLabel": "翻訳",
     "useDefaults": "デフォルト言語を使用"
+  },
+  "unsavedChanges": {
+    "title": "未保存の変更",
+    "message": "保存されていない変更があります。保存せずに終了してもよろしいですか？",
+    "discard": "破棄",
+    "cancel": "キャンセル"
   }
 }

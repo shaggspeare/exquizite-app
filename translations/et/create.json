@@ -58,5 +58,11 @@
     "targetLabel": "Pembelajaran",
     "nativeLabel": "Terjemahan",
     "useDefaults": "Gunakan default"
+  },
+  "unsavedChanges": {
+    "title": "Salvestamata muudatused",
+    "message": "Teil on salvestamata muudatusi. Kas olete kindel, et soovite lahkuda salvestamata?",
+    "discard": "Loobu",
+    "cancel": "Tühista"
   }
 }

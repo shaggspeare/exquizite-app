@@ -403,8 +403,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cardContainer: {
-    height: 450,
-    marginVertical: Spacing.xl,
+    height: 350,
+    marginTop: Spacing.md,
+    marginBottom: Spacing.xl,
   },
   card: {
     position: 'absolute',

@@ -58,5 +58,11 @@
     "targetLabel": "Aprenentatge",
     "nativeLabel": "Traduccions",
     "useDefaults": "Utilitza idiomes predeterminats"
+  },
+  "unsavedChanges": {
+    "title": "Canvis sense desar",
+    "message": "Tens canvis sense desar. Estàs segur que vols sortir sense desar?",
+    "discard": "Descarta",
+    "cancel": "Cancel·la"
   }
 }

@@ -58,5 +58,11 @@
     "targetLabel": "Pembelajaran",
     "nativeLabel": "Terjemahan",
     "useDefaults": "Gunakan default"
+  },
+  "unsavedChanges": {
+    "title": "Mentetlen változások",
+    "message": "Mentetlen változásai vannak. Biztosan el szeretne lépni mentés nélkül?",
+    "discard": "Elvetés",
+    "cancel": "Mégse"
   }
 }

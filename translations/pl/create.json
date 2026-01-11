@@ -58,5 +58,11 @@
     "targetLabel": "Nauka",
     "nativeLabel": "Tłumaczenia",
     "useDefaults": "Użyj domyślnych"
+  },
+  "unsavedChanges": {
+    "title": "Niezapisane zmiany",
+    "message": "Masz niezapisane zmiany. Czy na pewno chcesz wyjść bez zapisywania?",
+    "discard": "Odrzuć",
+    "cancel": "Anuluj"
   }
 }

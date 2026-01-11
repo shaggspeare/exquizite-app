@@ -58,5 +58,11 @@
     "targetLabel": "Pembelajaran",
     "nativeLabel": "Terjemahan",
     "useDefaults": "Gunakan default"
+  },
+  "unsavedChanges": {
+    "title": "Μη αποθηκευμένες αλλαγές",
+    "message": "Έχετε μη αποθηκευμένες αλλαγές. Είστε σίγουροι ότι θέλετε να φύγετε χωρίς αποθήκευση;",
+    "discard": "Απόρριψη",
+    "cancel": "Ακύρωση"
   }
 }

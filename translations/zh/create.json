@@ -58,5 +58,11 @@
     "targetLabel": "学习",
     "nativeLabel": "翻译",
     "useDefaults": "使用默认语言"
+  },
+  "unsavedChanges": {
+    "title": "未保存的更改",
+    "message": "您有未保存的更改。您确定要在不保存的情况下离开吗？",
+    "discard": "放弃",
+    "cancel": "取消"
   }
 }

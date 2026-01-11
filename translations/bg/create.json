@@ -58,5 +58,11 @@
     "targetLabel": "Pembelajaran",
     "nativeLabel": "Terjemahan",
     "useDefaults": "Gunakan default"
+  },
+  "unsavedChanges": {
+    "title": "Незапазени промени",
+    "message": "Имате незапазени промени. Сигурни ли сте, че искате да напуснете без да запазите?",
+    "discard": "Отхвърли",
+    "cancel": "Отказ"
   }
 }

@@ -58,5 +58,11 @@
     "targetLabel": "Öğrenme",
     "nativeLabel": "Çeviriler",
     "useDefaults": "Varsayılan Dilleri Kullan"
+  },
+  "unsavedChanges": {
+    "title": "Kaydedilmemiş Değişiklikler",
+    "message": "Kaydedilmemiş değişiklikleriniz var. Kaydetmeden çıkmak istediğinizden emin misiniz?",
+    "discard": "Vazgeç",
+    "cancel": "İptal"
   }
 }

@@ -58,5 +58,11 @@
     "targetLabel": "Pembelajaran",
     "nativeLabel": "Terjemahan",
     "useDefaults": "Gunakan default"
+  },
+  "unsavedChanges": {
+    "title": "Neišsaugoti pakeitimai",
+    "message": "Turite neišsaugotų pakeitimų. Ar tikrai norite išeiti neišsaugę?",
+    "discard": "Atmesti",
+    "cancel": "Atšaukti"
   }
 }

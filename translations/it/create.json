@@ -58,5 +58,11 @@
     "targetLabel": "Apprendimento",
     "nativeLabel": "Traduzioni",
     "useDefaults": "Usa lingue predefinite"
+  },
+  "unsavedChanges": {
+    "title": "Modifiche non salvate",
+    "message": "Hai modifiche non salvate. Sei sicuro di voler uscire senza salvare?",
+    "discard": "Scarta",
+    "cancel": "Annulla"
   }
 }

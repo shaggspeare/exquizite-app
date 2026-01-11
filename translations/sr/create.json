@@ -58,5 +58,11 @@
     "targetLabel": "Pembelajaran",
     "nativeLabel": "Terjemahan",
     "useDefaults": "Gunakan default"
+  },
+  "unsavedChanges": {
+    "title": "Nesačuvane promene",
+    "message": "Imate nesačuvane promene. Da li ste sigurni da želite da napustite bez čuvanja?",
+    "discard": "Odbaci",
+    "cancel": "Otkaži"
   }
 }

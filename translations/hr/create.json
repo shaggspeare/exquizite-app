@@ -58,5 +58,11 @@
     "targetLabel": "Pembelajaran",
     "nativeLabel": "Terjemahan",
     "useDefaults": "Gunakan default"
+  },
+  "unsavedChanges": {
+    "title": "Nespremljene promjene",
+    "message": "Imate nespremljene promjene. Jeste li sigurni da želite napustiti bez spremanja?",
+    "discard": "Odbaci",
+    "cancel": "Odustani"
   }
 }

@@ -58,5 +58,11 @@
     "targetLabel": "Pembelajaran",
     "nativeLabel": "Terjemahan",
     "useDefaults": "Gunakan default"
+  },
+  "unsavedChanges": {
+    "title": "Neshranjene spremembe",
+    "message": "Imate neshranjene spremembe. Ste prepričani, da želite oditi brez shranjevanja?",
+    "discard": "Zavrzi",
+    "cancel": "Prekliči"
   }
 }

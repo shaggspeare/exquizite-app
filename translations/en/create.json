@@ -58,5 +58,11 @@
     "targetLabel": "Learning",
     "nativeLabel": "Translations",
     "useDefaults": "Use Default Languages"
+  },
+  "unsavedChanges": {
+    "title": "Unsaved Changes",
+    "message": "You have unsaved changes. Are you sure you want to leave without saving?",
+    "discard": "Discard",
+    "cancel": "Cancel"
   }
 }

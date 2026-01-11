@@ -58,5 +58,11 @@
     "targetLabel": "Lärande",
     "nativeLabel": "Översättningar",
     "useDefaults": "Använd standard"
+  },
+  "unsavedChanges": {
+    "title": "Osparade ändringar",
+    "message": "Du har osparade ändringar. Är du säker på att du vill lämna utan att spara?",
+    "discard": "Kassera",
+    "cancel": "Avbryt"
   }
 }

@@ -58,5 +58,11 @@
     "targetLabel": "Pembelajaran",
     "nativeLabel": "Terjemahan",
     "useDefaults": "Gunakan default"
+  },
+  "unsavedChanges": {
+    "title": "Сақталмаған өзгерістер",
+    "message": "Сақталмаған өзгерістеріңіз бар. Сақтамай кеткіңіз келе ме?",
+    "discard": "Қайтару",
+    "cancel": "Болдырмау"
   }
 }

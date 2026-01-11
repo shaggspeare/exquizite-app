@@ -418,7 +418,7 @@ const styles = StyleSheet.create({
     ...Typography.h2,
     fontSize: 24,
     fontWeight: '700',
-    marginBottom: Spacing.lg,
+    marginBottom: Spacing.md,
   },
   sectionSubtitle: {
     ...Typography.body,
@@ -455,7 +455,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   lastPracticedContainer: {
-    marginTop: Spacing.md,
-    gap: Spacing.sm,
+    gap: Spacing.xs,
   },
 });

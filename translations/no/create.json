@@ -58,5 +58,11 @@
     "targetLabel": "Læring",
     "nativeLabel": "Oversettelser",
     "useDefaults": "Bruk standard"
+  },
+  "unsavedChanges": {
+    "title": "Ulagrede endringer",
+    "message": "Du har ulagrede endringer. Er du sikker på at du vil forlate uten å lagre?",
+    "discard": "Forkast",
+    "cancel": "Avbryt"
   }
 }

@@ -58,5 +58,11 @@
     "targetLabel": "Pembelajaran",
     "nativeLabel": "Terjemahan",
     "useDefaults": "Gunakan default"
+  },
+  "unsavedChanges": {
+    "title": "Saqlanmagan o'zgarishlar",
+    "message": "Sizda saqlanmagan o'zgarishlar mavjud. Saqlamasdan chiqishni xohlaysizmi?",
+    "discard": "Bekor qilish",
+    "cancel": "Bekor qilish"
   }
 }

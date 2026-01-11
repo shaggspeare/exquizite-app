@@ -57,5 +57,11 @@
     "targetLabel": "Aprendizaje",
     "nativeLabel": "Traducciones",
     "useDefaults": "Usar idiomas predeterminados"
+  },
+  "unsavedChanges": {
+    "title": "Cambios sin guardar",
+    "message": "Tienes cambios sin guardar. ¿Estás seguro de que quieres salir sin guardar?",
+    "discard": "Descartar",
+    "cancel": "Cancelar"
   }
 }
