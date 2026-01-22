@@ -66,4 +66,11 @@
     "discard": "Descarta",
     "cancel": "Cancel·la"
   }
+,
+  "duplicateWord": {
+    "title": "Duplicat detectat",
+    "message": "El parell de paraules \"{{word}}\" - \"{{translation}}\" ja existeix en aquest conjunt. Vols mantenir aquest duplicat?",
+    "keep": "Mantenir duplicat",
+    "remove": "Eliminar duplicat"
+  }
 }

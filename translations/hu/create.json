@@ -66,4 +66,11 @@
     "discard": "Elvetés",
     "cancel": "Mégse"
   }
+,
+  "duplicateWord": {
+    "title": "Duplikátum észlelve",
+    "message": "A \"{{word}}\" - \"{{translation}}\" szópár már létezik ebben a készletben. Szeretnéd megtartani ezt a duplikátumot?",
+    "keep": "Duplikátum megtartása",
+    "remove": "Duplikátum eltávolítása"
+  }
 }

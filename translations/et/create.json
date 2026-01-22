@@ -66,4 +66,11 @@
     "discard": "Loobu",
     "cancel": "Tühista"
   }
+,
+  "duplicateWord": {
+    "title": "Duplikaat tuvastatud",
+    "message": "Sõnapaar \"{{word}}\" - \"{{translation}}\" on selles komplektis juba olemas. Kas soovite seda duplikaati säilitada?",
+    "keep": "Säilita duplikaat",
+    "remove": "Eemalda duplikaat"
+  }
 }

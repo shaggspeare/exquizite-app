@@ -66,4 +66,11 @@
     "discard": "Vazgeç",
     "cancel": "İptal"
   }
+,
+  "duplicateWord": {
+    "title": "Kopya Tespit Edildi",
+    "message": "\"{{word}}\" - \"{{translation}}\" kelime çifti bu sette zaten mevcut. Bu kopyayı tutmak ister misiniz?",
+    "keep": "Kopyayı Tut",
+    "remove": "Kopyayı Kaldır"
+  }
 }

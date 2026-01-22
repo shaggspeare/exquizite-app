@@ -66,4 +66,11 @@
     "discard": "Zavrzi",
     "cancel": "Prekliči"
   }
+,
+  "duplicateWord": {
+    "title": "Zaznan duplikat",
+    "message": "Par besed \"{{word}}\" - \"{{translation}}\" že obstaja v tem kompletu. Ali želite obdržati ta duplikat?",
+    "keep": "Obdrži duplikat",
+    "remove": "Odstrani duplikat"
+  }
 }

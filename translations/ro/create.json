@@ -66,4 +66,11 @@
     "discard": "Renunță",
     "cancel": "Anulează"
   }
+,
+  "duplicateWord": {
+    "title": "Duplicat detectat",
+    "message": "Perechea de cuvinte \"{{word}}\" - \"{{translation}}\" există deja în acest set. Doriți să păstrați acest duplicat?",
+    "keep": "Păstrează duplicatul",
+    "remove": "Elimină duplicatul"
+  }
 }

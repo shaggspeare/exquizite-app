@@ -64,5 +64,11 @@
     "message": "Sie haben nicht gespeicherte Änderungen. Möchten Sie wirklich fortfahren, ohne zu speichern?",
     "discard": "Verwerfen",
     "cancel": "Abbrechen"
+  },
+  "duplicateWord": {
+    "title": "Duplikat erkannt",
+    "message": "Das Wortpaar \"{{word}}\" - \"{{translation}}\" existiert bereits in diesem Set. Möchten Sie dieses Duplikat behalten?",
+    "keep": "Duplikat behalten",
+    "remove": "Duplikat entfernen"
   }
 }

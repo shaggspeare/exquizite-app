@@ -66,4 +66,11 @@
     "discard": "Buang",
     "cancel": "Batal"
   }
+,
+  "duplicateWord": {
+    "title": "Duplikat Terdeteksi",
+    "message": "Pasangan kata \"{{word}}\" - \"{{translation}}\" sudah ada dalam set ini. Apakah Anda ingin menyimpan duplikat ini?",
+    "keep": "Simpan Duplikat",
+    "remove": "Hapus Duplikat"
+  }
 }

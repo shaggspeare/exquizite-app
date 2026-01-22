@@ -65,5 +65,11 @@
     "message": "Vous avez des modifications non enregistrées. Êtes-vous sûr de vouloir quitter sans enregistrer ?",
     "discard": "Abandonner",
     "cancel": "Annuler"
+  },
+  "duplicateWord": {
+    "title": "Doublon détecté",
+    "message": "La paire de mots \"{{word}}\" - \"{{translation}}\" existe déjà dans cet ensemble. Souhaitez-vous conserver ce doublon ?",
+    "keep": "Conserver le doublon",
+    "remove": "Supprimer le doublon"
   }
 }

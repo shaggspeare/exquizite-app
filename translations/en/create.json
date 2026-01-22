@@ -65,5 +65,11 @@
     "message": "You have unsaved changes. Are you sure you want to leave without saving?",
     "discard": "Discard",
     "cancel": "Cancel"
+  },
+  "duplicateWord": {
+    "title": "Duplicate Detected",
+    "message": "The word pair \"{{word}}\" - \"{{translation}}\" already exists in this set. Would you like to keep this duplicate?",
+    "keep": "Keep Duplicate",
+    "remove": "Remove Duplicate"
   }
 }

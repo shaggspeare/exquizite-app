@@ -66,4 +66,11 @@
     "discard": "Scarta",
     "cancel": "Annulla"
   }
+,
+  "duplicateWord": {
+    "title": "Duplicato rilevato",
+    "message": "La coppia di parole \"{{word}}\" - \"{{translation}}\" esiste già in questo set. Vuoi mantenere questo duplicato?",
+    "keep": "Mantieni duplicato",
+    "remove": "Rimuovi duplicato"
+  }
 }

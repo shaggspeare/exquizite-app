@@ -66,4 +66,11 @@
     "discard": "Zahodit",
     "cancel": "Zrušit"
   }
+,
+  "duplicateWord": {
+    "title": "Detekován duplikát",
+    "message": "Dvojice slov \"{{word}}\" - \"{{translation}}\" již v této sadě existuje. Chcete tento duplikát ponechat?",
+    "keep": "Ponechat duplikát",
+    "remove": "Odebrat duplikát"
+  }
 }

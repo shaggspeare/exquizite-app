@@ -66,4 +66,11 @@
     "discard": "삭제",
     "cancel": "취소"
   }
+,
+  "duplicateWord": {
+    "title": "중복 감지됨",
+    "message": "단어 쌍 \"{{word}}\" - \"{{translation}}\"이(가) 이 세트에 이미 존재합니다. 이 중복을 유지하시겠습니까?",
+    "keep": "중복 유지",
+    "remove": "중복 제거"
+  }
 }

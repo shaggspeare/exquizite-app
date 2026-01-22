@@ -66,4 +66,11 @@
     "discard": "Atmest",
     "cancel": "Atcelt"
   }
+,
+  "duplicateWord": {
+    "title": "Konstatēts dublikāts",
+    "message": "Vārdu pāris \"{{word}}\" - \"{{translation}}\" jau pastāv šajā komplektā. Vai vēlaties saglabāt šo dublikātu?",
+    "keep": "Saglabāt dublikātu",
+    "remove": "Noņemt dublikātu"
+  }
 }

@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
+import { forwardRef, useImperativeHandle, useRef } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { WordPair } from '@/lib/types';
 import { Spacing, Typography, BorderRadius } from '@/lib/constants';
@@ -16,21 +17,39 @@ interface WordPairInputProps {
   onChangeTranslation: (text: string) => void;
   onDelete: () => void;
   canDelete: boolean;
+  onTranslationSubmit?: () => void;
 }
 
-export function WordPairInput({
-  pair,
-  onChangeWord,
-  onChangeTranslation,
-  onDelete,
-  canDelete,
-}: WordPairInputProps) {
-  const { colors } = useTheme();
+export interface WordPairInputRef {
+  focusWord: () => void;
+}
+
+export const WordPairInput = forwardRef<WordPairInputRef, WordPairInputProps>(
+  (
+    {
+      pair,
+      onChangeWord,
+      onChangeTranslation,
+      onDelete,
+      canDelete,
+      onTranslationSubmit,
+    },
+    ref
+  ) => {
+    const { colors } = useTheme();
+    const wordInputRef = useRef<TextInput>(null);
+
+    useImperativeHandle(ref, () => ({
+      focusWord: () => {
+        wordInputRef.current?.focus();
+      },
+    }));
 
   return (
     <View style={styles.container}>
       <View style={styles.inputs}>
         <TextInput
+          ref={wordInputRef}
           style={[
             styles.input,
             styles.wordInput,
@@ -59,6 +78,9 @@ export function WordPairInput({
           placeholderTextColor={colors.textSecondary}
           value={pair.translation}
           onChangeText={onChangeTranslation}
+          onSubmitEditing={onTranslationSubmit}
+          returnKeyType="done"
+          blurOnSubmit={false}
         />
       </View>
       {canDelete && (
@@ -72,7 +94,7 @@ export function WordPairInput({
       )}
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {

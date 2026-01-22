@@ -66,4 +66,11 @@
     "discard": "Atmesti",
     "cancel": "Atšaukti"
   }
+,
+  "duplicateWord": {
+    "title": "Aptiktas dublikatas",
+    "message": "Žodžių pora \"{{word}}\" - \"{{translation}}\" jau yra šiame rinkinyje. Ar norite išlaikyti šį dublikatą?",
+    "keep": "Išlaikyti dublikatą",
+    "remove": "Pašalinti dublikatą"
+  }
 }

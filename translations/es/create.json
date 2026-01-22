@@ -64,5 +64,11 @@
     "message": "Tienes cambios sin guardar. ¿Estás seguro de que quieres salir sin guardar?",
     "discard": "Descartar",
     "cancel": "Cancelar"
+  },
+  "duplicateWord": {
+    "title": "Duplicado detectado",
+    "message": "El par de palabras \"{{word}}\" - \"{{translation}}\" ya existe en este conjunto. ¿Deseas mantener este duplicado?",
+    "keep": "Mantener duplicado",
+    "remove": "Eliminar duplicado"
   }
 }

@@ -66,4 +66,11 @@
     "discard": "Kassera",
     "cancel": "Avbryt"
   }
+,
+  "duplicateWord": {
+    "title": "Dubblett upptäckt",
+    "message": "Ordparet \"{{word}}\" - \"{{translation}}\" finns redan i denna uppsättning. Vill du behålla denna dubblett?",
+    "keep": "Behåll dubblett",
+    "remove": "Ta bort dubblett"
+  }
 }

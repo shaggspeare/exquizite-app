@@ -66,4 +66,11 @@
     "discard": "Kassér",
     "cancel": "Annullér"
   }
+,
+  "duplicateWord": {
+    "title": "Dublet fundet",
+    "message": "Ordparret \"{{word}}\" - \"{{translation}}\" findes allerede i dette sæt. Vil du beholde denne dublet?",
+    "keep": "Behold dublet",
+    "remove": "Fjern dublet"
+  }
 }

@@ -66,4 +66,11 @@
     "discard": "Buang",
     "cancel": "Batal"
   }
+,
+  "duplicateWord": {
+    "title": "Pendua Dikesan",
+    "message": "Pasangan perkataan \"{{word}}\" - \"{{translation}}\" sudah wujud dalam set ini. Adakah anda mahu menyimpan pendua ini?",
+    "keep": "Simpan Pendua",
+    "remove": "Buang Pendua"
+  }
 }

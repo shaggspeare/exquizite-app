@@ -63,7 +63,14 @@
       "Bash(chmod:*)",
       "Bash(node:*)",
       "Bash(git rm:*)",
-      "Bash(wc:*)"
+      "Bash(wc:*)",
+      "Bash(for lang in ar bg ca ceb cs da de el es et fi fr gu he hi hr hu id it ja kk ko lt lv ms nl no pl pt ro ru sk sl sr sv th tl tr uk uz vi zh zh-Hant)",
+      "Bash(do if grep -q \"duplicateWord\" /Users/slava/Projects/exquizite-app/translations/$lang/create.json)",
+      "Bash(then echo \"$lang: ✓\")",
+      "Bash(else echo \"$lang: ✗\")",
+      "Bash(for lang in ar bg ca ceb cs da el et fi gu he hi hr hu id it ja kk ko lt lv ms nl no pl pt ro ru sk sl sr sv th tl tr uk uz vi zh zh-Hant)",
+      "Bash(if python3 -m json.tool /Users/slava/Projects/exquizite-app/translations/$lang/create.json)",
+      "Bash(then echo \"$lang: ✓\" else echo \"$lang: ✗ MISSING\" fi done)"
     ],
     "deny": [],
     "ask": []

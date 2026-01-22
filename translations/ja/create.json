@@ -66,4 +66,11 @@
     "discard": "破棄",
     "cancel": "キャンセル"
   }
+,
+  "duplicateWord": {
+    "title": "重複が検出されました",
+    "message": "単語ペア「{{word}}」-「{{translation}}」はこのセットに既に存在します。この重複を保持しますか？",
+    "keep": "重複を保持",
+    "remove": "重複を削除"
+  }
 }

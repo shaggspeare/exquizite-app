@@ -66,4 +66,11 @@
     "discard": "Hylkää",
     "cancel": "Peruuta"
   }
+,
+  "duplicateWord": {
+    "title": "Kaksoiskappale havaittu",
+    "message": "Sanapari \"{{word}}\" - \"{{translation}}\" on jo tässä setissä. Haluatko säilyttää tämän kaksoiskappaleen?",
+    "keep": "Säilytä kaksoiskappale",
+    "remove": "Poista kaksoiskappale"
+  }
 }

@@ -66,4 +66,11 @@
     "discard": "Isalikway",
     "cancel": "Kanselahon"
   }
+,
+  "duplicateWord": {
+    "title": "Nakita ang Doble",
+    "message": "Ang parisan sa pulong \"{{word}}\" - \"{{translation}}\" naa na sa kini nga set. Gusto ba nimo nga huptan kini nga doble?",
+    "keep": "Huptan ang Doble",
+    "remove": "Tangtangon ang Doble"
+  }
 }

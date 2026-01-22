@@ -66,4 +66,11 @@
     "discard": "Verwijderen",
     "cancel": "Annuleren"
   }
+,
+  "duplicateWord": {
+    "title": "Duplicaat gedetecteerd",
+    "message": "Het woordpaar \"{{word}}\" - \"{{translation}}\" bestaat al in deze set. Wil je dit duplicaat behouden?",
+    "keep": "Duplicaat behouden",
+    "remove": "Duplicaat verwijderen"
+  }
 }

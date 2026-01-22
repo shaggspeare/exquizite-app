@@ -6,13 +6,14 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { useRouter, useLocalSearchParams, useFocusEffect } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/ui/Input';
-import { WordPairInput } from '@/components/set/WordPairInput';
+import { WordPairInput, WordPairInputRef } from '@/components/set/WordPairInput';
 import { AISuggestionModal } from '@/components/ai/AISuggestionModal';
 import { BulkImportModal } from '@/components/create/BulkImportModal';
+import { DuplicateWordModal } from '@/components/create/DuplicateWordModal';
 import { LanguageOverrideSelector } from '@/components/create/LanguageOverrideSelector';
 import { LanguageBadge } from '@/components/ui/LanguageBadge';
 import { useSets } from '@/contexts/SetsContext';
@@ -51,6 +52,31 @@ export function DesktopCreateView() {
   const [saving, setSaving] = useState(false);
   const [overrideTargetLanguage, setOverrideTargetLanguage] = useState<string | null>(null);
   const [overrideNativeLanguage, setOverrideNativeLanguage] = useState<string | null>(null);
+
+  // Duplicate detection state
+  const [duplicateModalVisible, setDuplicateModalVisible] = useState(false);
+  const [duplicateCandidate, setDuplicateCandidate] = useState<{
+    pairId: string;
+    word: string;
+    translation: string;
+  } | null>(null);
+  // Track which duplicate pairs the user has chosen to keep
+  const [allowedDuplicates, setAllowedDuplicates] = useState<Set<string>>(new Set());
+
+  // Refs for word pair inputs to manage focus
+  const wordPairRefs = useRef<{ [key: string]: WordPairInputRef | null }>({});
+  const [lastAddedPairId, setLastAddedPairId] = useState<string | null>(null);
+
+  // Focus on newly added pair
+  useEffect(() => {
+    if (lastAddedPairId && wordPairRefs.current[lastAddedPairId]) {
+      // Small delay to ensure the component is rendered
+      setTimeout(() => {
+        wordPairRefs.current[lastAddedPairId]?.focusWord();
+        setLastAddedPairId(null);
+      }, 100);
+    }
+  }, [lastAddedPairId, wordPairs]);
 
   useFocusEffect(
     useCallback(() => {
@@ -91,10 +117,22 @@ export function DesktopCreateView() {
       showAlert(t('limitReached'), t('limitMessage', { max: MAX_WORDS_PER_SET }));
       return;
     }
+    const newId = Date.now().toString();
     setWordPairs([
       ...wordPairs,
-      { id: Date.now().toString(), word: '', translation: '' },
+      { id: newId, word: '', translation: '' },
     ]);
+    setLastAddedPairId(newId);
+  };
+
+  const handleTranslationSubmit = (pairId: string) => {
+    // Find the current pair
+    const currentPair = wordPairs.find(p => p.id === pairId);
+
+    // Only add a new pair if both word and translation are filled
+    if (currentPair && currentPair.word.trim() && currentPair.translation.trim()) {
+      addWordPair();
+    }
   };
 
   const updateWordPair = (
@@ -102,13 +140,75 @@ export function DesktopCreateView() {
     field: 'word' | 'translation',
     value: string
   ) => {
-    setWordPairs(pairs =>
-      pairs.map(pair => (pair.id === id ? { ...pair, [field]: value } : pair))
-    );
+    // First, update the word pair
+    setWordPairs(pairs => {
+      const updatedPairs = pairs.map(pair =>
+        pair.id === id ? { ...pair, [field]: value } : pair
+      );
+
+      // Check for duplicates only when BOTH fields are filled
+      const currentPair = updatedPairs.find(p => p.id === id);
+      if (currentPair) {
+        const normalizedWord = currentPair.word.trim().toLowerCase();
+        const normalizedTranslation = currentPair.translation.trim().toLowerCase();
+
+        // Only check for duplicates when both word and translation are filled
+        if (normalizedWord && normalizedTranslation) {
+          const duplicateKey = `${normalizedWord}:${normalizedTranslation}`;
+
+          // Check if this pair already has been allowed as duplicate
+          if (allowedDuplicates.has(duplicateKey)) {
+            return updatedPairs;
+          }
+
+          // Check if there's another pair with same word AND translation
+          const hasDuplicate = updatedPairs.some(
+            pair =>
+              pair.id !== id &&
+              pair.word.trim().toLowerCase() === normalizedWord &&
+              pair.translation.trim().toLowerCase() === normalizedTranslation
+          );
+
+          if (hasDuplicate) {
+            // Show modal to ask user
+            setDuplicateCandidate({
+              pairId: id,
+              word: currentPair.word.trim(),
+              translation: currentPair.translation.trim(),
+            });
+            setDuplicateModalVisible(true);
+          }
+        }
+      }
+
+      return updatedPairs;
+    });
   };
 
   const deleteWordPair = (id: string) => {
     setWordPairs(pairs => pairs.filter(pair => pair.id !== id));
+  };
+
+  const handleKeepDuplicate = () => {
+    if (duplicateCandidate) {
+      const normalizedWord = duplicateCandidate.word.toLowerCase();
+      const normalizedTranslation = duplicateCandidate.translation.toLowerCase();
+      const duplicateKey = `${normalizedWord}:${normalizedTranslation}`;
+
+      // Add to allowed duplicates so we don't show modal again for this pair
+      setAllowedDuplicates(prev => new Set(prev).add(duplicateKey));
+    }
+    setDuplicateModalVisible(false);
+    setDuplicateCandidate(null);
+  };
+
+  const handleRemoveDuplicate = () => {
+    if (duplicateCandidate) {
+      // Remove the duplicate pair
+      setWordPairs(pairs => pairs.filter(pair => pair.id !== duplicateCandidate.pairId));
+    }
+    setDuplicateModalVisible(false);
+    setDuplicateCandidate(null);
   };
 
   const handleAIWordsSelected = (aiWords: WordPair[]) => {
@@ -364,6 +464,9 @@ export function DesktopCreateView() {
                 {wordPairs.map(pair => (
                   <WordPairInput
                     key={pair.id}
+                    ref={el => {
+                      wordPairRefs.current[pair.id] = el;
+                    }}
                     pair={pair}
                     onChangeWord={text => updateWordPair(pair.id, 'word', text)}
                     onChangeTranslation={text =>
@@ -371,6 +474,7 @@ export function DesktopCreateView() {
                     }
                     onDelete={() => deleteWordPair(pair.id)}
                     canDelete={wordPairs.length > 1}
+                    onTranslationSubmit={() => handleTranslationSubmit(pair.id)}
                   />
                 ))}
 
@@ -579,6 +683,14 @@ export function DesktopCreateView() {
         onClose={() => setShowBulkImportModal(false)}
         onImport={handleBulkImport}
         maxWords={MAX_WORDS_PER_SET}
+      />
+
+      <DuplicateWordModal
+        visible={duplicateModalVisible}
+        word={duplicateCandidate?.word || ''}
+        translation={duplicateCandidate?.translation || ''}
+        onKeep={handleKeepDuplicate}
+        onRemove={handleRemoveDuplicate}
       />
     </View>
   );

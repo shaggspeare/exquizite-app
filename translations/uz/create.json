@@ -66,4 +66,11 @@
     "discard": "Bekor qilish",
     "cancel": "Bekor qilish"
   }
+,
+  "duplicateWord": {
+    "title": "Dublikat aniqlandi",
+    "message": "\"{{word}}\" - \"{{translation}}\" so'z juftligi bu to'plamda allaqachon mavjud. Ushbu dublikatni saqlamoqchimisiz?",
+    "keep": "Dublikatni saqlash",
+    "remove": "Dublikatni o'chirish"
+  }
 }

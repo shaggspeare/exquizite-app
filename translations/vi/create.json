@@ -66,4 +66,11 @@
     "discard": "Bỏ qua",
     "cancel": "Hủy"
   }
+,
+  "duplicateWord": {
+    "title": "Phát hiện trùng lặp",
+    "message": "Cặp từ \"{{word}}\" - \"{{translation}}\" đã tồn tại trong bộ này. Bạn có muốn giữ bản sao này không?",
+    "keep": "Giữ bản sao",
+    "remove": "Xóa bản sao"
+  }
 }

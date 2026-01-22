@@ -66,4 +66,11 @@
     "discard": "Itapon",
     "cancel": "Kanselahin"
   }
+,
+  "duplicateWord": {
+    "title": "Natukoy ang Duplikado",
+    "message": "Ang pares ng salita \"{{word}}\" - \"{{translation}}\" ay umiiral na sa set na ito. Gusto mo bang panatilihin ang duplikadong ito?",
+    "keep": "Panatilihin ang Duplikado",
+    "remove": "Alisin ang Duplikado"
+  }
 }

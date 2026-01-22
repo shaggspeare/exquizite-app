@@ -66,4 +66,11 @@
     "discard": "Forkast",
     "cancel": "Avbryt"
   }
+,
+  "duplicateWord": {
+    "title": "Duplikat oppdaget",
+    "message": "Ordparet \"{{word}}\" - \"{{translation}}\" finnes allerede i dette settet. Vil du beholde dette duplikatet?",
+    "keep": "Behold duplikat",
+    "remove": "Fjern duplikat"
+  }
 }

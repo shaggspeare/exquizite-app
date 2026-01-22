@@ -66,4 +66,11 @@
     "discard": "放弃",
     "cancel": "取消"
   }
+,
+  "duplicateWord": {
+    "title": "检测到重复",
+    "message": "单词对 \"{{word}}\" - \"{{translation}}\" 已存在于此集合中。您想保留此重复项吗？",
+    "keep": "保留重复项",
+    "remove": "删除重复项"
+  }
 }
