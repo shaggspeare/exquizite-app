@@ -57,30 +57,79 @@ interface SetsContextType {
 
 const SetsContext = createContext<SetsContextType | undefined>(undefined);
 
-// Helper function to select 3 featured sets based on user's target language
-function selectFeaturedSets(targetLanguage: string): WordSet[] {
+// Helper function to select 3 featured sets based on user's languages
+function selectFeaturedSets(
+  targetLanguage: string,
+  nativeLanguage: string
+): WordSet[] {
   console.log(
-    '🎯 Selecting featured sets for target language:',
-    targetLanguage
+    '🎯 Selecting featured sets for languages:',
+    targetLanguage,
+    '→',
+    nativeLanguage
   );
 
-  // Filter sets by target language
-  const matchingSets = featuredSetsData.filter(
-    (set: any) => set.targetLanguage === targetLanguage
-  );
+  // Type for the featured sets data structure
+  type FeaturedSetsData = {
+    [theme: string]: {
+      theme: string;
+      concepts: Array<{
+        id: string;
+        translations: { [langCode: string]: string };
+      }>;
+    };
+  };
+
+  const data = featuredSetsData as FeaturedSetsData;
+  const themes = ['greetings', 'food', 'travel'];
+
+  const featuredSets: WordSet[] = themes
+    .map(theme => {
+      const themeData = data[theme];
+      if (!themeData) {
+        console.warn(`⚠️ Theme '${theme}' not found in featured sets data`);
+        return null;
+      }
+
+      // Generate word pairs by getting translations for target and native languages
+      const wordPairs: WordPair[] = themeData.concepts.map(concept => {
+        const targetWord = concept.translations[targetLanguage];
+        const nativeWord = concept.translations[nativeLanguage];
+
+        // Fallback to English if language not found
+        const fallbackTarget = targetWord || concept.translations['en'] || '';
+        const fallbackNative = nativeWord || concept.translations['en'] || '';
+
+        return {
+          id: concept.id,
+          word: fallbackTarget,
+          translation: fallbackNative,
+        };
+      });
+
+      // Capitalize theme name for display
+      const displayName = theme.charAt(0).toUpperCase() + theme.slice(1);
+
+      const set: WordSet = {
+        id: `featured-${theme}-${targetLanguage}`,
+        name: displayName,
+        words: wordPairs,
+        targetLanguage,
+        nativeLanguage,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        isFeatured: true,
+      };
+
+      return set;
+    })
+    .filter((set): set is WordSet => set !== null);
 
   console.log(
-    `✅ Found ${matchingSets.length} featured sets for ${targetLanguage}`
+    `✅ Generated ${featuredSets.length} featured sets for ${targetLanguage} → ${nativeLanguage}`
   );
 
-  // Return up to 3 sets for this language
-  const selectedSets = matchingSets.slice(0, 3);
-
-  return selectedSets.map((set: any) => ({
-    ...set,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  }));
+  return featuredSets;
 }
 
 export function SetsProvider({ children }: { children: ReactNode }) {
@@ -328,10 +377,13 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         console.log(`✅ Loaded ${userSets.length} sets from Supabase`);
       }
 
-      // Always show featured sets for all users when target language is set
-      if (preferences.targetLanguage) {
+      // Always show featured sets for all users when both languages are set
+      if (preferences.targetLanguage && preferences.nativeLanguage) {
         console.log('🎯 Adding featured sets...');
-        const featured = selectFeaturedSets(preferences.targetLanguage);
+        const featured = selectFeaturedSets(
+          preferences.targetLanguage,
+          preferences.nativeLanguage
+        );
         // Combine user sets and featured sets (user sets first)
         setSets([...userSets, ...featured]);
         console.log(`✅ Added ${featured.length} featured sets`);

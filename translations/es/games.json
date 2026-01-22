@@ -74,6 +74,11 @@
     "tryThem": "¡Pruébalos!",
     "demoDescription": "Practica con estos conjuntos de demostración para comenzar"
   },
+  "featuredThemes": {
+    "greetings": "Saludos",
+    "food": "Comida",
+    "travel": "Viajes"
+  },
   "dashboard": {
     "title": "Panel",
     "lastPracticed": "Últimas prácticas"

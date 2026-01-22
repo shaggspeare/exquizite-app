@@ -74,6 +74,11 @@
     "tryThem": "Try them!",
     "demoDescription": "Practice with these demo sets to get started"
   },
+  "featuredThemes": {
+    "greetings": "Greetings",
+    "food": "Food",
+    "travel": "Travel"
+  },
   "dashboard": {
     "title": "Dashboard",
     "lastPracticed": "Last Practiced",
