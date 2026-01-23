@@ -290,18 +290,29 @@ export default function CreateSetScreen() {
     return hasContent;
   };
 
+  // Navigate to appropriate destination based on context
+  const navigateBack = () => {
+    if (isEditing && editingSetId) {
+      // If editing, go back to the set detail page
+      router.replace(`/(tabs)/sets/${editingSetId}`);
+    } else {
+      // If creating new, go to home
+      router.replace('/(tabs)');
+    }
+  };
+
   const handleClose = () => {
     if (hasUnsavedChanges()) {
       showAlert(
         t('unsavedChanges.title'),
         t('unsavedChanges.message'),
         [
-          { text: t('unsavedChanges.discard'), onPress: () => router.back(), style: 'destructive' },
+          { text: t('unsavedChanges.discard'), onPress: navigateBack, style: 'destructive' },
           { text: t('unsavedChanges.cancel'), style: 'cancel' },
         ]
       );
     } else {
-      router.back();
+      navigateBack();
     }
   };
 

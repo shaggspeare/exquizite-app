@@ -92,6 +92,9 @@
   "setCard": {
     "featured": "Destacado",
     "complete": "{{percent}}% completado",
+    "lastPracticed": "Última práctica {{date}}",
+    "deleteSet": "Eliminar conjunto",
+    "deleteConfirm": "¿Estás seguro de que deseas eliminar \"{{setName}}\"? Esta acción no se puede deshacer.",
     "demoInfo": "Este es un conjunto de demostración. ¡Crea tu propio conjunto para comenzar!"
   }
 }

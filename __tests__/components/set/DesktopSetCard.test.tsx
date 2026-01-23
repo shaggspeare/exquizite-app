@@ -115,16 +115,6 @@ describe('DesktopSetCard', () => {
       expect(getByText('3')).toBeTruthy(); // word count
     });
 
-    it('renders with background icon when provided', () => {
-      const { getByTestId } = render(
-        <DesktopSetCard set={mockSet} backgroundIcon="restaurant" />
-      );
-
-      // Icon is rendered (we can't directly test the icon name in React Native)
-      const card = render(<DesktopSetCard set={mockSet} backgroundIcon="restaurant" />);
-      expect(card).toBeTruthy();
-    });
-
     it('shows featured badge for featured sets', () => {
       const { getAllByText } = render(<DesktopSetCard set={mockFeaturedSet} />);
 

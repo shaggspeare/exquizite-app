@@ -87,6 +87,9 @@
   "setCard": {
     "featured": "Empfohlen",
     "complete": "{{percent}}% abgeschlossen",
+    "lastPracticed": "Zuletzt geübt {{date}}",
+    "deleteSet": "Set löschen",
+    "deleteConfirm": "Bist du sicher, dass du \"{{setName}}\" löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
     "demoInfo": "Dies ist ein Demo-Set. Erstelle dein eigenes Set, um loszulegen!"
   }
 }

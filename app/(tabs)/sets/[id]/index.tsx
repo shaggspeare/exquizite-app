@@ -4,6 +4,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -21,12 +22,17 @@ import { useTranslation } from 'react-i18next';
 export default function SetDetailScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { getSetById } = useSets();
+  const { getSetById, isLoading } = useSets();
   const { colors } = useTheme();
   const { isDesktop } = useResponsive();
   const { t } = useTranslation('games');
 
   const set = getSetById(id!);
+
+  // Helper to navigate back - go to home tab instead of router.back()
+  const handleGoBack = () => {
+    router.replace('/(tabs)');
+  };
 
   // Use desktop layout for desktop screens
   if (isDesktop) {
@@ -39,14 +45,55 @@ export default function SetDetailScreen() {
 
   // Mobile layout below
 
+  // Show loading state while sets are loading
+  if (isLoading && !set) {
+    return (
+      <SafeAreaView
+        style={[styles.container, { backgroundColor: colors.background }]}
+        edges={['top']}
+      >
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   if (!set) {
     return (
       <SafeAreaView
         style={[styles.container, { backgroundColor: colors.background }]}
+        edges={['top']}
       >
-        <Text style={[styles.errorText, { color: colors.error }]}>
-          {t('setNotFound')}
-        </Text>
+        <View
+          style={[
+            styles.header,
+            { backgroundColor: colors.card, borderBottomColor: colors.border },
+          ]}
+        >
+          <TouchableOpacity
+            onPress={handleGoBack}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Ionicons name="arrow-back" size={28} color={colors.text} />
+          </TouchableOpacity>
+          <Text style={[styles.headerTitle, { color: colors.text }]}>
+            {t('common:status.error')}
+          </Text>
+          <View style={styles.headerPlaceholder} />
+        </View>
+        <View style={styles.errorContainer}>
+          <Ionicons name="alert-circle-outline" size={64} color={colors.error} />
+          <Text style={[styles.errorText, { color: colors.error }]}>
+            {t('setNotFound')}
+          </Text>
+          <TouchableOpacity
+            style={[styles.backButton, { backgroundColor: colors.primary }]}
+            onPress={handleGoBack}
+          >
+            <Text style={styles.backButtonText}>{t('common:buttons.goBack')}</Text>
+          </TouchableOpacity>
+        </View>
       </SafeAreaView>
     );
   }
@@ -63,7 +110,7 @@ export default function SetDetailScreen() {
         ]}
       >
         <TouchableOpacity
-          onPress={() => router.back()}
+          onPress={handleGoBack}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <Ionicons name="arrow-back" size={28} color={colors.text} />
@@ -221,9 +268,32 @@ const styles = StyleSheet.create({
     padding: Spacing.lg,
     borderTopWidth: 1,
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: Spacing.xl,
+    gap: Spacing.md,
+  },
   errorText: {
     ...Typography.body,
     textAlign: 'center',
-    marginTop: Spacing.xl,
+    marginTop: Spacing.sm,
+  },
+  backButton: {
+    marginTop: Spacing.lg,
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.xl,
+    borderRadius: 8,
+  },
+  backButtonText: {
+    ...Typography.body,
+    color: '#FFFFFF',
+    fontWeight: '600',
   },
 });

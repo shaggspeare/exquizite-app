@@ -18,7 +18,8 @@
     "playAgain": "Play Again",
     "showHint": "Show Hint",
     "generate": "Generate",
-    "generating": "Generating..."
+    "generating": "Generating...",
+    "goBack": "Go Back"
   },
   "status": {
     "loading": "Loading...",

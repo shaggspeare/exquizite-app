@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useSets } from '@/contexts/SetsContext';
@@ -14,21 +15,71 @@ import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 import { DesktopContainer } from '@/components/layout/DesktopContainer';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useTranslation } from 'react-i18next';
 
 export function DesktopSetDetailView() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { getSetById } = useSets();
+  const { getSetById, isLoading } = useSets();
   const { colors } = useTheme();
+  const { t } = useTranslation('games');
 
   const set = getSetById(id!);
+
+  // Helper to navigate back - go to home tab instead of router.back()
+  const handleGoBack = () => {
+    router.replace('/(tabs)');
+  };
+
+  // Show loading state while sets are loading
+  if (isLoading && !set) {
+    return (
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      </View>
+    );
+  }
 
   if (!set) {
     return (
       <View style={[styles.container, { backgroundColor: colors.background }]}>
-        <Text style={[styles.errorText, { color: colors.error }]}>
-          Set not found
-        </Text>
+        {/* Header */}
+        <View
+          style={[
+            styles.header,
+            { backgroundColor: colors.card, borderBottomColor: colors.border },
+          ]}
+        >
+          <DesktopContainer>
+            <View style={styles.headerContent}>
+              <View style={styles.headerLeft}>
+                <TouchableOpacity
+                  onPress={handleGoBack}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                >
+                  <Ionicons name="arrow-back" size={28} color={colors.text} />
+                </TouchableOpacity>
+                <Text style={[styles.headerTitle, { color: colors.text }]}>
+                  {t('common:status.error')}
+                </Text>
+              </View>
+            </View>
+          </DesktopContainer>
+        </View>
+        <View style={styles.errorContainer}>
+          <Ionicons name="alert-circle-outline" size={80} color={colors.error} />
+          <Text style={[styles.errorText, { color: colors.error }]}>
+            {t('setNotFound')}
+          </Text>
+          <TouchableOpacity
+            style={[styles.backButton, { backgroundColor: colors.primary }]}
+            onPress={handleGoBack}
+          >
+            <Text style={styles.backButtonText}>{t('common:buttons.goBack')}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -73,7 +124,7 @@ export function DesktopSetDetailView() {
           <View style={styles.headerContent}>
             <View style={styles.headerLeft}>
               <TouchableOpacity
-                onPress={() => router.back()}
+                onPress={handleGoBack}
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               >
                 <Ionicons name="arrow-back" size={28} color={colors.text} />
@@ -422,9 +473,33 @@ const styles = StyleSheet.create({
     ...Typography.caption,
     fontSize: 14,
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: Spacing.xl,
+    gap: Spacing.lg,
+  },
   errorText: {
-    ...Typography.body,
+    ...Typography.h2,
     textAlign: 'center',
-    marginTop: Spacing.xl,
+    fontSize: 20,
+  },
+  backButton: {
+    marginTop: Spacing.md,
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.xxl,
+    borderRadius: BorderRadius.button,
+  },
+  backButtonText: {
+    ...Typography.body,
+    color: '#FFFFFF',
+    fontWeight: '600',
+    fontSize: 16,
   },
 });

@@ -14,10 +14,9 @@ import { showAlert } from '@/lib/alert';
 
 interface DesktopSetCardProps {
   set: WordSet;
-  backgroundIcon?: keyof typeof Ionicons.glyphMap;
 }
 
-export function DesktopSetCard({ set, backgroundIcon }: DesktopSetCardProps) {
+export function DesktopSetCard({ set }: DesktopSetCardProps) {
   const { t } = useTranslation('games');
   const { colors } = useTheme();
   const { deleteSet } = useSets();
@@ -122,17 +121,6 @@ export function DesktopSetCard({ set, backgroundIcon }: DesktopSetCardProps) {
           end={{ x: 1, y: 1 }}
           style={styles.gradientCard}
         >
-          {/* Background Icon - Large and semi-transparent */}
-          {backgroundIcon && (
-            <View style={styles.backgroundIconContainer}>
-              <Ionicons
-                name={backgroundIcon}
-                size={80}
-                color="rgba(255, 255, 255, 0.15)"
-              />
-            </View>
-          )}
-
           {/* Three-dot menu button - Top right */}
           {!set.isFeatured && (
             <TouchableOpacity
@@ -187,7 +175,7 @@ export function DesktopSetCard({ set, backgroundIcon }: DesktopSetCardProps) {
                   color="rgba(255,255,255,0.8)"
                 />
                 <Text style={styles.metaText}>
-                  {formatDate(set.lastPracticed)}
+                  {t('setCard.lastPracticed', { date: formatDate(set.lastPracticed) })}
                 </Text>
               </View>
             )}
@@ -272,13 +260,6 @@ const styles = StyleSheet.create({
     position: 'relative',
     overflow: 'hidden',
     ...Shadow.card,
-  },
-  backgroundIconContainer: {
-    position: 'absolute',
-    right: Spacing.md,
-    top: '50%',
-    transform: [{ translateY: -40 }],
-    zIndex: 0,
   },
   menuButton: {
     position: 'absolute',

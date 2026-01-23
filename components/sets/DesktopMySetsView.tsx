@@ -15,7 +15,6 @@ import { DesktopContainer } from '@/components/layout/DesktopContainer';
 import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/ui/Card';
-import { getIconForSet } from '@/lib/setIcons';
 
 export function DesktopMySetsView() {
   const { t } = useTranslation('games');
@@ -74,7 +73,7 @@ export function DesktopMySetsView() {
               <View style={styles.setsGrid}>
                 {userSets.map((set, index) => (
                   <View key={set.id} style={styles.gridItem}>
-                    <DesktopSetCard set={set} backgroundIcon={getIconForSet(set.name)} />
+                    <DesktopSetCard set={set} />
                   </View>
                 ))}
               </View>
