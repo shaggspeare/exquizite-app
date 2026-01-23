@@ -17,6 +17,7 @@ jest.mock('react-i18next', () => ({
       if (key === 'setCard.complete') return `${params?.percent}% Complete`;
       if (key === 'setCard.deleteSet') return 'Delete Set';
       if (key === 'setCard.deleteConfirm') return `Delete ${params?.setName}?`;
+      if (key === 'setCard.lastPracticed') return `Last practiced ${params?.date}`;
       if (key === 'common:buttons.cancel') return 'Cancel';
       if (key === 'common:buttons.delete') return 'Delete';
       if (key === 'common:buttons.edit') return 'Edit';
