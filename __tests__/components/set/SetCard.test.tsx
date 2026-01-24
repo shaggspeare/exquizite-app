@@ -21,9 +21,14 @@ jest.mock('@/contexts/ThemeContext', () => ({
 
 // Mock SetsContext
 const mockDeleteSet = jest.fn();
+const mockGetPracticeStats = jest.fn().mockReturnValue({
+  totalCount: 0,
+  byMode: { flashcard: 0, match: 0, quiz: 0, 'fill-blank': 0 },
+});
 jest.mock('@/contexts/SetsContext', () => ({
   useSets: () => ({
     deleteSet: mockDeleteSet,
+    getPracticeStats: mockGetPracticeStats,
   }),
 }));
 
@@ -123,7 +128,7 @@ describe('SetCard', () => {
     expect(screen.getByText('0')).toBeTruthy();
   });
 
-  it('renders progress bar', () => {
+  it('renders practice stats', () => {
     const set = createMockSet({
       words: Array(10).fill(null).map((_, i) => ({
         id: String(i),
@@ -132,7 +137,7 @@ describe('SetCard', () => {
       })),
     });
     render(<SetCard set={set} />);
-    // Progress text should show completion percentage
-    expect(screen.getByText('setCard.complete')).toBeTruthy();
+    // Should show "Not practiced yet" when no practice sessions
+    expect(screen.getByText('setCard.notPracticed')).toBeTruthy();
   });
 });

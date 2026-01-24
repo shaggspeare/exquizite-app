@@ -18,6 +18,8 @@ jest.mock('react-i18next', () => ({
       if (key === 'setCard.deleteSet') return 'Delete Set';
       if (key === 'setCard.deleteConfirm') return `Delete ${params?.setName}?`;
       if (key === 'setCard.lastPracticed') return `Last practiced ${params?.date}`;
+      if (key === 'setCard.practicedTimes') return `Practiced ${params?.count} times`;
+      if (key === 'setCard.notPracticed') return 'Not practiced yet';
       if (key === 'common:buttons.cancel') return 'Cancel';
       if (key === 'common:buttons.delete') return 'Delete';
       if (key === 'common:buttons.edit') return 'Edit';
@@ -102,6 +104,10 @@ describe('DesktopSetCard', () => {
     (useRouter as jest.Mock).mockReturnValue(mockRouter);
     (useSets as jest.Mock).mockReturnValue({
       deleteSet: mockDeleteSet,
+      getPracticeStats: jest.fn().mockReturnValue({
+        totalCount: 0,
+        byMode: { flashcard: 0, match: 0, quiz: 0, 'fill-blank': 0 },
+      }),
     });
     (showAlert as jest.Mock).mockImplementation((title, message, buttons) => {
       // Mock implementation that doesn't actually show an alert
@@ -298,33 +304,25 @@ describe('DesktopSetCard', () => {
     });
   });
 
-  describe('Progress Calculation', () => {
-    it('calculates progress correctly for small sets', () => {
-      const smallSet = {
-        ...mockSet,
-        words: [{ word: 'test', translation: 'test', id: 'w1' }],
-      };
+  describe('Practice Stats Display', () => {
+    it('shows "Not practiced yet" when no practice sessions', () => {
+      const { getByText } = render(<DesktopSetCard set={mockSet} />);
 
-      const { getByText } = render(<DesktopSetCard set={smallSet} />);
-
-      // 1 word out of 20 target = 5%
-      expect(getByText(/5%/)).toBeTruthy();
+      expect(getByText('Not practiced yet')).toBeTruthy();
     });
 
-    it('caps progress at 100%', () => {
-      const largeSet = {
-        ...mockSet,
-        words: Array.from({ length: 25 }, (_, i) => ({
-          word: `word${i}`,
-          translation: `trans${i}`,
-          id: `w${i}`,
-        })),
-      };
+    it('shows practice count when set has been practiced', () => {
+      (useSets as jest.Mock).mockReturnValue({
+        deleteSet: mockDeleteSet,
+        getPracticeStats: jest.fn().mockReturnValue({
+          totalCount: 5,
+          byMode: { flashcard: 2, match: 1, quiz: 2, 'fill-blank': 0 },
+        }),
+      });
 
-      const { getByText } = render(<DesktopSetCard set={largeSet} />);
+      const { getByText } = render(<DesktopSetCard set={mockSet} />);
 
-      // Should show 100% even though there are 25 words (125% capped at 100%)
-      expect(getByText('100% Complete')).toBeTruthy();
+      expect(getByText('Practiced 5 times')).toBeTruthy();
     });
   });
 });
