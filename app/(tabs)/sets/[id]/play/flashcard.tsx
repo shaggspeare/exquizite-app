@@ -39,7 +39,7 @@ function shuffleArray<T>(array: T[]): T[] {
 export default function FlashcardScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { getSetById, updateLastPracticed } = useSets();
+  const { getSetById, updateLastPracticed, recordPracticeSession } = useSets();
   const { colors } = useTheme();
   const { isDesktop } = useResponsive();
 
@@ -111,6 +111,7 @@ export default function FlashcardScreen() {
 
   const handleComplete = () => {
     updateLastPracticed(id!);
+    recordPracticeSession(id!, 'flashcard');
     router.back();
   };
 

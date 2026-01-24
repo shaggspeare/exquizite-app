@@ -17,6 +17,8 @@ import {
   ShareOptions,
   SharedSetDetails,
   CopySetResponse,
+  GameMode,
+  PracticeStats,
 } from '@/lib/types';
 import * as guestStorage from '@/lib/guestStorage';
 import featuredSetsData from '@/data/featuredSets.json';
@@ -24,6 +26,7 @@ import featuredSetsData from '@/data/featuredSets.json';
 interface SetsContextType {
   sets: WordSet[];
   isLoading: boolean;
+  practiceStats: Record<string, PracticeStats>;
   createSet: (
     name: string,
     words: WordPair[],
@@ -42,6 +45,13 @@ interface SetsContextType {
   updateLastPracticed: (id: string) => Promise<void>;
   refreshSets: () => Promise<void>;
   migrateGuestSetsToUser: () => Promise<void>;
+  // Practice tracking methods
+  recordPracticeSession: (
+    setId: string,
+    gameMode: GameMode,
+    score?: number
+  ) => Promise<void>;
+  getPracticeStats: (setId: string) => PracticeStats;
   // Sharing methods
   shareSet: (
     setId: string,
@@ -140,6 +150,7 @@ export function SetsProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [hasMigrated, setHasMigrated] = useState(false);
   const isMigratingRef = useRef(false);
+  const [practiceStats, setPracticeStats] = useState<Record<string, PracticeStats>>({});
 
   // Track previous values to detect actual changes and prevent unnecessary reloads
   const prevUserIdRef = useRef<string | null>(null);
@@ -1104,11 +1115,126 @@ export function SetsProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Practice tracking methods
+
+  const loadPracticeStats = async () => {
+    if (!user) return;
+
+    try {
+      if (isGuestUser()) {
+        // Load from local storage for guest users
+        const stats = await guestStorage.getAllGuestPracticeStats();
+        setPracticeStats(stats);
+      } else {
+        // Load from Supabase for authenticated users
+        const { data, error } = await supabase
+          .from('practice_sessions')
+          .select('set_id, game_mode')
+          .eq('user_id', user.id);
+
+        if (error) {
+          console.error('Error loading practice stats:', error);
+          return;
+        }
+
+        // Aggregate stats by set
+        const stats: Record<string, PracticeStats> = {};
+        for (const session of data || []) {
+          if (!stats[session.set_id]) {
+            stats[session.set_id] = {
+              totalCount: 0,
+              byMode: {
+                flashcard: 0,
+                match: 0,
+                quiz: 0,
+                'fill-blank': 0,
+              },
+            };
+          }
+          stats[session.set_id].totalCount++;
+          stats[session.set_id].byMode[session.game_mode as GameMode]++;
+        }
+
+        setPracticeStats(stats);
+      }
+    } catch (error) {
+      console.error('Error loading practice stats:', error);
+    }
+  };
+
+  const recordPracticeSession = async (
+    setId: string,
+    gameMode: GameMode,
+    score?: number
+  ): Promise<void> => {
+    if (!user) return;
+
+    try {
+      if (isGuestUser()) {
+        // Save to local storage for guest users
+        await guestStorage.recordGuestPracticeSession(setId, gameMode, score);
+      } else {
+        // Save to Supabase for authenticated users
+        const { error } = await supabase.from('practice_sessions').insert({
+          user_id: user.id,
+          set_id: setId,
+          game_mode: gameMode,
+          score,
+        });
+
+        if (error) {
+          console.error('Error recording practice session:', error);
+          throw error;
+        }
+      }
+
+      // Update local state
+      setPracticeStats(prev => {
+        const current = prev[setId] || {
+          totalCount: 0,
+          byMode: { flashcard: 0, match: 0, quiz: 0, 'fill-blank': 0 },
+        };
+        return {
+          ...prev,
+          [setId]: {
+            totalCount: current.totalCount + 1,
+            byMode: {
+              ...current.byMode,
+              [gameMode]: current.byMode[gameMode] + 1,
+            },
+          },
+        };
+      });
+
+      console.log(`✅ Recorded practice session: ${gameMode} for set ${setId}`);
+    } catch (error) {
+      console.error('Error recording practice session:', error);
+    }
+  };
+
+  const getPracticeStats = (setId: string): PracticeStats => {
+    return (
+      practiceStats[setId] || {
+        totalCount: 0,
+        byMode: { flashcard: 0, match: 0, quiz: 0, 'fill-blank': 0 },
+      }
+    );
+  };
+
+  // Load practice stats when sets are loaded
+  useEffect(() => {
+    if (user && sets.length > 0) {
+      loadPracticeStats();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, sets.length]);
+
   return (
     <SetsContext.Provider
       value={{
         sets,
         isLoading,
+        practiceStats,
         createSet,
         updateSet,
         deleteSet,
@@ -1116,6 +1242,8 @@ export function SetsProvider({ children }: { children: ReactNode }) {
         updateLastPracticed,
         refreshSets,
         migrateGuestSetsToUser,
+        recordPracticeSession,
+        getPracticeStats,
         shareSet,
         getSharedSet,
         copySharedSet,

@@ -19,7 +19,7 @@ interface DesktopSetCardProps {
 export function DesktopSetCard({ set }: DesktopSetCardProps) {
   const { t } = useTranslation('games');
   const { colors } = useTheme();
-  const { deleteSet } = useSets();
+  const { deleteSet, getPracticeStats } = useSets();
   const router = useRouter();
   const [showShareModal, setShowShareModal] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -94,6 +94,15 @@ export function DesktopSetCard({ set }: DesktopSetCardProps) {
     router.push(`/(tabs)/sets/${set.id}/play/template`);
   };
 
+  // Get real practice stats from context
+  const stats = getPracticeStats(set.id);
+  const practiceCount = stats.totalCount;
+
+  const getPracticeText = (count: number): string => {
+    if (count === 0) return t('setCard.notPracticed');
+    return t('setCard.practicedTimes', { count });
+  };
+
   const gradientColors = getGradientColors();
 
   return (
@@ -121,7 +130,7 @@ export function DesktopSetCard({ set }: DesktopSetCardProps) {
           end={{ x: 1, y: 1 }}
           style={styles.gradientCard}
         >
-          {/* Three-dot menu button - Top right */}
+          {/* Three-dot menu button - Bottom right */}
           {!set.isFeatured && (
             <TouchableOpacity
               style={styles.menuButton}
@@ -149,20 +158,18 @@ export function DesktopSetCard({ set }: DesktopSetCardProps) {
               </View>
             </View>
 
-            {/* Progress Section */}
-            <View style={styles.progressSection}>
-              <View style={styles.progressBar}>
-                <View
-                  style={[
-                    styles.progressFill,
-                    {
-                      width: `${Math.min((set.words.length / 20) * 100, 100)}%`,
-                    },
-                  ]}
-                />
-              </View>
-              <Text style={styles.progressText}>
-                {t('setCard.complete', { percent: Math.min(Math.round((set.words.length / 20) * 100), 100) })}
+            {/* Divider line */}
+            <View style={styles.divider} />
+
+            {/* Practice Count */}
+            <View style={styles.practiceRow}>
+              <Ionicons
+                name="refresh"
+                size={12}
+                color="rgba(255,255,255,0.9)"
+              />
+              <Text style={styles.practiceText}>
+                {getPracticeText(practiceCount)}
               </Text>
             </View>
 
@@ -172,7 +179,7 @@ export function DesktopSetCard({ set }: DesktopSetCardProps) {
                 <Ionicons
                   name="time-outline"
                   size={12}
-                  color="rgba(255,255,255,0.8)"
+                  color="rgba(255,255,255,0.9)"
                 />
                 <Text style={styles.metaText}>
                   {t('setCard.lastPracticed', { date: formatDate(set.lastPracticed) })}
@@ -263,8 +270,8 @@ const styles = StyleSheet.create({
   },
   menuButton: {
     position: 'absolute',
-    top: Spacing.md,
-    right: Spacing.md,
+    bottom: Spacing.lg,
+    right: Spacing.lg,
     width: 32,
     height: 32,
     borderRadius: 16,
@@ -275,8 +282,8 @@ const styles = StyleSheet.create({
   },
   menuDropdown: {
     position: 'absolute',
-    top: Spacing.md + 36,
-    right: Spacing.md,
+    bottom: Spacing.lg + 36,
+    right: Spacing.lg,
     borderRadius: BorderRadius.input,
     paddingVertical: Spacing.xs,
     minWidth: 160,
@@ -336,8 +343,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: Spacing.md,
-    paddingRight: 40,
+    marginBottom: Spacing.sm,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: 'rgba(255,255,255,0.3)',
+    marginBottom: Spacing.sm,
   },
   title: {
     ...Typography.h2,
@@ -362,24 +373,15 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#FFFFFF',
   },
-  progressSection: {
-    marginBottom: Spacing.sm,
-  },
-  progressBar: {
-    height: 5,
-    borderRadius: 3,
-    backgroundColor: 'rgba(255,255,255,0.3)',
-    overflow: 'hidden',
+  practiceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.xs,
     marginBottom: Spacing.xs,
   },
-  progressFill: {
-    height: '100%',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 3,
-  },
-  progressText: {
+  practiceText: {
     ...Typography.small,
-    fontSize: 11,
+    fontSize: 12,
     color: 'rgba(255,255,255,0.9)',
     fontWeight: '600',
   },
@@ -390,8 +392,8 @@ const styles = StyleSheet.create({
   },
   metaText: {
     ...Typography.caption,
-    fontSize: 10,
-    color: 'rgba(255,255,255,0.8)',
+    fontSize: 12,
+    color: 'rgba(255,255,255,0.9)',
   },
   playButton: {
     flexDirection: 'row',

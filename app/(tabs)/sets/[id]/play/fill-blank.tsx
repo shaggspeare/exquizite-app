@@ -33,7 +33,7 @@ interface FillBlankQuestion {
 export default function FillBlankScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { getSetById, updateLastPracticed } = useSets();
+  const { getSetById, updateLastPracticed, recordPracticeSession } = useSets();
   const { colors } = useTheme();
   const { isDesktop } = useResponsive();
 
@@ -216,6 +216,7 @@ export default function FillBlankScreen() {
     updateLastPracticed(id!);
     const totalQuestions = totalExpectedQuestions || questions.length;
     const percentage = Math.round((score / totalQuestions) * 100);
+    recordPracticeSession(id!, 'fill-blank', percentage);
     showAlert(
       t('fillBlank.complete.title'),
       t('fillBlank.complete.score', { score, total: totalQuestions, percentage }),

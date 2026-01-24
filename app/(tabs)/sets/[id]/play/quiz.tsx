@@ -56,7 +56,7 @@ function generateQuizOptions(
 export default function QuizScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { getSetById, updateLastPracticed } = useSets();
+  const { getSetById, updateLastPracticed, recordPracticeSession } = useSets();
   const { colors } = useTheme();
   const { isDesktop } = useResponsive();
 
@@ -126,6 +126,7 @@ export default function QuizScreen() {
   const handleComplete = () => {
     updateLastPracticed(id!);
     const percentage = Math.round((score / originalQuestionCount) * 100);
+    recordPracticeSession(id!, 'quiz', percentage);
     showAlert(
       t('quiz.complete.title'),
       t('quiz.complete.score', { score, total: originalQuestionCount, percentage }),

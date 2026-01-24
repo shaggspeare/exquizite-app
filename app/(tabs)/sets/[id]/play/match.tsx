@@ -44,7 +44,7 @@ interface MatchItem {
 export default function MatchScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { getSetById, updateLastPracticed } = useSets();
+  const { getSetById, updateLastPracticed, recordPracticeSession } = useSets();
   const { colors } = useTheme();
   const { isDesktop } = useResponsive();
 
@@ -158,6 +158,7 @@ export default function MatchScreen() {
 
   const handleComplete = () => {
     updateLastPracticed(id!);
+    recordPracticeSession(id!, 'match');
     showAlert(
       t('match.complete.title'),
       t('match.complete.message', { time: formatTime(timer) }),

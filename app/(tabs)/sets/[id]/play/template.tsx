@@ -8,6 +8,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useSets } from '@/contexts/SetsContext';
+import { GameMode } from '@/lib/types';
 import { useResponsive } from '@/hooks/useResponsive';
 import { Spacing, Typography, BorderRadius, Shadow } from '@/lib/constants';
 import { Ionicons } from '@expo/vector-icons';
@@ -26,9 +28,9 @@ interface GameTemplate {
   title: string;
   description: string;
   icon: keyof typeof Ionicons.glyphMap;
-  route: string;
+  route: GameMode;
   aiEnabled?: boolean;
-  gradientColors: string[];
+  gradientColors: [string, string];
 }
 
 const getTemplates = (t: any): GameTemplate[] => [
@@ -69,12 +71,14 @@ const getTemplates = (t: any): GameTemplate[] => [
   },
 ];
 
+
 interface GameCardProps {
   template: GameTemplate;
   onPress: () => void;
+  practiceCount: number;
 }
 
-function GameCard({ template, onPress }: GameCardProps) {
+function GameCard({ template, onPress, practiceCount }: GameCardProps) {
   const scale = useSharedValue(1);
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -118,6 +122,12 @@ function GameCard({ template, onPress }: GameCardProps) {
               </View>
             )}
           </View>
+          {practiceCount > 0 && (
+            <View style={styles.practiceCountBadge}>
+              <Ionicons name="refresh" size={14} color="#FFFFFF" />
+              <Text style={styles.practiceCountText}>{practiceCount}</Text>
+            </View>
+          )}
           <View style={styles.playButton}>
             <Ionicons name="play" size={24} color="#FFFFFF" />
           </View>
@@ -133,8 +143,11 @@ export default function TemplateSelectionScreen() {
   const { colors } = useTheme();
   const { isDesktop } = useResponsive();
   const { t } = useTranslation('games');
+  const { getPracticeStats } = useSets();
 
   const templates = getTemplates(t);
+  const stats = getPracticeStats(id || '');
+  const modeStats = stats.byMode;
 
   const handleSelectTemplate = (template: GameTemplate) => {
     router.push(`/(tabs)/sets/${id}/play/${template.route}`);
@@ -188,6 +201,7 @@ export default function TemplateSelectionScreen() {
                     <GameCard
                       template={template}
                       onPress={() => handleSelectTemplate(template)}
+                      practiceCount={modeStats[template.route] || 0}
                     />
                   </View>
                 ))}
@@ -227,6 +241,7 @@ export default function TemplateSelectionScreen() {
             key={template.id}
             template={template}
             onPress={() => handleSelectTemplate(template)}
+            practiceCount={modeStats[template.route] || 0}
           />
         ))}
       </ScrollView>
@@ -323,6 +338,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     transform: [{ translateY: -28 }],
+  },
+  practiceCountBadge: {
+    position: 'absolute',
+    top: Spacing.md,
+    right: Spacing.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: 'rgba(255,255,255,0.25)',
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 4,
+    borderRadius: BorderRadius.round,
+  },
+  practiceCountText: {
+    ...Typography.caption,
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#FFFFFF',
   },
   // Desktop styles
   desktopContainer: {

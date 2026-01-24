@@ -2,10 +2,19 @@
 // Stores guest user data and sets locally (localStorage on web, SecureStore on native)
 
 import { storage } from './storage';
-import { User, WordSet, WordPair } from './types';
+import { User, WordSet, WordPair, GameMode, PracticeStats } from './types';
 
 const GUEST_USER_KEY = 'exquizite_guest_user';
 const GUEST_SETS_KEY = 'exquizite_guest_sets';
+const GUEST_PRACTICE_SESSIONS_KEY = 'exquizite_guest_practice_sessions';
+
+interface GuestPracticeSession {
+  id: string;
+  setId: string;
+  gameMode: GameMode;
+  score?: number;
+  completedAt: string;
+}
 
 // Generate a unique guest email
 export function generateGuestEmail(): string {
@@ -151,10 +160,87 @@ export async function getGuestSetById(id: string): Promise<WordSet | null> {
   return sets.find(s => s.id === id) || null;
 }
 
+// Practice Sessions Management
+
+export async function getGuestPracticeSessions(): Promise<GuestPracticeSession[]> {
+  try {
+    const data = await storage.getItem(GUEST_PRACTICE_SESSIONS_KEY);
+    if (!data) return [];
+    return JSON.parse(data);
+  } catch (error) {
+    console.error('Error reading guest practice sessions:', error);
+    return [];
+  }
+}
+
+export async function recordGuestPracticeSession(
+  setId: string,
+  gameMode: GameMode,
+  score?: number
+): Promise<void> {
+  const sessions = await getGuestPracticeSessions();
+
+  const newSession: GuestPracticeSession = {
+    id: generateUUID(),
+    setId,
+    gameMode,
+    score,
+    completedAt: new Date().toISOString(),
+  };
+
+  sessions.push(newSession);
+  await storage.setItem(GUEST_PRACTICE_SESSIONS_KEY, JSON.stringify(sessions));
+}
+
+export async function getGuestPracticeStats(setId: string): Promise<PracticeStats> {
+  const sessions = await getGuestPracticeSessions();
+  const setSessionsArray = sessions.filter(s => s.setId === setId);
+
+  const byMode: Record<GameMode, number> = {
+    flashcard: 0,
+    match: 0,
+    quiz: 0,
+    'fill-blank': 0,
+  };
+
+  for (const session of setSessionsArray) {
+    byMode[session.gameMode]++;
+  }
+
+  return {
+    totalCount: setSessionsArray.length,
+    byMode,
+  };
+}
+
+export async function getAllGuestPracticeStats(): Promise<Record<string, PracticeStats>> {
+  const sessions = await getGuestPracticeSessions();
+  const statsBySet: Record<string, PracticeStats> = {};
+
+  for (const session of sessions) {
+    if (!statsBySet[session.setId]) {
+      statsBySet[session.setId] = {
+        totalCount: 0,
+        byMode: {
+          flashcard: 0,
+          match: 0,
+          quiz: 0,
+          'fill-blank': 0,
+        },
+      };
+    }
+    statsBySet[session.setId].totalCount++;
+    statsBySet[session.setId].byMode[session.gameMode]++;
+  }
+
+  return statsBySet;
+}
+
 // Clear all guest data
 export async function clearGuestData(): Promise<void> {
   await deleteGuestUser();
   await storage.removeItem(GUEST_SETS_KEY);
+  await storage.removeItem(GUEST_PRACTICE_SESSIONS_KEY);
 }
 
 // Check if user has any guest data

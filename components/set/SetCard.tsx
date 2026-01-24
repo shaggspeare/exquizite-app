@@ -24,7 +24,7 @@ interface SetCardProps {
 export function SetCard({ set, onPress }: SetCardProps) {
   const { t } = useTranslation('games');
   const { colors } = useTheme();
-  const { deleteSet } = useSets();
+  const { deleteSet, getPracticeStats } = useSets();
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
@@ -118,6 +118,15 @@ export function SetCard({ set, onPress }: SetCardProps) {
 
   const wordPairsList = set.words.map(word => word.word).join(', ');
 
+  // Get real practice stats from context
+  const stats = getPracticeStats(set.id);
+  const practiceCount = stats.totalCount;
+
+  const getPracticeText = (count: number): string => {
+    if (count === 0) return t('setCard.notPracticed');
+    return t('setCard.practicedTimes', { count });
+  };
+
   const gradientColors = getGradientColors();
 
   return (
@@ -154,19 +163,14 @@ export function SetCard({ set, onPress }: SetCardProps) {
               </View>
             </View>
 
-            <View style={styles.progressSection}>
-              <View style={styles.progressBar}>
-                <View
-                  style={[
-                    styles.progressFill,
-                    {
-                      width: `${Math.min((set.words.length / 20) * 100, 100)}%`,
-                    },
-                  ]}
-                />
-              </View>
-              <Text style={styles.progressText}>
-                {t('setCard.complete', { percent: Math.round((set.words.length / 20) * 100) })}
+            <View style={styles.practiceRow}>
+              <Ionicons
+                name="refresh"
+                size={14}
+                color="rgba(255,255,255,0.9)"
+              />
+              <Text style={styles.practiceText}>
+                {getPracticeText(practiceCount)}
               </Text>
             </View>
 
@@ -344,22 +348,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     flex: 1,
   },
-  progressSection: {
+  practiceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.xs,
     marginBottom: Spacing.sm,
   },
-  progressBar: {
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: 'rgba(255,255,255,0.3)',
-    overflow: 'hidden',
-    marginBottom: Spacing.xs,
-  },
-  progressFill: {
-    height: '100%',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 3,
-  },
-  progressText: {
+  practiceText: {
     ...Typography.small,
     fontSize: 12,
     color: 'rgba(255,255,255,0.9)',

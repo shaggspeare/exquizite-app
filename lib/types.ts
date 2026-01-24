@@ -38,7 +38,29 @@ export interface GameResult {
   completedAt: string;
 }
 
+export type GameMode = 'flashcard' | 'match' | 'quiz' | 'fill-blank';
+
+// Legacy alias
 export type GameType = 'flashcard' | 'match' | 'quiz';
+
+// Practice Statistics Types
+export interface PracticeSession {
+  id: string;
+  userId: string;
+  setId: string;
+  gameMode: GameMode;
+  score?: number;
+  completedAt: string;
+}
+
+export interface PracticeStats {
+  totalCount: number;
+  byMode: Record<GameMode, number>;
+}
+
+export interface SetPracticeStats {
+  [setId: string]: PracticeStats;
+}
 
 export interface QuizQuestion {
   word: string;
